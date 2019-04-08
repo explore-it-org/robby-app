@@ -10,8 +10,8 @@
   },
   "dependencies": {
     "buffer": "5.2.1",
-    "react": "16.6.3",
-    "react-native": "0.58.5",
+    "react": "^16.8.3",
+    "react-native": "^0.59.3",
     "react-native-ble-plx": "1.0.3",
     "react-native-elements": "1.1.0",
     "react-native-fab": "1.0.8",
