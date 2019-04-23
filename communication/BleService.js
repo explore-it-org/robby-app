@@ -5,13 +5,14 @@ import { Buffer } from 'buffer';
 // These values are unique to explore-it devices.
 const serviceUUID = '0000ffe0-0000-1000-8000-00805f9b34fb';
 const characteristicsUUID = '0000ffe1-0000-1000-8000-00805f9b34fb';
-const transactionId = '1';
+const transactionId = 'exploreit';
 
 class BleService {
     constructor() {
         this.devices = null;
         this.actDevice = null;
         this.manager = new BleManager();
+        this.subscription = null;
     }
 
     async requestLocationPermission() {
@@ -89,7 +90,7 @@ class BleService {
                 // Returns connected device object if successful.
                 console.log('BleService monitor - ' + device.name);
                 // Monitor value changes of a ble characteristic.
-                device.monitorCharacteristicForService(
+                this.subscription = device.monitorCharacteristicForService(
                     serviceUUID,
                     characteristicsUUID,
                     // Add listener to handle responses from connected device
@@ -102,7 +103,9 @@ class BleService {
                     },
                     transactionId);
                 console.log('BleService connection done - ' + device.name);
+                console.log('subscription: ='+ this.subscription);
                 connectionHandler(device);
+
             })
             .catch((error) => {
                 // Handle errors
@@ -131,9 +134,13 @@ class BleService {
     }
 
     shutdown() {
+        console.log('begin shutdown subscription: ' + this.subscription)
         this.actDevice.cancelConnection();
         this.manager.cancelTransaction(transactionId);
         this.actDevice = null;
+        console.log('before remove subscription: ' + this.subscription)
+        this.subscription.remove()
+        console.log('after remove subscription: ' + this.subscription)
         console.log('BleService disconnected');
     }
 }

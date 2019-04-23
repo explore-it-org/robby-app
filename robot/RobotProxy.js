@@ -18,18 +18,13 @@ class RobotProxy {
     }
 
     connect(responseHandler, connectionHandler, errorHandler) {
-        // check if device is already connected - to avoid multiple listeners if a disconnection occurs
-        if (this.isConnected){
-            disconnect()
-        } else {
-            BleService.connectToActDevice(
-                responseHandler,
-                (robot) => {
-                    this.isConnected = true;
-                    connectionHandler(robot);
-                },
-                errorHandler);
-            }        
+        BleService.connectToActDevice(
+            responseHandler,
+            (robot) => {
+                this.isConnected = true;
+                connectionHandler(robot);
+            },
+            errorHandler);                 
     }
 
     disconnect() {
