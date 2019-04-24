@@ -80,11 +80,11 @@ class BleService {
 
     connectToActDevice(responseHandler, connectionHandler, errorHandler) {
         console.log('BleService connecting...');
-        if (this.subscription != null){
+        /* if (this.subscription != null){
             this.manager.cancelTransaction(transactionId);
             this.subscription.remove()
             console.log("subscription found... removing")
-        }
+        } */
         this.actDevice.connect()
             .then((device) => {
                 console.log('BleService connect - ' + device.name);
@@ -139,9 +139,9 @@ class BleService {
     }
 
     shutdown() {
-        this.actDevice.cancelConnection().then(device => console.log('BleService disconnected') ).catch(error => console.log('Failed with ' + error) );
         this.manager.cancelTransaction(transactionId);
         this.subscription.remove();
+        this.actDevice.cancelConnection().then(device => console.log('BleService disconnected') ).catch(error => console.log('Failed with ' + error) );
         this.actDevice = null;
     }
 }
