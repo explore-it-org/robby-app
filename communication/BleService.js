@@ -91,7 +91,7 @@ class BleService {
                 // Returns connected device object if successful.
                 console.log('BleService monitor - ' + device.name);
                 // Workaround for multiple listeners
-                this.c ++;
+                this.c++;
                 let localc = this.c;
                 // Monitor value changes of a ble characteristic.
                 this.subscription = device.monitorCharacteristicForService(
@@ -99,11 +99,11 @@ class BleService {
                     characteristicsUUID,
                     // Add listener to handle responses from connected device
                     (error, characteristic) => {
-                        if (error) {
-                            throw error
-                        }
-                        response = Buffer.from(characteristic.value, 'base64').toString('ascii');
                         if (this.c == localc){
+                            if (error) {
+                                throw error
+                            }
+							response = Buffer.from(characteristic.value, 'base64').toString('ascii');
                             responseHandler(response);
                         }
                     },
