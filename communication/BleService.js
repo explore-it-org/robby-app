@@ -103,7 +103,7 @@ class BleService {
                             if (error) {
                                 throw error
                             }
-							response = Buffer.from(characteristic.value, 'base64').toString('ascii');
+                            response = Buffer.from(characteristic.value, 'base64').toString('ascii');
                             responseHandler(response);
                         }
                     },
@@ -111,7 +111,6 @@ class BleService {
                 console.log('BleService connection done - ' + device.name);
                 console.log("transaction id: " + transactionId)
                 connectionHandler(device);
-
             })
             .catch((error) => {
                 // Handle errors
