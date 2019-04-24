@@ -24,7 +24,7 @@ class RobotProxy {
                 this.isConnected = true;
                 connectionHandler(robot);
             },
-            errorHandler);                 
+            errorHandler);
     }
 
     disconnect() {
@@ -32,7 +32,7 @@ class RobotProxy {
             BleService.shutdown();
             this.isConnected = false;
         } else {
-            console.log("Warning: Disconnect robot first!")
+            console.log("Warning: robot already disconnected!")
         }
     }
 
