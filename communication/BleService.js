@@ -13,6 +13,7 @@ class BleService {
         this.actDevice = null;
         this.manager = new BleManager();
         this.subscription = null;
+        this.c = 0;
     }
 
     async requestLocationPermission() {
@@ -80,11 +81,6 @@ class BleService {
 
     connectToActDevice(responseHandler, connectionHandler, errorHandler) {
         console.log('BleService connecting...');
-        /* if (this.subscription != null){
-            this.manager.cancelTransaction(transactionId);
-            this.subscription.remove()
-            console.log("subscription found... removing")
-        } */
         this.actDevice.connect()
             .then((device) => {
                 console.log('BleService connect - ' + device.name);
@@ -94,6 +90,9 @@ class BleService {
             .then((device) => {
                 // Returns connected device object if successful.
                 console.log('BleService monitor - ' + device.name);
+                // Workaround for multiple listeners
+                this.c ++;
+                let localc = this.c;
                 // Monitor value changes of a ble characteristic.
                 this.subscription = device.monitorCharacteristicForService(
                     serviceUUID,
@@ -104,11 +103,13 @@ class BleService {
                             throw error
                         }
                         response = Buffer.from(characteristic.value, 'base64').toString('ascii');
-                        responseHandler(response);
+                        if (this.c == localc){
+                            responseHandler(response);
+                        }
                     },
                     transactionId);
                 console.log('BleService connection done - ' + device.name);
-                console.log("transaction id: " +transactionId)
+                console.log("transaction id: " + transactionId)
                 connectionHandler(device);
 
             })
