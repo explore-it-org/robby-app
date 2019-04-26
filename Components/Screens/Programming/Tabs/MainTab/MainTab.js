@@ -49,6 +49,7 @@ export default class MainTab extends Component {
             select_controls =
                 <View>
                     <FAB
+                        disabled={!this.state.selected}
                         style={styles.delete}
                         icon="delete"
                         onPress={() => {
