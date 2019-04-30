@@ -4,7 +4,7 @@ import Programming from "./Components/Screens/Programming/Programming";
 import Settings from "./Components/Screens/Settings/Settings";
 import BleService from "./communication/BleService";
 import {set_update_device_name_callback, device_name} from "./Stores/SettingsStore";
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import {getStatusBarHeight, ifIphoneX} from "react-native-iphone-x-helper";
 
 export default class App extends Component {
@@ -30,57 +30,38 @@ class DrawerContent extends Component {
 
     render() {
         return (
-            <View>
-                <View
-                    style={{
-                        backgroundColor: '#9c27b0',
-                        height: 140,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        ...ifIphoneX({
-                            paddingTop: getStatusBarHeight() + 10,
-                        }, {
-
-                        })
-                    }}
-                >
+            <View style={styles.container}>
+                <View style={styles.deviceName}>
                     <Text
                         style={{ color: 'white', fontSize: 30 }}>
                             {this.state.device_name}
                     </Text>
                 </View>
-                <View>
+                <View style ={styles.drawerItems}>
                     <DrawerItems {...this.props} />
                 </View>
-                <View
-                    style={{
-                        //alignItems: 'flex-end',
-                        height: 50,
-                            borderTopWidth: 1,
-                            borderTopColor: '#9c27b0',
-                            flexDirection: 'row',
-                    }}
-                >
+                <View style={styles.footer}>
                     <Text
                         style={{
-                            textAlign: 'left',
-                                marginLeft: 15,
-                                fontWeight: 'bold',
-                                color: 'black',
+                            flex: 1,
+                            marginLeft: 15,
+                            color: 'white',
+                            fontWeight: 'bold',
                         }}
                     >
                         robby app
-                        </Text>
-                        <Text
-                            style={{
-                                textAlign: 'right',
-                                marginRight: 15,
-                                fontWeight: 'bold',
-                                color: 'black',
-                            }}
-                        >
-                            v0.57
-                        </Text>
+                    </Text>
+                    <Text
+                        style={{
+                            flex: 1,
+                            textAlign: 'right',
+                            marginRight: 15,
+                            color: 'white',
+                            fontWeight: 'bold',
+                        }}
+                    >
+                        v0.5.7
+                    </Text>
                 </View>
             </View>
         );
@@ -95,3 +76,32 @@ const DrawerNavigator = createDrawerNavigator({
 });
 
 const DrawerContainer = createAppContainer(DrawerNavigator);
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1
+    },
+    deviceName: {
+        flex: 1,
+        backgroundColor: '#9c27b0',
+        height: 140,
+        alignItems: 'center',
+        justifyContent: 'center',
+        ...ifIphoneX({
+                paddingTop: getStatusBarHeight() + 10,
+            }, {}
+        )
+    },
+    drawerItems: {
+        flex: 3,
+        flexDirection: 'column',
+    },
+    footer: {
+        backgroundColor: '#9c27b0',
+        height: 50,
+        alignItems: 'center',
+        borderTopWidth: 1,
+        borderTopColor: '#9c27b0',
+        flexDirection: 'row',
+    },
+})
