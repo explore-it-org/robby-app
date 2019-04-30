@@ -19,7 +19,8 @@ import {
 export default class MainTab extends Component {
     state = {
         speeds: speeds,
-        selected: -1 // id of currently selected row
+        selected: -1, // id of currently selected row
+        speedEntryCounter: 1,
     };
 
     componentWillMount() {
@@ -49,13 +50,14 @@ export default class MainTab extends Component {
             select_controls =
                 <View>
                     <FAB
-                        disabled={this.state.selected == 0}
+                        disabled={this.state.speedEntryCounter <= 1}
                         style={styles.delete}
                         icon="delete"
                         onPress={() => {
                             let curr = this.state.selected;
                             remove(curr);
                             this.setState({ selected: curr - 1 })
+                            this.setState({speedEntryCounter: this.state.speedEntryCounter -1})
                         }}
                     />
                     <FAB
@@ -141,6 +143,7 @@ export default class MainTab extends Component {
                         } else {
                             add_at({ left: 0, right: 0 }, curr + 1)
                         }
+                        this.setState({speedEntryCounter: this.state.speedEntryCounter +1})
                     }}
                 />
                 </View>
