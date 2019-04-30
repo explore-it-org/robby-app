@@ -44,11 +44,44 @@ class DrawerContent extends Component {
                         })
                     }}
                 >
-                    <Text style={{ color: 'white', fontSize: 30 }}>
-                        {this.state.device_name}
+                    <Text
+                        style={{ color: 'white', fontSize: 30 }}>
+                            {this.state.device_name}
                     </Text>
                 </View>
-                <DrawerItems {...this.props} />
+                <View>
+                    <DrawerItems {...this.props} />
+                </View>
+                <View
+                    style={{
+                        //alignItems: 'flex-end',
+                        height: 50,
+                            borderTopWidth: 1,
+                            borderTopColor: '#9c27b0',
+                            flexDirection: 'row',
+                    }}
+                >
+                    <Text
+                        style={{
+                            textAlign: 'left',
+                                marginLeft: 15,
+                                fontWeight: 'bold',
+                                color: 'black',
+                        }}
+                    >
+                        robby app
+                        </Text>
+                        <Text
+                            style={{
+                                textAlign: 'right',
+                                marginRight: 15,
+                                fontWeight: 'bold',
+                                color: 'black',
+                            }}
+                        >
+                            v0.57
+                        </Text>
+                </View>
             </View>
         );
     }
