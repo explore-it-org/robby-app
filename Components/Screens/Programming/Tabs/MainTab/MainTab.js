@@ -96,7 +96,6 @@ export default class MainTab extends Component {
                 <KeyboardAwareScrollView
                     style={{ backgroundColor: 'white' }}
                     resetScrollToCoords={{ x: 0, y: 0 }}
-                    contentContainerStyle={styles.container}
                     scrollEnabled={true}
                 >
                     <FlatList
