@@ -38,10 +38,16 @@ export default class MainTab extends Component {
 
     onChangeLeft(index, text) {
         update_leftspeed(index, parseInt(text));
+        this.setState({
+            selected: -1
+        })
     }
 
     onChangeRight(index, text) {
         update_rightspeed(index, parseInt(text));
+        this.setState({
+            selected: -1
+        })
     }
 
     render() {
