@@ -15,6 +15,7 @@ import {
     //storeSpeeds,
     //retrieveSpeeds
 } from '../../../../../Stores/SpeedsStore'
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview'
 
 export default class MainTab extends Component {
     state = {
@@ -85,8 +86,6 @@ export default class MainTab extends Component {
                 </View>
         }
 
-        const keyboardVerticalOffset = Platform.OS === 'ios' ? 150 : -80
-        const behavior = Platform.OS === 'ios' ? 'padding' : 'position'
         return (
             <View style={[styles.view, { flex: 1, justifyContent: 'center', alignItems: 'center' }]}>
                 <View style={{marginTop: 30, height: 20, width: '100%', flexDirection: 'row'}}>
@@ -94,7 +93,12 @@ export default class MainTab extends Component {
                     <Text style={{ flex: 2, textAlign: 'center' }}>Geschwindigkeit von 0-100</Text>
                     <Text style={{ flex: 1, textAlign: 'center' }}>R</Text>
                 </View>
-                <KeyboardAvoidingView behavior={behavior} keyboardVerticalOffset={keyboardVerticalOffset}>
+                <KeyboardAwareScrollView
+                    style={{ backgroundColor: 'white' }}
+                    resetScrollToCoords={{ x: 0, y: 0 }}
+                    contentContainerStyle={styles.container}
+                    scrollEnabled={true}
+                >
                     <FlatList
                         data={this.state.speeds}
                         extraData={this.state}
@@ -129,7 +133,7 @@ export default class MainTab extends Component {
                             </TouchableOpacity>
                         )}
                     />
-                </KeyboardAvoidingView>
+                </KeyboardAwareScrollView>
                 <View>
                 <FAB
                     style={styles.fab}
