@@ -6,6 +6,7 @@ import BleService from "./communication/BleService";
 import {set_update_device_name_callback, device_name} from "./Stores/SettingsStore";
 import { View, Text, StyleSheet } from "react-native";
 import {getStatusBarHeight, ifIphoneX} from "react-native-iphone-x-helper";
+import { version } from './package.json';
 
 export default class App extends Component {
     state = {device: undefined};
@@ -60,7 +61,7 @@ class DrawerContent extends Component {
                             fontWeight: 'bold',
                         }}
                     >
-                        v0.5.7
+                        v{version}
                     </Text>
                 </View>
             </View>
