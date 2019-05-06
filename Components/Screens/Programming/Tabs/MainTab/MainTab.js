@@ -15,6 +15,9 @@ import {
     //storeSpeeds,
     //retrieveSpeeds
 } from '../../../../../Stores/SpeedsStore'
+//import packageJson from '../../../../../package.json';
+//import * as RNLocalize from "react-native-localize";
+import i18n from '../../../../../locales/i18n';
 
 export default class MainTab extends Component {
     state = {
@@ -91,7 +94,7 @@ export default class MainTab extends Component {
             <View style={[styles.view, { flex: 1, justifyContent: 'center', alignItems: 'center' }]}>
                 <View style={{marginTop: 30, height: 20, width: '100%', flexDirection: 'row'}}>
                     <Text style={{ flex: 1, textAlign: 'center' }}>L</Text>
-                    <Text style={{ flex: 2, textAlign: 'center' }}>Geschwindigkeit von 0-100</Text>
+                    <Text style={{ flex: 2, textAlign: 'center' }}>{i18n.t('MainTab.speed')}</Text>
                     <Text style={{ flex: 1, textAlign: 'center' }}>R</Text>
                 </View>
                 <KeyboardAvoidingView behavior={behavior} keyboardVerticalOffset={keyboardVerticalOffset}>

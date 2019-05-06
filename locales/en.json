@@ -1,0 +1,40 @@
+{
+  "MainTab": {
+    "speed": "Speed from 0-100"
+  },
+  "Programming": {
+    "device": "Device",
+    "noConnection": "No Connection ",
+    "chooseDevice": "Choose Device",
+    "connecting": "Connecting...",
+    "connectionError": "Error while connecting",
+    "download": "Download",
+    "downloadMessage": "Instructions successfully downloaded!",
+    "record": "Record",
+    "recordMessage": "Successfully recorded and saved on the robot!",
+    "upload": "Upload",
+    "uploadMessage": "All instructions successfully loaded on the robot!",
+    "drive": "Drive",
+    "driveMessage": "Instructions followed, terminated drive successfully!"
+  },
+  "SpeedInput": {
+    "invalidEntry": "Invalid Entry",
+    "invalidEntryMessage": "Please only enter integers between 0-100."
+  },
+  "Settings": {
+    "device": "Device",
+    "save": "Save",
+    "learn": "Learn:",
+    "interval": "Interval:",
+    "duration": "Duration:",
+    "loops": "Loops:",
+    "calibrate": "Calibrate:"
+  },
+  "App": {
+    "programming": "Programming",
+    "settings": "Settings"
+  },
+  "SettingsStore" : {
+    "noConnection": "No Connection"
+  }
+}

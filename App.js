@@ -7,6 +7,7 @@ import {set_update_device_name_callback, device_name} from "./Stores/SettingsSto
 import { View, Text, StyleSheet } from "react-native";
 import {getStatusBarHeight, ifIphoneX} from "react-native-iphone-x-helper";
 import { version } from './package.json';
+import i18n from './locales/i18n'
 
 export default class App extends Component {
     state = {device: undefined};
@@ -69,10 +70,13 @@ class DrawerContent extends Component {
     }
 }
 
-const DrawerNavigator = createDrawerNavigator({
-    Programmieren: {screen: Programming},
-    Einstellungen: {screen: Settings},
-},{
+
+const DrawerNavigator = createDrawerNavigator(
+    {
+        [i18n.t('App.programming')] : {screen: Programming},
+        [i18n.t('App.settings')] : {screen: Settings}
+    },
+{
     contentComponent: DrawerContent,
 });
 

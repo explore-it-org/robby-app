@@ -1,0 +1,40 @@
+{
+  "MainTab": {
+    "speed": "Geschwindigkeit von 0-100"
+  },
+  "Programming": {
+    "device": "Gerät",
+    "noConnection": "Keine Verbindung",
+    "chooseDevice": "Wähle Gerät",
+    "connecting": "Verbinden...",
+    "connectionError": "Error beim Verbindungsaufbau",
+    "download": "Download",
+    "downloadMessage": "Anweisungen erfolgreich von Roboter heruntergeladen!",
+    "record": "Aufzeichnen",
+    "recordMessage": "Erfolgreich aufgezeichnet und auf dem Roboter gespeichert!",
+    "upload": "Upload",
+    "uploadMessage": "Alle Anweisungen erfolgreich auf Roboter geladen!",
+    "drive": "Fahren",
+    "driveMessage": "Anweisungen abgearbeitet, Fahrt erfolgreich abgeschlossen!"
+  },
+  "SpeedInput": {
+    "invalidEntry": "Ungültige Eingabe",
+    "invalidEntryMessage": "Bitte gib nur ganze Zahlen zwischen 0-100 ein."
+  },
+  "Settings": {
+    "device": "Gerät",
+    "save": "Speichern",
+    "learn": "Lernen:",
+    "interval": "Interval:",
+    "duration": "Dauer:",
+    "loops": "Loops:",
+    "calibrate": "Kalibrieren:"
+  },
+  "App": {
+    "programming": "Programmieren",
+    "settings": "Einstellungen"
+  },
+  "SettingsStore" : {
+    "noConnection": "Keine Verbindung"
+  }
+}

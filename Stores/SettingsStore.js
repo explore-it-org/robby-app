@@ -1,10 +1,12 @@
+import i18n from '../locales/i18n'
+
 let duration = 1; // 1-80
 let interval = 1; // 1-50
 
 let calibration_left; // 1-20
 let calibration_right; // 1-20
 
-let device_name = 'Keine Verbindung'; // if undefined: no connection
+let device_name = i18n.t('SettingsStore.noConnection'); // if undefined: no connection
 let callbacks = [];
 
 let loops = 1;

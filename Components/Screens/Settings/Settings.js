@@ -5,12 +5,13 @@ import { Appbar } from 'react-native-paper';
 import { set_update_device_name_callback, device_name, loops, set_loops } from "../../../Stores/SettingsStore";
 import CalibrationInput from './CalibrationInput';
 import { getStatusBarHeight, ifIphoneX } from 'react-native-iphone-x-helper';
+import i18n from '../../../locales/i18n';
 
 export default class Settings extends Component {
 
     state = {
         device_name: device_name,
-        sub_title: 'Gerät',
+        sub_title: i18n.t('Settings.device'),
         loops: loops.toString()
     };
 
@@ -31,11 +32,11 @@ export default class Settings extends Component {
                 </Appbar>
                 <View style={{ flex: 1, padding: 40 }}>
                     <Text style={{fontSize: 16, fontWeight: 'bold', paddingBottom: 15}}>
-                        Lernen:
+                        {i18n.t('Settings.learn')}
                     </Text>
                     <View style={{ flexDirection: 'row', marginBottom: 10 }}>
                         <Text style={{ height: 50, width: '20%'}}>
-                            Interval:
+                            {i18n.t('Settings.interval')}
                             </Text>
                         <TextInput
                             style={{ padding: 5, height: 50, width: 60, borderWidth: 1, borderColor: 'grey', backgroundColor: 'white', justifyContent: 'center' }}
@@ -44,7 +45,7 @@ export default class Settings extends Component {
                             mode="outlined"
                         />
                         <Text style={{ height: 50, width: '20%', marginLeft: 40}}>
-                            Dauer:
+                            {i18n.t('Settings.duration')}
                         </Text>
                         <TextInput
                             style={{ padding: 5, width: 60, height: 50, borderWidth: 1, borderColor: 'grey', backgroundColor: 'white', justifyContent: 'center' }}
@@ -54,7 +55,7 @@ export default class Settings extends Component {
                         />
                     </View>
                     <Button
-                        title='Speichern'
+                        title={i18n.t('Settings.save')}
                         color="#9c27b0"
                         onPress={() => alert('something')} />
                     <Text style={{marginTop: 20, fontSize: 16, fontWeight: 'bold', paddingBottom: 15}}>
@@ -75,7 +76,7 @@ export default class Settings extends Component {
                         value={this.state.loops}
                     />
                     <Text style={{marginTop: 20, fontSize: 16, fontWeight: 'bold'}}>
-                        Kalibrieren:
+                        {i18n.t('Settings.calibrate')}
                     </Text>
                     <View style={{ flex: 1, flexDirection: 'row'}}>
                         <CalibrationInput val={5} limit={20} />
