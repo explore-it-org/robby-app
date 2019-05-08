@@ -15,8 +15,6 @@ import {
     //storeSpeeds,
     //retrieveSpeeds
 } from '../../../../../Stores/SpeedsStore'
-//import packageJson from '../../../../../package.json';
-//import * as RNLocalize from "react-native-localize";
 import i18n from '../../../../../locales/i18n';
 
 export default class MainTab extends Component {
