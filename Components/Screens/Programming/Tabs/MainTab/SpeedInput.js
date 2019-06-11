@@ -2,6 +2,7 @@ import { Component } from "react";
 import { StyleSheet, View, Alert } from "react-native";
 import React from "react";
 import NumericInput from "./NumericInput";
+import i18n from '../../../../../locales/i18n'
 
 export default class SpeedInput extends Component {
     // checks input changes of component NumericInput before upcalling and
@@ -11,14 +12,14 @@ export default class SpeedInput extends Component {
         let numbers = '0123456789';
 
         if (parseInt(text) > 100) {
-            Alert.alert("Ungültige Eingabe", "Bitte gib nur ganze Zahlen zwischen 0-100 ein.");
+            Alert.alert(i18n.t('SpeedInput.invalidEntry'), i18n.t('SpeedInput.invalidEntryMessage'));
             newText = '100';
         } else {
             for (let i = 0; i < text.length; i++) {
                 if (numbers.indexOf(text[i]) > -1) {
                     newText = newText + text[i];
                 } else {
-                    Alert.alert("Ungültige Eingabe", "Bitte gib nur ganze Zahlen zwischen 0-100 ein.");
+                    Alert.alert(i18n.t('SpeedInput.invalidEntry'), i18n.t('SpeedInput.invalidEntryMessage'));
                 }
             }
         }
