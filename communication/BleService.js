@@ -61,7 +61,7 @@ class BleService {
 //        services.push(serviceUUID)
 //        this.manager.startDeviceScan(services, null, (error, device) => {
 // Fixes issue #30, i.e. on some devices the scan for a particular service UUID does not return the device.
-        this.manager.startDeviceScan(null /* services */, null, (error, device) => {
+        this.manager.startDeviceScan(null, null, (error, device) => {
             if (error) {
                 // Handle error (scanning will be stopped automatically)
                 errorHandler(error);
