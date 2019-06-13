@@ -20,6 +20,12 @@ class RobotProxy {
         }
     }
 
+    stopScanning() {
+        if (! this.isConnected) {
+            BleService.stopScanning()
+        }
+    }
+
     connect(responseHandler, connectionHandler, errorHandler) {
         BleService.connectToActDevice(
             (response) => {
@@ -29,7 +35,8 @@ class RobotProxy {
                 this.isConnected = true;
                 connectionHandler(robot);
             },
-            errorHandler);
+            errorHandler
+        );
     }
 
     disconnect() {

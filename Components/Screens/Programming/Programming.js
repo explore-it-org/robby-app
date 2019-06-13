@@ -88,38 +88,50 @@ export default class Programming extends Component {
         return (
             <View style={[styles.container]}>
                 <SinglePickerMaterialDialog
-                    title={i18n.t('Programming.chooseDevice')}
-                    items={this.state.devices.map((row, index) => ({ value: index, label: row }))}
-                    visible={this.state.visible}
-                    onCancel={() => this.setState({ visible: false })}
-                    onOk={result => {
-                        this.setState({
-                            visible: false
-                        });
-                        update_device_name({ device: i18n.t('Programming.connecting')})
-                        let deviceName = result.selectedItem.label;
-                        RobotProxy.setRobot(deviceName);
-                        RobotProxy.connect(
-                            // callback for all messages from the robot
-                            (response) => {
-                                this.handleResponse(response)
-                            },
-                            // callback if communication is established successfully
-                            (robot) => {
-                                this.handleCommunicationMessages(robot.name);
-                            },
-                            // handle all errors
-                            (error) => {
-                                console.log("Error: " + error);
-                                update_device_name({ device: i18n.t('Programming.noConnection')})
-                                this.setState({
-                                    remaining_btns_disabled: true,
-                                    stop_btn_disabled: true
-                                });
-                                RobotProxy.disconnect();
-                                Alert.alert("Error", i18n.t('Programming.connectionError'));
+                    title = {i18n.t('Programming.chooseDevice')}
+                    items = {this.state.devices.map((row, index) => ({ value: index, label: row }))}
+                    visible = {this.state.visible}
+                    onCancel = {
+                        () => {
+                            this.setState({
+                                visible: false
                             });
-                    }}
+                            RobotProxy.stopScanning();
+                        }
+                    }
+                    onOk = {
+                        result => {
+                            this.setState({
+                                visible: false
+                            });
+                            RobotProxy.stopScanning();
+
+                            update_device_name({ device: i18n.t('Programming.connecting')})
+                            let deviceName = result.selectedItem.label;
+                            RobotProxy.setRobot(deviceName);
+                            RobotProxy.connect(
+                                // callback for all messages from the robot
+                                (response) => {
+                                    this.handleResponse(response)
+                                },
+                                // callback if communication is established successfully
+                                (robot) => {
+                                    this.handleCommunicationMessages(robot.name);
+                                },
+                                // handle all errors
+                                (error) => {
+                                    console.log("Error: " + error);
+                                    update_device_name({ device: i18n.t('Programming.noConnection')})
+                                    this.setState({
+                                        remaining_btns_disabled: true,
+                                        stop_btn_disabled: true
+                                    });
+                                    RobotProxy.disconnect();
+                                    Alert.alert("Error", i18n.t('Programming.connectionError'));
+                                }
+                            );
+                        }
+                    }
                     colorAccent="#9c27b0"
                 />
                 <Appbar>

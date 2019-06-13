@@ -45,6 +45,7 @@ class BleService {
     }
 
     scanningForRobots(errorHandler, deviceHandler) {
+        console.log('BleService scanning...');
         // Just for testing
         /*
         simDevices = ['Device A', 'Device B'];
@@ -56,18 +57,19 @@ class BleService {
         }, 100);
         */
         this.devices = new Map();
-        let services = [];
-        services.push(serviceUUID)
-        this.manager.startDeviceScan(services, null, (error, device) => {
+//        let services = [];
+//        services.push(serviceUUID)
+//        this.manager.startDeviceScan(services, null, (error, device) => {
+// Fixes issue #30, i.e. on some devices the scan for a particular service UUID does not return the device.
+        this.manager.startDeviceScan(null /* services */, null, (error, device) => {
             if (error) {
                 // Handle error (scanning will be stopped automatically)
                 errorHandler(error);
                 return
             }
             // new device detected. check it!
-            if (device.name && device.name.startsWith('EXPLORE-IT')) {
-                devicesFound = this.devices.get(device.name);
-                if (devicesFound === undefined) {
+            if (device.name && device.name.startsWith('EXPLORE-IT') && device.serviceUUIDs.includes(serviceUUID)) {
+                if (this.devices.get(device.name) === undefined) {
                     this.devices.set(device.name, device);
                     deviceHandler(device.name);
                 }
