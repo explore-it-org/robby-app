@@ -1,4 +1,4 @@
-import BleService from '../communication/BleService'
+import BleService from './BleService'
 import { throwStatement } from '@babel/types';
 
 class RobotProxy {
