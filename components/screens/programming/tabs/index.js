@@ -1,4 +1,4 @@
-import MainTab from './MainTab/MainTab'
+import MainTab from './main-tab/MainTab'
 import MixedViewTab from './MixedViewTab'
 import BlockViewTab from './BlockViewTab'
 

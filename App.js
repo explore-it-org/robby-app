@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import { createDrawerNavigator, createAppContainer, DrawerItems} from "react-navigation";
-import Programming from "./Components/Screens/Programming/Programming";
-import Settings from "./Components/Screens/Settings/Settings";
+import Programming from "./components/screens/programming/Programming";
+import Settings from "./components/screens/settings/Settings";
 import BleService from "./communication/BleService";
-import {set_update_device_name_callback, device_name} from "./Stores/SettingsStore";
+import {set_update_device_name_callback, device_name} from "./stores/SettingsStore";
 import { View, Text, StyleSheet } from "react-native";
 import {getStatusBarHeight, ifIphoneX} from "react-native-iphone-x-helper";
 import { version } from './package.json';

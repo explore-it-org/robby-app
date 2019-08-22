@@ -3,10 +3,10 @@ import { StyleSheet, View, Alert } from 'react-native';
 import { Appbar } from 'react-native-paper';
 import { createMaterialTopTabNavigator, createAppContainer } from "react-navigation";
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { MainTab, MixedViewTab, BlockViewTab } from "./Tabs/index";
-import RobotProxy from '../../../robot/RobotProxy';
-import { speeds, add, remove_all, set_update_speeds_callback } from '../../../Stores/SpeedsStore';
-import { set_update_device_name_callback, device_name, update_device_name, loops } from "../../../Stores/SettingsStore";
+import { MainTab, MixedViewTab, BlockViewTab } from "./tabs/index";
+import RobotProxy from '../../../communication/RobotProxy';
+import { speeds, add, remove_all, set_update_speeds_callback } from '../../../stores/SpeedsStore';
+import { set_update_device_name_callback, device_name, update_device_name, loops } from "../../../stores/SettingsStore";
 import { getStatusBarHeight, ifIphoneX } from 'react-native-iphone-x-helper'
 import { SinglePickerMaterialDialog } from "react-native-material-dialog";
 import i18n from '../../../locales/i18n'

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Text, TextInput, Button } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { Appbar } from 'react-native-paper';
-import { set_update_device_name_callback, device_name, loops, set_loops } from "../../../Stores/SettingsStore";
+import { set_update_device_name_callback, device_name, loops, set_loops } from "../../../stores/SettingsStore";
 import CalibrationInput from './CalibrationInput';
 import { getStatusBarHeight, ifIphoneX } from 'react-native-iphone-x-helper';
 import i18n from '../../../locales/i18n';

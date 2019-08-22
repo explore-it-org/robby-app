@@ -14,7 +14,7 @@ import {
     set_update_speeds_callback,
     //storeSpeeds,
     //retrieveSpeeds
-} from '../../../../../Stores/SpeedsStore'
+} from '../../../../../stores/SpeedsStore'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview'
 import i18n from '../../../../../locales/i18n';
 
