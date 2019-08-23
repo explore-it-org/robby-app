@@ -130,7 +130,7 @@ class BleService {
         return this.actDevice;
     }
 
-    // Deprecated
+    // @deprecated
     sendCommandToActDevice(command) {
         if (this.actDevice) {
             console.log('sendCommandToActDevice: ' + command);
