@@ -46,21 +46,22 @@ class BleService {
 
     scanningForRobots(errorHandler, deviceHandler) {
         console.log('BleService scanning...');
-        // Just for testing
-        /*
-        simDevices = ['Device A', 'Device B'];
-        setTimeout(() => {
-          deviceHandler(simDevices[0]);
-        }, 100);
-        setTimeout(() => {
-          deviceHandler(simDevices[1]);
-        }, 100);
-        */
+//      // Just for testing
+//      var i;
+//      for(i = 0; i < 20; i++) {
+//          const id = i;
+//          setTimeout(() => {
+//              deviceHandler("EXPLORE-IT 00:" + id.toString(16).padStart(2, "0"));
+//          }, i*100);
+//      }
+
         this.devices = new Map();
+// Fixes issue #30, i.e. on some devices the scan for a particular service UUID does not return the device.
+//    Replaces the following explicit search for devices supporting a particular characteristic
 //        let services = [];
 //        services.push(serviceUUID)
 //        this.manager.startDeviceScan(services, null, (error, device) => {
-// Fixes issue #30, i.e. on some devices the scan for a particular service UUID does not return the device.
+//    with code which accepts all devices (null-arguments)
         this.manager.startDeviceScan(null, null, (error, device) => {
             if (error) {
                 // Handle error (scanning will be stopped automatically)
@@ -129,6 +130,7 @@ class BleService {
         return this.actDevice;
     }
 
+    // Deprecated
     sendCommandToActDevice(command) {
         if (this.actDevice) {
             console.log('sendCommandToActDevice: ' + command);
@@ -139,6 +141,16 @@ class BleService {
                 null
             );
         }
+    }
+
+    sendCommandToActDevice2(command): Promise<Characteristic> {
+        console.log('sendCommandToActDevice2: ' + command);
+        return this.actDevice.writeCharacteristicWithResponseForService(
+            serviceUUID,
+            characteristicsUUID,
+            Buffer.from(command).toString('base64'),
+            null
+        );
     }
 
     shutdown() {

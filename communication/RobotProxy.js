@@ -7,8 +7,6 @@ class RobotProxy {
         isLearning = false;
         loops = 0;
         version = 0;
-
-        cont = null;
     }
 
     setRobot(robotDevice) {
@@ -37,8 +35,18 @@ class RobotProxy {
             (robot) => {
                 this.isConnected = true;
                 this.version = 1; // default version if no version number is published
-                BleService.sendCommandToActDevice('Z'); // Version request
-                connectionHandler(robot);
+                BleService.sendCommandToActDevice2('Z') // Version request
+                    .then((c) => {
+                        connectionHandler(robot); // enables buttons in the GUI
+                    })
+                    .then(() => {
+                        // connection established, query for I now
+                        return BleService.sendCommandToActDevice2("I?")
+                    })
+                    .catch((e) => {
+                        console.log("Device not set")
+                        console.log(e)
+                    });
             },
             errorHandler
         );
@@ -56,7 +64,11 @@ class RobotProxy {
 
     run() {
         if (this.isConnected) {
-            BleService.sendCommandToActDevice('R');
+            BleService.sendCommandToActDevice2('R')
+                .catch((e) => {
+                    console.log("Device not set")
+                    console.log(e)
+                });
         }
     }
 
@@ -64,7 +76,11 @@ class RobotProxy {
     go(loops) {
         if (this.isConnected) {
             this.loops = loops;
-            BleService.sendCommandToActDevice('G');
+            BleService.sendCommandToActDevice2('G')
+                .catch((e) => {
+                    console.log("Device not set")
+                    console.log(e)
+                });
         }
     }
 
@@ -73,7 +89,11 @@ class RobotProxy {
         if (this.isConnected) {
             this.isLearning = false;
             this.loops = 0;
-            BleService.sendCommandToActDevice('S');
+            BleService.sendCommandToActDevice2('S')
+                .catch((e) => {
+                    console.log("Device not set")
+                    console.log(e)
+                });
         }
     }
 
@@ -88,15 +108,22 @@ class RobotProxy {
                     break;
                 case 2:
                 case 3:
-                    BleService.sendCommandToActDevice('F');
-                    var hex = Number(interval * duration * 2 - 1).toString(16).toUpperCase();
-                    while (hex.length < 4) {
-                        hex = "0" + hex;
-                    }
-                    BleService.sendCommandToActDevice('d' + hex);
-                    this.cont = () => {
-                        BleService.sendCommandToActDevice('L');
-                    }
+                    BleService.sendCommandToActDevice2('F')
+                        .then((c) => {
+                            var hex = Number(interval * duration * 2 - 1).toString(16).toUpperCase();
+                            while (hex.length < 4) {
+                                hex = "0" + hex;
+                            }
+                            return BleService.sendCommandToActDevice2('d' + hex);
+                        })
+                        .then((c) => {
+                            return BleService.sendCommandToActDevice2('L');
+                        })
+                        .catch((e) => {
+                            console.log("Device not set")
+                            console.log(e)
+                        });
+
                     break;
                 default:
                     console.log("record: version not supported: " + this.version)
@@ -128,23 +155,34 @@ class RobotProxy {
                     }
                     BleService.sendCommandToActDevice(',,,,');
                     break;
+
                 case 2:
                 case 3:
-                    BleService.sendCommandToActDevice('F')
-                    var hex = Number(speeds.length * 2 - 1).toString(16).toUpperCase();
-                    while (hex.length < 4) {
-                        hex = "0" + hex;
+                    var promise = BleService.sendCommandToActDevice2('F')
+                        .then((c) => {
+                            var hex = Number(speeds.length * 2 - 1).toString(16).toUpperCase();
+                            while (hex.length < 4) {
+                                hex = "0" + hex;
+                            }
+                            return BleService.sendCommandToActDevice2('d' + hex)
+                        })
+                        .then((c) => {
+                            return BleService.sendCommandToActDevice2('E');
+                        });
+
+                    for (let i = 0; i < speeds.length; i++) {
+                        let item = speeds[i];
+                        let speed = this.speed_padding(item.left) + ',' + this.speed_padding(item.right) + 'xx';
+                        promise = promise.then((c) => {
+                            return BleService.sendCommandToActDevice2(speed);
+                        })
                     }
-                    BleService.sendCommandToActDevice('d' + hex);
-                    this.cont = () => {
-                        BleService.sendCommandToActDevice('E');
-                        for (let i = 0; i < speeds.length; i++) {
-                            let item = speeds[i];
-                            let speed = this.speed_padding(item.left) + ',' + this.speed_padding(item.right) + 'xx';
-                            BleService.sendCommandToActDevice(speed);
-                        }
-                        BleService.sendCommandToActDevice(',,,,');
-                    }
+                    promise.then((c) => {
+                        return BleService.sendCommandToActDevice2('end');
+                    }).catch((e) => {
+                        console.log("Device not set")
+                        console.log(e)
+                    })
                     break;
                 default:
                     console.log("upload: version not supported: " + this.version)
@@ -156,19 +194,20 @@ class RobotProxy {
     download() {
         if (this.isConnected) {
             this.isLearning = false;
-            BleService.sendCommandToActDevice('B');
+            BleService.sendCommandToActDevice2('B')
+                .catch((e) => {
+                    console.log("Device not set")
+                    console.log(e)
+                });
         }
     }
 
     // handles responses from the robot
     handleResponse(responseHandler, response) {
-        console.log("Response: " + response)
+        console.log("Response: " + response + " (len " + response.length + ")")
         if (response.startsWith("VER")) {
             console.log("Protocol Version: " + response);
             this.version = parseInt(response.substring(4));
-        } else if (response.startsWith("d_")) {
-            // FIXME
-            if(this.cont) this.cont();
         } else if (response.match("\\b[0-9]{3}\\b,\\b[0-9]{3}\\b")) {
             let read_speeds = response.trim().split(',');
             let speed_l = read_speeds[0] / 2.55 + 0.5;
@@ -201,7 +240,11 @@ class RobotProxy {
                     var res = {type: 'finishedDriving'};
                     this.loops--;
                     if(this.loops > 0) {
-                        BleService.sendCommandToActDevice('G');
+                        BleService.sendCommandToActDevice2('G')
+                            .catch((e) => {
+                                console.log("Device not set")
+                                console.log(e)
+                            });
                     } else {
                         responseHandler(res);
                     }
