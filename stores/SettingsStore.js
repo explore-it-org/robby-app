@@ -1,10 +1,10 @@
 import i18n from '../locales/i18n'
 
-let duration = 1; // 1-80
+let duration = 5; // 1-80
 let interval = 1; // 1-50
 
-let calibration_left; // 1-20
-let calibration_right; // 1-20
+//let calibration_left; // 1-20
+//let calibration_right; // 1-20
 
 let device_name = i18n.t('SettingsStore.noConnection'); // if undefined: no connection
 let callbacks = [];
@@ -25,14 +25,18 @@ function set_update_device_name_callback(fn) {
 function set_loops(n) {
     loops = n;
 }
+function set_duration(n) {
+    duration = n;
+}
 
 export {
-    duration,
-    interval,
     device_name,
     update_device_name,
-    calibration_left,
+//    calibration_left,
     set_update_device_name_callback,
+    interval,
     loops,
-    set_loops
+    set_loops,
+    duration,
+    set_duration
 }

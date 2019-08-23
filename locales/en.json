@@ -22,11 +22,14 @@
     "invalidEntryMessage": "Please only enter integers between 0-100."
   },
   "Settings": {
+    "settings": "Settings",
     "device": "Device",
-    "save": "Save",
     "learn": "Learn:",
     "interval": "Interval:",
+    "interval-unit": "per second (1..50)",
     "duration": "Duration:",
+    "duration-unit": "seconds (1..80)",
+    "play": "Play:",
     "loops": "Loops:",
     "calibrate": "Calibrate:"
   },

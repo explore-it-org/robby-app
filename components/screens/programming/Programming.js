@@ -6,7 +6,7 @@ import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIc
 import { MainTab, MixedViewTab, BlockViewTab } from "./tabs/index";
 import RobotProxy from '../../../communication/RobotProxy';
 import { speeds, add, remove_all, set_update_speeds_callback } from '../../../stores/SpeedsStore';
-import { set_update_device_name_callback, device_name, update_device_name, loops } from "../../../stores/SettingsStore";
+import { set_update_device_name_callback, device_name, update_device_name, loops, duration, interval } from "../../../stores/SettingsStore";
 import { getStatusBarHeight, ifIphoneX } from 'react-native-iphone-x-helper'
 import { SinglePickerMaterialDialog } from "react-native-material-dialog";
 import i18n from '../../../locales/i18n'
@@ -66,13 +66,13 @@ export default class Programming extends Component {
                 });
                 break
             case 'finishedLearning':
-                Alert.alert(i18n.t('Programming.upload'), i18n.t('Programming.recordMessage'));
+                Alert.alert(i18n.t('Programming.record'), i18n.t('Programming.recordMessage'));
                 this.setState({
                     remaining_btns_disabled: false,
                     stop_btn_disabled: true
                 });
                 break
-			case 'finishedUpload':
+            case 'finishedUpload':
                 Alert.alert(i18n.t('Programming.upload'), i18n.t('Programming.uploadMessage'));
                 this.setState({
                     remaining_btns_disabled: false,
@@ -167,7 +167,7 @@ export default class Programming extends Component {
                                 stop_btn_disabled: false,
                                 remaining_btns_disabled: true
                             });
-                            RobotProxy.record(loops);
+                            RobotProxy.record(duration, interval);
                         }} />
                     <Appbar.Action icon="fast-forward"
                         size={32}
@@ -195,9 +195,9 @@ export default class Programming extends Component {
                         disabled={this.state.remaining_btns_disabled}
                         onPress={() => {
                             this.setState({
-								stop_btn_disabled: true,
+                                stop_btn_disabled: true,
                                 remaining_btns_disabled: true
-							});
+                            });
                             RobotProxy.upload(this.state.speeds);
                         }} />
                     <Appbar.Action icon={(this.state.device) ? "bluetooth-connected" : "bluetooth"} style={{ position: 'absolute', right: 0 }}

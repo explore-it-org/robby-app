@@ -131,6 +131,7 @@ class BleService {
 
     sendCommandToActDevice(command) {
         if (this.actDevice) {
+            console.log('sendCommandToActDevice: ' + command);
             this.actDevice.writeCharacteristicWithResponseForService(
                 serviceUUID,
                 characteristicsUUID,

@@ -22,11 +22,14 @@
     "invalidEntryMessage": "Bitte gib nur ganze Zahlen zwischen 0-100 ein."
   },
   "Settings": {
+    "settings": "Einstellung",
     "device": "Gerät",
-    "save": "Speichern",
     "learn": "Lernen:",
     "interval": "Interval:",
+    "interval-unit": "pro Sekunde (1..50)",
     "duration": "Dauer:",
+    "duration-unit": "Sekunden (1..80)",
+    "play": "Abspielen:",
     "loops": "Loops:",
     "calibrate": "Kalibrieren:"
   },
