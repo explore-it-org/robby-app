@@ -87,6 +87,7 @@ class RobotProxy {
                     BleService.sendCommandToActDevice('L');
                     break;
                 case 2:
+                case 3:
                     BleService.sendCommandToActDevice('F');
                     var hex = Number(interval * duration * 2 - 1).toString(16).toUpperCase();
                     while (hex.length < 4) {
@@ -128,6 +129,7 @@ class RobotProxy {
                     BleService.sendCommandToActDevice(',,,,');
                     break;
                 case 2:
+                case 3:
                     BleService.sendCommandToActDevice('F')
                     var hex = Number(speeds.length * 2 - 1).toString(16).toUpperCase();
                     while (hex.length < 4) {
@@ -179,7 +181,7 @@ class RobotProxy {
             responseHandler(res)
         } else {
             response = response.trim().toLowerCase() 
-            switch (response) {     
+            switch (response) {
                 case (',,,,'):
                     // finished download (beam)
                     responseHandler({type: 'finishedDownload'});
