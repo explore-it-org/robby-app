@@ -16,7 +16,7 @@
     "react-native-ble-plx": "1.0.3",
     "react-native-elements": "1.1.0",
     "react-native-fab": "1.0.8",
-    "react-native-gesture-handler": "^1.1.0",
+    "react-native-gesture-handler": "1.1.0",
     "react-native-iphone-x-helper": "1.2.0",
     "react-native-keyboard-aware-scrollview": "^2.0.0",
     "react-native-localize": "^1.1.2",
