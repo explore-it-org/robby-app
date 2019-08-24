@@ -2,23 +2,27 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Text, TextInput, Button } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { Appbar } from 'react-native-paper';
-import { set_update_device_name_callback, device_name, loops, duration, set_loops, set_duration } from "../../../stores/SettingsStore";
+import { addDeviceNameChangeListener, addIntervalChangeListener, getDeviceName, getLoopCounter, getDuration, getInterval, setLoopCounter, setDuration } from "../../../stores/SettingsStore";
 //import CalibrationInput from './CalibrationInput';
 import { getStatusBarHeight, ifIphoneX } from 'react-native-iphone-x-helper';
 import i18n from '../../../locales/i18n';
+import RobotProxy from '../../../communication/RobotProxy';
+
 
 export default class Settings extends Component {
 
     state = {
-        device_name: device_name,
+        device_name: getDeviceName(),
         sub_title: i18n.t('Settings.device'),
-        loops: loops.toString(),
-        duration: duration.toString()
+        loops: getLoopCounter().toString(),
+        duration: getDuration().toString(),
+        interval: getInterval() == 0 ? "" : getInterval().toString()
     };
 
     constructor() {
         super();
-        set_update_device_name_callback((name) => { this.setState({ device_name: name }); });
+        addDeviceNameChangeListener(name => { this.setState({ device_name: name }); });
+        addIntervalChangeListener(value => { this.setState({ interval: value == 0 ? "" : value.toString() }); })
     }
 
     render() {
@@ -45,11 +49,22 @@ export default class Settings extends Component {
                             keyboardType='numeric'
                             textAlign={'center'}
                             mode="outlined"
+                            onChangeText={(text) => {
+                                this.setState({
+                                    interval: text
+                                });
+                                if(text.length > 0) {
+                                    const value = parseInt(text);
+                                    RobotProxy.setInterval(value)
+                                }
+                            }}
+                            value={this.state.interval}
                         />
                         <Text style={{ height: 50, marginLeft: 20}}>
                             {i18n.t('Settings.interval-unit')}
                         </Text>
                     </View>
+
 
                     <Text style={{fontSize: 16, fontWeight: 'bold', paddingBottom: 15}}>
                         {i18n.t('Settings.learn')}
@@ -68,7 +83,7 @@ export default class Settings extends Component {
                                 this.setState({
                                     duration: text
                                 });
-                                set_duration(d)
+                                setDuration(d)
                             }}
                             value={this.state.duration}
                         />
@@ -94,7 +109,7 @@ export default class Settings extends Component {
                                 this.setState({
                                     loops: text
                                 });
-                                set_loops(nr)
+                                setLoopCounter(nr)
                             }}
                             value={this.state.loops}
                         />

@@ -202,12 +202,31 @@ class RobotProxy {
         }
     }
 
+    setInterval(interval) {
+        if (this.isConnected) {
+            // Argument check is done by the robot, i.e. arguments must meet (0 <= interval <= 50)
+            BleService.sendCommandToActDevice2("I"+interval)
+                .then((c) => {
+                    BleService.sendCommandToActDevice2("I?")
+                })
+                .catch((e) => {
+                    console.log("Device not set")
+                    console.log(e)
+                });
+        }
+    }
+
     // handles responses from the robot
     handleResponse(responseHandler, response) {
         console.log("Response: " + response + " (len " + response.length + ")")
         if (response.startsWith("VER")) {
             console.log("Protocol Version: " + response);
             this.version = parseInt(response.substring(4));
+        } else if(response.startsWith("I=")) {
+            // Response to I?:  I=02
+            console.log("Interval: " + response);
+            let value = parseInt(response.substring(2));
+            responseHandler({type: 'interval', value: value})
         } else if (response.match("\\b[0-9]{3}\\b,\\b[0-9]{3}\\b")) {
             let read_speeds = response.trim().split(',');
             let speed_l = read_speeds[0] / 2.55 + 0.5;

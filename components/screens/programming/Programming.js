@@ -6,14 +6,14 @@ import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIc
 import { MainTab, MixedViewTab, BlockViewTab } from "./tabs/index";
 import RobotProxy from '../../../communication/RobotProxy';
 import { speeds, add, remove_all, set_update_speeds_callback } from '../../../stores/SpeedsStore';
-import { set_update_device_name_callback, device_name, update_device_name, loops, duration, interval } from "../../../stores/SettingsStore";
+import { addDeviceNameChangeListener, getDeviceName, setDeviceName, getLoopCounter, getDuration, getInterval, setInterval } from "../../../stores/SettingsStore";
 import { getStatusBarHeight, ifIphoneX } from 'react-native-iphone-x-helper'
 import { SinglePickerMaterialDialog } from "react-native-material-dialog";
 import i18n from '../../../locales/i18n'
 
 export default class Programming extends Component {
     state = {
-        device_name: device_name,
+        device_name: getDeviceName(),
         sub_title: i18n.t('Programming.device'),
         visible: false,
         device: undefined,
@@ -25,13 +25,13 @@ export default class Programming extends Component {
 
     constructor(props) {
         super(props);
-        set_update_device_name_callback((name) => { this.setState({ device_name: name }); });
+        addDeviceNameChangeListener((name) => { this.setState({ device_name: name }); });
         set_update_speeds_callback((speeds) => { this.setState({ speeds: speeds }); });
     }
 
     // handles messages from the communcation system
     handleCommunicationMessages(name) {
-        update_device_name({ device: name.substr(name.length - 5) });
+        setDeviceName({ device: name.substr(name.length - 5) });
         this.setState({
             visible: false,
             device: name,
@@ -42,6 +42,9 @@ export default class Programming extends Component {
 
     handleResponse(res) {
         switch (res.type) {
+            case 'interval':
+                setInterval(res.value)
+                break;
             case 'speedLine':
                 add({ left: res.left, right: res.right })
                 break
@@ -106,7 +109,7 @@ export default class Programming extends Component {
                             });
                             RobotProxy.stopScanning();
 
-                            update_device_name({ device: i18n.t('Programming.connecting')})
+                            setDeviceName({ device: i18n.t('Programming.connecting')})
                             let deviceName = result.selectedItem.label;
                             RobotProxy.setRobot(deviceName);
                             RobotProxy.connect(
@@ -121,7 +124,8 @@ export default class Programming extends Component {
                                 // handle all errors
                                 (error) => {
                                     console.log("Error: " + error);
-                                    update_device_name({ device: i18n.t('Programming.noConnection')})
+                                    setDeviceName({ device: i18n.t('Programming.noConnection')});
+                                    setInterval(0);
                                     this.setState({
                                         remaining_btns_disabled: true,
                                         stop_btn_disabled: true
@@ -167,7 +171,7 @@ export default class Programming extends Component {
                                 stop_btn_disabled: false,
                                 remaining_btns_disabled: true
                             });
-                            RobotProxy.record(duration, interval);
+                            RobotProxy.record(getDuration(), getInterval());
                         }} />
                     <Appbar.Action icon="fast-forward"
                         size={32}
@@ -177,7 +181,7 @@ export default class Programming extends Component {
                                 stop_btn_disabled: false,
                                 remaining_btns_disabled: true
                             });
-                            RobotProxy.go(loops);
+                            RobotProxy.go(getLoopCounter());
                         }} />
                     <Appbar.Action icon="file-download"
                         size={32}
@@ -205,12 +209,13 @@ export default class Programming extends Component {
                         onPress={() => {
                             if (RobotProxy.isConnected) {
                                 RobotProxy.disconnect();
-                                update_device_name({ device: i18n.t('Programming.noConnection')})
+                                setDeviceName({ device: i18n.t('Programming.noConnection')});
+                                setInterval(0);
                                 this.setState({
                                     device: undefined,
                                     remaining_btns_disabled: true,
                                     stop_btn_disabled: true
-                                })
+                                });
                             } else {
                                 // init scanning for robots over ble
                                 this.setState({

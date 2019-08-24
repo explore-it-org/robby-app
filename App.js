@@ -3,7 +3,7 @@ import { createDrawerNavigator, createAppContainer, DrawerItems} from "react-nav
 import Programming from "./components/screens/programming/Programming";
 import Settings from "./components/screens/settings/Settings";
 import BleService from "./communication/BleService";
-import {set_update_device_name_callback, device_name} from "./stores/SettingsStore";
+import {addDeviceNameChangeListener, getDeviceName} from "./stores/SettingsStore";
 import { View, Text, StyleSheet } from "react-native";
 import {getStatusBarHeight, ifIphoneX} from "react-native-iphone-x-helper";
 import { version } from './package.json';
@@ -20,12 +20,12 @@ export default class App extends Component {
 
 class DrawerContent extends Component {
     state = {
-        device_name: device_name,
+        device_name: getDeviceName(),
     };
     constructor() {
         super();
 
-        set_update_device_name_callback((name) => {
+        addDeviceNameChangeListener(name => {
             this.setState({ device_name: name });
         });
     }
