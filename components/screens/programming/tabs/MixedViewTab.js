@@ -6,7 +6,7 @@ export default class MixedViewScreen extends React.Component {
     render() {
         return (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white' }}>
-                <Text>Second!</Text>
+                <Text>Load and Store (to be implemented)</Text>
             </View>
         );
     }

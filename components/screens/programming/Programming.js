@@ -3,10 +3,10 @@ import { StyleSheet, View, Alert } from 'react-native';
 import { Appbar } from 'react-native-paper';
 import { createMaterialTopTabNavigator, createAppContainer } from "react-navigation";
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { MainTab, MixedViewTab, BlockViewTab } from "./tabs/index";
+import { MainTab, MixedViewTab } from "./tabs/index";
 import RobotProxy from '../../../communication/RobotProxy';
 import { speeds, add, remove_all, set_update_speeds_callback } from '../../../stores/SpeedsStore';
-import { addDeviceNameChangeListener, getDeviceName, setDeviceName, getLoopCounter, getDuration, getInterval, setInterval } from "../../../stores/SettingsStore";
+import { addDeviceNameChangeListener, getDeviceName, setDeviceName, setConnected, getLoopCounter, getDuration, getInterval, setInterval } from "../../../stores/SettingsStore";
 import { getStatusBarHeight, ifIphoneX } from 'react-native-iphone-x-helper'
 import { SinglePickerMaterialDialog } from "react-native-material-dialog";
 import i18n from '../../../locales/i18n'
@@ -32,6 +32,7 @@ export default class Programming extends Component {
     // handles messages from the communcation system
     handleCommunicationMessages(name) {
         setDeviceName({ device: name.substr(name.length - 5) });
+        setConnected(true);
         this.setState({
             visible: false,
             device: name,
@@ -126,6 +127,7 @@ export default class Programming extends Component {
                                     console.log("Error: " + error);
                                     setDeviceName({ device: i18n.t('Programming.noConnection')});
                                     setInterval(0);
+                                    setConnected(false);
                                     this.setState({
                                         remaining_btns_disabled: true,
                                         stop_btn_disabled: true
@@ -211,6 +213,7 @@ export default class Programming extends Component {
                                 RobotProxy.disconnect();
                                 setDeviceName({ device: i18n.t('Programming.noConnection')});
                                 setInterval(0);
+                                setConnected(false);
                                 this.setState({
                                     device: undefined,
                                     remaining_btns_disabled: true,
@@ -254,14 +257,6 @@ const TabNavigator = createMaterialTopTabNavigator({
         navigationOptions: {
             tabBarIcon: ({ tintColor }) => (
                 <MaterialCommunityIcon name="page-layout-body" size={24} color={tintColor} />
-            )
-        },
-    },
-    Third: {
-        screen: BlockViewTab,
-        navigationOptions: {
-            tabBarIcon: ({ tintColor }) => (
-                <MaterialCommunityIcon name="page-layout-header" size={24} color={tintColor} />
             )
         },
     }

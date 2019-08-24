@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, TextInput, Button } from 'react-native';
-import { Icon } from 'react-native-elements';
 import { Appbar } from 'react-native-paper';
-import { addDeviceNameChangeListener, addIntervalChangeListener, getDeviceName, getLoopCounter, getDuration, getInterval, setLoopCounter, setDuration } from "../../../stores/SettingsStore";
+
+import { getDeviceName, addDeviceNameChangeListener } from "../../../stores/SettingsStore";
+import { getInterval, addIntervalChangeListener } from "../../../stores/SettingsStore";
+import { getLoopCounter, setLoopCounter } from "../../../stores/SettingsStore";
+import { getDuration, setDuration } from "../../../stores/SettingsStore";
+import { isConnected, addConnectedChangeListener } from "../../../stores/SettingsStore";
+
+//import { Icon } from 'react-native-elements';
 //import CalibrationInput from './CalibrationInput';
 import { getStatusBarHeight, ifIphoneX } from 'react-native-iphone-x-helper';
 import i18n from '../../../locales/i18n';
@@ -16,13 +22,15 @@ export default class Settings extends Component {
         sub_title: i18n.t('Settings.device'),
         loops: getLoopCounter().toString(),
         duration: getDuration().toString(),
-        interval: getInterval() == 0 ? "" : getInterval().toString()
+        interval: getInterval() == 0 ? "" : getInterval().toString(),
+        connected: isConnected()
     };
 
     constructor() {
         super();
         addDeviceNameChangeListener(name => { this.setState({ device_name: name }); });
         addIntervalChangeListener(value => { this.setState({ interval: value == 0 ? "" : value.toString() }); })
+        addConnectedChangeListener(value => { this.setState({ connected: isConnected() }); });
     }
 
     render() {
@@ -49,6 +57,7 @@ export default class Settings extends Component {
                             keyboardType='numeric'
                             textAlign={'center'}
                             mode="outlined"
+                            editable={this.state.connected}
                             onChangeText={(text) => {
                                 this.setState({
                                     interval: text
