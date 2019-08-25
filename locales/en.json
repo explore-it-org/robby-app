@@ -13,7 +13,7 @@
     "record": "Record",
     "recordMessage": "Successfully recorded and saved on the robot!",
     "upload": "Upload",
-    "uploadMessage": "All instructions successfully loaded on the robot!",
+    "uploadMessage": "All instructions successfully uploaded on the robot!",
     "drive": "Drive",
     "driveMessage": "Instructions followed, terminated drive successfully!"
   },
@@ -22,16 +22,15 @@
     "invalidEntryMessage": "Please only enter integers between 0-100."
   },
   "Settings": {
-    "settings": "Settings",
     "device": "Device",
-    "learn": "Learn:",
+    "settings": "Settings",
     "interval": "Interval:",
     "interval-unit": "per second (1..50)",
+    "learn": "Record:",
     "duration": "Duration:",
     "duration-unit": "seconds (1..80)",
     "play": "Play:",
-    "loops": "Loops:",
-    "calibrate": "Calibrate:"
+    "loops": "Loops:"
   },
   "App": {
     "programming": "Programming",
