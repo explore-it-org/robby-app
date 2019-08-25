@@ -110,32 +110,34 @@ export default class Programming extends Component {
                             });
                             RobotProxy.stopScanning();
 
-                            setDeviceName({ device: i18n.t('Programming.connecting')})
-                            let deviceName = result.selectedItem.label;
-                            RobotProxy.setRobot(deviceName);
-                            RobotProxy.connect(
-                                // callback for all messages from the robot
-                                (response) => {
-                                    this.handleResponse(response)
-                                },
-                                // callback if communication is established successfully
-                                (robot) => {
-                                    this.handleCommunicationMessages(robot.name);
-                                },
-                                // handle all errors
-                                (error) => {
-                                    console.log("Error: " + error);
-                                    setDeviceName({ device: i18n.t('Programming.noConnection')});
-                                    setInterval(0);
-                                    setConnected(false);
-                                    this.setState({
-                                        remaining_btns_disabled: true,
-                                        stop_btn_disabled: true
-                                    });
-                                    RobotProxy.disconnect();
-                                    Alert.alert("Error", i18n.t('Programming.connectionError'));
-                                }
-                            );
+                            if(result.selectedItem) {
+                                setDeviceName({ device: i18n.t('Programming.connecting')})
+                                let deviceName = result.selectedItem.label;
+                                RobotProxy.setRobot(deviceName);
+                                RobotProxy.connect(
+                                    // callback for all messages from the robot
+                                    (response) => {
+                                        this.handleResponse(response)
+                                    },
+                                    // callback if communication is established successfully
+                                    (robot) => {
+                                        this.handleCommunicationMessages(robot.name);
+                                    },
+                                    // handle all errors
+                                    (error) => {
+                                        console.log("Error: " + error);
+                                        setDeviceName({ device: i18n.t('Programming.noConnection')});
+                                        setInterval(0);
+                                        setConnected(false);
+                                        this.setState({
+                                            remaining_btns_disabled: true,
+                                            stop_btn_disabled: true
+                                        });
+                                        RobotProxy.disconnect();
+                                        Alert.alert("Error", i18n.t('Programming.connectionError'));
+                                    }
+                                );
+                            }
                         }
                     }
                     colorAccent="#9c27b0"
