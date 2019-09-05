@@ -8,7 +8,7 @@ import RobotProxy from '../../../communication/RobotProxy';
 import { speeds, add, remove_all, set_update_speeds_callback } from '../../../stores/SpeedsStore';
 import { addDeviceNameChangeListener, getDeviceName, setDeviceName, setConnected, getLoopCounter, getDuration, getInterval, setInterval } from "../../../stores/SettingsStore";
 import { getStatusBarHeight, ifIphoneX } from 'react-native-iphone-x-helper'
-import { SinglePickerMaterialDialog } from "react-native-material-dialog";
+import SinglePickerMaterialDialog from '../../materialdialog/SinglePickerMaterialDialog'
 import i18n from '../../../locales/i18n'
 
 export default class Programming extends Component {

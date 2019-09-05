@@ -46,22 +46,22 @@ class BleService {
 
     scanningForRobots(errorHandler, deviceHandler) {
         console.log('BleService scanning...');
-//      // Just for testing
-//      var i;
-//      for(i = 0; i < 20; i++) {
-//          const id = i;
-//          setTimeout(() => {
-//              deviceHandler("EXPLORE-IT 00:" + id.toString(16).padStart(2, "0"));
-//          }, i*100);
-//      }
+      // Just for testing
+        var i;
+        for(i = 0; i < 5; i++) {
+            const id = i;
+            setTimeout(() => {
+                deviceHandler("EXPLORE-IT 00:" + id.toString(16).padStart(2, "0"));
+            }, i*100);
+        } 
 
-        this.devices = new Map();
+        this.devices = new Map(); 
 // Fixes issue #30, i.e. on some devices the scan for a particular service UUID does not return the device.
 //    Replaces the following explicit search for devices supporting a particular characteristic
 //        let services = [];
 //        services.push(serviceUUID)
 //        this.manager.startDeviceScan(services, null, (error, device) => {
-//    with code which accepts all devices (null-arguments)
+//    with code which accepts all devices (null-arguments)+
         this.manager.startDeviceScan(null, null, (error, device) => {
             if (error) {
                 // Handle error (scanning will be stopped automatically)
