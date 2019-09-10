@@ -48,10 +48,10 @@ class BleService {
         console.log('BleService scanning...');
       // Just for testing
         var i;
-        for(i = 0; i < 5; i++) {
+        for(i = 0; i < 20; i++) {
             const id = i;
             setTimeout(() => {
-                deviceHandler("EXPLORE-IT 00:" + id.toString(16).padStart(2, "0"));
+                deviceHandler("EXPLORE-IT 70:" + id.toString(16).padStart(2, "9"));
             }, i*100);
         } 
 

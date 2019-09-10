@@ -93,7 +93,7 @@ export default class Programming extends Component {
             <View style={[styles.container]}>
                 <SinglePickerMaterialDialog
                     title = {i18n.t('Programming.chooseDevice')}
-                    items = {this.state.devices.map((row, index) => ({ value: index, label: row }))}
+                    items = {this.state.devices.map((row, index) => ({key: index.toString(), label: row, selected: false }))}
                     visible = {this.state.visible}
                     onCancel = {
                         () => {
@@ -232,7 +232,7 @@ export default class Programming extends Component {
                                     // collect all devices found and publish them in the Dialog
                                     let devices = this.state.devices;
                                     devices.push(device);
-                                    this.setState({ devices: devices });
+                                    this.setState({ devices: devices.sort() });
                                 });
                                 setTimeout(() => {
                                     this.setState({ visible: true });
