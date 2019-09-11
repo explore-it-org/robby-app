@@ -9,13 +9,13 @@ import colors from './colors';
 
 export default class SinglePickerMaterialDialog extends PureComponent {
   
-  state = { selectedKey: undefined,
-            selectedItem: undefined };
+  state = {
+    selectedLabel: undefined
+  };
 
   onRowPress(item) {
     this.setState({
-      selectedKey: item.key,
-      selectedItem: item
+      selectedLabel: item.label
     });
   }
 
@@ -43,10 +43,8 @@ export default class SinglePickerMaterialDialog extends PureComponent {
     This pattern is called "memoization helper" and replaces 'componentWillReceiveProps()' which is unsafe.
     */
     
-    // const rows = items.map(item => Object.assign({}, item, { selectedItem: false }));
-    
     const rows = this.props.items.map((item => {
-      if (item.key === this.state.selectedKey) { item.selected = true, console.log('selected item is true') } else { item.selected = false , console.log('selected item is false')  };
+      item.selected = item.label === this.state.selectedLabel
       return item
     }))
     
@@ -60,11 +58,14 @@ export default class SinglePickerMaterialDialog extends PureComponent {
         scrolled={this.props.scrolled}
         cancelLabel={this.props.cancelLabel}
         onCancel={() => {
+          this.setState({ selectedLabel: undefined })
           this.props.onCancel();
         }}
         onOk={() => {
+          const selectedLabel = this.state.selectedLabel
+          this.setState({ selectedLabel: undefined })
           this.props.onOk({
-            selectedItem: this.state.selectedItem,
+            selectedLabel: selectedLabel
           })
         }}
       >
