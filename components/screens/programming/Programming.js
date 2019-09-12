@@ -110,9 +110,9 @@ export default class Programming extends Component {
                             });
                             RobotProxy.stopScanning();
 
-                            if(result.selectedItem) {
+                            if(result.selectedLabel) {
                                 setDeviceName({ device: i18n.t('Programming.connecting')})
-                                let deviceName = result.selectedItem.label;
+                                let deviceName = result.selectedLabel;
                                 RobotProxy.setRobot(deviceName);
                                 RobotProxy.connect(
                                     // callback for all messages from the robot
