@@ -62,8 +62,10 @@ export default class SinglePickerMaterialDialog extends PureComponent {
           this.props.onCancel();
         }}
         onOk={() => {
+          const selectedLabel = this.state.selectedLabel
+          this.setState({ selectedLabel: undefined })
           this.props.onOk({
-            selectedLabel: this.state.selectedLabel
+            selectedLabel: selectedLabel
           })
         }}
       >
