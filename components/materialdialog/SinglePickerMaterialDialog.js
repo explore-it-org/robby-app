@@ -10,7 +10,8 @@ import colors from './colors';
 export default class SinglePickerMaterialDialog extends PureComponent {
   
   state = {
-    selectedLabel: undefined
+    selectedLabel: undefined,
+    visible: false
   };
 
   onRowPress(item) {
@@ -18,6 +19,21 @@ export default class SinglePickerMaterialDialog extends PureComponent {
       selectedLabel: item.label
     });
   }
+
+    // The new static getDerivedStateFromProps lifecycle is invoked after a component is instantiated as well as
+    // before it is re-rendered. It can return an object to update state, or null to indicate that the new props
+    // do not require any state updates.
+    static getDerivedStateFromProps(props, state) {
+        if (props.visible !== state.visible) {
+            return {
+                visible: props.visible,
+                selectedLabel: undefined
+            };
+        }
+
+        // Return null to indicate no change to state.
+        return null;
+    }
 
   renderItem = ({ item }) => {
     return (
@@ -35,6 +51,8 @@ export default class SinglePickerMaterialDialog extends PureComponent {
       </TouchableOpacity>
     )
   };
+
+
 
   render() {
     /*
@@ -58,14 +76,11 @@ export default class SinglePickerMaterialDialog extends PureComponent {
         scrolled={this.props.scrolled}
         cancelLabel={this.props.cancelLabel}
         onCancel={() => {
-          this.setState({ selectedLabel: undefined })
           this.props.onCancel();
         }}
         onOk={() => {
-          const selectedLabel = this.state.selectedLabel
-          this.setState({ selectedLabel: undefined })
           this.props.onOk({
-            selectedLabel: selectedLabel
+            selectedLabel: this.state.selectedLabel
           })
         }}
       >

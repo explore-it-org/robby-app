@@ -52,7 +52,7 @@ class BleService {
             const id = i;
             setTimeout(() => {
                 deviceHandler("EXPLORE-IT 70:" + id.toString(16).padStart(2, "9"));
-            }, i*100);
+            }, i*500);
         } 
 
         this.devices = new Map(); 
