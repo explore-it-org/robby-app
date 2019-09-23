@@ -23,7 +23,7 @@
   },
   "Settings": {
     "device": "Gerät",
-    "settings": "Einstellung",
+    "settings": "Einstellung:",
     "interval": "Interval:",
     "interval-unit": "pro Sekunde (1..50)",
     "learn": "Lernen:",

@@ -5,54 +5,51 @@ let callbacks = [];
 
 function add(value) {
     speeds.push(value);
-    update_speeds();
+    nofitySpeedChangeListeners();
     return speeds
 }
 
-function add_at(value, index) {
+function addAt(index, value) {
     speeds.splice(index, 0, value);
-    update_speeds()
+    nofitySpeedChangeListeners()
 }
 
-function move(old_index, new_index) {
-    if (new_index >= speeds.length) {
-        let k = new_index - speeds.length + 1;
-        while (k--) {
-            speeds.push(undefined);
-        }
-    }
-    speeds.splice(new_index, 0, speeds.splice(old_index, 1)[0]);
-    update_speeds()
+function swap(old_index, new_index) {
+    const sl = speeds[old_index].left;
+    const sr = speeds[old_index].right;
+    speeds[old_index].left = speeds[new_index].left;
+    speeds[old_index].right = speeds[new_index].right;
+    speeds[new_index].left = sl;
+    speeds[new_index].right = sr;
+    nofitySpeedChangeListeners()
 }
 
-function remove(index=-1) {
-    speeds.splice(index,1);
-    update_speeds();
+function remove(index) {
+    speeds.splice(index, 1);
+    nofitySpeedChangeListeners();
 }
 
-function remove_all() {
-    speeds = []
-    update_speeds()
+function removeAll() {
+    speeds = [];
+    nofitySpeedChangeListeners();
 }
 
-function update_leftspeed(index, new_speed){
-    speeds[index].left = new_speed
-    update_speeds()
+function updateLeftSpeed(index, new_speed) {
+    speeds[index].left = new_speed;
+    nofitySpeedChangeListeners();
 }
 
-function update_rightspeed(index, new_speed){
-    speeds[index].right = new_speed
-    update_speeds()
+function updateRightSpeed(index, new_speed) {
+    speeds[index].right = new_speed;
+    nofitySpeedChangeListeners();
 }
 
-function set_update_speeds_callback(fn) {
+function addSpeedChangeListener(fn) {
     callbacks.push(fn);
 }
 
-function update_speeds() {
-    callbacks.forEach(cb => {
-        cb(speeds);
-    });
+function nofitySpeedChangeListeners() {
+    callbacks.forEach(listener => { listener(speeds); });
 }
 
 storeSpeeds = async () => {
@@ -76,13 +73,13 @@ retrieveSpeeds = async () => {
 
 export {
     add,
-    add_at,
-    move,
+    addAt,
+    swap,
     remove,
-    remove_all,
-    update_leftspeed,
-    update_rightspeed,
-    set_update_speeds_callback,
+    removeAll,
+    updateLeftSpeed,
+    updateRightSpeed,
+    addSpeedChangeListener,
     speeds,
     //storeSpeeds,
     //retrieveSpeeds

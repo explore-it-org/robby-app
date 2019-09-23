@@ -6,12 +6,12 @@ import React from "react";
 import {
     speeds,
     add,
-    add_at,
-    update_leftspeed,
-    update_rightspeed,
-    move,
+    addAt,
+    updateLeftSpeed,
+    updateRightSpeed,
+    swap,
     remove,
-    set_update_speeds_callback,
+    addSpeedChangeListener,
     //storeSpeeds,
     //retrieveSpeeds
 } from '../../../../../stores/SpeedsStore'
@@ -34,18 +34,18 @@ export default class MainTab extends Component {
 
     constructor(props) {
         super(props);
-        set_update_speeds_callback((speeds) => { this.setState({ speeds: speeds }); });
+        addSpeedChangeListener((speeds) => { this.setState({ speeds: speeds }); });
     }
 
     onChangeLeft(index, text) {
-        update_leftspeed(index, parseInt(text));
+        updateLeftSpeed(index, parseInt(text));
         this.setState({
             selected: -1
         })
     }
 
     onChangeRight(index, text) {
-        update_rightspeed(index, parseInt(text));
+        updateRightSpeed(index, parseInt(text));
         this.setState({
             selected: -1
         })
@@ -72,7 +72,7 @@ export default class MainTab extends Component {
                         icon="arrow-upward"
                         onPress={() => {
                             let curr = this.state.selected;
-                            move(curr, curr - 1);
+                            swap(curr, curr - 1);
                             this.setState({ 
                                 selected: curr - 1
                             })
@@ -84,7 +84,7 @@ export default class MainTab extends Component {
                         icon="arrow-downward"
                         onPress={() => {
                             let curr = this.state.selected;
-                            move(curr, curr + 1);
+                            swap(curr, curr + 1);
                             this.setState({ 
                                 selected: curr + 1
                             });
@@ -149,7 +149,7 @@ export default class MainTab extends Component {
                         if (curr == -1) {
                             add({ left: 0, right: 0 });
                         } else {
-                            add_at({ left: 0, right: 0 }, curr + 1)
+                            addAt(curr + 1, { left: 0, right: 0 })
                         }
                     }}
                 />

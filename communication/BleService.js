@@ -66,11 +66,17 @@ class BleService {
 //    with code which accepts all devices (null-arguments)
         this.manager.startDeviceScan(null, null, (error, device) => {
             if (error) {
+                // error.errorCode == BleErrorCode.BluetoothPoweredOff (102) if bluetooth is turned off
+                // error.errorCode == BleErrorCode.LocationServicesDisabled (601) if location is turned off
+                // Probably other error codes should be supported as well.
+
                 // Handle error (scanning will be stopped automatically)
                 errorHandler(error);
                 return
             }
             // new device detected. check it!
+            console.log("new device detected: " + device.name)
+            console.log(device)
             if (device.name && device.name.startsWith('EXPLORE-IT') && device.serviceUUIDs.includes(serviceUUID)) {
                 if (this.devices.get(device.name) === undefined) {
                     this.devices.set(device.name, device);

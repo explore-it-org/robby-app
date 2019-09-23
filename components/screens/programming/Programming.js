@@ -5,7 +5,7 @@ import { createMaterialTopTabNavigator, createAppContainer } from "react-navigat
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { MainTab, MixedViewTab } from "./tabs/index";
 import RobotProxy from '../../../communication/RobotProxy';
-import { speeds, add, remove_all, set_update_speeds_callback } from '../../../stores/SpeedsStore';
+import { speeds, add, removeAll, addSpeedChangeListener } from '../../../stores/SpeedsStore';
 import { addDeviceNameChangeListener, getDeviceName, setDeviceName, setConnected, getLoopCounter, getDuration, getInterval, setInterval } from "../../../stores/SettingsStore";
 import { getStatusBarHeight, ifIphoneX } from 'react-native-iphone-x-helper'
 import SinglePickerMaterialDialog from '../../materialdialog/SinglePickerMaterialDialog'
@@ -26,7 +26,7 @@ export default class Programming extends Component {
     constructor(props) {
         super(props);
         addDeviceNameChangeListener((name) => { this.setState({ device_name: name }); });
-        set_update_speeds_callback((speeds) => { this.setState({ speeds: speeds }); });
+        addSpeedChangeListener((speeds) => { this.setState({ speeds: speeds }); });
     }
 
     // handles messages from the communcation system
@@ -195,7 +195,7 @@ export default class Programming extends Component {
                                 stop_btn_disabled: true,
                                 remaining_btns_disabled: true
                             });
-                            remove_all();
+                            removeAll();
                             RobotProxy.download();
                         }} />
                     <Appbar.Action icon="file-upload"
