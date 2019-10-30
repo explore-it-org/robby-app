@@ -1,8 +1,10 @@
-import {createStore} from 'redux';
+import {createStore, applyMiddleware} from 'redux';
 import {ProgramsReducer} from '../database/DatabaseReducer';
 import {combineReducers} from 'redux';
+import thunk from 'redux-thunk';
 
 
 const rootReducer = combineReducers({Program: ProgramsReducer});
 
-export default store = createStore(rootReducer());
+let store = createStore(rootReducer);
+export default store;

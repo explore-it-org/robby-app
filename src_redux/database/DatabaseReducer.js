@@ -1,25 +1,23 @@
-import Database from './RoboticsDatabase';
+import db from './RoboticsDatabase';
 import {ADD_PROGRAM, SAVE_PROGRAM, DUPLICATE_PROGRAM, DELETE_ALL, DELETE_PROGRAM} from '../GlobalActionTypes';
 
-export const ProgramsReducer = (state = {lastUpdate: Date.now(), Programs: Database.findAll()}, action) => {
+export const ProgramsReducer = (state = {lastUpdate: Date.now(), Programs: db.findAll()}, action) => {
     switch (action.typeof) {
         case ADD_PROGRAM:
-            // {type: 'ADD_ITEM, Programm}
-            Database.add(action.program);
-            return {lastUpdate: Date.now(), Programs: Database.findAll()};
+            db.add(action.program);
+            return {lastUpdate: Date.now(), Programs: db.findAll()};
         case SAVE_PROGRAM:
-            // do something
-            Database.save(action.program);
-            return {lastUpdate: Date.now(), Programs: Database.findAll()};
+            db.save(action.program);
+            return {lastUpdate: Date.now(), Programs: db.findAll()};
         case DUPLICATE_PROGRAM:
-            Database.duplicate(action.program, action.newName);
-            return {lastUpdate: Date.now(), Programs: Database.findAll()};
+            db.duplicate(action.program, action.newName);
+            return {lastUpdate: Date.now(), Programs: db.findAll()};
         case DELETE_ALL:
-            Database.deleteAll();
-            return {lastUpdate: Date.now(), Programs: Database.findAll()};
+            db.deleteAll();
+            return {lastUpdate: Date.now(), Programs: db.findAll()};
         case DELETE_PROGRAM:
-            Database.delete(action.program_id);
-            return {lastUpdate: Date.now(), Programs: Database.findAll()};
+            db.delete(action.program_id);
+            return {lastUpdate: Date.now(), Programs: db.findAll()};
         default:
             return state;
     }

@@ -10,7 +10,7 @@ export const add = (program) => ({
     type: DUPLICATE_PROGRAM,
     program: program,
     newName: newName,
-}), deletee = (program_id) => ({
+}), remove = (program_id) => ({
     type: DELETE_PROGRAM,
     program_id: program_id,
 }), delete_all = () => ({
