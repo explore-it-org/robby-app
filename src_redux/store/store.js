@@ -1,5 +1,5 @@
 import {createStore} from 'redux';
-import ProgramsReducer from '../database/DatabaseReducer';
+import {ProgramsReducer} from '../database/DatabaseReducer';
 import {combineReducers} from 'redux';
 
 
