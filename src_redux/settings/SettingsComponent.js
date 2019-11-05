@@ -11,10 +11,6 @@ import {duration} from '@material-ui/core/styles';
 
 class SettingsComponent extends Component {
 
-    componentDidMount(): void {
-        console.log(this.props);
-    }
-
     changeInterval(interval) {
         this.props.setInterval(interval.length === 0 ? 0 : parseInt(interval));
 

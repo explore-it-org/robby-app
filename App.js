@@ -25,12 +25,12 @@ class App extends Component {
         // dispatch isGranted to settings dispatcher this.props.dispatch()
         //let databasetest = new DatabaseTest();
 
-       // databasetest.clearDatabase();
-       // databasetest.recurive();
+        // databasetest.clearDatabase();
+        // databasetest.recurive();
         //databasetest.findOneByPK();
         //databasetest.updatingEntries();
         //databasetest.createDatabaseEntries();
-       // databasetest.creatingDatabaseEntriesWithDependencies();
+        // databasetest.creatingDatabaseEntriesWithDependencies();
         ////
     }
 
@@ -42,25 +42,12 @@ class App extends Component {
 export default connect()(App);
 
 class DrawerContent extends Component {
-    state = {
-        device_name: "sfda",
-    };
-/*
-    constructor() {
-        super();
-        console.log('Welcome to ' + GLOBAL.SHORT_APP_NAME);
-
-        addDeviceNameChangeListener(name => {
-            this.setState({device_name: name});
-        });
-    }*/
-
     render() {
         return (
             <View style={styles.container}>
                 <View style={styles.deviceName}>
                     <Text style={{color: 'white', fontSize: 30}}>
-                        {this.state.device_name}
+                        {this.props.BLEConnection.device.name}
                     </Text>
                 </View>
                 <View style={styles.drawerItems}>
@@ -93,15 +80,23 @@ class DrawerContent extends Component {
 }
 
 
+const mapStateToProps = state => ({
+    Settings: state.Settings,
+    BLEConnection: state.BLEConnection,
+});
+const ReduxNavigator = connect(mapStateToProps)(DrawerContent);
+
+
 const DrawerNavigator = createDrawerNavigator(
     {
-       // [i18n.t('App.programming')]: {screen: Programming},
+        // [i18n.t('App.programming')]: {screen: Programming},
         [i18n.t('App.settings')]: {screen: Settings},
     },
     {
-        contentComponent: DrawerContent,
+        contentComponent: ReduxNavigator,
     },
 );
+
 
 const DrawerContainer = createAppContainer(DrawerNavigator);
 
