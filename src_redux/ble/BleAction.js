@@ -5,7 +5,7 @@ export const connectToBle = () => ({
     type: ActionTypes.START_CONNECTING,
 }), connectedToBle = () => ({
     type: ActionTypes.START_CONNECTING,
-}), connetionFailed = (error) => ({
+}), connectionFailed = (error) => ({
     type: ActionTypes.FAILURE_CONNECTING,
 }), bleResponse = (response) => ({
     type: ActionTypes.BLE_RESPONSE,

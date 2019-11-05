@@ -41,20 +41,18 @@ class RobotProxy {
     }
 
     connect() {
-        return function (dispatch) {
-            dispatch(bleActions.connectToBle());
+        return function () {
+            store.dispatch(bleActions.connectToBle());
             return BleService.connectToActDevice(
                 (response) => {
                     handleResposneRedux(response);
-                    //this.handleResponse(responseHandler, response);
-                    // dispatch response to response reducer
                 },
                 (robot) => {
-                    dispatch(bleActions.connectedToBle());
+                    store.dispatch(bleActions.connectedToBle());
                     BleService.sendCommandToActDevice2('Z');
                     BleService.sendCommandToActDevice2('I?');
                 },
-                (error) => dispatch(bleActions.connetionFailed(error)),
+                (error) => store.dispatch(bleActions.connetionFailed(error)),
             );
         };
     }
@@ -285,16 +283,20 @@ class RobotProxy {
 }
 
 function handleResposneRedux(response) {
+
+    /**
+     * All response must be given to the reducer
+     */
     console.log('New Response in');
     if (response.startsWith('VER')) {
-        dispatch(bleActions.updateDeviceVersion(parseInt(response.substring(4))));
+        store.dispatch(bleActions.updateDeviceVersion(parseInt(response.substring(4))));
     } else if (response.startsWith('I=')) {
         // Response to I?:  I=02
         console.log('Interval: ' + response);
         let value = parseInt(response.substring(2));
 
         // interval dispachter (settings)
-        return {type: 'interval', value: value};
+        //return {type: 'interval', value: value};
     } else if (response.match('\\b[0-9]{3}\\b,\\b[0-9]{3}\\b')) {
         let read_instructions = response.trim().split(',');
         let speed_l = read_instructions[0] / 2.55 + 0.5;
@@ -306,7 +308,7 @@ function handleResposneRedux(response) {
             speed_r = 0;
         }
         var res = {type: 'speedLine', left: Math.trunc(speed_l), right: Math.trunc(speed_r)};
-        // lets see which dispatcher
+        // lets see which store.dispatcher
         return res;
     } else {
         response = response.trim().toLowerCase();
@@ -328,7 +330,6 @@ function handleResposneRedux(response) {
                 this.loops--;
                 if (this.loops > 0) {
                     BleService.sendCommandToActDevice2('G');
-
                 } else {
                     return res;
                 }

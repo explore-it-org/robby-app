@@ -15,7 +15,7 @@ function getDeviceName(): string {
  * Such a listener is registered in:
  * - App.js
  * - Programming.js
- * - Settings.js
+ * - SettingsComponent.js
  *
  * @param fn function to be invoked, type: (String) => {}
  */

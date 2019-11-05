@@ -25,11 +25,7 @@ class BleService {
             const granted = await PermissionsAndroid.request(
                 PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
             );
-            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                console.log('Location permission granted');
-            } else {
-                console.log('Location permission denied');
-            }
+            return granted === PermissionsAndroid.RESULTS.GRANTED;
         } catch (err) {
             console.warn(err);
             return false;

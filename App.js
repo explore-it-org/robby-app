@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {createAppContainer} from 'react-navigation';
 import {DrawerNavigatorItems, createDrawerNavigator} from 'react-navigation-drawer';
 import Programming from './src/components/screens/programming/Programming';
-import Settings from './src/components/screens/settings/Settings';
+import Settings from 'settings/SettingsContainer';
 import BleService from './src/communication/BleService';
 import {
     addDeviceNameChangeListener,
@@ -15,15 +15,18 @@ import i18n from './resources/locales/i18n';
 import GLOBAL from './src/utility/Global';
 import {DatabaseTest} from './src/utility/DatabaseTest';
 
+import {connect} from 'react-redux';
 
 import * as ut from './src/utility/AppSettings';
 
-export default class App extends Component {
-    state = {device: undefined};
+class App extends Component {
+
 
     componentDidMount() {
-        BleService.requestLocationPermission();
+        let isGranted = BleService.requestLocationPermission();
+        // dispatch isGranted to settings dispatcher this.props.dispatch()
         let databasetest = new DatabaseTest();
+
         databasetest.clearDatabase();
         databasetest.recurive();
         //databasetest.findOneByPK();
@@ -37,6 +40,8 @@ export default class App extends Component {
         return <DrawerContainer/>;
     }
 }
+
+export default connect()(App);
 
 class DrawerContent extends Component {
     state = {
@@ -88,6 +93,7 @@ class DrawerContent extends Component {
         );
     }
 }
+
 
 const DrawerNavigator = createDrawerNavigator(
     {
