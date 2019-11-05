@@ -3,11 +3,13 @@ import * as ActionTypes from '../GlobalActionTypes';
 
 export const setDuration = (duration) => ({
     type: ActionTypes.SET_DURATION,
-    duration: duration,
-}), setInterval = (interval) => ({
+    duration,
+});
+export const setInterval = (interval) => ({
     type: ActionTypes.SET_INTERVALL,
-    interval: interval,
-}), setLoops = (loops) => ({
+    interval,
+});
+export const setLoops = (loops) => ({
     type: ActionTypes.SET_LOOPS,
-    loops: loops,
+    loops,
 });

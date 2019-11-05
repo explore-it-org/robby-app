@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import SettingsAction from './SettingsAction';
+import {setDuration, setInterval, setLoops} from './SettingsAction';
 import BleAction from '../ble/BleAction';
 import SettingsComponent from './SettingsComponent';
 
@@ -9,8 +9,12 @@ const mapStateToProps = state => ({
     BLEConnection: state.BLEConnection,
 });
 
-const mapDispatchToProps = dispatch => ({
-    actions: bindActionCreators(Object.assign({}, SettingsAction, BleAction), dispatch),
-});
+const mapDispatchToProps = dispatch =>
+    bindActionCreators(
+        {
+            setDuration,
+            setInterval,
+            setLoops,
+        }, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps())(SettingsComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(SettingsComponent);

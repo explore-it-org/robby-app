@@ -1,13 +1,11 @@
 import React, {Component} from 'react';
 import {createAppContainer} from 'react-navigation';
 import {DrawerNavigatorItems, createDrawerNavigator} from 'react-navigation-drawer';
-import Programming from './src/components/screens/programming/Programming';
-import Settings from 'settings/SettingsContainer';
-import BleService from './src/communication/BleService';
-import {
-    addDeviceNameChangeListener,
-    getDeviceName,
-} from './src/stores/SettingsStore';
+// import Programming from './src/components/screens/programming/Programming';
+import Settings from './src_redux/settings/SettingsContainer';
+import BleService from './src_redux/ble/BleService';
+
+
 import {View, Text, StyleSheet} from 'react-native';
 import {getStatusBarHeight, ifIphoneX} from 'react-native-iphone-x-helper';
 // import {version} from './package.json';
@@ -25,15 +23,15 @@ class App extends Component {
     componentDidMount() {
         let isGranted = BleService.requestLocationPermission();
         // dispatch isGranted to settings dispatcher this.props.dispatch()
-        let databasetest = new DatabaseTest();
+        //let databasetest = new DatabaseTest();
 
-        databasetest.clearDatabase();
-        databasetest.recurive();
+       // databasetest.clearDatabase();
+       // databasetest.recurive();
         //databasetest.findOneByPK();
         //databasetest.updatingEntries();
         //databasetest.createDatabaseEntries();
-        databasetest.creatingDatabaseEntriesWithDependencies();
-        //
+       // databasetest.creatingDatabaseEntriesWithDependencies();
+        ////
     }
 
     render() {
@@ -45,9 +43,9 @@ export default connect()(App);
 
 class DrawerContent extends Component {
     state = {
-        device_name: getDeviceName(),
+        device_name: "sfda",
     };
-
+/*
     constructor() {
         super();
         console.log('Welcome to ' + GLOBAL.SHORT_APP_NAME);
@@ -55,7 +53,7 @@ class DrawerContent extends Component {
         addDeviceNameChangeListener(name => {
             this.setState({device_name: name});
         });
-    }
+    }*/
 
     render() {
         return (
@@ -97,7 +95,7 @@ class DrawerContent extends Component {
 
 const DrawerNavigator = createDrawerNavigator(
     {
-        [i18n.t('App.programming')]: {screen: Programming},
+       // [i18n.t('App.programming')]: {screen: Programming},
         [i18n.t('App.settings')]: {screen: Settings},
     },
     {

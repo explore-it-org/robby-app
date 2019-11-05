@@ -9,12 +9,14 @@ const default_state_settings = {
 
 };
 export const SettingsReducer = (state = default_state_settings, action) => {
-    switch (action.typeof) {
+    console.log(action);
+    switch (action.type) {
         case ActionType.SET_LOOPS:
             return Object.assign({}, state, {loops: action.loops, lastUpdate: Date.now()});
         case ActionType.SET_INTERVALL:
             return Object.assign({}, state, {interval: action.interval, lastUpdate: Date.now()});
         case ActionType.SET_DURATION:
+            console.log( Object.assign({}, state, {duration: action.duration, lastUpdate: Date.now()}));
             return Object.assign({}, state, {duration: action.duration, lastUpdate: Date.now()});
         default:
             return state;

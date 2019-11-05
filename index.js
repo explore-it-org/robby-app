@@ -5,7 +5,7 @@ import App from './App';
 import * as React from 'react';
 import {name as appName} from './app.json';
 import {DefaultTheme, Provider as PaperProvider} from 'react-native-paper';
-import store from '/src_redux/store';
+import store from './src_redux/store/store';
 import {Provider as ReduxProvider} from 'react-redux';
 
 const theme = {
