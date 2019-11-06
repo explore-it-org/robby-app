@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {createAppContainer} from 'react-navigation';
 import {DrawerNavigatorItems, createDrawerNavigator} from 'react-navigation-drawer';
-// import Programming from './src/components/screens/programming/Programming';
+import ProgrammingContainer from './src_redux/programing/ProgrammingContainer';
 import Settings from './src_redux/settings/SettingsContainer';
 import BleService from './src_redux/ble/BleService';
 
@@ -89,7 +89,7 @@ const ReduxNavigator = connect(mapStateToProps)(DrawerContent);
 
 const DrawerNavigator = createDrawerNavigator(
     {
-        // [i18n.t('App.programming')]: {screen: Programming},
+        [i18n.t('App.programming')]: {screen: ProgrammingContainer},
         [i18n.t('App.settings')]: {screen: Settings},
     },
     {

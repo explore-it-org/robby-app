@@ -12,5 +12,5 @@ const rootReducer = combineReducers({
     Settings: SettingsReducer,
 });
 
-let store = createStore(rootReducer);
+let store = createStore(rootReducer, applyMiddleware(thunk));
 export default store;

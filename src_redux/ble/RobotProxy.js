@@ -1,5 +1,6 @@
 import BleService from './BleService';
 import * as bleActions from './BleAction';
+import store from '../store/store';
 
 // import { throwStatement } from '@babel/types';
 
@@ -33,35 +34,52 @@ class RobotProxy {
         }
     }
 
+    scanningForRobotsRedux() {
+        //let dispatch = store.dispatch;
+        console.log("we have began scanning for devices")
+        return function (dispatch) {
+            console.log("pelae")
+            dispatch(bleActions.startScanning());
+            return BleService.scanningForRobots(
+                (error) => {
+                    dispatch(bleActions.failedScanning(error));
+                },
+                (error) => {
+                    dispatch(bleActions.failedScanning(error));
+                },
+            );
+
+        };
+    }
+
     stopScanning() {
         if (!this.isConnected) {
             BleService.stopScanning();
-
         }
     }
 
     connect() {
-        return function () {
-            store.dispatch(bleActions.connectToBle());
+        return function (dispatch) {
+            dispatch(bleActions.connectToBle());
             return BleService.connectToActDevice(
                 (response) => {
                     handleResposneRedux(response);
                 },
                 (robot) => {
-                    store.dispatch(bleActions.connectedToBle());
+                    dispatch(bleActions.connectedToBle());
                     BleService.sendCommandToActDevice2('Z');
                     BleService.sendCommandToActDevice2('I?');
                 },
-                (error) => store.dispatch(bleActions.connetionFailed(error)),
+                (error) => dispatch(bleActions.connectionFailed(error)),
             );
         };
     }
 
     connect2(responseHandler, connectionHandler, errorHandler) {
-
         BleService.connectToActDevice(
             (response) => {
-                this.handleResponse(responseHandler, response);
+                responseHandler(response)
+                //this.handleResponse(responseHandler, response);
             },
             (robot) => {
                 this.isConnected = true;
@@ -282,63 +300,7 @@ class RobotProxy {
     }
 }
 
-function handleResposneRedux(response) {
 
-    /**
-     * All response must be given to the reducer
-     */
-    console.log('New Response in');
-    if (response.startsWith('VER')) {
-        store.dispatch(bleActions.updateDeviceVersion(parseInt(response.substring(4))));
-    } else if (response.startsWith('I=')) {
-        // Response to I?:  I=02
-        console.log('Interval: ' + response);
-        let value = parseInt(response.substring(2));
-
-        // interval dispachter (settings)
-        //return {type: 'interval', value: value};
-    } else if (response.match('\\b[0-9]{3}\\b,\\b[0-9]{3}\\b')) {
-        let read_instructions = response.trim().split(',');
-        let speed_l = read_instructions[0] / 2.55 + 0.5;
-        let speed_r = read_instructions[1] / 2.55 + 0.5;
-        if (speed_l < 0) {
-            speed_l = 0;
-        }
-        if (speed_r < 0) {
-            speed_r = 0;
-        }
-        var res = {type: 'speedLine', left: Math.trunc(speed_l), right: Math.trunc(speed_r)};
-        // lets see which store.dispatcher
-        return res;
-    } else {
-        response = response.trim().toLowerCase();
-        switch (response) {
-            case (',,,,'):
-                // finished download (beam)
-                return {type: 'finishedDownload'};
-            case ('_sr_'):
-                // stop
-                this.isLearning = false;
-                return {type: 'stop'};
-            case ('full'):
-                // finished learning or uploading
-                var res = {type: this.isLearning ? 'finishedLearning' : 'finishedUpload'};
-                return res;
-            case ('_end'):
-                // done driving
-                var res = {type: 'finishedDriving'};
-                this.loops--;
-                if (this.loops > 0) {
-                    BleService.sendCommandToActDevice2('G');
-                } else {
-                    return res;
-                }
-                break;
-            default:
-                break;
-        }
-    }
-}
 
 
 // Singleton pattern in ES6
