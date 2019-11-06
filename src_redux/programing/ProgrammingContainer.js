@@ -1,6 +1,14 @@
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {scanningForDevices, connectToDevice, stopScanning} from '../ble/BleAction';
+import {
+    scanningForDevices,
+    connectToDevice,
+    stopScanning,
+    disconnect,
+    setDevice,
+    stopRobot,
+    runRobot, startRecording,
+} from '../ble/BleAction';
 import {} from '../database/DatabaseAction';
 
 import ProgrammingComponent from './ProgrammingComponent';
@@ -19,6 +27,11 @@ const mapDispatchToProps = dispatch =>
             scanForRobot: scanningForDevices,
             connectToRobot: connectToDevice,
             stopScanning: stopScanning,
+            disconnect: disconnect,
+            setActiveDevice: setDevice,
+            stopRobot: stopRobot,
+            runRobot: runRobot,
+            startRecording: startRecording,
         }, dispatch);
 
 

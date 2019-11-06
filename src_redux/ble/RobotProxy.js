@@ -36,9 +36,9 @@ class RobotProxy {
 
     scanningForRobotsRedux() {
         //let dispatch = store.dispatch;
-        console.log("we have began scanning for devices")
+        console.log('we have began scanning for devices');
         return function (dispatch) {
-            console.log("pelae")
+            console.log('pelae');
             dispatch(bleActions.startScanning());
             return BleService.scanningForRobots(
                 (error) => {
@@ -78,7 +78,7 @@ class RobotProxy {
     connect2(responseHandler, connectionHandler, errorHandler) {
         BleService.connectToActDevice(
             (response) => {
-                responseHandler(response)
+                responseHandler(response);
                 //this.handleResponse(responseHandler, response);
             },
             (robot) => {
@@ -110,7 +110,6 @@ class RobotProxy {
     run() {
         if (this.isConnected) {
             return BleService.sendCommandToActDevice2('R');
-
         }
     }
 
@@ -133,10 +132,10 @@ class RobotProxy {
         }
     }
 
-    record(duration, interval) {
+    record(duration, interval, version) {
         if (this.isConnected) {
             this.isLearning = true;
-            switch (this.version) {
+            switch (version) {
                 case 1:
                     BleService.sendCommandToActDevice('F');
                     BleService.sendCommandToActDevice('D' + duration);
@@ -299,8 +298,6 @@ class RobotProxy {
         }
     }
 }
-
-
 
 
 // Singleton pattern in ES6

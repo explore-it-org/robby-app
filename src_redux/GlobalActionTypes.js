@@ -19,6 +19,8 @@ export const START_CONNECTING = 'START_CONNECTING';
 export const SUCCESS_CONNECTING = 'SUCCESS_CONNECTING';
 export const FAILURE_CONNECTING = 'FAILURE_CONNECTING';
 
+export const DISCONNECT = 'DISCONNECT';
+
 export const START_UPLOADING = 'START_UPLOADING';
 export const SUCCESS_UPLOADING = 'SUCCESS_UPLOADING';
 export const FAILURE_UPLOADING = 'FAILURE_UPLOADING';
@@ -35,9 +37,14 @@ export const START_SENDING = 'START_SENDING';
 export const SUCCESS_SENDING = 'SUCCESS_SENDING';
 export const FAILURE_SENDING = 'FAILURE_SENDING';
 
+export const STOP_ROBOT = 'STOP_ROBOT';
+
+export const RUN_ROBOT = 'RUN_ROBOT';
+
 export const UPDATE_DEVICE_VERSION = 'UPDATE_DEVICE_VERSION';
 export const BLE_RESPONSE = 'BLE_RESPONSE';
 
+export const BLE_ERROR = 'BLE_ERROR';
 
 // Active Program  Action Types
 export const CLEAR_PROGRAM = 'CLEAR_PROGRAM';
@@ -50,4 +57,4 @@ export const CHANGE_INSTRUCTION_INDEX = 'CHANGE_INSTRUCTION_INDEX';
 // Settings Action Types
 export const SET_LOOPS = 'SET_LOOPS';
 export const SET_INTERVALL = 'SET_INTERVALL';
-export const SET_DURATION = 'SET_DURATION'
+export const SET_DURATION = 'SET_DURATION';

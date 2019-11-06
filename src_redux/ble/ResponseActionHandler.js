@@ -54,7 +54,8 @@ export const handleResponse = (response) => {
                 }
                 break;
             default:
-                break;
+                return bleAction.bleResponse('');
         }
     }
+    bleAction.bleResponse('');
 };

@@ -117,7 +117,7 @@ export default class ProgrammingComponent extends Component {
                         result => {
                             this.props.stopScanning();
                             if (result.selectedLabel) {
-                                RobotProxy.setRobot(result.selectedLabel);
+                                this.props.setActiveDevice(result.selectedLabel);
                                 this.props.connectToRobot();
                             }
                         }
@@ -139,46 +139,30 @@ export default class ProgrammingComponent extends Component {
                                        console.log('lets start scanning');
                                        if (this.props.BLEConnection.isConnected) {
                                            console.log('try to disconnected');
-                                           RobotProxy.disconnect();
+                                           this.props.disconnect();
                                        } else {
-                                           console.log('trying to connect');
-                                           // init scanning for robots over ble
                                            this.props.scanForRobot();
-                                           //RobotProxy.scanningForRobotsRedux();
-                                           /*setTimeout(() => {
-                                               this.setState({visible: true});
-                                           }, 500);*/
-
-
                                        }
                                    }}/>
                 </Appbar>
 
                 <Appbar style={styles.bottom}>
                     <Appbar.Action icon="stop" size={32}
-                                   disabled={this.state.stop_btn_disabled}
+                                   disabled={false}
                                    onPress={() => {
-                                       RobotProxy.stop().catch(e => this.handleDisconnect());
+                                       this.props.stopRobot();
                                    }}/>
                     <Appbar.Action icon="play-arrow"
                                    size={32}
-                                   disabled={this.state.remaining_btns_disabled}
+                                   disabled={false}
                                    onPress={() => {
-                                       this.setState({
-                                           stop_btn_disabled: false,
-                                           remaining_btns_disabled: true,
-                                       });
-                                       RobotProxy.run().catch(e => this.handleDisconnect());
+                                       this.props.runRobot();
                                    }}/>
                     <Appbar.Action icon="fiber-manual-record"
                                    size={32}
                                    disabled={this.state.remaining_btns_disabled}
                                    onPress={() => {
-                                       this.setState({
-                                           stop_btn_disabled: false,
-                                           remaining_btns_disabled: true,
-                                       });
-                                       RobotProxy.record(getDuration(), getInterval()).catch(e => this.handleDisconnect());
+                                       this.props.startRecording();
                                    }}/>
                     <Appbar.Action icon="fast-forward"
                                    size={32}
