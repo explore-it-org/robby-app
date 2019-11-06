@@ -126,7 +126,7 @@ class BleService {
                         if (this.c === localc) {
                             if (!error) {
                                 let response = Buffer.from(characteristic.value, 'base64').toString(
-                                    'ascii',
+                                    'latin1',
                                 );
                                 responseHandler(response);
                             }

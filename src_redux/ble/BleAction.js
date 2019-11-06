@@ -4,7 +4,9 @@ import store from '../store/store';
 import BleService from './BleService';
 import * as settingsAction from '../settings/SettingsAction';
 import {handleResponse} from './ResponseActionHandler';
-import {get} from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
+import {} from '../database/DatabaseAction';
+import {exp} from 'react-native-reanimated';
+
 
 export const connectToBle = () => ({
     type: ActionTypes.START_CONNECTING,
@@ -60,9 +62,9 @@ export const bleError = (error) => ({
     error,
 });
 
+
 export const runRobot = () => {
     return (dispatch, getState) => {
-        // TODO something is wrong with respond of robot
         RobotProxy.run().then(res => {
             dispatch(ranRobot());
         }).catch(error => {
@@ -72,10 +74,23 @@ export const runRobot = () => {
     };
 };
 
+export const didGoRobot = () => ({
+    type: ActionTypes.GO_ROBOT,
+});
+
+export const goRobot = () => {
+    return (dispatch, getState) => {
+        RobotProxy.go(1).then(res => {
+            dispatch(didGoRobot());
+        }).catch(error => {
+            dispatch(bleError(error));
+        });
+    };
+};
+
+
 export const stopRobot = () => {
     return (dispatch, getState) => {
-        console.log();
-        console.log();
         RobotProxy.stop().then(res => {
             dispatch(stoppedRobot());
         }).catch(error => {
@@ -132,4 +147,48 @@ export const connectToDevice = () => {
         });
     };
 };
+export const startUpload = () => ({
+    type: ActionTypes.START_UPLOADING,
+});
 
+export const successUplaod = () => ({
+    type: ActionTypes.SUCCESS_UPLOADING,
+});
+
+export const failedUplaod = (error) => ({
+    type: ActionTypes.FAILURE_UPLOADING,
+    error,
+});
+export const uploadToRobot = () => {
+    return (dispatch, getState) => {
+        let a = getState().Program.ActiveProgram;
+        RobotProxy.upload(a.flatten()).then(res => {
+            dispatch(startUpload());
+        }).catch(error => {
+            dispatch(failedUplaod());
+        });
+    };
+};
+
+export const startDownloading = () => ({
+    type: ActionTypes.START_DOWNLOADING,
+});
+export const errorDownloading = (error) => ({
+    type: ActionTypes.FAILURE_DOWNLOADING,
+    error,
+});
+export const succcessDownloading = () => ({
+    type: ActionTypes.SUCCESS_DOWNLOADING,
+});
+
+
+export const downloadToDevice = () => {
+    return (dispatch, getState) => {
+        dispatch(startDownloading());
+        RobotProxy.download().then(res => {
+
+        }).catch(error => {
+            dispatch(errorDownloading(error));
+        });
+    };
+};

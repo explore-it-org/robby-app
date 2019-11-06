@@ -28,21 +28,20 @@ import {connectToDevice} from '../ble/BleAction';
 
 export default class ProgrammingComponent extends Component {
     state = {
-        visible: false,
-        device: '',
-        stop_btn_disabled: true,
+        stoppButton: this.props.BLEConnection.isConnected && (this.props.BLEConnection.device.isUploading ||
+            this.props.BLEConnection.device.isGoing ||
+            this.props.BLEConnection.device.isRecording),
+        ohterButton: !this.props.BLEConnection.isConnected ||
+            this.props.BLEConnection.device.isUploading ||
+            this.props.BLEConnection.device.isGoing ||
+            this.props.BLEConnection.device.isRecording,
 
-        currentRoute: 'First',
-        save_and_new_btn_disabled: false,
-        remaining_btns_disabled: false,
-        ble_connection: {
-            allowed: false,
-            errormessage: '',
-        },
+
     };
 
 
     componentDidMount(): void {
+        console.log(this.state.disabledButton);
         /*
         RobotProxy.testScan(err => {
                 this.setState({
@@ -134,11 +133,9 @@ export default class ProgrammingComponent extends Component {
                     <Appbar.Action icon={(this.props.BLEConnection.isConnected) ? 'bluetooth-connected' : 'bluetooth'}
                                    style={{position: 'absolute', right: 0}}
                                    size={32}
-                        // disabled={this.state.ble_connection.allowed}
+                                   disabled={this.props.BLEConnection.isConnecting}
                                    onPress={() => {
-                                       console.log('lets start scanning');
                                        if (this.props.BLEConnection.isConnected) {
-                                           console.log('try to disconnected');
                                            this.props.disconnect();
                                        } else {
                                            this.props.scanForRobot();
@@ -148,65 +145,81 @@ export default class ProgrammingComponent extends Component {
 
                 <Appbar style={styles.bottom}>
                     <Appbar.Action icon="stop" size={32}
-                                   disabled={false}
+                                   disabled={!this.props.BLEConnection.isConnected ||
+                                   !(this.props.BLEConnection.device.isUploading ||
+                                   this.props.BLEConnection.device.isGoing ||
+                                   this.props.BLEConnection.device.isRecording ||
+                                   this.props.BLEConnection.device.isRunning)}
                                    onPress={() => {
                                        this.props.stopRobot();
                                    }}/>
                     <Appbar.Action icon="play-arrow"
                                    size={32}
-                                   disabled={false}
+                                   disabled={!this.props.BLEConnection.isConnected ||
+                                   this.props.BLEConnection.device.isUploading ||
+                                   this.props.BLEConnection.device.isGoing ||
+                                   this.props.BLEConnection.device.isRecording ||
+                                   this.props.BLEConnection.device.isRunning}
                                    onPress={() => {
                                        this.props.runRobot();
                                    }}/>
                     <Appbar.Action icon="fiber-manual-record"
                                    size={32}
-                                   disabled={this.state.remaining_btns_disabled}
+                                   disabled={!this.props.BLEConnection.isConnected ||
+                                   this.props.BLEConnection.device.isUploading ||
+                                   this.props.BLEConnection.device.isGoing ||
+                                   this.props.BLEConnection.device.isRecording ||
+                                   this.props.BLEConnection.device.isRunning}
                                    onPress={() => {
                                        this.props.startRecording();
                                    }}/>
                     <Appbar.Action icon="fast-forward"
                                    size={32}
-                                   disabled={this.state.remaining_btns_disabled}
+                                   disabled={!this.props.BLEConnection.isConnected ||
+                                   this.props.BLEConnection.device.isUploading ||
+                                   this.props.BLEConnection.device.isGoing ||
+                                   this.props.BLEConnection.device.isRecording ||
+                                   this.props.BLEConnection.device.isRunning}
                                    onPress={() => {
-                                       this.setState({
-                                           stop_btn_disabled: false,
-                                           remaining_btns_disabled: true,
-                                       });
-                                       RobotProxy.go(getLoopCounter()).catch(e => this.handleDisconnect());
+                                       this.props.goRobot();
                                    }}/>
                     <Appbar.Action icon="file-download"
                                    size={32}
-                                   disabled={this.state.remaining_btns_disabled}
+                                   disabled={!this.props.BLEConnection.isConnected ||
+                                   this.props.BLEConnection.device.isUploading ||
+                                   this.props.BLEConnection.device.isGoing ||
+                                   this.props.BLEConnection.device.isRecording ||
+                                   this.props.BLEConnection.device.isRunning}
                                    onPress={() => {
-                                       this.setState({
-                                           stop_btn_disabled: true,
-                                           remaining_btns_disabled: true,
-                                       });
-                                       removeAll();
-                                       RobotProxy.download().catch(e => this.handleDisconnect());
+                                       this.props.download();
                                    }}/>
                     <Appbar.Action icon="file-upload"
                                    size={32}
-                                   disabled={this.state.remaining_btns_disabled}
+                                   disabled={!this.props.BLEConnection.isConnected ||
+                                   this.props.BLEConnection.device.isUploading ||
+                                   this.props.BLEConnection.device.isGoing ||
+                                   this.props.BLEConnection.device.isRecording ||
+                                   this.props.BLEConnection.device.isRunning}
                                    onPress={() => {
-                                       this.setState({
-                                           stop_btn_disabled: true,
-                                           remaining_btns_disabled: true,
-                                       });
-                                       RobotProxy.upload(this.state.speeds).catch(e => {
-                                           console.log(2);
-                                           this.handleDisconnect();
-                                       });
+                                       this.props.upload();
                                    }}/>
                     <Appbar.Action icon="save"
                                    size={32}
-                                   disabled={this.state.save_and_new_btn_disabled}
+                                   disabled={!this.props.BLEConnection.isConnected ||
+                                   this.props.BLEConnection.device.isUploading ||
+                                   this.props.BLEConnection.device.isGoing ||
+                                   this.props.BLEConnection.device.isRecording ||
+                                   this.props.BLEConnection.device.isRunning}
                                    onPress={() => {
                                        this.save();
                                    }}/>
                     <Appbar.Action icon="delete"
                                    size={32}
-                                   disabled={this.state.save_and_new_btn_disabled}
+                                   disabled={!this.props.BLEConnection.isConnected ||
+                                   this.props.BLEConnection.device.isUploading ||
+                                   this.props.BLEConnection.device.isGoing ||
+                                   this.props.BLEConnection.device.isRecording ||
+                                   this.props.BLEConnection.device.isRunning}
                                    onPress={() => {
                                        this.clear();
                                    }}/>

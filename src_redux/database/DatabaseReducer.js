@@ -6,6 +6,7 @@ import {Instruction, Program, ProgramType} from '../model/DatabaseModels';
 const default_state_Programs = {
     lastUpdate: Date.now(),
     Programs: db.findAll(),
+    ActiveProgram: new Program(),
 };
 
 export const ProgramsReducer = (state = default_state_Programs, action) => {

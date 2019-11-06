@@ -41,6 +41,8 @@ export const STOP_ROBOT = 'STOP_ROBOT';
 
 export const RUN_ROBOT = 'RUN_ROBOT';
 
+export const GO_ROBOT = 'GO_ROBOT';
+
 export const UPDATE_DEVICE_VERSION = 'UPDATE_DEVICE_VERSION';
 export const BLE_RESPONSE = 'BLE_RESPONSE';
 

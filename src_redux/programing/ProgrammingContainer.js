@@ -7,7 +7,7 @@ import {
     disconnect,
     setDevice,
     stopRobot,
-    runRobot, startRecording,
+    runRobot, startRecording, goRobot, uploadToRobot, downloadToDevice,
 } from '../ble/BleAction';
 import {} from '../database/DatabaseAction';
 
@@ -32,6 +32,9 @@ const mapDispatchToProps = dispatch =>
             stopRobot: stopRobot,
             runRobot: runRobot,
             startRecording: startRecording,
+            goRobot: goRobot,
+            upload: uploadToRobot,
+            download: downloadToDevice,
         }, dispatch);
 
 

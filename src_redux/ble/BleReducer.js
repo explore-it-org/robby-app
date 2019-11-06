@@ -16,6 +16,7 @@ const default_state_ble_connection = {
         isRunning: false,
         isUploading: false,
         isDownloading: false,
+        isGoing: false,
     },
     response: [],
     error: '',
@@ -62,15 +63,39 @@ export const BleConnectionReducer = (state = default_state_ble_connection, actio
             RobotProxy.setRobot(action.device);
             return Object.assign({}, state, {active_device: action.device});
         case ActionType.STOP_ROBOT:
-            return Object.assign({}, state, {device: {...state.device, isRunning: false}});
+            return Object.assign({}, state, {
+                device: {
+                    ...state.device,
+                    isRunning: false,
+                    isGoing: false,
+                    isRecording: false,
+                    isUploading: false,
+                    isDownloading: false,
+                },
+            });
         case ActionType.RUN_ROBOT:
             return Object.assign({}, state, {device: {...state.device, isRunning: true}});
         case ActionType.SUCCESS_RECORDING:
-            return Object.assign({}, state, {device: {...state.device, isRecording: false}});
+            return Object.assign({}, state, {device: {...state.device, isRecording: false, isUploading: false}});
         case ActionType.START_RECORDING:
             return Object.assign({}, state, {device: {...state.device, isRecording: true}});
         case ActionType.FAILURE_RECORDING:
             return Object.assign({}, state, {device: {...state.device, isRecording: false}});
+        case ActionType.GO_ROBOT:
+            console.log('now');
+            return Object.assign({}, state, {device: {...state.device, isGoing: true}});
+        case ActionType.FAILURE_UPLOADING:
+            return Object.assign({}, state, {device: {...state.device, isUploading: false}});
+        case ActionType.SUCCESS_UPLOADING:
+            return Object.assign({}, state, {device: {...state.device, isUploading: false, isRecording: false}});
+        case ActionType.START_UPLOADING:
+            return Object.assign({}, state, {device: {...state.device, isUploading: true}});
+        case ActionType.START_DOWNLOADING:
+            return Object.assign({}, state, {device: {...state.device, isDownloading: true}});
+        case ActionType.SUCCESS_DOWNLOADING:
+            return Object.assign({}, state, {device: {...state.device, isDownloading: false}});
+        case ActionType.FAILURE_DOWNLOADING:
+            return Object.assign({}, state, {device: {...state.device, isDownloading: false}});
         default:
             return state;
 

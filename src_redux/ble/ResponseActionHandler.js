@@ -16,16 +16,9 @@ export const handleResponse = (response) => {
         return settingsAction.setInterval(parseInt(response.substring(2)));
     } else if (response.match('\\b[0-9]{3}\\b,\\b[0-9]{3}\\b')) {
         let read_instructions = response.trim().split(',');
-        let speed_l = read_instructions[0] / 2.55 + 0.5;
-        let speed_r = read_instructions[1] / 2.55 + 0.5;
-        if (speed_l < 0) {
-            speed_l = 0;
-        }
-        if (speed_r < 0) {
-            speed_r = 0;
-        }
-        var res = {type: 'speedLine', left: Math.trunc(speed_l), right: Math.trunc(speed_r)};
-
+        let speed_l = Math.trunc(read_instructions[0] / 2.55 + 0.5);
+        let speed_r = Math.trunc(read_instructions[1] / 2.55 + 0.5);
+        var res = {type: 'speedLine', left: speed_l, right: speed_r};
         // TODO implemented reducer
         return bleAction.bleResponse('');
     } else {
@@ -33,15 +26,15 @@ export const handleResponse = (response) => {
         switch (response) {
             case (',,,,'):
                 // finished download (beam)
-                return bleAction.bleResponse('finishedDownload');
+                return bleAction.succcessDownloading();
             case ('_sr_'):
                 // stop
                 this.isLearning = false;
-                return bleAction.bleResponse('stop');
+                return bleAction.stoppedRobot();
             case ('full'):
                 // finished learning or uploading
                 // var res = {type: this.isLearning ? 'finishedLearning' : 'finishedUpload'};
-                return bleAction.bleResponse('finishedUpload');
+                return bleAction.successUplaod();
 
             case ('_end'):
                 // done driving
@@ -50,7 +43,7 @@ export const handleResponse = (response) => {
                 if (this.loops > 0) {
                     BleService.sendCommandToActDevice2('G');
                 } else {
-                    return bleAction.bleResponse('finishedDriving');
+                    return bleAction.stoppedRobot();
                 }
                 break;
             default:
