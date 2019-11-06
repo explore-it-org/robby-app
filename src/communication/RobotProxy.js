@@ -5,13 +5,17 @@ import BleService from './BleService';
 class RobotProxy {
     isLearning: boolean;
     loops: number;
+    expectedLength: number;
+    lastValue: number;
 
     constructor() {
         isConnected = false;
         this.isLearning = false;
 
         this.loops = 0;
-        version = 0;
+        this.version = 0;
+        this.expectedLength = 0;
+        this.lastValue = undefined;
     }
 
     setRobot(robotDevice) {
@@ -46,13 +50,13 @@ class RobotProxy {
             (robot) => {
                 this.isConnected = true;
                 this.version = 1; // default version if no version number is published
-                BleService.sendCommandToActDevice2('Z') // Version request
+                BleService.sendCommandToActDevice('Z') // Version request
                     .then((c) => {
                         connectionHandler(robot); // enables buttons in the GUI
                     })
                     .then(() => {
                         // connection established, query for I now
-                        return BleService.sendCommandToActDevice2('I?');
+                        return BleService.sendCommandToActDevice('I?');
                     });
             },
             errorHandler,
@@ -71,7 +75,7 @@ class RobotProxy {
 
     run() {
         if (this.isConnected) {
-            return BleService.sendCommandToActDevice2('R');
+            return BleService.sendCommandToActDevice('R');
 
         }
     }
@@ -80,7 +84,7 @@ class RobotProxy {
     go(loops) {
         if (this.isConnected) {
             this.loops = loops;
-            return BleService.sendCommandToActDevice2('G');
+            return BleService.sendCommandToActDevice('G');
 
         }
     }
@@ -90,7 +94,7 @@ class RobotProxy {
         if (this.isConnected) {
             this.isLearning = false;
             this.loops = 0;
-            return BleService.sendCommandToActDevice2('S');
+            return BleService.sendCommandToActDevice('S');
 
         }
     }
@@ -100,23 +104,28 @@ class RobotProxy {
             this.isLearning = true;
             switch (this.version) {
                 case 1:
-                    BleService.sendCommandToActDevice('F');
-                    BleService.sendCommandToActDevice('D' + duration);
-                    BleService.sendCommandToActDevice('L');
+                    return BleService.sendCommandToActDevice('F')
+                        .then(c => {
+                            BleService.sendCommandToActDevice('D' + duration)
+                        })
+                        .then(c => {
+                            BleService.sendCommandToActDevice('L')
+                        });
                     break;
                 case 2:
                 case 3:
                 case 4:
-                    return BleService.sendCommandToActDevice2('F')
-                        .then((c) => {
+                case 5:
+                    return BleService.sendCommandToActDevice('F')
+                        .then(c => {
                             var hex = Number(interval * duration * 2 - 1).toString(16).toUpperCase();
                             while (hex.length < 4) {
                                 hex = '0' + hex;
                             }
-                            return BleService.sendCommandToActDevice2('d' + hex);
+                            return BleService.sendCommandToActDevice('d' + hex);
                         })
                         .then((c) => {
-                            return BleService.sendCommandToActDevice2('L');
+                            return BleService.sendCommandToActDevice('L');
                         });
 
                 default:
@@ -142,43 +151,79 @@ class RobotProxy {
         if (this.isConnected) {
             switch (this.version) {
                 case 1:
-                    BleService.sendCommandToActDevice('F');
-                    BleService.sendCommandToActDevice('D' + instructions.length);
-                    BleService.sendCommandToActDevice('I1');
-                    BleService.sendCommandToActDevice('E');
+                    var promise = BleService.sendCommandToActDevice('F')
+                        .then(c => {
+                            return BleService.sendCommandToActDevice('D' + instructions.length);
+                        })
+                        .then(c => {
+                            return BleService.sendCommandToActDevice('I1');
+                        })
+                        .then(c => {
+                            return BleService.sendCommandToActDevice('E');
+                        });
+
                     for (let i = 0; i < instructions.length; i++) {
                         let item = instructions[i];
                         let speed = this.speed_padding(item.left) + ',' + this.speed_padding(item.right) + 'xx';
-                        BleService.sendCommandToActDevice(speed);
+                        promise = promise.then(c => {
+                            return BleService.sendCommandToActDevice(speed);
+                        });
                     }
-                    BleService.sendCommandToActDevice(',,,,');
-                    break;
+                    return promise.then(c => {
+                        return BleService.sendCommandToActDevice('end');
+                    });
 
                 case 2:
                 case 3:
                 case 4:
-                    var promise = BleService.sendCommandToActDevice2('F')
-                        .then((c) => {
+                    var promise = BleService.sendCommandToActDevice('F')
+                        .then(c => {
                             var hex = Number(instructions.length * 2 - 1).toString(16).toUpperCase();
                             while (hex.length < 4) {
                                 hex = '0' + hex;
                             }
-                            return BleService.sendCommandToActDevice2('d' + hex);
+                            return BleService.sendCommandToActDevice('d' + hex);
                         })
-                        .then((c) => {
-                            return BleService.sendCommandToActDevice2('E');
+                        .then(c => {
+                            return BleService.sendCommandToActDevice('E');
                         });
 
                     for (let i = 0; i < instructions.length; i++) {
                         let item = instructions[i];
                         let speed = this.speed_padding(item.left) + ',' + this.speed_padding(item.right) + 'xx';
-                        promise = promise.then((c) => {
-                            return BleService.sendCommandToActDevice2(speed);
+                        promise = promise.then(c => {
+                            return BleService.sendCommandToActDevice(speed);
                         });
                     }
-                    return promise.then((c) => {
-                        return BleService.sendCommandToActDevice2('end');
+                    return promise.then(c => {
+                        return BleService.sendCommandToActDevice('end');
                     });
+
+                case 5:
+                    return BleService.sendCommandToActDevice('F')
+                        .then(c => {
+                            var hex = Number(instructions.length * 2 - 1).toString(16).toUpperCase();
+                            while (hex.length < 4) {
+                                hex = '0' + hex;
+                            }
+                            return BleService.sendCommandToActDevice('d' + hex);
+                        })
+                        .then(c => {
+                            return BleService.sendCommandToActDevice('E');
+                        })
+                        .then(c => {
+                            var bytes = new Uint8Array(instructions.length * 2);
+                            for(let i = 0; i < instructions.length; i++) {
+                                let item = instructions[i];
+                                bytes[2*i] = this.speed_padding(item.left);
+                                bytes[2*i+1] = this.speed_padding(item.right);
+                            }
+                            return BleService.sendCommandToActDevice(bytes);
+                        })
+                        .then(c => {
+                            return BleService.sendCommandToActDevice('end');
+                        });
+
                 default:
                     console.log('upload: version not supported: ' + this.version);
             }
@@ -189,17 +234,26 @@ class RobotProxy {
     download() {
         if (this.isConnected) {
             this.isLearning = false;
-            return BleService.sendCommandToActDevice2('B');
-
+            switch (this.version) {
+                case 1: case 2: case 3: case 4:
+                    return BleService.sendCommandToActDevice('B');
+                case 5:
+                    return BleService.sendCommandToActDevice('d?')
+                        .then(c => {
+                            BleService.sendCommandToActDevice('B')
+                        });
+                default:
+                    console.log('upload: version not supported: ' + this.version);
+            }
         }
     }
 
     setInterval(interval) {
         if (this.isConnected) {
             // Argument check is done by the robot, i.e. arguments must meet (0 <= interval <= 50)
-            return BleService.sendCommandToActDevice2('I' + interval)
-                .then((c) => {
-                    BleService.sendCommandToActDevice2('I?');
+            return BleService.sendCommandToActDevice('I' + interval)
+                .then(c => {
+                    BleService.sendCommandToActDevice('I?');
                 });
         }
     }
@@ -207,7 +261,30 @@ class RobotProxy {
     // handles responses from the robot
     handleResponse(responseHandler, response) {
         console.log('Response: ' + response + ' (len ' + response.length + ')');
-        if (response.startsWith('VER')) {
+        for(let i = 0; i < response.length; i++) {
+            let hex = response.charCodeAt(i).toString(16);
+            while(hex.length < 2) { hex = '0' + hex; }
+            console.log(i + ': 0x' + hex);
+        }
+
+        if(response.length === 2 && response.charCodeAt(0) === 13 && response.charCodeAt(1) === 10 ) {
+            // ignore lines which consist of 0x0D 0x0A (CR LF) only
+        } else if(response.length === 1 && response.charCodeAt(0) === 0) {
+            // ignore lines which consist of 0x00 only
+        } else if(this.expectedLength > 0) {
+            for(let i = 0; i < response.length; i++) {
+                let speed = Math.trunc(response.charCodeAt(i) / 2.55 + 0.5);
+                if(this.lastValue === undefined) {
+                    this.lastValue = speed;
+                } else {
+                    var res = {type: 'speedLine', left: this.lastValue, right: speed};
+                    responseHandler(res);
+                    this.lastValue = undefined;
+                    this.expectedLength = this.expectedLength - 2;
+                }
+            }
+            console.log('expectedLength: ' + this.expectedLength);
+        } else if (response.startsWith('VER')) { // starting with version 2
             console.log('Protocol Version: ' + response);
             this.version = parseInt(response.substring(4));
         } else if (response.startsWith('I=')) {
@@ -216,6 +293,9 @@ class RobotProxy {
             let value = parseInt(response.substring(2));
 
             responseHandler({type: 'interval', value: value})
+        } else if (response.startsWith('dx')) {
+            this.expectedLength = parseInt(response.substring(2, 6), 16) + 1;
+            console.log('expectedLength: ' + this.expectedLength);
         } else if (response.match("\\b[0-9]{3}\\b,\\b[0-9]{3}\\b")) {
             let read_instructions = response.trim().split(',');
             let speed_l = read_instructions[0] / 2.55 + 0.5;
@@ -249,7 +329,7 @@ class RobotProxy {
                     var res = {type: 'finishedDriving'};
                     this.loops--;
                     if (this.loops > 0) {
-                        BleService.sendCommandToActDevice2('G');
+                        BleService.sendCommandToActDevice('G');
 
                     } else {
                         responseHandler(res);
