@@ -43,7 +43,6 @@ export const BleConnectionReducer = (state = default_state_ble_connection, actio
                 device: {...state.device, name: action.robot.name},
             });
         case ActionType.UPDATE_DEVICE_VERSION:
-            console.log('my version is ' + action.version);
             return Object.assign({}, state, {device: {...state.device, version: action.version}});
         case ActionType.BLE_RESPONSE:
             return state;

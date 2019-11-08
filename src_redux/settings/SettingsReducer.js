@@ -9,7 +9,6 @@ const default_state_settings = {
 
 };
 export const SettingsReducer = (state = default_state_settings, action) => {
-    console.log(action);
     switch (action.type) {
         case ActionType.SET_LOOPS:
             return Object.assign({}, state, {loops: action.loops, lastUpdate: Date.now()});

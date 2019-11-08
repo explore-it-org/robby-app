@@ -3,45 +3,26 @@ import {StyleSheet, View, Alert} from 'react-native';
 import {Appbar} from 'react-native-paper';
 import RobotProxy from '../ble/RobotProxy';
 import {createAppContainer} from 'react-navigation';
-//import {createMaterialTopTabNavigator} from 'react-navigation-tabs';
+import {createMaterialTopTabNavigator} from 'react-navigation-tabs';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 // import {MainTab, MixedViewTab, SecondTab} from './tabs/index';
 // import RobotProxy from '../../../communication/RobotProxy';
 // import {instructions, add, removeAll, addSpeedChangeListener, clearInstructions, storeInstructions} from '../../../stores/InstructionsStore';
 //import {blocks, addBlocksChangeListener} from '../../../stores/BlocksStore'
-/*import {
-    addDeviceNameChangeListener,
-    getDeviceName,
-    setDeviceName,
-    setConnected,
-    getLoopCounter,
-    getDuration,
-    getInterval,
-    setInterval,
-} from '../../../stores/SettingsStore';*/
+
 import {getStatusBarHeight, ifIphoneX} from 'react-native-iphone-x-helper';
 import SinglePickerMaterialDialog from '../materialdialog/SinglePickerMaterialDialog';
 import i18n from '../../resources/locales/i18n';
 import {connectToDevice} from '../ble/BleAction';
+import OverviewContainer from '../programmingtabs/overview/OverviewContainer';
+import StepProgrammingComponent from '../programmingtabs/stepprogramming/StepProgrammingComponent';
+import StepProgrammingContainer from '../programmingtabs/stepprogramming/StepProgrammingContainer';
 // import {storeBlocks, clearBlocksProgram} from '../../../stores/BlocksStore';
 
 
 export default class ProgrammingComponent extends Component {
-    state = {
-        stoppButton: this.props.BLEConnection.isConnected && (this.props.BLEConnection.device.isUploading ||
-            this.props.BLEConnection.device.isGoing ||
-            this.props.BLEConnection.device.isRecording),
-        ohterButton: !this.props.BLEConnection.isConnected ||
-            this.props.BLEConnection.device.isUploading ||
-            this.props.BLEConnection.device.isGoing ||
-            this.props.BLEConnection.device.isRecording,
-
-
-    };
-
 
     componentDidMount(): void {
-        console.log(this.state.disabledButton);
         /*
         RobotProxy.testScan(err => {
                 this.setState({
@@ -143,13 +124,46 @@ export default class ProgrammingComponent extends Component {
                                    }}/>
                 </Appbar>
 
+                <TabContainer
+                    onNavigationStateChange={(prevState, currentState, action) => {
+                        const currentScreen = this.getActiveRouteName(currentState);
+                        const prevScreen = this.getActiveRouteName(prevState);
+                        // this.setState({currentRoute: currentScreen});
+                        switch (currentScreen) {
+                            case 'First':
+                                // this.setState({save_and_new_btn_disabled: false});
+                                /* this.save = () => {
+                                     // storeInstructions();
+                                 };
+                                 this.clear = () => {
+                                     //clearInstructions();
+                                 };*/
+                                break;
+                            case 'Second':
+                                /*  this.setState({save_and_new_btn_disabled: false});
+                                  this.save = () => {
+                                      storeBlocks();
+                                  };
+                                  this.clear = () => {
+                                      clearBlocksProgram();
+                                  };*/
+                                break;
+                            default:
+                                /*this.setState({save_and_new_btn_disabled: true});
+                                this.clear = undefined;
+                                this.save = undefined;*/
+                                break;
+                        }
+                    }}
+                />
+
                 <Appbar style={styles.bottom}>
                     <Appbar.Action icon="stop" size={32}
                                    disabled={!this.props.BLEConnection.isConnected ||
                                    !(this.props.BLEConnection.device.isUploading ||
-                                   this.props.BLEConnection.device.isGoing ||
-                                   this.props.BLEConnection.device.isRecording ||
-                                   this.props.BLEConnection.device.isRunning)}
+                                       this.props.BLEConnection.device.isGoing ||
+                                       this.props.BLEConnection.device.isRecording ||
+                                       this.props.BLEConnection.device.isRunning)}
                                    onPress={() => {
                                        this.props.stopRobot();
                                    }}/>
@@ -229,32 +243,32 @@ export default class ProgrammingComponent extends Component {
     }
 }
 
-/*
+
 const TabNavigator = createMaterialTopTabNavigator({
     First: {
-        screen: MainTab,
+        screen: OverviewContainer,
         navigationOptions: {
             tabBarIcon: ({tintColor}) => (
                 <MaterialCommunityIcon name="menu" size={24} color={tintColor}/>
             ),
         },
     },
-    Second:{
-        screen: SecondTab,
+    Second: {
+        screen: StepProgrammingContainer,
         navigationOptions: {
             tabBarIcon: ({tintColor}) => (
                 <MaterialCommunityIcon name="page-layout-body" size={24} color={tintColor}/>
             ),
-        }
-    },
-    Third: {
-        screen: MixedViewTab,
-        navigationOptions: {
-            tabBarIcon: ({tintColor}) => (
-                <MaterialCommunityIcon name="content-copy" size={24} color={tintColor}/>
-            ),
         },
-    },
+    },/*
+     Third: {
+         screen: MixedViewTab,
+         navigationOptions: {
+             tabBarIcon: ({tintColor}) => (
+                 <MaterialCommunityIcon name="content-copy" size={24} color={tintColor}/>
+             ),
+         },
+     },*/
 }, {
     tabBarOptions: {
         activeTintColor: '#9c27b0',
@@ -271,7 +285,7 @@ const TabNavigator = createMaterialTopTabNavigator({
 });
 
 const TabContainer = createAppContainer(TabNavigator);
-*/
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -307,35 +321,4 @@ const styles = StyleSheet.create({
 });
 
 
-/*  <TabContainer
-      onNavigationStateChange={(prevState, currentState, action) => {
-          const currentScreen = this.getActiveRouteName(currentState);
-          const prevScreen = this.getActiveRouteName(prevState);
-          this.setState({currentRoute: currentScreen});
-          switch (currentScreen) {
-              case 'First':
-                  this.setState({save_and_new_btn_disabled: false});
-                  this.save = () => {
-                      // storeInstructions();
-                  };
-                  this.clear = () => {
-                      //clearInstructions();
-                  };
-                  break;
-              case 'Second':
-                  this.setState({save_and_new_btn_disabled: false});
-                  this.save = () => {
-                      storeBlocks();
-                  };
-                  this.clear = () => {
-                      clearBlocksProgram();
-                  };
-                  break;
-              default:
-                  this.setState({save_and_new_btn_disabled: true});
-                  this.clear = undefined;
-                  this.save = undefined;
-                  break;
-          }
-      }}
-  />*/
+

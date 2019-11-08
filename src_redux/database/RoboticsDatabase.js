@@ -21,12 +21,12 @@ class RoboticsDatabase {
                 this.repository.write(() => {
                     this.repository.create('Program', program);
                 });
-                return 'Saved to Database';
+                return {operation: 'save', status: 'success', error: ''};
             } catch (e) {
-                return 'Error while saving: ' + e;
+                return {operation: 'save', status: 'failure', error: e.message};
             }
         }
-        return 'Name is already taken';
+        return {operation: 'save', status: 'failure', error: 'Name is already taken'};
     }
 
     findAllWhichCanBeAddedTo(program): Program[] {
@@ -59,7 +59,7 @@ class RoboticsDatabase {
                 cloneProgram.name = newName + '(' + i + ')';
                 i++;
             }
-            return RobbyDatabaseAction.add(cloneProgram);
+            return this.add(cloneProgram);
         } catch (e) {
             return e;
         }
@@ -82,7 +82,7 @@ class RoboticsDatabase {
     }
 
     delete(program_id): String {
-        if (!RobbyDatabaseAction.findAll().reduce((acc, p) => acc || this.isUsed(p, program_id), false)) {
+        if (!this.findAll().reduce((acc, p) => acc || this.isUsed(p, program_id), false)) {
             try {
                 this.repository.write(() => {
                     this.repository.delete(this.repository.objectForPrimaryKey('Program', program_id));
@@ -114,11 +114,11 @@ class RoboticsDatabase {
 
     // Checks whether the given `program` has an indirect reference to the program with the id `program_id`.
     isUsedRecursive(program, program_id): boolean {
-        return program_id === program.id || this.isUsed(program, program_id) || program.blocks.reduce((acc, p) => acc || this.isUsedRecursive(RobbyDatabaseAction.findOneByPK(Block.fromDatabase(p).ref), program_id), false);
+        return program_id === program.id || this.isUsed(program, program_id) || program.blocks.reduce((acc, p) => acc || this.isUsedRecursive(this.findOneByPK(Block.fromDatabase(p).ref), program_id), false);
     }
 
     nameIsUnused(name) {
-        return (RobbyDatabaseAction.findOne(name) === undefined);
+        return (this.findOne(name) === undefined);
     }
 
 

@@ -1,50 +1,37 @@
-import db from './RoboticsDatabase';
+import Database from './RoboticsDatabase';
 import *  as ActionTypes from '../GlobalActionTypes';
 import {Instruction, Program, ProgramType} from '../model/DatabaseModels';
 
 
 const default_state_Programs = {
     lastUpdate: Date.now(),
-    Programs: db.findAll(),
-    ActiveProgram: new Program(),
+    Programs: Database.findAll(),
+    status: 'success',
+    operation: '',
+    errorMessage: '',
 };
 
 export const ProgramsReducer = (state = default_state_Programs, action) => {
-    switch (action.typeof) {
+    switch (action.type) {
         case ActionTypes.ADD_PROGRAM:
-            db.add(action.program);
-            return {lastUpdate: Date.now(), Programs: db.findAll()};
+            let a = Database.add(state.Programs);
+            return Object.assign({}, state, {lastUpdate: Date.now(), Programs: Database.findAll(), ...a});
         case ActionTypes.SAVE_PROGRAM:
-            db.save(action.program);
-            return {lastUpdate: Date.now(), Programs: db.findAll()};
+            Database.save(action.program);
+            return Object.assign({}, state, {lastUpdate: Date.now(), Programs: Database.findAll()});
         case ActionTypes.DUPLICATE_PROGRAM:
-            db.duplicate(action.program, action.newName);
-            return {lastUpdate: Date.now(), Programs: db.findAll()};
+            Database.duplicate(action.program, action.newName);
+            return Object.assign({}, state, {lastUpdate: Date.now(), Programs: Database.findAll()});
         case ActionTypes.DELETE_ALL:
-            db.deleteAll();
-            return {lastUpdate: Date.now(), Programs: db.findAll()};
+            Database.deleteAll();
+            return Object.assign({}, state, {lastUpdate: Date.now(), Programs: Database.findAll()});
         case ActionTypes.DELETE_PROGRAM:
-            db.delete(action.program_id);
-            return {lastUpdate: Date.now(), Programs: db.findAll()};
+            Database.delete(action.program_id);
+            return Object.assign({}, state, {lastUpdate: Date.now(), Programs: Database.findAll()});
         default:
             return state;
     }
 };
 
 
-const default_state_Active_Instruction = {lastUpdate: Date.now(), Program: new Program('', ProgramType.STEPS)};
-export const ActiveInstructionsReducer = (state = default_state_Active_Instruction, action) => {
-    switch (action.typeof) {
-        case ActionTypes.ADD_NEW_INSTRUCTION:
-            return Object.assign({}, state, {Program: Object.assign(new Program(), state.Program, {steps: [...b.Program.steps, new Instruction(0, 0)]})});
-        case ActionTypes.CHANGE_INSTRUCTION_INDEX:
-        case ActionTypes.CHANGE_INSTRUCTION_NAME:
-        case ActionTypes.CLEAR_PROGRAM:
-            return default_state_Active_Instruction;
-        case ActionTypes.DELETE_INSTRUCITON_INDEX:
 
-
-    }
-
-
-};
