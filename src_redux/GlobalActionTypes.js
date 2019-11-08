@@ -48,7 +48,7 @@ export const BLE_RESPONSE = 'BLE_RESPONSE';
 
 export const BLE_ERROR = 'BLE_ERROR';
 
-// Active Program  Action Types
+// Active Instruction  Action Types
 export const CLEAR_PROGRAM = 'CLEAR_PROGRAM';
 export const ADD_NEW_INSTRUCTION = 'ADD_NEW_INSTRUCTION';
 export const CHANGE_INSTRUCTION_NAME = 'CHANGE_INSTRUCTION_NAME';
@@ -58,6 +58,15 @@ export const SET_ACTIVE_INDEX = 'SET_ACTIVE_INDEX';
 export const CHANGE_RIGHT_SPEED = 'CHANGE_RIGHT_SPEED';
 export const CHANGE_LEFT_SPEED = 'CHANGE_LEFT_SPEED';
 export const SET_PROGRAM_NAME = 'SET_PROGRAM_NAME';
+
+// Active Block Action Types
+export const CLEAR_BLOCK = 'CLEAR_BLOCK';
+export const ADD_NEW_BLOCK = 'ADD_NEW_BLOCK';
+export const CHANGE_BLOCK_NAME = 'CHANGE_BLOCK_NAME';
+export const DELETE_BLOCK_INDEX = 'DELETE_BLOCK_INDEX';
+export const CHANGE_BLOCK_INDEX = 'CHANGE_BLOCK_INDEX';
+export const SET_ACTIVE_BLOCK = 'SET_ACTIVE_BLOCK';
+export const CHANGE_REPS = 'CHANGE_REPS';
 
 
 // Settings Action Types

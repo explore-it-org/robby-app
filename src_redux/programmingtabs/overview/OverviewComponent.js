@@ -3,7 +3,7 @@ import {StyleSheet, View, ScrollView, FlatList, TouchableOpacity, Button} from '
 import {Text} from 'react-native-paper';
 import {duplicate, remove} from '../../database/DatabaseAction';
 
-export default class MixedViewComponent extends Component {
+export default class OverviewComponent extends Component {
 
     componentDidMount(): void {
         console.log('i get called' + this.props.Program.Programs);
@@ -49,7 +49,7 @@ export default class MixedViewComponent extends Component {
                                     </View>
                                     <View style={{marginRight: 20}}>
                                         <Button title="Duplicate" onPress={() => {
-                                            this.props.duplicate(item)
+                                            this.props.duplicate(item);
                                         }}/>
                                     </View>
                                 </View>

@@ -10,10 +10,10 @@ import {FAB} from 'react-native-paper';
 import React from 'react';
 import SpeedInput from '../../controls/SpeedInput';
 import i18n from '../../../resources/locales/i18n';
-import {changeLeftSpeed} from '../../database/ActiveProgramAction';
+import {changeLeftSpeed} from './ActiveProgramAction';
 
 
-export default class MainTab extends Component {
+export default class StepProgrammingComponent extends Component {
     /*   state = {
            instructions: instructions,
            selected: -1, // id of currently selected row

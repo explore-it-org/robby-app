@@ -6,7 +6,7 @@ import {
     SET_ACTIVE_INDEX,
     CHANGE_LEFT_SPEED,
     CHANGE_RIGHT_SPEED, SET_PROGRAM_NAME,
-} from '../GlobalActionTypes';
+} from '../../GlobalActionTypes';
 
 export const moveUp = () => ({
     type: CHANGE_INSTRUCTION_INDEX,

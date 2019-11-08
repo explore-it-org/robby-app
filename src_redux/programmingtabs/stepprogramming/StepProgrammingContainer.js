@@ -9,7 +9,7 @@ import {
     changeLeftSpeed,
     changeRightSpeed,
     setName
-} from '../../database/ActiveProgramAction';
+} from './ActiveProgramAction';
 import StepProgrammingComponent from './StepProgrammingComponent';
 
 const mapStateToProps = state => ({

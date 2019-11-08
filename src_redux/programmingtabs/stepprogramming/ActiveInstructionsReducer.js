@@ -1,5 +1,5 @@
-import {Instruction, Program, ProgramType} from '../model/DatabaseModels';
-import * as ActionTypes from '../GlobalActionTypes';
+import {Instruction, Program, ProgramType} from '../../model/DatabaseModels';
+import * as ActionTypes from '../../GlobalActionTypes';
 
 const default_state_Active_Instruction = {
     lastUpdate: Date.now(),

@@ -17,6 +17,7 @@ import {connectToDevice} from '../ble/BleAction';
 import OverviewContainer from '../programmingtabs/overview/OverviewContainer';
 import StepProgrammingComponent from '../programmingtabs/stepprogramming/StepProgrammingComponent';
 import StepProgrammingContainer from '../programmingtabs/stepprogramming/StepProgrammingContainer';
+import BlockProgrammingContainer from '../programmingtabs/blockprogramming/BlockProgrammingContainer';
 // import {storeBlocks, clearBlocksProgram} from '../../../stores/BlocksStore';
 
 
@@ -260,15 +261,15 @@ const TabNavigator = createMaterialTopTabNavigator({
                 <MaterialCommunityIcon name="page-layout-body" size={24} color={tintColor}/>
             ),
         },
-    },/*
-     Third: {
-         screen: MixedViewTab,
-         navigationOptions: {
-             tabBarIcon: ({tintColor}) => (
-                 <MaterialCommunityIcon name="content-copy" size={24} color={tintColor}/>
-             ),
-         },
-     },*/
+    },
+    Third: {
+        screen: BlockProgrammingContainer,
+        navigationOptions: {
+            tabBarIcon: ({tintColor}) => (
+                <MaterialCommunityIcon name="content-copy" size={24} color={tintColor}/>
+            ),
+        },
+    },
 }, {
     tabBarOptions: {
         activeTintColor: '#9c27b0',
