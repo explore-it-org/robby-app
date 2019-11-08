@@ -1,5 +1,6 @@
 import {Instruction, Program, ProgramType} from '../../model/DatabaseModels';
 import * as ActionTypes from '../../GlobalActionTypes';
+import Database from '../../database/RoboticsDatabase';
 
 const default_state_Active_Instruction = {
     lastUpdate: Date.now(),
@@ -120,6 +121,11 @@ export const ActiveInstructionsReducer = (state = default_state_Active_Instructi
             return Object.assign({}, state, {
                 lastUpdate: Date.now(),
                 ActiveProgram: Object.assign(new Program(), state.ActiveProgram, {name: action.name}),
+            });
+        case ActionTypes.LOAD_INSTRUCTION:
+            let a = Database.findOne(action.name);
+            return Object.assign({}, state, {
+                ActiveProgram: a,
             });
         default:
             return state;

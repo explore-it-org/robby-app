@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, ScrollView, FlatList, TouchableOpacity, Button} from 'react-native';
 import {Text} from 'react-native-paper';
-import {duplicate, remove} from '../../database/DatabaseAction';
+import {ProgramType} from '../../model/DatabaseModels';
 
 export default class OverviewComponent extends Component {
 
@@ -9,17 +9,18 @@ export default class OverviewComponent extends Component {
         console.log('i get called' + this.props.Program.Programs);
     }
 
-    /*
-        load(item){
-            if(item.programType === ProgramType.STEPS){
-                loadSpeedProgramByName(item.name);
-                this.props.navigation.navigate("First");
-            }else{
-                loadProgramByName(item.name);
-                this.props.navigation.navigate("Second");
-            }
+
+    load(item) {
+        console.log('hello?');
+        if (item.programType === ProgramType.STEPS) {
+            this.props.loadInstruction(item.name);
+            this.props.navigation.navigate('First');
+        } else {
+            this.props.loadBlock(item.name);
+            this.props.navigation.navigate('Second');
         }
-    */
+    }
+
     render() {
         return (
             <View style={[styles.view, {flex: 1, justifyContent: 'center', alignItems: 'center'}]}>
@@ -36,7 +37,7 @@ export default class OverviewComponent extends Component {
                             <TouchableOpacity
                                 style={{width: '100%', flexDirection: 'row'}}
                                 onPress={() => {
-                                    //this.load(item);
+                                    this.load(item);
                                 }}>
                                 <View style={{padding: 20, width: '100%', flexDirection: 'row'}}>
                                     <Text style={{flex: 1}}>

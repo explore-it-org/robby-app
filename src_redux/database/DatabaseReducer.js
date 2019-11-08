@@ -14,7 +14,7 @@ const default_state_Programs = {
 export const ProgramsReducer = (state = default_state_Programs, action) => {
     switch (action.type) {
         case ActionTypes.ADD_PROGRAM:
-            let a = Database.add(state.Programs);
+            let a = Database.add(action.program);
             return Object.assign({}, state, {lastUpdate: Date.now(), Programs: Database.findAll(), ...a});
         case ActionTypes.SAVE_PROGRAM:
             Database.save(action.program);

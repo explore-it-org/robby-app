@@ -5,7 +5,7 @@ import uuidv4 from 'uuid/v4';
 
 export class DatabaseTest {
 
-    basename = 'Model';
+    basename = 'Modeddl';
     amount = 10;
 
     constructor(store) {

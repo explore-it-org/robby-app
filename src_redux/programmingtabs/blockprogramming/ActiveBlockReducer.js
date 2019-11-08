@@ -1,5 +1,6 @@
 import {Block, Instruction, Program, ProgramType} from '../../model/DatabaseModels';
 import * as ActionTypes from '../../GlobalActionTypes';
+import Database from '../../database/RoboticsDatabase';
 
 const default_state_block = {
     lastUpdate: Date.now(),
@@ -92,6 +93,11 @@ export const ActiveBlockReducer = (state = default_state_block, action) => {
 
                 });
             }
+        case ActionTypes.LOAD_BLOCK:
+            let a = Database.findOne(action.name);
+            return Object.assign({}, state, {
+                Active_Block: a,
+            });
         default:
             return state;
 

@@ -58,6 +58,7 @@ export const SET_ACTIVE_INDEX = 'SET_ACTIVE_INDEX';
 export const CHANGE_RIGHT_SPEED = 'CHANGE_RIGHT_SPEED';
 export const CHANGE_LEFT_SPEED = 'CHANGE_LEFT_SPEED';
 export const SET_PROGRAM_NAME = 'SET_PROGRAM_NAME';
+export const LOAD_INSTRUCTION = 'LOAD_INSTRUCTION';
 
 // Active Block Action Types
 export const CLEAR_BLOCK = 'CLEAR_BLOCK';
@@ -67,6 +68,7 @@ export const DELETE_BLOCK_INDEX = 'DELETE_BLOCK_INDEX';
 export const CHANGE_BLOCK_INDEX = 'CHANGE_BLOCK_INDEX';
 export const SET_ACTIVE_BLOCK = 'SET_ACTIVE_BLOCK';
 export const CHANGE_REPS = 'CHANGE_REPS';
+export const LOAD_BLOCK = 'LOAD_BLOCK';
 
 
 // Settings Action Types

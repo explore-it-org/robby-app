@@ -5,7 +5,7 @@ import {
     CHANGE_INSTRUCTION_INDEX,
     SET_ACTIVE_INDEX,
     CHANGE_LEFT_SPEED,
-    CHANGE_RIGHT_SPEED, SET_PROGRAM_NAME,
+    CHANGE_RIGHT_SPEED, SET_PROGRAM_NAME, LOAD_INSTRUCTION,
 } from '../../GlobalActionTypes';
 
 export const moveUp = () => ({
@@ -37,6 +37,11 @@ export const changeLeftSpeed = (speed) => ({
 });
 export const setName = (name) => ({
     type: SET_PROGRAM_NAME,
+    name,
+});
+
+export const loadInstruction = (name) => ({
+    type: LOAD_INSTRUCTION,
     name,
 });
 

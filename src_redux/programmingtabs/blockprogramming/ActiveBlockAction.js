@@ -5,7 +5,7 @@ import {
     CLEAR_BLOCK,
     DELETE_BLOCK_INDEX,
     SET_ACTIVE_BLOCK,
-    CHANGE_REPS,
+    CHANGE_REPS, LOAD_BLOCK,
 } from '../../GlobalActionTypes';
 
 export const moveUpBlock = () => ({
@@ -36,6 +36,10 @@ export const clearBlock = () => ({
 });
 export const setBlockName = (name) => ({
     type: CHANGE_BLOCK_NAME,
+    name,
+});
+export const loadBlock = (name) => ({
+    type: LOAD_BLOCK,
     name,
 });
 
