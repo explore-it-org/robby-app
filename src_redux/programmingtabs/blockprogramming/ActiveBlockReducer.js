@@ -70,12 +70,13 @@ export const ActiveBlockReducer = (state = default_state_block, action) => {
                             ...state.Active_Block.blocks.slice(0, state.selectedBlockIndex - 1),
                             state.Active_Block.blocks[state.selectedBlockIndex],
                             state.Active_Block.blocks[state.selectedBlockIndex - 1],
-                            ...state.Active_Block.blocks.slice(state.selectedIndex + 1, state.Active_Block.blocks.length),
+                            ...state.Active_Block.blocks.slice(state.selectedBlockIndex + 1, state.Active_Block.blocks.length),
                         ],
                     }),
 
                 });
             } else {
+
                 if (state.selectedBlockIndex >= state.Active_Block.blocks.length - 1) {
                     return state;
                 }

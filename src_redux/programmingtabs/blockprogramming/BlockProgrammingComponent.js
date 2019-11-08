@@ -22,31 +22,39 @@ export default class BlockProgrammingComponent extends Component {
 
 
     render() {
-        let select_controls;
         let items = [<Picker.Item label='Select a program'/>];
         this.props.Block.possibleChildren.forEach((p) => {
             items.push(<Picker.Item label={p.name} value={p.id}/>);
         });
+        let select_controls;
         if (this.props.Block.selectedBlockIndex >= 0) {
             select_controls =
                 <View>
                     <FAB
-                        //disabled={blocks.length <= 1}
+                        //disabled={this.props.Instruction.ActiveProgram.steps.length <= 1}
                         style={styles.delete}
                         icon="delete"
-                        onPress={this.props.deleteBlock()}
+                        onPress={() => {
+                            this.props.deleteBlock();
+                        }}
                     />
                     <FAB
-                        //disabled={this.state.selected === 0}
+                        //disabled={this.props.Instruction.selectedIndex === 0} disabling move up and down button produces unexpected behaviour
                         style={styles.move_up}
                         icon="arrow-upward"
-                        onPress={this.props.moveUpBlock()}
+                        onPress={() => {
+                            console.log('move down clicked');
+                            this.props.moveUpBlock();
+                        }}
                     />
                     <FAB
-                        //disabled={this.props.d.selected >= blocks.length - 1}
+                        //disabled={this.props.Instruction.selectedIndex >= this.props.Instruction.ActiveProgram.steps.length - 1}
                         style={styles.move_down}
                         icon="arrow-downward"
-                        onPress={this.props.moveDownBlock()}
+                        onPress={() => {
+                            console.log('move up clicked');
+                            this.props.moveDownBlock();
+                        }}
                     />
                 </View>;
         }
@@ -74,13 +82,13 @@ export default class BlockProgrammingComponent extends Component {
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={({item, index}) => (
                             <TouchableOpacity index={index}
-                                              style={parseInt(index) === this.props.Block.selectedBlockIndex ? styles.selected_row : styles.row}
+                                //style={parseInt(index) === this.props.Block.selectedBlockIndex ? styles.selected_row : styles.row}
                                               onPress={() => {
                                                   this.props.setActiveBlockIndex(index);
                                               }}>
 
                                 <ProgramInput index={index}
-                                              selected={this.props.Block.Active_Block.selectedBlockIndex}
+                                    //selected={this.props.Block.Active_Block.selectedBlockIndex}
                                               pickerItems={items}
                                               selectedProgram={34}
                                               onRepeatValueChange={(value) => {
@@ -90,7 +98,8 @@ export default class BlockProgrammingComponent extends Component {
                                               onProgramSelectionChange={(value) => {
                                                   //TODO this.props.change refrenz
                                               }}
-                                              val={parseInt(this.props.Block.Active_Block.blocks[index].ref)}></ProgramInput>
+
+                                              val={this.props.Block.Active_Block.blocks[index].ref}></ProgramInput>
 
                             </TouchableOpacity>
                         )}/>
