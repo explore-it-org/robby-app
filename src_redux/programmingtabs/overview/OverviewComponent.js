@@ -11,13 +11,12 @@ export default class OverviewComponent extends Component {
 
 
     load(item) {
-        console.log('hello?');
         if (item.programType === ProgramType.STEPS) {
             this.props.loadInstruction(item.name);
-            this.props.navigation.navigate('First');
+            this.props.navigation.navigate('Stepprogramming');
         } else {
             this.props.loadBlock(item.name);
-            this.props.navigation.navigate('Second');
+            this.props.navigation.navigate('Blockprogramming');
         }
     }
 

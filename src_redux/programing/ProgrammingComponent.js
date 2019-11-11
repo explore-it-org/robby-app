@@ -5,7 +5,7 @@ import RobotProxy from '../ble/RobotProxy';
 import {createAppContainer} from 'react-navigation';
 import {createMaterialTopTabNavigator} from 'react-navigation-tabs';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-// import {MainTab, MixedViewTab, SecondTab} from './tabs/index';
+// import {MainTab, MixedViewTab, StepprogrammingTab} from './tabs/index';
 // import RobotProxy from '../../../communication/RobotProxy';
 // import {instructions, add, removeAll, addSpeedChangeListener, clearInstructions, storeInstructions} from '../../../stores/InstructionsStore';
 //import {blocks, addBlocksChangeListener} from '../../../stores/BlocksStore'
@@ -62,22 +62,9 @@ export default class ProgrammingComponent extends Component {
         if (route.routes) {
             return this.getActiveRouteName(route);
         }
+        console.log(route.routeName);
         return route.routeName;
     }
-
-
-    /*
-        // handles messages from the communcation system
-        handleCommunicationMessages(name) {
-            setDeviceName({device: name.substr(name.length - 5)});
-            setConnected(true);
-            this.setState({
-                visible: false,
-                device: name,
-                remaining_btns_disabled: false,
-                stop_btn_disabled: true,
-            });
-        }*/
 
 
     render() {
@@ -131,7 +118,7 @@ export default class ProgrammingComponent extends Component {
                         const prevScreen = this.getActiveRouteName(prevState);
                         // this.setState({currentRoute: currentScreen});
                         switch (currentScreen) {
-                            case 'First':
+                            case 'Overview':
                                 // this.setState({save_and_new_btn_disabled: false});
                                 /* this.save = () => {
                                      // storeInstructions();
@@ -140,7 +127,7 @@ export default class ProgrammingComponent extends Component {
                                      //clearInstructions();
                                  };*/
                                 break;
-                            case 'Second':
+                            case 'Stepprogramming':
                                 /*  this.setState({save_and_new_btn_disabled: false});
                                   this.save = () => {
                                       storeBlocks();
@@ -246,7 +233,7 @@ export default class ProgrammingComponent extends Component {
 
 
 const TabNavigator = createMaterialTopTabNavigator({
-    First: {
+    Overview: {
         screen: OverviewContainer,
         navigationOptions: {
             tabBarIcon: ({tintColor}) => (
@@ -254,7 +241,7 @@ const TabNavigator = createMaterialTopTabNavigator({
             ),
         },
     },
-    Second: {
+    Stepprogramming: {
         screen: StepProgrammingContainer,
         navigationOptions: {
             tabBarIcon: ({tintColor}) => (
@@ -262,7 +249,7 @@ const TabNavigator = createMaterialTopTabNavigator({
             ),
         },
     },
-    Third: {
+    Blockprogramming: {
         screen: BlockProgrammingContainer,
         navigationOptions: {
             tabBarIcon: ({tintColor}) => (
