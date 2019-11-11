@@ -43,12 +43,12 @@ export default class OverviewComponent extends Component {
                                         {item.name}
                                     </Text>
                                     <View style={{marginRight: 20}}>
-                                        <Button onPress={() => {
+                                        <Button color="#792387" onPress={() => {
                                             this.props.remove(item.id);
                                         }} title="Delete"/>
                                     </View>
                                     <View style={{marginRight: 20}}>
-                                        <Button title="Duplicate" onPress={() => {
+                                        <Button color="#792387" title="Duplicate" onPress={() => {
                                             this.props.duplicate(item);
                                         }}/>
                                     </View>
