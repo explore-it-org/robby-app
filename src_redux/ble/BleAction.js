@@ -182,8 +182,9 @@ export const errorDownloading = (error) => ({
     type: ActionTypes.FAILURE_DOWNLOADING,
     error,
 });
-export const succcessDownloading = () => ({
+export const succcessDownloading = (program) => ({
     type: ActionTypes.SUCCESS_DOWNLOADING,
+    program,
 });
 
 
@@ -191,7 +192,7 @@ export const downloadToDevice = () => {
     return (dispatch, getState) => {
         dispatch(startDownloading());
         RobotProxy.download().then(res => {
-
+            dispatch(succcessDownloading(res));
         }).catch(error => {
             dispatch(errorDownloading(error));
         });
