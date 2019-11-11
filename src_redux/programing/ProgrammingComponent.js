@@ -62,7 +62,7 @@ export default class ProgrammingComponent extends Component {
         if (route.routes) {
             return this.getActiveRouteName(route);
         }
-        console.log(route.routeName);
+        //console.log(route.routeName);
         return route.routeName;
     }
 
@@ -203,7 +203,7 @@ export default class ProgrammingComponent extends Component {
                                    this.props.BLEConnection.device.isRecording ||
                                    this.props.BLEConnection.device.isRunning}
                                    onPress={() => {
-                                       this.props.upload();
+                                       this.props.upload(this.getActiveRouteName());
                                    }}/>
                     <Appbar.Action icon="save"
                                    size={32}

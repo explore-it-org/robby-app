@@ -159,10 +159,15 @@ export const failedUplaod = (error) => ({
     type: ActionTypes.FAILURE_UPLOADING,
     error,
 });
-export const uploadToRobot = () => {
+export const uploadToRobot = (ActiveProgram) => {
     return (dispatch, getState) => {
-        let a = getState().Program.ActiveProgram;
-        RobotProxy.upload(a.flatten()).then(res => {
+        let a = null;
+        if (ActiveProgram === 'Stepprogramming') {
+            a = getState().ActiveProgram.ActiveProgram.flatten();
+        } else {
+            a = getState().ActiveBlock.Active_Block.flatten();
+        }
+        RobotProxy.upload(a).then(res => {
             dispatch(startUpload());
         }).catch(error => {
             dispatch(failedUplaod());
