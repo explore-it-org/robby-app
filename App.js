@@ -9,6 +9,7 @@ import {View, Text, StyleSheet} from 'react-native';
 import {getStatusBarHeight, ifIphoneX} from 'react-native-iphone-x-helper';
 // import {version} from './package.json';
 import i18n from './resources/locales/i18n';
+
 import GLOBAL from './src/utility/Global';
 
 
@@ -16,11 +17,13 @@ import {connect} from 'react-redux';
 
 import * as ut from './src/utility/AppSettings';
 
+
 class App extends Component {
 
 
     componentDidMount() {
         let isGranted = BleService.requestLocationPermission();
+
         // dispatch isGranted to settings dispatcher this.props.dispatch()
 
     }
