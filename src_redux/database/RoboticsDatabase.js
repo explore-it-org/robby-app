@@ -35,7 +35,7 @@ class RoboticsDatabase {
     }
 
     findAll(): Program[] {
-        return this.repository.objects('Program').map(elem => Program.fromDatabase(elem));
+        return this.repository.objects('Program').map(elem => Program.fromDatabase(elem)).sort((a, b) => a.name.toUpperCase() < b.name.toUpperCase() ? -1 : 1);
     }
 
     findOne(name): Program {
