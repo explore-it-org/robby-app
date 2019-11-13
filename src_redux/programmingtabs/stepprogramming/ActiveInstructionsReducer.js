@@ -4,7 +4,7 @@ import Database from '../../database/RoboticsDatabase';
 
 const default_state_Active_Instruction = {
     lastUpdate: Date.now(),
-    ActiveProgram: new Program('', ProgramType.STEPS),
+    ActiveProgram: new Program('', ProgramType.STEPS, [new Instruction(0, 0)]),
     possibleChildren: [],
     selectedIndex: -1,
 };
