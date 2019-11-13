@@ -8,6 +8,20 @@ export const save = (program) => ({
     type: SAVE_PROGRAM,
     program: program,
 });
+
+export const saveProgram = (ActiveProgram) => {
+    alert(ActiveProgram);
+    return (dispatch, getState) => {
+        let program = null;
+        if (ActiveProgram === 'Stepprogramming') {
+            program = getState().ActiveProgram.ActiveProgram;
+        } else {
+            program = getState().ActiveBlock.Active_Block;
+        }
+        dispatch(save(program));
+    };
+};
+
 export const duplicate = (program, newName = '') => ({
     type: DUPLICATE_PROGRAM,
     program: program,

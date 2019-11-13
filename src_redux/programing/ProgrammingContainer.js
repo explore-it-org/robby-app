@@ -9,7 +9,9 @@ import {
     stopRobot,
     runRobot, startRecording, goRobot, uploadToRobot, downloadToDevice,
 } from '../ble/BleAction';
-import {} from '../database/DatabaseAction';
+import {clearBlock, storeBlock} from '../programmingtabs/blockprogramming/ActiveBlockAction';
+import {clearProgram, storeInstruction} from '../programmingtabs/stepprogramming/ActiveProgramAction';
+import {saveProgram} from '../database/DatabaseAction';
 
 import ProgrammingComponent from './ProgrammingComponent';
 import RobotProxy from '../ble/RobotProxy';
@@ -35,6 +37,9 @@ const mapDispatchToProps = dispatch =>
             goRobot: goRobot,
             upload: uploadToRobot,
             download: downloadToDevice,
+            clearBlock: clearBlock,
+            clearProgram: clearProgram,
+            saveProgram: saveProgram
         }, dispatch);
 
 
