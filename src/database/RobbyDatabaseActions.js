@@ -72,16 +72,32 @@ let RobbyDatabaseAction = {
             return e;
         }
     },
-    save: function (program): boolean {
-        try {
+    save: function (program): string {
+        var res = this.findOneByPK(program.id);
+        if(res){
+            try {
             repository.write(() => {
                 repository.create('Program', program, true);
             });
-            return true;
+            return 'Saved to Database';
         } catch (e) {
             alert(e); // TODO: remove?
-            return false;
+            return 'Error while saving: ' + e;
         }
+        }else{
+            if (nameIsUnused(program.name)) {
+                try {
+                    repository.write(() => {
+                        repository.create('Program', program);
+                    });
+                    return 'Saved to Database';
+                } catch (e) {
+                    return 'Error while saving: ' + e;
+                }
+            }
+            return 'Name is already taken';
+        }
+        
 
     },
     canBeDeleted : function (program_id): Boolean {

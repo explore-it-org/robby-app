@@ -14,7 +14,7 @@ export const ActiveBlockReducer = (state = default_state_block, action) => {
             return Object.assign({}, state, {
                 lastUpdate: Date.now(),
                 selectedBlockIndex: -1,
-                Active_Block: new Program('', ProgramType.BLOCKS),
+                Active_Block: new Program('', ProgramType.BLOCKS,[],[new Block(0,0)])
             });
         case ActionTypes.CHANGE_BLOCK_NAME:
             return Object.assign({}, state, {

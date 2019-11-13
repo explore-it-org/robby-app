@@ -45,8 +45,10 @@ export const loadInstruction = (name) => ({
     name,
 });
 
+export const clearProgram = () => ({
+    type: CLEAR_PROGRAM,
+});
 export const receiveDownload = (program) => ({
     type: RECEIVED_DOWNLOAD,
     program,
 });
-

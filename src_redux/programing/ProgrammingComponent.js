@@ -18,6 +18,9 @@ import OverviewContainer from '../programmingtabs/overview/OverviewContainer';
 import StepProgrammingComponent from '../programmingtabs/stepprogramming/StepProgrammingComponent';
 import StepProgrammingContainer from '../programmingtabs/stepprogramming/StepProgrammingContainer';
 import BlockProgrammingContainer from '../programmingtabs/blockprogramming/BlockProgrammingContainer';
+import {
+    clearBlock
+} from '../programmingtabs/blockprogramming/ActiveBlockAction';
 // import {storeBlocks, clearBlocksProgram} from '../../../stores/BlocksStore';
 
 
@@ -66,11 +69,17 @@ export default class ProgrammingComponent extends Component {
         if (route.routes) {
             return this.getActiveRouteName(route);
         }
-        //console.log(route.routeName);
         return route.routeName;
     }
+    
+    clear = () => {
+        this.props.clearProgram();
+    }
 
-
+    save = () => {
+        this.props.saveProgram('Stepprogramming');
+    }
+    
     render() {
         return (
             <View style={[styles.container]}>
@@ -120,30 +129,26 @@ export default class ProgrammingComponent extends Component {
                     onNavigationStateChange={(prevState, currentState, action) => {
                         const currentScreen = this.getActiveRouteName(currentState);
                         const prevScreen = this.getActiveRouteName(prevState);
-                        this.setState({currentRoute: currentScreen});
+                        this.save = () => {
+                            this.props.saveProgram(currentScreen); 
+                        };
                         switch (currentScreen) {
-                            case 'Overview':
-                                // this.setState({save_and_new_btn_disabled: false});
-                                /* this.save = () => {
-                                     // storeInstructions();
-                                 };
-                                 this.clear = () => {
-                                     //clearInstructions();
-                                 };*/
-                                break;
                             case 'Stepprogramming':
-                                /*  this.setState({save_and_new_btn_disabled: false});
-                                  this.save = () => {
-                                      storeBlocks();
-                                  };
+                                // this.setState({save_and_new_btn_disabled: false});
+                                 this.clear = () => {
+                                     this.props.clearProgram();
+                                 };
+                                break;
+                            case 'Blockprogramming':
+                                // this.setState({save_and_new_btn_disabled: false});
                                   this.clear = () => {
-                                      clearBlocksProgram();
-                                  };*/
+                                      this.props.clearBlock();
+                                  };
                                 break;
                             default:
-                                /*this.setState({save_and_new_btn_disabled: true});
+                                /*this.setState({save_and_new_btn_disabled: true});*/
                                 this.clear = undefined;
-                                this.save = undefined;*/
+                                this.save = undefined;
                                 break;
                         }
                     }}
@@ -222,8 +227,7 @@ export default class ProgrammingComponent extends Component {
                                    }}/>
                     <Appbar.Action icon="save"
                                    size={32}
-                                   disabled={!this.props.BLEConnection.isConnected ||
-                                   this.props.BLEConnection.device.isUploading ||
+                                   disabled={this.props.BLEConnection.device.isUploading ||
                                    this.props.BLEConnection.device.isGoing ||
                                    this.props.BLEConnection.device.isRecording ||
                                    this.props.BLEConnection.device.isRunning||
@@ -233,8 +237,7 @@ export default class ProgrammingComponent extends Component {
                                    }}/>
                     <Appbar.Action icon="delete"
                                    size={32}
-                                   disabled={!this.props.BLEConnection.isConnected ||
-                                   this.props.BLEConnection.device.isUploading ||
+                                   disabled={this.props.BLEConnection.device.isUploading ||
                                    this.props.BLEConnection.device.isGoing ||
                                    this.props.BLEConnection.device.isRecording ||
                                    this.props.BLEConnection.device.isRunning||
