@@ -127,10 +127,10 @@ export const ActiveInstructionsReducer = (state = default_state_Active_Instructi
             return Object.assign({}, state, {
                 ActiveProgram: a,
             });
-        case ActionTypes.SUCCESS_DOWNLOADING:
-            // TODO implemented parsing download
-            //return Object.assign({})
-            return state;
+        case ActionTypes.RECEIVED_DOWNLOAD:
+            return Object.assign({}, state, {
+                ActiveProgram: action.program,
+            });
         default:
             return state;
 

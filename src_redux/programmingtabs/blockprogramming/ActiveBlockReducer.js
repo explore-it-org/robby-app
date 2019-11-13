@@ -100,8 +100,6 @@ export const ActiveBlockReducer = (state = default_state_block, action) => {
             });
         default:
             return state;
-
-
     }
 
 };

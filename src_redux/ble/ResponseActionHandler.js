@@ -1,14 +1,14 @@
 import * as settingsAction from '../settings/SettingsAction';
 import BleService from './BleService';
 import * as bleAction from './BleAction';
+import {Instruction} from '../model/DatabaseModels';
 
 export const handleResponse = (response) => {
 
     /**
      * All response must be given to the reducer
      */
-    console.log('New Response in');
-    console.log(response);
+    console.log('New Response in ' + response);
     if (response.startsWith('VER')) {
         return bleAction.updateDeviceVersion(parseInt(response.substring(4)));
     } else if (response.startsWith('I=')) {
@@ -16,17 +16,16 @@ export const handleResponse = (response) => {
         return settingsAction.setInterval(parseInt(response.substring(2)));
     } else if (response.match('\\b[0-9]{3}\\b,\\b[0-9]{3}\\b')) {
         let read_instructions = response.trim().split(',');
-        let speed_l = Math.trunc(read_instructions[0] / 2.55 + 0.5);
-        let speed_r = Math.trunc(read_instructions[1] / 2.55 + 0.5);
-        var res = {type: 'speedLine', left: speed_l, right: speed_r};
+        let instruction = new Instruction(Math.trunc(read_instructions[1] / 2.55 + 0.5), Math.trunc(read_instructions[0] / 2.55 + 0.5));
+        // var res = {type: 'speedLine', left: speed_l, right: speed_r};
         // TODO implemented reducer
-        return bleAction.bleResponse('');
+        return bleAction.receivedChunck([instruction]);
     } else {
         response = response.trim().toLowerCase();
         switch (response) {
             case (',,,,'):
                 // finished download (beam)
-                return bleAction.succcessDownloading();
+                return bleAction.finishedDownloading();
             case ('_sr_'):
                 // stop
                 this.isLearning = false;
