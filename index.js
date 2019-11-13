@@ -8,6 +8,7 @@ import {DefaultTheme, Provider as PaperProvider} from 'react-native-paper';
 import store from './src_redux/store/store';
 import {Provider as ReduxProvider} from 'react-redux';
 
+
 const theme = {
     ...DefaultTheme,
     roundness: 2,
