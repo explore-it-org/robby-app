@@ -8,10 +8,11 @@ const default_state_ble_connection = {
     isConnecting: false,
     isConnected: false,
     isScanning: false,
+    receivedDownloads: [],
     scannedDevices: [],
     device: {
         name: 'Unknown',
-        version: 1,
+        version: 3,
         isRecording: false,
         isRunning: false,
         isUploading: false,
@@ -43,6 +44,7 @@ export const BleConnectionReducer = (state = default_state_ble_connection, actio
                 device: {...state.device, name: action.robot.name},
             });
         case ActionType.UPDATE_DEVICE_VERSION:
+            console.log("my version " + action.version);
             return Object.assign({}, state, {device: {...state.device, version: action.version}});
         case ActionType.BLE_RESPONSE:
             return state;
@@ -90,11 +92,18 @@ export const BleConnectionReducer = (state = default_state_ble_connection, actio
         case ActionType.START_UPLOADING:
             return Object.assign({}, state, {device: {...state.device, isUploading: true}});
         case ActionType.START_DOWNLOADING:
-            return Object.assign({}, state, {device: {...state.device, isDownloading: true}});
+            return Object.assign({}, state, {device: {...state.device, isDownloading: true}, receivedDownloads: []});
         case ActionType.SUCCESS_DOWNLOADING:
             return Object.assign({}, state, {device: {...state.device, isDownloading: false}});
         case ActionType.FAILURE_DOWNLOADING:
             return Object.assign({}, state, {device: {...state.device, isDownloading: false}});
+        case ActionType.RECEIVED_CHUNK:
+            return Object.assign({}, state, {
+                receivedDownloads: [
+                    ...state.receivedDownloads,
+                    ...action.chunk,
+                ],
+            });
         default:
             return state;
 

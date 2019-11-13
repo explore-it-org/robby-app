@@ -26,6 +26,10 @@ import {
 
 export default class ProgrammingComponent extends Component {
 
+    state = {
+        currentRoute: 'Stepprogramming',
+    };
+
     componentDidMount(): void {
         /*
         RobotProxy.testScan(err => {
@@ -156,7 +160,8 @@ export default class ProgrammingComponent extends Component {
                                    !(this.props.BLEConnection.device.isUploading ||
                                        this.props.BLEConnection.device.isGoing ||
                                        this.props.BLEConnection.device.isRecording ||
-                                       this.props.BLEConnection.device.isRunning)}
+                                       this.props.BLEConnection.device.isRunning ||
+                                       this.props.BLEConnection.device.isDownloading)}
                                    onPress={() => {
                                        this.props.stopRobot();
                                    }}/>
@@ -166,7 +171,8 @@ export default class ProgrammingComponent extends Component {
                                    this.props.BLEConnection.device.isUploading ||
                                    this.props.BLEConnection.device.isGoing ||
                                    this.props.BLEConnection.device.isRecording ||
-                                   this.props.BLEConnection.device.isRunning}
+                                   this.props.BLEConnection.device.isRunning||
+                                   this.props.BLEConnection.device.isDownloading}
                                    onPress={() => {
                                        this.props.runRobot();
                                    }}/>
@@ -176,7 +182,8 @@ export default class ProgrammingComponent extends Component {
                                    this.props.BLEConnection.device.isUploading ||
                                    this.props.BLEConnection.device.isGoing ||
                                    this.props.BLEConnection.device.isRecording ||
-                                   this.props.BLEConnection.device.isRunning}
+                                   this.props.BLEConnection.device.isRunning||
+                                   this.props.BLEConnection.device.isDownloading}
                                    onPress={() => {
                                        this.props.startRecording();
                                    }}/>
@@ -186,7 +193,8 @@ export default class ProgrammingComponent extends Component {
                                    this.props.BLEConnection.device.isUploading ||
                                    this.props.BLEConnection.device.isGoing ||
                                    this.props.BLEConnection.device.isRecording ||
-                                   this.props.BLEConnection.device.isRunning}
+                                   this.props.BLEConnection.device.isRunning||
+                                   this.props.BLEConnection.device.isDownloading}
                                    onPress={() => {
                                        this.props.goRobot();
                                    }}/>
@@ -196,9 +204,14 @@ export default class ProgrammingComponent extends Component {
                                    this.props.BLEConnection.device.isUploading ||
                                    this.props.BLEConnection.device.isGoing ||
                                    this.props.BLEConnection.device.isRecording ||
-                                   this.props.BLEConnection.device.isRunning}
+                                   this.props.BLEConnection.device.isRunning||
+                                   this.props.BLEConnection.device.isDownloading}
                                    onPress={() => {
                                        this.props.download();
+                                       //TabNavigator.navigate('Stepprogramming');
+                                       //TabContainer.navigate('Stepprogramming');
+                                       this.props.navigation.navigate('Stepprogramming');
+                                       //navigator.navigate('Stepprogramming');
                                    }}/>
                     <Appbar.Action icon="file-upload"
                                    size={32}
@@ -206,16 +219,19 @@ export default class ProgrammingComponent extends Component {
                                    this.props.BLEConnection.device.isUploading ||
                                    this.props.BLEConnection.device.isGoing ||
                                    this.props.BLEConnection.device.isRecording ||
-                                   this.props.BLEConnection.device.isRunning}
+                                   this.props.BLEConnection.device.isRunning ||
+                                   this.props.BLEConnection.device.isDownloading}
                                    onPress={() => {
-                                       this.props.upload(this.getActiveRouteName());
+                                       console.log(this.state.currentRoute);
+                                       this.props.upload(this.state.currentRoute);
                                    }}/>
                     <Appbar.Action icon="save"
                                    size={32}
                                    disabled={this.props.BLEConnection.device.isUploading ||
                                    this.props.BLEConnection.device.isGoing ||
                                    this.props.BLEConnection.device.isRecording ||
-                                   this.props.BLEConnection.device.isRunning}
+                                   this.props.BLEConnection.device.isRunning||
+                                   this.props.BLEConnection.device.isDownloading}
                                    onPress={() => {
                                        this.save();
                                    }}/>
@@ -224,7 +240,8 @@ export default class ProgrammingComponent extends Component {
                                    disabled={this.props.BLEConnection.device.isUploading ||
                                    this.props.BLEConnection.device.isGoing ||
                                    this.props.BLEConnection.device.isRecording ||
-                                   this.props.BLEConnection.device.isRunning}
+                                   this.props.BLEConnection.device.isRunning||
+                                   this.props.BLEConnection.device.isDownloading}
                                    onPress={() => {
                                        this.clear();
                                    }}/>

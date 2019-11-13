@@ -5,10 +5,7 @@ import {
     CHANGE_INSTRUCTION_INDEX,
     SET_ACTIVE_INDEX,
     CHANGE_LEFT_SPEED,
-    CHANGE_RIGHT_SPEED, 
-    SET_PROGRAM_NAME, 
-    LOAD_INSTRUCTION, 
-    CLEAR_PROGRAM,
+    CHANGE_RIGHT_SPEED, SET_PROGRAM_NAME, LOAD_INSTRUCTION, RECEIVED_DOWNLOAD,
 } from '../../GlobalActionTypes';
 
 export const moveUp = () => ({
@@ -50,4 +47,8 @@ export const loadInstruction = (name) => ({
 
 export const clearProgram = () => ({
     type: CLEAR_PROGRAM,
+});
+export const receiveDownload = (program) => ({
+    type: RECEIVED_DOWNLOAD,
+    program,
 });

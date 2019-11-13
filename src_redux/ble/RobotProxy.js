@@ -174,9 +174,9 @@ class RobotProxy {
 
 
     // Uploads speed entries from the app to the robot
-    upload(instructions) {
+    upload(instructions, version) {
         if (this.isConnected) {
-            switch (this.version) {
+            switch (version) {
                 case 1:
                     BleService.sendCommandToActDevice('F');
                     BleService.sendCommandToActDevice('D' + instructions.length);

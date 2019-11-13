@@ -4,7 +4,7 @@ import Database from '../../database/RoboticsDatabase';
 
 const default_state_block = {
     lastUpdate: Date.now(),
-    Active_Block: new Program('', ProgramType.BLOCKS),
+    Active_Block: new Program('', ProgramType.BLOCKS, [], [new Block(0, 0)]),
     possibleChildren: [],
     selectedBlockIndex: -1,
 };
@@ -100,8 +100,6 @@ export const ActiveBlockReducer = (state = default_state_block, action) => {
             });
         default:
             return state;
-
-
     }
 
 };

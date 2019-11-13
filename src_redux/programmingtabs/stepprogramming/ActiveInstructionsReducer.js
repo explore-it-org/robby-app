@@ -4,7 +4,7 @@ import Database from '../../database/RoboticsDatabase';
 
 const default_state_Active_Instruction = {
     lastUpdate: Date.now(),
-    ActiveProgram: new Program('', ProgramType.STEPS),
+    ActiveProgram: new Program('', ProgramType.STEPS, [new Instruction(0, 0)]),
     possibleChildren: [],
     selectedIndex: -1,
 };
@@ -127,10 +127,10 @@ export const ActiveInstructionsReducer = (state = default_state_Active_Instructi
             return Object.assign({}, state, {
                 ActiveProgram: a,
             });
-        case ActionTypes.SUCCESS_DOWNLOADING:
-            // TODO implemented parsing download
-            //return Object.assign({})
-            return state;
+        case ActionTypes.RECEIVED_DOWNLOAD:
+            return Object.assign({}, state, {
+                ActiveProgram: action.program,
+            });
         case ActionTypes.CLEAR_PROGRAM:
                 return Object.assign({}, state, {
                     lastUpdate: Date.now(),
