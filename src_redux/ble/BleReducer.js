@@ -8,6 +8,7 @@ const default_state_ble_connection = {
     isConnecting: false,
     isConnected: false,
     isScanning: false,
+    receivedDownloads: [],
     scannedDevices: [],
     device: {
         name: 'Unknown',
@@ -90,11 +91,18 @@ export const BleConnectionReducer = (state = default_state_ble_connection, actio
         case ActionType.START_UPLOADING:
             return Object.assign({}, state, {device: {...state.device, isUploading: true}});
         case ActionType.START_DOWNLOADING:
-            return Object.assign({}, state, {device: {...state.device, isDownloading: true}});
+            return Object.assign({}, state, {device: {...state.device, isDownloading: true}, receivedDownloads: []});
         case ActionType.SUCCESS_DOWNLOADING:
             return Object.assign({}, state, {device: {...state.device, isDownloading: false}});
         case ActionType.FAILURE_DOWNLOADING:
             return Object.assign({}, state, {device: {...state.device, isDownloading: false}});
+        case ActionType.RECEIVED_CHUNK:
+            return Object.assign({}, state, {
+                receivedDownloads: [
+                    ...state.receivedDownloads,
+                    ...action.chunk,
+                ],
+            });
         default:
             return state;
 

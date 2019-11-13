@@ -5,7 +5,8 @@ import BleService from './BleService';
 import * as settingsAction from '../settings/SettingsAction';
 import {handleResponse} from './ResponseActionHandler';
 import {} from '../database/DatabaseAction';
-import {exp} from 'react-native-reanimated';
+import {receiveDownload} from '../programmingtabs/stepprogramming/ActiveProgramAction';
+import {Program, ProgramType} from '../model/DatabaseModels';
 
 
 export const connectToBle = () => ({
@@ -182,9 +183,19 @@ export const errorDownloading = (error) => ({
     type: ActionTypes.FAILURE_DOWNLOADING,
     error,
 });
-export const succcessDownloading = (program) => ({
+export const successDownloading = () => ({
     type: ActionTypes.SUCCESS_DOWNLOADING,
-    program,
+});
+
+export const finishedDownloading = () => {
+    return (dispatch, getState) => {
+        dispatch(successDownloading());
+        dispatch(receiveDownload(new Program('Download', ProgramType.STEPS, getState().BLEConnection.receivedDownloads)));
+    };
+};
+export const receivedChunck = (chunk) => ({
+    type: ActionTypes.RECEIVED_CHUNK,
+    chunk,
 });
 
 
@@ -192,7 +203,7 @@ export const downloadToDevice = () => {
     return (dispatch, getState) => {
         dispatch(startDownloading());
         RobotProxy.download().then(res => {
-            dispatch(succcessDownloading(res));
+
         }).catch(error => {
             dispatch(errorDownloading(error));
         });
