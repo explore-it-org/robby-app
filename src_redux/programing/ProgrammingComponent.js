@@ -233,14 +233,6 @@ export default class ProgrammingComponent extends Component {
 
 
 const TabNavigator = createMaterialTopTabNavigator({
-    Overview: {
-        screen: OverviewContainer,
-        navigationOptions: {
-            tabBarIcon: ({tintColor}) => (
-                <MaterialCommunityIcon name="menu" size={24} color={tintColor}/>
-            ),
-        },
-    },
     Stepprogramming: {
         screen: StepProgrammingContainer,
         navigationOptions: {
@@ -254,6 +246,14 @@ const TabNavigator = createMaterialTopTabNavigator({
         navigationOptions: {
             tabBarIcon: ({tintColor}) => (
                 <MaterialCommunityIcon name="content-copy" size={24} color={tintColor}/>
+            ),
+        },
+    },
+    Overview: {
+        screen: OverviewContainer,
+        navigationOptions: {
+            tabBarIcon: ({tintColor}) => (
+                <MaterialCommunityIcon name="menu" size={24} color={tintColor}/>
             ),
         },
     },
