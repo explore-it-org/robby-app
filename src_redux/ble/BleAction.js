@@ -163,13 +163,18 @@ export const failedUplaod = (error) => ({
 export const uploadToRobot = (ActiveProgram) => {
     return (dispatch, getState) => {
         let a = null;
+        console.log(ActiveProgram);
         if (ActiveProgram === 'Stepprogramming') {
             a = getState().ActiveProgram.ActiveProgram.flatten();
+            console.log(a);
         } else {
             a = getState().ActiveBlock.Active_Block.flatten();
+            console.log(a);
         }
-        RobotProxy.upload(a).then(res => {
-            dispatch(startUpload());
+        console.log(getState().BLEConnection.device.version);
+        dispatch(startUpload());
+        RobotProxy.upload(a, getState().BLEConnection.device.version).then(res => {
+
         }).catch(error => {
             dispatch(failedUplaod());
         });

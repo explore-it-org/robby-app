@@ -8,8 +8,7 @@ export const handleResponse = (response) => {
     /**
      * All response must be given to the reducer
      */
-    console.log('New Response in');
-    console.log(response);
+    console.log('New Response in ' + response);
     if (response.startsWith('VER')) {
         return bleAction.updateDeviceVersion(parseInt(response.substring(4)));
     } else if (response.startsWith('I=')) {
