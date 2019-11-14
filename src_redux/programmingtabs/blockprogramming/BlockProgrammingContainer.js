@@ -9,6 +9,7 @@ import {
     setActiveBlockIndex,
     setBlockName,
     changeReps,
+    changeSelectedID,
 } from './ActiveBlockAction';
 import BlockProgrammingComponent from './BlockProgrammingComponent';
 
@@ -29,6 +30,7 @@ const mapDispatchToProps = dispatch =>
             setBlockName,
             setActiveBlockIndex,
             changeReps,
+            changeSelectedID,
         }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(BlockProgrammingComponent);

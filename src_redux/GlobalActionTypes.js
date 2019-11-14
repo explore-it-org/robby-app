@@ -71,7 +71,7 @@ export const CHANGE_BLOCK_INDEX = 'CHANGE_BLOCK_INDEX';
 export const SET_ACTIVE_BLOCK = 'SET_ACTIVE_BLOCK';
 export const CHANGE_REPS = 'CHANGE_REPS';
 export const LOAD_BLOCK = 'LOAD_BLOCK';
-
+export const CHANGE_BLOCK_SELECTED_ID = 'CHANGE_BLOCK_SELECTED_ID'
 
 // Settings Action Types
 export const SET_LOOPS = 'SET_LOOPS';

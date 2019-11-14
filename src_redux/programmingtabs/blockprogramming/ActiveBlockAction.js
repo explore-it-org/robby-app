@@ -5,8 +5,9 @@ import {
     CLEAR_BLOCK,
     DELETE_BLOCK_INDEX,
     SET_ACTIVE_BLOCK,
-    CHANGE_REPS, 
+    CHANGE_REPS,
     LOAD_BLOCK,
+    CHANGE_BLOCK_SELECTED_ID,
 } from '../../GlobalActionTypes';
 
 export const moveUpBlock = () => ({
@@ -42,4 +43,8 @@ export const setBlockName = (name) => ({
 export const loadBlock = (name) => ({
     type: LOAD_BLOCK,
     name,
+});
+export const changeSelectedID = (id) => ({
+    type: CHANGE_BLOCK_SELECTED_ID,
+    id,
 });

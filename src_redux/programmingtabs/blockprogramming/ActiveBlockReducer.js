@@ -5,7 +5,7 @@ import Database from '../../database/RoboticsDatabase';
 const default_state_block = {
     lastUpdate: Date.now(),
     Active_Block: new Program('', ProgramType.BLOCKS, [], [new Block(0, 0)]),
-    possibleChildren: [],
+    possibleChildren: Database.findAll(),
     selectedBlockIndex: -1,
 };
 export const ActiveBlockReducer = (state = default_state_block, action) => {
@@ -14,7 +14,7 @@ export const ActiveBlockReducer = (state = default_state_block, action) => {
             return Object.assign({}, state, {
                 lastUpdate: Date.now(),
                 selectedBlockIndex: -1,
-                Active_Block: new Program('', ProgramType.BLOCKS,[],[new Block(0,0)])
+                Active_Block: new Program('', ProgramType.BLOCKS, [], [new Block(0, 0)]),
             });
         case ActionTypes.CHANGE_BLOCK_NAME:
             return Object.assign({}, state, {
@@ -35,7 +35,12 @@ export const ActiveBlockReducer = (state = default_state_block, action) => {
                 }),
             });
         case ActionTypes.SET_ACTIVE_BLOCK:
-            return Object.assign({}, state, {selectedBlockIndex: action.index});
+            return Object.assign({}, state, {
+                lastUpdate: Date.now(),
+                selectedBlockIndex: action.index,
+            });
+
+
         case ActionTypes.ADD_NEW_BLOCK:
             return Object.assign({}, state, {
                 lastUpdate: Date.now(),
@@ -95,9 +100,30 @@ export const ActiveBlockReducer = (state = default_state_block, action) => {
             }
         case ActionTypes.LOAD_BLOCK:
             let a = Database.findOne(action.name);
+            let b = Database.findAllWhichCanBeAddedTo(a);
+            console.log(b);
             return Object.assign({}, state, {
                 Active_Block: a,
+                possibleChildren: b,
             });
+        case ActionTypes.CHANGE_BLOCK_SELECTED_ID:
+            let oldIDBlock = state.Active_Block.blocks[state.selectedBlockIndex];
+            let newIDBLock = Object.assign(new Block(), oldIDBlock, {ref: action.id});
+            console.log(state.selectedBlockIndex);
+
+            let activeMainProgram = Object.assign(new Program(), state.Active_Block, {
+                blocks: [
+                    ...state.Active_Block.blocks.slice(0, state.selectedBlockIndex),
+                    newIDBLock,
+                    ...state.Active_Block.blocks.slice(state.selectedBlockIndex + 1, state.Active_Block.blocks.length),
+                ],
+            });
+            return Object.assign({}, state, {
+                lastUpdate: Date.now(),
+                Active_Block: activeMainProgram,
+                possibleChildren: Database.findAllWhichCanBeAddedTo(activeMainProgram),
+            });
+
         default:
             return state;
     }
