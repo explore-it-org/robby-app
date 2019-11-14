@@ -14,17 +14,38 @@ import {FAB} from 'react-native-paper';
 import React from 'react';
 import ProgramInput from '../../controls/ProgramInput';
 import {Block} from '../../model/DatabaseModels';
+import {setActiveBlockIndex} from './ActiveBlockAction';
 
 
 export default class BlockProgrammingComponent extends Component {
 
     // TODO: Replace static text with translated Text!!
+    items = [];
+    renderProgramInput = ({item, index}) => (
+        <TouchableOpacity index={index}
+                          style={parseInt(index) === this.props.Block.selectedBlockIndex ? styles.selected_row : styles.row}
+                          onPress={() => {
+                              this.props.setActiveBlockIndex(index);
+                          }}>
+            <ProgramInput index={index}
+                          selected={this.props.Block.Active_Block.selectedBlockIndex}
+                          pickerItems={this.items}
+                          selectedProgram={this.props.Block.Active_Block.blocks[index].ref}
+                          onRepeatValueChange={(value) => this.props.changeReps(value)}
+                          onProgramSelectionChange={(value) => {
+                              this.props.setActiveBlockIndex(index);
+                              this.props.changeSelectedID(value);
+                          }}
+                          val={this.props.Block.Active_Block.blocks[index].rep}/>
+        </TouchableOpacity>
+    );
 
 
     render() {
-        let items = [<Picker.Item label='Select a program'/>];
+        this.items = [<Picker.Item key={0} label='Select a program'/>];
+
         this.props.Block.possibleChildren.forEach((p) => {
-            items.push(<Picker.Item label={p.name} value={p.id}/>);
+            this.items.push(<Picker.Item key={p.id} label={p.name} value={p.id} testID={p.id}/>);
         });
         let select_controls;
         if (this.props.Block.selectedBlockIndex >= 0) {
@@ -80,29 +101,7 @@ export default class BlockProgrammingComponent extends Component {
                         data={this.props.Block.Active_Block.blocks}
                         //extraData={this.state}
                         keyExtractor={(item, index) => index.toString()}
-                        renderItem={({item, index}) => (
-                            <TouchableOpacity index={index}
-                                //style={parseInt(index) === this.props.Block.selectedBlockIndex ? styles.selected_row : styles.row}
-                                              onPress={() => {
-                                                  this.props.setActiveBlockIndex(index);
-                                              }}>
-
-                                <ProgramInput index={index}
-                                    //selected={this.props.Block.Active_Block.selectedBlockIndex}
-                                              pickerItems={items}
-                                              selectedProgram={34}
-                                              onRepeatValueChange={(value) => {
-                                                  //this.props.changeReps(value);
-                                              }
-                                              }
-                                              onProgramSelectionChange={(value) => {
-                                                  //TODO this.props.change refrenz
-                                              }}
-
-                                              val={this.props.Block.Active_Block.blocks[index].ref}></ProgramInput>
-
-                            </TouchableOpacity>
-                        )}/>
+                        renderItem={this.renderProgramInput}/>
                 </ScrollView>
                 <View>
                     <FAB
