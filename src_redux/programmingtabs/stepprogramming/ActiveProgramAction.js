@@ -5,7 +5,11 @@ import {
     CHANGE_INSTRUCTION_INDEX,
     SET_ACTIVE_INDEX,
     CHANGE_LEFT_SPEED,
-    CHANGE_RIGHT_SPEED, SET_PROGRAM_NAME, LOAD_INSTRUCTION, RECEIVED_DOWNLOAD,
+    CHANGE_RIGHT_SPEED, 
+    SET_PROGRAM_NAME, 
+    LOAD_INSTRUCTION, 
+    RECEIVED_DOWNLOAD,
+    CLEAR_PROGRAM
 } from '../../GlobalActionTypes';
 
 export const moveUp = () => ({
@@ -27,13 +31,15 @@ export const setActiveIndex = (index) => ({
     type: SET_ACTIVE_INDEX,
     index,
 });
-export const changeRightSpeed = (speed) => ({
+export const changeRightSpeed = (speed, index) => ({
     type: CHANGE_RIGHT_SPEED,
     speed,
+    index
 });
-export const changeLeftSpeed = (speed) => ({
+export const changeLeftSpeed = (speed, index) => ({
     type: CHANGE_LEFT_SPEED,
     speed,
+    index
 });
 export const setName = (name) => ({
     type: SET_PROGRAM_NAME,

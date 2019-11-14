@@ -91,29 +91,29 @@ export const ActiveInstructionsReducer = (state = default_state_Active_Instructi
             console.log('i am called with index: ' + action.index);
             return Object.assign({}, state, {selectedIndex: action.index});
         case ActionTypes.CHANGE_LEFT_SPEED:
-            let oldInstruction = state.ActiveProgram.steps[state.selectedIndex];
+            let oldInstruction = state.ActiveProgram.steps[action.index];
             let newInstruction = new Instruction(oldInstruction.right, action.speed);
             return Object.assign({}, state, {
                 lastUpdate: Date.now(),
                 ActiveProgram: Object.assign(new Program(), state.ActiveProgram,
                     {
-                        steps: [...state.ActiveProgram.steps.slice(0, state.selectedIndex),
+                        steps: [...state.ActiveProgram.steps.slice(0, action.index),
                             newInstruction,
-                            ...state.ActiveProgram.steps.slice(state.selectedIndex + 1, state.ActiveProgram.steps.length),
+                            ...state.ActiveProgram.steps.slice(action.index + 1, state.ActiveProgram.steps.length),
                         ],
                     }),
             });
         case ActionTypes.CHANGE_RIGHT_SPEED:
-            let os = state.ActiveProgram.steps[state.selectedIndex];
-            console.log(os + ' ' + state.selectedIndex);
+            let os = state.ActiveProgram.steps[action.index];
+            console.log(os + ' ' + action.index);
             let ns = new Instruction(action.speed, os.left);
             return Object.assign({}, state, {
                 lastUpdate: Date.now(),
                 ActiveProgram: Object.assign(new Program(), state.ActiveProgram,
                     {
-                        steps: [...state.ActiveProgram.steps.slice(0, state.selectedIndex),
+                        steps: [...state.ActiveProgram.steps.slice(0, action.index),
                             ns,
-                            ...state.ActiveProgram.steps.slice(state.selectedIndex + 1, state.ActiveProgram.steps.length),
+                            ...state.ActiveProgram.steps.slice(action.index + 1, state.ActiveProgram.steps.length),
                         ],
                     }),
             });

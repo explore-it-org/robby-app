@@ -10,7 +10,6 @@ export const save = (program) => ({
 });
 
 export const saveProgram = (ActiveProgram) => {
-    alert(ActiveProgram);
     return (dispatch, getState) => {
         let program = null;
         if (ActiveProgram === 'Stepprogramming') {

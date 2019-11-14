@@ -108,8 +108,8 @@ export default class StepProgrammingComponent extends Component {
                                       style={parseInt(index) === this.props.Instruction.selectedIndex ? styles.selected_row : styles.row}>
                                     <SpeedInput
                                         onchange={(text) => {
-                                            this.props.setActiveIndex(parseInt(index));
-                                            this.props.changeLeftSpeed(parseInt(text));
+                                            this.props.setActiveIndex(-1);
+                                            this.props.changeLeftSpeed(parseInt(text), parseInt(index));
                                         }}
                                         val={item.left}
                                         val1={100 - item.left}
@@ -119,8 +119,8 @@ export default class StepProgrammingComponent extends Component {
                                     />
                                     <SpeedInput
                                         onchange={(text) => {
-                                            this.props.setActiveIndex(parseInt(index));
-                                            this.props.changeRightSpeed(parseInt(text));
+                                            this.props.setActiveIndex(-1);
+                                            this.props.changeRightSpeed(parseInt(text), parseInt(index));
                                         }}
                                         val={item.right}
                                         val1={item.right}
