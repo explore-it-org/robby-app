@@ -31,7 +31,10 @@ export default class BlockProgrammingComponent extends Component {
                           selected={this.props.Block.Active_Block.selectedBlockIndex}
                           pickerItems={this.items}
                           selectedProgram={this.props.Block.Active_Block.blocks[index].ref}
-                          onRepeatValueChange={(value) => this.props.changeReps(value)}
+                          onRepeatValueChange={(value) => {
+                              this.props.setActiveBlockIndex(index);
+                              this.props.changeReps(value);
+                          }}
                           onProgramSelectionChange={(value) => {
                               this.props.setActiveBlockIndex(index);
                               this.props.changeSelectedID(value);

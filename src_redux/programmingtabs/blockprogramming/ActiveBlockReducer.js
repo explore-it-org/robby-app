@@ -9,6 +9,7 @@ const default_state_block = {
     selectedBlockIndex: -1,
 };
 export const ActiveBlockReducer = (state = default_state_block, action) => {
+    console.log(action.type);
     switch (action.type) {
         case ActionTypes.CLEAR_BLOCK:
             return Object.assign({}, state, {
@@ -34,6 +35,22 @@ export const ActiveBlockReducer = (state = default_state_block, action) => {
                     ],
                 }),
             });
+        case ActionTypes.CHANGE_BLOCK_SELECTED_ID:
+            let oldIDBlock = state.Active_Block.blocks[state.selectedBlockIndex];
+            let newIDBLock = Object.assign(new Block(), oldIDBlock, {ref: action.id});
+            let activeMainProgram = Object.assign(new Program(), state.Active_Block, {
+                blocks: [
+                    ...state.Active_Block.blocks.slice(0, state.selectedBlockIndex),
+                    newIDBLock,
+                    ...state.Active_Block.blocks.slice(state.selectedBlockIndex + 1, state.Active_Block.blocks.length),
+                ],
+            });
+            return Object.assign({}, state, {
+                lastUpdate: Date.now(),
+                Active_Block: activeMainProgram,
+                possibleChildren: Database.findAllWhichCanBeAddedTo(activeMainProgram),
+            });
+
         case ActionTypes.SET_ACTIVE_BLOCK:
             return Object.assign({}, state, {
                 lastUpdate: Date.now(),
@@ -105,23 +122,6 @@ export const ActiveBlockReducer = (state = default_state_block, action) => {
             return Object.assign({}, state, {
                 Active_Block: a,
                 possibleChildren: b,
-            });
-        case ActionTypes.CHANGE_BLOCK_SELECTED_ID:
-            let oldIDBlock = state.Active_Block.blocks[state.selectedBlockIndex];
-            let newIDBLock = Object.assign(new Block(), oldIDBlock, {ref: action.id});
-            console.log(state.selectedBlockIndex);
-
-            let activeMainProgram = Object.assign(new Program(), state.Active_Block, {
-                blocks: [
-                    ...state.Active_Block.blocks.slice(0, state.selectedBlockIndex),
-                    newIDBLock,
-                    ...state.Active_Block.blocks.slice(state.selectedBlockIndex + 1, state.Active_Block.blocks.length),
-                ],
-            });
-            return Object.assign({}, state, {
-                lastUpdate: Date.now(),
-                Active_Block: activeMainProgram,
-                possibleChildren: Database.findAllWhichCanBeAddedTo(activeMainProgram),
             });
 
         default:
