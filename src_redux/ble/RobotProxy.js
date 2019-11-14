@@ -67,8 +67,8 @@ class RobotProxy {
                 },
                 (robot) => {
                     dispatch(bleActions.connectedToBle());
-                    BleService.sendCommandToActDevice2('Z');
-                    BleService.sendCommandToActDevice2('I?');
+                    BleService.sendCommandToActDevice('Z');
+                    BleService.sendCommandToActDevice('I?');
                 },
                 (error) => dispatch(bleActions.connectionFailed(error)),
             );
@@ -84,13 +84,13 @@ class RobotProxy {
             (robot) => {
                 this.isConnected = true;
                 this.version = 1; // default version if no version number is published
-                BleService.sendCommandToActDevice2('Z') // Version request
+                BleService.sendCommandToActDevice('Z') // Version request
                     .then((c) => {
                         connectionHandler(robot); // enables buttons in the GUI
                     })
                     .then(() => {
                         // connection established, query for I now
-                        return BleService.sendCommandToActDevice2('I?');
+                        return BleService.sendCommandToActDevice('I?');
                     });
             },
             errorHandler,
@@ -109,7 +109,7 @@ class RobotProxy {
 
     run() {
         if (this.isConnected) {
-            return BleService.sendCommandToActDevice2('R');
+            return BleService.sendCommandToActDevice('R');
         }
     }
 
@@ -117,7 +117,7 @@ class RobotProxy {
     go(loops) {
         if (this.isConnected) {
             this.loops = loops;
-            return BleService.sendCommandToActDevice2('G');
+            return BleService.sendCommandToActDevice('G');
 
         }
     }
@@ -127,7 +127,7 @@ class RobotProxy {
         if (this.isConnected) {
             this.isLearning = false;
             this.loops = 0;
-            return BleService.sendCommandToActDevice2('S');
+            return BleService.sendCommandToActDevice('S');
 
         }
     }
@@ -137,22 +137,27 @@ class RobotProxy {
             this.isLearning = true;
             switch (version) {
                 case 1:
-                    BleService.sendCommandToActDevice('F');
-                    BleService.sendCommandToActDevice('D' + duration);
-                    BleService.sendCommandToActDevice('L');
-                    break;
+                    return BleService.sendCommandToActDevice('F')
+                        .then((c) => {
+                            return BleService.sendCommandToActDevice('D' + duration);
+                        })
+                        .then((c) => {
+                            return BleService.sendCommandToActDevice('L');
+                        });
+
                 case 2:
                 case 3:
-                    return BleService.sendCommandToActDevice2('F')
+                case 4:
+                    return BleService.sendCommandToActDevice('F')
                         .then((c) => {
                             var hex = Number(interval * duration * 2 - 1).toString(16).toUpperCase();
                             while (hex.length < 4) {
                                 hex = '0' + hex;
                             }
-                            return BleService.sendCommandToActDevice2('d' + hex);
+                            return BleService.sendCommandToActDevice('d' + hex);
                         })
                         .then((c) => {
-                            return BleService.sendCommandToActDevice2('L');
+                            return BleService.sendCommandToActDevice('L');
                         });
 
                 default:
@@ -178,41 +183,52 @@ class RobotProxy {
         if (this.isConnected) {
             switch (version) {
                 case 1:
-                    BleService.sendCommandToActDevice('F');
-                    BleService.sendCommandToActDevice('D' + instructions.length);
-                    BleService.sendCommandToActDevice('I1');
-                    BleService.sendCommandToActDevice('E');
-                    for (let i = 0; i < instructions.length; i++) {
-                        let item = instructions[i];
-                        let speed = this.speed_padding(item.left) + ',' + this.speed_padding(item.right) + 'xx';
-                        BleService.sendCommandToActDevice(speed);
-                    }
-                    BleService.sendCommandToActDevice(',,,,');
-                    break;
-
-                case 2:
-                case 3:
-                    var promise = BleService.sendCommandToActDevice2('F')
+                    var promise = BleService.sendCommandToActDevice('F')
                         .then((c) => {
-                            var hex = Number(instructions.length * 2 - 1).toString(16).toUpperCase();
-                            while (hex.length < 4) {
-                                hex = '0' + hex;
-                            }
-                            return BleService.sendCommandToActDevice2('d' + hex);
+                            return BleService.sendCommandToActDevice('D' + instructions.length);
                         })
                         .then((c) => {
-                            return BleService.sendCommandToActDevice2('E');
+                            return BleService.sendCommandToActDevice('I1');
+                        })
+                        .then((c) => {
+                            return BleService.sendCommandToActDevice('E');
                         });
 
                     for (let i = 0; i < instructions.length; i++) {
                         let item = instructions[i];
                         let speed = this.speed_padding(item.left) + ',' + this.speed_padding(item.right) + 'xx';
                         promise = promise.then((c) => {
-                            return BleService.sendCommandToActDevice2(speed);
+                            return BleService.sendCommandToActDevice(speed);
                         });
                     }
                     return promise.then((c) => {
-                        return BleService.sendCommandToActDevice2('end');
+                        return BleService.sendCommandToActDevice('end');
+                    });
+
+                case 2:
+                case 3:
+                case 4:
+                    var promise = BleService.sendCommandToActDevice('F')
+                        .then((c) => {
+                            var hex = Number(instructions.length * 2 - 1).toString(16).toUpperCase();
+                            while (hex.length < 4) {
+                                hex = '0' + hex;
+                            }
+                            return BleService.sendCommandToActDevice('d' + hex);
+                        })
+                        .then((c) => {
+                            return BleService.sendCommandToActDevice('E');
+                        });
+
+                    for (let i = 0; i < instructions.length; i++) {
+                        let item = instructions[i];
+                        let speed = this.speed_padding(item.left) + ',' + this.speed_padding(item.right) + 'xx';
+                        promise = promise.then((c) => {
+                            return BleService.sendCommandToActDevice(speed);
+                        });
+                    }
+                    return promise.then((c) => {
+                        return BleService.sendCommandToActDevice('end');
                     });
                 default:
                     console.log('upload: version not supported: ' + this.version);
@@ -224,7 +240,7 @@ class RobotProxy {
     download() {
         if (this.isConnected) {
             this.isLearning = false;
-            return BleService.sendCommandToActDevice2('B');
+            return BleService.sendCommandToActDevice('B');
 
         }
     }
@@ -232,9 +248,9 @@ class RobotProxy {
     setInterval(interval) {
         if (this.isConnected) {
             // Argument check is done by the robot, i.e. arguments must meet (0 <= interval <= 50)
-            return BleService.sendCommandToActDevice2('I' + interval)
+            return BleService.sendCommandToActDevice('I' + interval)
                 .then((c) => {
-                    BleService.sendCommandToActDevice2('I?');
+                    BleService.sendCommandToActDevice('I?');
                 });
         }
     }
@@ -286,7 +302,7 @@ class RobotProxy {
                     var res = {type: 'finishedDriving'};
                     this.loops--;
                     if (this.loops > 0) {
-                        BleService.sendCommandToActDevice2('G');
+                        BleService.sendCommandToActDevice('G');
 
                     } else {
                         responseHandler(res);

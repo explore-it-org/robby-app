@@ -40,7 +40,7 @@ export const handleResponse = (response) => {
                 var res = {type: 'finishedDriving'};
                 this.loops--;
                 if (this.loops > 0) {
-                    BleService.sendCommandToActDevice2('G');
+                    BleService.sendCommandToActDevice('G');
                 } else {
                     return bleAction.stoppedRobot();
                 }

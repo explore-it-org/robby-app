@@ -154,21 +154,8 @@ class BleService {
         return this.actDevice;
     }
 
-    // @deprecated
-    sendCommandToActDevice(command) {
-        if (this.actDevice) {
-            console.log('sendCommandToActDevice: ' + command);
-            this.actDevice.writeCharacteristicWithResponseForService(
-                serviceUUID,
-                characteristicsUUID,
-                Buffer.from(command).toString('base64'),
-                null,
-            );
-        }
-    }
-
-    sendCommandToActDevice2(command): Promise<Characteristic> {
-        console.log('sendCommandToActDevice2: ' + command);
+    sendCommandToActDevice(command): Promise<Characteristic> {
+        console.log('sendCommandToActDevice: ' + command);
         return this.actDevice.writeCharacteristicWithResponseForService(
             serviceUUID,
             characteristicsUUID,
