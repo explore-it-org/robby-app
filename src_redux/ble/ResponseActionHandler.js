@@ -2,8 +2,36 @@ import * as settingsAction from '../settings/SettingsAction';
 import BleService from './BleService';
 import * as bleAction from './BleAction';
 import {Instruction} from '../model/DatabaseModels';
+import store from '../store/store';
+import {resolve} from 'react-native-svg/src/lib/resolve';
 
-export const handleResponse = (response) => {
+export const mainHandler = (response) => {
+
+    switch (store.getState().BLEConnection.device.version) {
+        case 1:
+            handleResponse1(response);
+            break;
+        case 2:
+        case 3:
+        case 4:
+            handleResponse3(response);
+            break;
+        case 5:
+        case 6:
+
+    }
+};
+
+const handleResponse1 = (response) => {
+    if (response.startsWith('VER')) {
+        return bleAction.updateDeviceVersion(parseInt(response.substring(4)));
+    }
+    return bleAction.bleResponse('');
+
+
+};
+
+const handleResponse3 = (response) => {
 
     /**
      * All response must be given to the reducer

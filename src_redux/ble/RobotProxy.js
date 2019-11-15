@@ -161,6 +161,7 @@ class RobotProxy {
                         });
 
                 default:
+                    // TODO return promise
                     console.log('record: version not supported: ' + this.version);
             }
         }

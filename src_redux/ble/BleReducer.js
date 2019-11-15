@@ -12,7 +12,7 @@ const default_state_ble_connection = {
     scannedDevices: [],
     device: {
         name: 'Unknown',
-        version: 3,
+        version: 1,
         isRecording: false,
         isRunning: false,
         isUploading: false,

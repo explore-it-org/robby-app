@@ -20,7 +20,7 @@ export class DatabaseTest {
     createDatabaseEntries() {
         console.log('creating entries');
         for (var i = 1; i <= this.amount; i++) {
-            this.store.dispatch(DBAction.add(new Program(this.basename + i, ProgramType.STEPS)));
+            this.store.dispatch(DBAction.add(new Program(this.basename + i, ProgramType.STEPS, [new Instruction(1, 1)])));
         }
     }
 

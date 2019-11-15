@@ -12,12 +12,12 @@ import {duration} from '@material-ui/core/styles';
 class SettingsComponent extends Component {
 
     changeInterval(interval) {
+        // TODO write to robo
         this.props.setInterval(interval.length === 0 ? 0 : parseInt(interval));
 
     }
 
     changeDuration(duration) {
-        console.log(duration);
         this.props.setDuration(duration.length === 0 ? 0 : parseInt(duration));
 
     }

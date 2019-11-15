@@ -3,7 +3,7 @@ import RobotProxy from './RobotProxy';
 import store from '../store/store';
 import BleService from './BleService';
 import * as settingsAction from '../settings/SettingsAction';
-import {handleResponse} from './ResponseActionHandler';
+import {handleResponse3, mainHandler} from './ResponseActionHandler';
 import {} from '../database/DatabaseAction';
 import {receiveDownload} from '../programmingtabs/stepprogramming/ActiveProgramAction';
 import {Program, ProgramType} from '../model/DatabaseModels';
@@ -139,7 +139,7 @@ export const connectToDevice = () => {
     return (dispatch, getState) => {
         dispatch(connectToBle());
         RobotProxy.connect2((response) => {
-            dispatch(handleResponse(response));
+            dispatch(mainHandler(response));
         }, (robot) => {
             console.log(robot.name);
             dispatch(connectedToBle(robot));
