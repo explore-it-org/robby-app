@@ -29,9 +29,10 @@ export const setActiveBlockIndex = (index) => ({
     type: SET_ACTIVE_BLOCK,
     index,
 });
-export const changeReps = (reps) => ({
+export const changeReps = (reps, index) => ({
     type: CHANGE_REPS,
     reps,
+    index,
 });
 export const clearBlock = () => ({
     type: CLEAR_BLOCK,
@@ -44,7 +45,8 @@ export const loadBlock = (name) => ({
     type: LOAD_BLOCK,
     name,
 });
-export const changeSelectedID = (id) => ({
+export const changeSelectedID = (id, index) => ({
     type: CHANGE_BLOCK_SELECTED_ID,
     id,
+    index,
 });
