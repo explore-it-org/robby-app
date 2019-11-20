@@ -79,9 +79,9 @@ export default class ProgrammingComponent extends Component {
         this.props.clearProgram();
     };
 
-    save = () => {
+    /*save = () => {
         this.props.saveProgram('Stepprogramming');
-    };
+    };*/
 
     render() {
         return (
@@ -225,7 +225,6 @@ export default class ProgrammingComponent extends Component {
                                    this.props.BLEConnection.device.isRunning ||
                                    this.props.BLEConnection.device.isDownloading}
                                    onPress={() => {
-                                       console.log(this.state.currentRoute);
                                        this.props.upload(this.state.currentRoute);
                                    }}/>
                     <Appbar.Action icon="save"

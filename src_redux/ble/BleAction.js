@@ -195,7 +195,7 @@ export const successDownloading = () => ({
 export const finishedDownloading = () => {
     return (dispatch, getState) => {
         dispatch(successDownloading());
-        dispatch(receiveDownload(new Program('Download', ProgramType.STEPS, getState().BLEConnection.receivedDownloads)));
+        dispatch(receiveDownload(new Program('', ProgramType.STEPS, getState().BLEConnection.receivedDownloads)));
     };
 };
 export const receivedChunck = (chunk) => ({

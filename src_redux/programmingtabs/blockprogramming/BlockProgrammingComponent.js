@@ -33,7 +33,7 @@ export default class BlockProgrammingComponent extends Component {
                           selectedProgram={this.props.Block.Active_Block.blocks[index].ref}
                           onRepeatValueChange={(value) => {
                               this.props.setActiveBlockIndex(-1);
-                              this.props.changeReps(value, index);
+                              this.props.changeReps(parseInt(value), index);
                           }}
                           onProgramSelectionChange={(value) => {
                               this.props.setActiveBlockIndex(-1);

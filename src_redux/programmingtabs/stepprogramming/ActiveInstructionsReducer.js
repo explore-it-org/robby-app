@@ -74,8 +74,8 @@ export const ActiveInstructionsReducer = (state = default_state_Active_Instructi
                 });
             }
         case ActionTypes.CHANGE_INSTRUCTION_NAME:
-        case ActionTypes.CLEAR_PROGRAM:
-            return default_state_Active_Instruction;
+            return state;
+
         case ActionTypes.DELETE_INSTRUCITON_INDEX:
             return Object.assign({}, state, {
                 lastUpdate: Date.now(),
@@ -126,17 +126,18 @@ export const ActiveInstructionsReducer = (state = default_state_Active_Instructi
             let a = Database.findOne(action.name);
             return Object.assign({}, state, {
                 ActiveProgram: a,
+                selectedIndex: -1
             });
         case ActionTypes.RECEIVED_DOWNLOAD:
             return Object.assign({}, state, {
                 ActiveProgram: action.program,
             });
         case ActionTypes.CLEAR_PROGRAM:
-                return Object.assign({}, state, {
-                    lastUpdate: Date.now(),
-                    ActiveProgram: new Program('', ProgramType.STEPS,[new Instruction(0,0)]),
-                    selectedIndex: -1,
-                });
+            return Object.assign({}, state, {
+                lastUpdate: Date.now(),
+                ActiveProgram: new Program('', ProgramType.STEPS, [new Instruction(0, 0)]),
+                selectedIndex: -1,
+            });
         default:
             return state;
 

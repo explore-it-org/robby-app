@@ -1,6 +1,6 @@
 import Database from './RoboticsDatabase';
 import *  as ActionTypes from '../GlobalActionTypes';
-import {Instruction, Program, ProgramType} from '../model/DatabaseModels';
+
 
 
 const default_state_Programs = {
@@ -27,7 +27,7 @@ export const ProgramsReducer = (state = default_state_Programs, action) => {
                     lastChange: change,
                 });
         case ActionTypes.SAVE_PROGRAM:
-            change = Database.save(action.program);
+            change = Database.save(action.program, action.isNew);
             return Object.assign({}, state,
                 {
                     lastUpdate: Date.now(),
@@ -44,10 +44,20 @@ export const ProgramsReducer = (state = default_state_Programs, action) => {
                 });
         case ActionTypes.DELETE_ALL:
             change = Database.deleteAll();
-            return Object.assign({}, state, {lastUpdate: Date.now(), Programs: Database.findAll(), lastChange: change});
+            return Object.assign({}, state,
+                {
+                    lastUpdate: Date.now(),
+                    Programs: Database.findAll(),
+                    lastChange: change,
+                });
         case ActionTypes.DELETE_PROGRAM:
             change = Database.delete(action.program_id);
-            return Object.assign({}, state, {lastUpdate: Date.now(), Programs: Database.findAll(), lastChange: change});
+            return Object.assign({}, state,
+                {
+                    lastUpdate: Date.now(),
+                    Programs: Database.findAll(),
+                    lastChange: change,
+                });
         default:
             return state;
     }

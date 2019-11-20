@@ -15,11 +15,15 @@ class RoboticsDatabase {
 
     }
 
-    add(program, operation = 'save'): String {
-        if (this.nameIsUnused(program.name)) {
+    add(program, operation = 'add', update = false, noNameChange = true): String {
+        if (program.name === '') {
+            return {operation: operation, status: 'failure', error: 'No empty name'};
+        }
+        if ((update && noNameChange) || this.nameIsUnused(program.name)) {
+
             try {
                 this.repository.write(() => {
-                    this.repository.create('Program', program);
+                    this.repository.create('Program', program, update);
                 });
                 return {operation: operation, status: 'success', error: ''};
             } catch (e) {
@@ -66,15 +70,23 @@ class RoboticsDatabase {
     }
 
     save(program): boolean {
-        try {
-            this.repository.write(() => {
-                this.repository.create('Program', program, true);
-            });
-            return {operation: 'save', status: 'success', error: ''};
-        } catch (e) {
-            return {operation: 'save', status: 'failure', error: e};
+        let old = this.findOneByPK(program.id);
+        if (old === undefined) {
+            return this.add(program);
+        } else {
+            return this.add(program, 'save', true, old.name === program.name);
         }
 
+        /*
+                try {
+                    this.repository.write(() => {
+                        this.repository.create('Program', program, true);
+                    });
+                    return {operation: 'save', status: 'success', error: ''};
+                } catch (e) {
+                    return {operation: 'save', status: 'failure', error: e};
+                }
+        */
     }
 
     canBeDeleted(program_id): Boolean {
