@@ -11,21 +11,38 @@ import {duration} from '@material-ui/core/styles';
 
 class SettingsComponent extends Component {
 
+    state = {
+        lastUpdate: 0,
+    };
+
     componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS): void {
-        let prev = prevProps.Settings;
-        let now = this.props.Settings;
+        let prev = prevProps.Settings.lastUpdate;
+        let now = this.props.Settings.lastUpdate;
         if (prev !== now) {
             ToastAndroid.show('settings udpated', ToastAndroid.SHORT);
         }
     }
 
+    actuallyChangeInterval(interval) {
+        if (this.state.lastUpdate === interval) {
+            this.props.setIntervalAndSendToRobby(interval.length === 0 ? 0 : parseInt(interval));
+        }
+    }
+
     changeInterval(interval) {
-        this.props.setInterval(interval.length === 0 ? 0 : parseInt(interval));
+        this.props.setInterval(interval);
+        this.setState({lastUpdate: interval});
+        setTimeout(() => {
+            this.actuallyChangeInterval(interval);
+        }, 400);
+
 
     }
 
     changeDuration(duration) {
+
         this.props.setDuration(duration.length === 0 ? 0 : parseInt(duration));
+
 
     }
 

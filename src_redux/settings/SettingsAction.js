@@ -16,10 +16,9 @@ export const setLoops = (loops) => ({
 });
 
 
-export const _setInterval = (inter) => {
+export const setIntervalAndSendToRobby = (inter) => {
         return (dispatch, getState) => {
             RobotProxy.setInterval(inter).then(res => {
-                dispatch(_setInterval(inter));
             });
         };
     }
