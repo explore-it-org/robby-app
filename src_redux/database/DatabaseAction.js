@@ -4,9 +4,10 @@ export const add = (program) => ({
     type: ADD_PROGRAM,
     program: program,
 });
-export const save = (program) => ({
+export const save = (program, isNew) => ({
     type: SAVE_PROGRAM,
     program: program,
+    isNew,
 });
 
 export const saveProgram = (ActiveProgram) => {
@@ -16,6 +17,7 @@ export const saveProgram = (ActiveProgram) => {
             program = getState().ActiveProgram.ActiveProgram;
         } else {
             program = getState().ActiveBlock.Active_Block;
+            console.log(program);
         }
         dispatch(save(program));
     };
