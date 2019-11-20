@@ -41,8 +41,26 @@ export default class ProgrammingComponent extends Component {
                 case 'failure':
                     Alert.alert(now.operation, now.error);
             }
-
         }
+        if (this.props.BLEConnection.error !== prevProps.BLEConnection.error) {
+            Alert.alert('ble error', this.props.BLEConnection.error);
+        } else {
+            prev = prevProps.BLEConnection.device;
+            now = this.props.BLEConnection.device;
+            if (prev !== now) {
+                if (prev.isUploading && !now.isUploading) {
+                    ToastAndroid.show('finished uploading', ToastAndroid.SHORT);
+                } else if (prev.isDownloading && !now.isDownloading) {
+                    ToastAndroid.show('finished downloading', ToastAndroid.SHORT);
+                } else if (prev.isRecording && !now.isDownloading) {
+                    ToastAndroid.show('finished downloading', ToastAndroid.SHORT);
+                } else if (prev.isGoing && !now.isGoing) {
+                    ToastAndroid.show('finished going', ToastAndroid.SHORT);
+                }
+
+            }
+        }
+
     }
 
     componentDidMount(): void {

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Text, TextInput, Button} from 'react-native';
+import {StyleSheet, View, Text, TextInput, Button, ToastAndroid, Alert} from 'react-native';
 import {Appbar} from 'react-native-paper';
 
 
@@ -11,8 +11,15 @@ import {duration} from '@material-ui/core/styles';
 
 class SettingsComponent extends Component {
 
+    componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS): void {
+        let prev = prevProps.Settings;
+        let now = this.props.Settings;
+        if (prev !== now) {
+            ToastAndroid.show('settings udpated', ToastAndroid.SHORT);
+        }
+    }
+
     changeInterval(interval) {
-        // TODO write to robo
         this.props.setInterval(interval.length === 0 ? 0 : parseInt(interval));
 
     }
