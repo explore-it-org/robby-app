@@ -6,28 +6,48 @@ import {Instruction, Program, ProgramType} from '../model/DatabaseModels';
 const default_state_Programs = {
     lastUpdate: Date.now(),
     Programs: Database.findAll(),
-    status: 'success',
-    operation: '',
-    errorMessage: '',
+    lastChange: {
+        status: 'success',
+        operation: '',
+        error: '',
+    },
+
 };
 
 export const ProgramsReducer = (state = default_state_Programs, action) => {
+    let change = {};
     switch (action.type) {
         case ActionTypes.ADD_PROGRAM:
-            let a = Database.add(action.program);
-            return Object.assign({}, state, {lastUpdate: Date.now(), Programs: Database.findAll(), ...a});
+            change = Database.add(action.program);
+            return Object.assign({},
+                state,
+                {
+                    lastUpdate: Date.now(),
+                    Programs: Database.findAll(),
+                    lastChange: change,
+                });
         case ActionTypes.SAVE_PROGRAM:
-            Database.save(action.program);
-            return Object.assign({}, state, {lastUpdate: Date.now(), Programs: Database.findAll()});
+            change = Database.save(action.program);
+            return Object.assign({}, state,
+                {
+                    lastUpdate: Date.now(),
+                    Programs: Database.findAll(),
+                    lastChange: change,
+                });
         case ActionTypes.DUPLICATE_PROGRAM:
-            Database.duplicate(action.program, action.newName);
-            return Object.assign({}, state, {lastUpdate: Date.now(), Programs: Database.findAll()});
+            change = Database.duplicate(action.program, action.newName);
+            return Object.assign({}, state,
+                {
+                    lastUpdate: Date.now(),
+                    Programs: Database.findAll(),
+                    lastChange: change,
+                });
         case ActionTypes.DELETE_ALL:
-            Database.deleteAll();
-            return Object.assign({}, state, {lastUpdate: Date.now(), Programs: Database.findAll()});
+            change = Database.deleteAll();
+            return Object.assign({}, state, {lastUpdate: Date.now(), Programs: Database.findAll(), lastChange: change});
         case ActionTypes.DELETE_PROGRAM:
-            Database.delete(action.program_id);
-            return Object.assign({}, state, {lastUpdate: Date.now(), Programs: Database.findAll()});
+            change = Database.delete(action.program_id);
+            return Object.assign({}, state, {lastUpdate: Date.now(), Programs: Database.findAll(), lastChange: change});
         default:
             return state;
     }

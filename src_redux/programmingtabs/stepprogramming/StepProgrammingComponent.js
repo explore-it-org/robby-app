@@ -4,7 +4,7 @@ import {
     FlatList,
     TouchableOpacity,
     Platform,
-    ScrollView,
+    ScrollView, Alert,
 } from 'react-native';
 import {FAB} from 'react-native-paper';
 import React from 'react';
@@ -14,27 +14,9 @@ import {changeLeftSpeed} from './ActiveProgramAction';
 
 
 export default class StepProgrammingComponent extends Component {
-    /*   state = {
-           instructions: instructions,
-           selected: -1, // id of currently selected row
-           programName: '',
-       };
 
 
-       onChangeLeft(index, text) {
-           updateLeftSpeed(index, parseInt(text));
-           this.setState({
-               selected: -1,
-           });
-       }
 
-       onChangeRight(index, text) {
-           updateRightSpeed(index, parseInt(text));
-           this.setState({
-               selected: -1,
-           });
-       }
-   */
     render() {
         let select_controls;
         if (this.props.Instruction.selectedIndex >= 0) {
