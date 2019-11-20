@@ -1,13 +1,15 @@
 import {ADD_PROGRAM, SAVE_PROGRAM, DUPLICATE_PROGRAM, DELETE_PROGRAM, DELETE_ALL} from '../GlobalActionTypes';
+import {loadChildren} from '../programmingtabs/blockprogramming/ActiveBlockAction';
+import {exp} from 'react-native-reanimated';
+import {Program} from '../model/DatabaseModels';
 
 export const add = (program) => ({
     type: ADD_PROGRAM,
     program: program,
 });
-export const save = (program, isNew) => ({
+export const save = (program) => ({
     type: SAVE_PROGRAM,
     program: program,
-    isNew,
 });
 
 export const saveProgram = (ActiveProgram) => {
@@ -16,10 +18,11 @@ export const saveProgram = (ActiveProgram) => {
         if (ActiveProgram === 'Stepprogramming') {
             program = getState().ActiveProgram.ActiveProgram;
         } else {
-            program = getState().ActiveBlock.Active_Block;
-            console.log(program);
+            let a = getState().ActiveBlock.Active_Block;
+            program = Object.assign(new Program(), a, {blocks: a.blocks.filter(b => b.ref !== '' && b.ref !== 0)});
         }
         dispatch(save(program));
+        dispatch(loadChildren());
     };
 };
 
@@ -32,6 +35,13 @@ export const remove = (program_id) => ({
     type: DELETE_PROGRAM,
     program_id: program_id,
 });
+
+export const removeProgram = (program_id) => {
+    return (dispatch, getState) => {
+        dispatch(remove(program_id));
+        dispatch(loadChildren());
+    };
+};
 export const delete_all = () => ({
     type: DELETE_ALL,
 });

@@ -7,7 +7,7 @@ import {
     SET_ACTIVE_BLOCK,
     CHANGE_REPS,
     LOAD_BLOCK,
-    CHANGE_BLOCK_SELECTED_ID,
+    CHANGE_BLOCK_SELECTED_ID, LOAD_POSSIBLE_CHILDREN,
 } from '../../GlobalActionTypes';
 
 export const moveUpBlock = () => ({
@@ -49,4 +49,7 @@ export const changeSelectedID = (id, index) => ({
     type: CHANGE_BLOCK_SELECTED_ID,
     id,
     index,
+});
+export const loadChildren = () => ({
+    type: LOAD_POSSIBLE_CHILDREN,
 });

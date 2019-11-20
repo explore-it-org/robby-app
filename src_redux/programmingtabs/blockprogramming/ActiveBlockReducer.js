@@ -1,15 +1,15 @@
 import {Block, Instruction, Program, ProgramType} from '../../model/DatabaseModels';
 import * as ActionTypes from '../../GlobalActionTypes';
 import Database from '../../database/RoboticsDatabase';
+import {LOAD_POSSIBLE_CHILDREN} from '../../GlobalActionTypes';
 
 const default_state_block = {
     lastUpdate: Date.now(),
-    Active_Block: new Program('', ProgramType.BLOCKS, [], [new Block(0, 0)]),
+    Active_Block: new Program('', ProgramType.BLOCKS, [], [new Block('', 0)]),
     possibleChildren: Database.findAll(),
     selectedBlockIndex: -1,
 };
 export const ActiveBlockReducer = (state = default_state_block, action) => {
-    console.log(action.type);
     switch (action.type) {
         case ActionTypes.CLEAR_BLOCK:
             return Object.assign({}, state, {
@@ -55,6 +55,8 @@ export const ActiveBlockReducer = (state = default_state_block, action) => {
             return Object.assign({}, state, {
                 lastUpdate: Date.now(),
                 selectedBlockIndex: action.index,
+                // dirty hack to force update
+                Active_Block: Object.assign(new Program(), state.Active_Block, {blocks: [...state.Active_Block.blocks]}),
             });
 
 
@@ -99,7 +101,6 @@ export const ActiveBlockReducer = (state = default_state_block, action) => {
 
                 });
             } else {
-
                 if (state.selectedBlockIndex >= state.Active_Block.blocks.length - 1) {
                     return state;
                 }
@@ -118,12 +119,17 @@ export const ActiveBlockReducer = (state = default_state_block, action) => {
         case ActionTypes.LOAD_BLOCK:
             let a = Database.findOne(action.name);
             let b = Database.findAllWhichCanBeAddedTo(a);
-            console.log(b);
             return Object.assign({}, state, {
                 Active_Block: a,
                 possibleChildren: b,
             });
-
+        case ActionTypes.LOAD_POSSIBLE_CHILDREN:
+            let z = Database.findAllWhichCanBeAddedTo(state.Active_Block);
+            return Object.assign({}, state, {
+                // Dirty hack to force update
+                Active_Block: Object.assign(new Program(), state.Active_Block, {blocks: [...state.Active_Block.blocks]}),
+                possibleChildren: z,
+            });
         default:
             return state;
     }

@@ -23,7 +23,6 @@ const default_state_ble_connection = {
     error: '',
 };
 export const BleConnectionReducer = (state = default_state_ble_connection, action) => {
-    console.log(action);
     switch (action.type) {
         case ActionType.START_CONNECTING:
             return Object.assign({}, state, {isConnecting: true, isConnected: false});
@@ -37,7 +36,7 @@ export const BleConnectionReducer = (state = default_state_ble_connection, actio
                 lastUpdate: Date.now(),
             });
         case ActionType.IS_CONNECTED:
-            console.log('i am called with: ' + action.robot.name);
+
             return Object.assign({}, state, {
                 isConnecting: false,
                 isConnected: true,
@@ -45,7 +44,7 @@ export const BleConnectionReducer = (state = default_state_ble_connection, actio
                 device: {...state.device, name: action.robot.name},
             });
         case ActionType.UPDATE_DEVICE_VERSION:
-            console.log('my version ' + action.version);
+
             return Object.assign({}, state, {device: {...state.device, version: action.version}});
         case ActionType.BLE_RESPONSE:
             return state;
@@ -84,7 +83,7 @@ export const BleConnectionReducer = (state = default_state_ble_connection, actio
         case ActionType.FAILURE_RECORDING:
             return Object.assign({}, state, {device: {...state.device, isRecording: false}});
         case ActionType.GO_ROBOT:
-            console.log('now');
+
             return Object.assign({}, state, {device: {...state.device, isGoing: true}});
         case ActionType.FAILURE_UPLOADING:
             return Object.assign({}, state, {device: {...state.device, isUploading: false}});

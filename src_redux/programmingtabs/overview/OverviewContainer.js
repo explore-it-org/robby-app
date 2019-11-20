@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {add, save, delete_all, duplicate, remove} from '../../database/DatabaseAction';
+import {add, save, delete_all, duplicate, remove, removeProgram} from '../../database/DatabaseAction';
 import {loadBlock} from '../blockprogramming/ActiveBlockAction';
 import OverviewComponent from './OverviewComponent';
 import {loadInstruction} from '../stepprogramming/ActiveProgramAction';
@@ -17,7 +17,7 @@ const mapDispatchToProps = dispatch =>
             save,
             delete_all,
             duplicate,
-            remove,
+            remove: removeProgram,
             loadBlock,
             loadInstruction,
         }, dispatch);

@@ -20,5 +20,5 @@ const rootReducer = combineReducers({
 let store = createStore(rootReducer, applyMiddleware(thunk));
 let test = new dbtest.DatabaseTest(store);
 test.clearDatabase();
-test.createDatabaseEntries();
+
 export default store;
