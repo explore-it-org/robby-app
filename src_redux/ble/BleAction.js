@@ -116,7 +116,6 @@ export const startRecording = () => {
         let duration = getState().Settings.duration;
         let interval = getState().Settings.interval;
         let version = getState().BLEConnection.device.version;
-        console.log(version);
         RobotProxy.record(duration, interval, version).then(res => {
             dispatch(tryRecording());
         }).catch(error => {

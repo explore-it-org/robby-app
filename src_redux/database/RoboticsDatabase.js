@@ -34,7 +34,6 @@ class RoboticsDatabase {
     }
 
     findAllWhichCanBeAddedTo(program): Program[] {
-        // console.log(program);
         return this.repository.objects('Program').map(elem => Program.fromDatabase(elem)).filter(p => !this.isUsedRecursive(p, program.id));
     }
 
@@ -70,6 +69,7 @@ class RoboticsDatabase {
     }
 
     save(program): boolean {
+
         let old = this.findOneByPK(program.id);
         if (old === undefined) {
             return this.add(program);

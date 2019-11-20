@@ -27,7 +27,7 @@ export const ProgramsReducer = (state = default_state_Programs, action) => {
                     lastChange: change,
                 });
         case ActionTypes.SAVE_PROGRAM:
-            change = Database.save(action.program, action.isNew);
+            change = Database.save(action.program);
             return Object.assign({}, state,
                 {
                     lastUpdate: Date.now(),

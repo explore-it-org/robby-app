@@ -19,6 +19,14 @@ import {setActiveBlockIndex} from './ActiveBlockAction';
 
 export default class BlockProgrammingComponent extends Component {
 
+    componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS): void {
+        console.log('i am called');
+
+    }
+
+    componentDidMount(): void {
+    }
+
     // TODO: Replace static text with translated Text!!
     items = [];
     renderProgramInput = ({item, index}) => (
@@ -47,7 +55,7 @@ export default class BlockProgrammingComponent extends Component {
     render() {
         this.items = [<Picker.Item key={0} label='Select a program'/>];
 
-        this.props.Block.possibleChildren.forEach((p) => {
+        this.props.Block.possibleChildren.forEach((p) => {;
             this.items.push(<Picker.Item key={p.id} label={p.name} value={p.id} testID={p.id}/>);
         });
         let select_controls;

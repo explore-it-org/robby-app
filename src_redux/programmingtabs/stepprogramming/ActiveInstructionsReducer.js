@@ -36,7 +36,6 @@ export const ActiveInstructionsReducer = (state = default_state_Active_Instructi
                 if (state.selectedIndex === 0) {
                     return state;
                 }
-                console.log('moving down');
                 return Object.assign({}, state, {
 
                     lastUpdate: Date.now(),
@@ -50,7 +49,6 @@ export const ActiveInstructionsReducer = (state = default_state_Active_Instructi
                     selectedIndex: state.selectedIndex - 1,
                 });
             } else {
-                console.log('moving up');
                 if (state.selectedIndex >= state.ActiveProgram.steps.length - 1) {
                     return state;
                 }
@@ -88,8 +86,12 @@ export const ActiveInstructionsReducer = (state = default_state_Active_Instructi
                     }),
             });
         case ActionTypes.SET_ACTIVE_INDEX:
-            console.log('i am called with index: ' + action.index);
-            return Object.assign({}, state, {selectedIndex: action.index});
+
+            return Object.assign({}, state, {
+                selectedIndex: action.index,
+                // dirty hack to force update
+                ActiveProgram: Object.assign(new Program(), state.ActiveProgram, {steps: [...state.ActiveProgram.steps]}),
+            });
         case ActionTypes.CHANGE_LEFT_SPEED:
             let oldInstruction = state.ActiveProgram.steps[action.index];
             let newInstruction = new Instruction(oldInstruction.right, action.speed);
@@ -126,7 +128,7 @@ export const ActiveInstructionsReducer = (state = default_state_Active_Instructi
             let a = Database.findOne(action.name);
             return Object.assign({}, state, {
                 ActiveProgram: a,
-                selectedIndex: -1
+                selectedIndex: -1,
             });
         case ActionTypes.RECEIVED_DOWNLOAD:
             return Object.assign({}, state, {

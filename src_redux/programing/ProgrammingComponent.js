@@ -79,9 +79,9 @@ export default class ProgrammingComponent extends Component {
         this.props.clearProgram();
     };
 
-    /*save = () => {
+    save = () => {
         this.props.saveProgram('Stepprogramming');
-    };*/
+    };
 
     render() {
         return (
@@ -137,19 +137,17 @@ export default class ProgrammingComponent extends Component {
                         };
                         switch (currentScreen) {
                             case 'Stepprogramming':
-                                // this.setState({save_and_new_btn_disabled: false});
                                 this.clear = () => {
                                     this.props.clearProgram();
                                 };
                                 break;
                             case 'Blockprogramming':
-                                // this.setState({save_and_new_btn_disabled: false});
+
                                 this.clear = () => {
                                     this.props.clearBlock();
                                 };
                                 break;
                             default:
-                                /*this.setState({save_and_new_btn_disabled: true});*/
                                 this.clear = undefined;
                                 this.save = undefined;
                                 break;
