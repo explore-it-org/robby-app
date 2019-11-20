@@ -23,26 +23,26 @@ export const ActiveBlockReducer = (state = default_state_block, action) => {
                 Active_Block: Object.assign(new Program(), state.Active_Block, {name: action.name}),
             });
         case ActionTypes.CHANGE_REPS:
-            let oldBlock = state.Active_Block.blocks[state.selectedBlockIndex];
+            let oldBlock = state.Active_Block.blocks[action.index];
             let newBlock = Object.assign(new Block(), oldBlock, {rep: action.reps});
             return Object.assign({}, state, {
                 lastUpdate: Date.now(),
                 Active_Block: Object.assign(new Program(), state.Active_Block, {
                     blocks: [
-                        ...state.Active_Block.blocks.slice(0, state.selectedBlockIndex),
+                        ...state.Active_Block.blocks.slice(0, action.index),
                         newBlock,
-                        ...state.Active_Block.blocks.slice(state.selectedBlockIndex + 1),
+                        ...state.Active_Block.blocks.slice(action.index + 1),
                     ],
                 }),
             });
         case ActionTypes.CHANGE_BLOCK_SELECTED_ID:
-            let oldIDBlock = state.Active_Block.blocks[state.selectedBlockIndex];
+            let oldIDBlock = state.Active_Block.blocks[action.index];
             let newIDBLock = Object.assign(new Block(), oldIDBlock, {ref: action.id});
             let activeMainProgram = Object.assign(new Program(), state.Active_Block, {
                 blocks: [
-                    ...state.Active_Block.blocks.slice(0, state.selectedBlockIndex),
+                    ...state.Active_Block.blocks.slice(0, action.index),
                     newIDBLock,
-                    ...state.Active_Block.blocks.slice(state.selectedBlockIndex + 1, state.Active_Block.blocks.length),
+                    ...state.Active_Block.blocks.slice(action.index + 1, state.Active_Block.blocks.length),
                 ],
             });
             return Object.assign({}, state, {

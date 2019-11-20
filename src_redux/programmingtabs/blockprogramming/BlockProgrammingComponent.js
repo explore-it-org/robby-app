@@ -32,12 +32,12 @@ export default class BlockProgrammingComponent extends Component {
                           pickerItems={this.items}
                           selectedProgram={this.props.Block.Active_Block.blocks[index].ref}
                           onRepeatValueChange={(value) => {
-                              this.props.setActiveBlockIndex(index);
-                              this.props.changeReps(value);
+                              this.props.setActiveBlockIndex(-1);
+                              this.props.changeReps(value, index);
                           }}
                           onProgramSelectionChange={(value) => {
-                              this.props.setActiveBlockIndex(index);
-                              this.props.changeSelectedID(value);
+                              this.props.setActiveBlockIndex(-1);
+                              this.props.changeSelectedID(value, index);
                           }}
                           val={this.props.Block.Active_Block.blocks[index].rep}/>
         </TouchableOpacity>
