@@ -57,42 +57,10 @@ export default class ProgrammingComponent extends Component {
                 } else if (prev.isGoing && !now.isGoing) {
                     ToastAndroid.show('finished going', ToastAndroid.SHORT);
                 }
-
             }
         }
-
     }
 
-    componentDidMount(): void {
-
-
-        /*
-        RobotProxy.testScan(err => {
-                this.setState({
-                    ble_connection: {
-                        allowed: false,
-                        errormessage: err.message,
-                    },
-                });
-                this.openBLEErrorAlert();
-                console.log('error state is set to ' + this.state.ble_connection.allowed);
-            },
-            dh => {
-                this.setState({
-                    ble_connection: {
-                        allowed: true,
-                        errormessage: '',
-                    },
-                });
-                RobotProxy.stopScanning();
-                console.log('state is set to ' + this.state.ble_connection.allowed);
-            });*/
-    }
-
-    /*
-        openBLEErrorAlert() {
-            Alert.alert('BLE Error', this.state.ble_connection.errormessage);
-        }*/
 
     // gets the current screen from navigation state
     getActiveRouteName(navigationState) {
