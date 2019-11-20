@@ -5,7 +5,7 @@ import App from './App';
 import * as React from 'react';
 import {name as appName} from './app.json';
 import {DefaultTheme, Provider as PaperProvider} from 'react-native-paper';
-import store from './src_redux/store/store';
+import store from './src/store/store';
 import {Provider as ReduxProvider} from 'react-redux';
 
 
@@ -14,7 +14,7 @@ const theme = {
     roundness: 2,
     colors: {
         ...DefaultTheme.colors,
-        primary: '#9c27b0',
+        primary: '#3d68e6',
         accent: '#f50057',
     },
 };

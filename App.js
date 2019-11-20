@@ -1,31 +1,26 @@
 import React, {Component} from 'react';
 import {createAppContainer} from 'react-navigation';
 import {DrawerNavigatorItems, createDrawerNavigator} from 'react-navigation-drawer';
-import ProgrammingContainer from './src_redux/programing/ProgrammingContainer';
-import Settings from './src_redux/settings/SettingsContainer';
-import BleService from './src_redux/ble/BleService';
-
+import ProgrammingContainer from './src/programing/ProgrammingContainer';
+import Settings from './src/settings/SettingsContainer';
+import BleService from './src/ble/BleService';
 import {View, Text, StyleSheet, Alert} from 'react-native';
 import {getStatusBarHeight, ifIphoneX} from 'react-native-iphone-x-helper';
 // import {version} from './package.json';
 import i18n from './resources/locales/i18n';
 
-import GLOBAL from './src/utility/Global';
+import GLOBAL from './src/utillity/Global';
 
 
 import {connect} from 'react-redux';
-
-import * as ut from './src/utility/AppSettings';
-
 
 class App extends Component {
 
 
     componentDidMount(prevProps, prevState, snapsho) {
+        // TODO dispacht
         let isGranted = BleService.requestLocationPermission();
-        // dispatch isGranted to settings dispatcher this.props.dispatch()
     }
-
 
     render() {
         return <DrawerContainer/>;
@@ -34,15 +29,7 @@ class App extends Component {
 
 export default connect()(App);
 
-/*
-    Program: ProgramsReducer,
-    BLEConnection: BleConnectionReducer,
-    Settings: SettingsReducer,
-    ActiveProgram: ActiveInstructionsReducer,
-    ActiveBlock: ActiveBlockReducer,
- */
 class DrawerContent extends Component {
-
 
     render() {
         return (

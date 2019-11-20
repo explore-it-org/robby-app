@@ -1,5 +1,5 @@
 import uuidv4 from 'uuid/v4';
-var RobbyDatabaseAction = require('../database/RobbyDatabaseActions');
+import Database from '../database/RoboticsDatabase';
 
 export class Program {
     constructor(name, programType, steps = [], blocks = [], id = uuidv4(), date = new Date(Date.now())) {
@@ -29,31 +29,32 @@ export class Program {
             case false:
                 return this.steps.length;
             case true:
-                return this.blocks.reduce((acc, b) => acc + b.rep * RobbyDatabaseAction.findOneByPK(b.ref).length(), 0);
+                return this.blocks.reduce((acc, b) => acc + b.rep * Database.findOneByPK(b.ref).length(), 0);
         }
     }
 
-    delete(){
-        return RobbyDatabaseAction.delete(this.id);
+    delete() {
+        return Database.delete(this.id);
     }
 
-    duplicate(){
-        return RobbyDatabaseAction.duplicate(this);
+    duplicate() {
+        return Database.duplicate(this);
     }
 
-    flatten(rep = 1){
+    flatten(rep = 1) {
         var result = [];
-        if(this.programType === ProgramType.BLOCKS){
+        if (this.programType === ProgramType.BLOCKS) {
             this.blocks.forEach((block) => {
-                var prg = RobbyDatabaseAction.findOneByPK(block.ref);
-                if(rep){
-                    for(var i = 0; i < rep; i++){
+                var prg = Database.findOneByPK(block.ref);
+
+                if (rep) {
+                    for (let i = 0; i < rep; i++) {
                         result.push(...prg.flatten(block.rep));
                     }
                 }
             });
-        }else{        
-            for(i = 0; i < rep; i++){
+        } else {
+            for (let i = 0; i < rep; i++) {
                 result.push(...this.steps);
             }
         }
