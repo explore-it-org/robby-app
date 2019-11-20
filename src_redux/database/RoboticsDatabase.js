@@ -15,18 +15,18 @@ class RoboticsDatabase {
 
     }
 
-    add(program): String {
+    add(program, operation = 'save'): String {
         if (this.nameIsUnused(program.name)) {
             try {
                 this.repository.write(() => {
                     this.repository.create('Program', program);
                 });
-                return {operation: 'save', status: 'success', error: ''};
+                return {operation: operation, status: 'success', error: ''};
             } catch (e) {
-                return {operation: 'save', status: 'failure', error: e.message};
+                return {operation: operation, status: 'failure', error: e.message};
             }
         }
-        return {operation: 'save', status: 'failure', error: 'Name is already taken'};
+        return {operation: operation, status: 'failure', error: 'Name is already taken'};
     }
 
     findAllWhichCanBeAddedTo(program): Program[] {
@@ -59,9 +59,9 @@ class RoboticsDatabase {
                 cloneProgram.name = newName + '(' + i + ')';
                 i++;
             }
-            return this.add(cloneProgram);
+            return this.add(cloneProgram, 'duplicate');
         } catch (e) {
-            return e;
+            return {operation: 'duplicate', status: 'failure', error: e};
         }
     }
 
@@ -70,9 +70,9 @@ class RoboticsDatabase {
             this.repository.write(() => {
                 this.repository.create('Program', program, true);
             });
-            return true;
+            return {operation: 'save', status: 'success', error: ''};
         } catch (e) {
-            return false;
+            return {operation: 'save', status: 'failure', error: e};
         }
 
     }
@@ -87,12 +87,13 @@ class RoboticsDatabase {
                 this.repository.write(() => {
                     this.repository.delete(this.repository.objectForPrimaryKey('Program', program_id));
                 });
-                return 'Deleted Object: ' + program_id;
+                return {operation: 'delete', status: 'success', error: ''};
             } catch (e) {
-                return e;
+                return {operation: 'delete', status: 'failure', error: e};
             }
         }
-        return 'Program is used by other program';
+        return {operation: 'delete', status: 'failure', error: 'Program is used by other program'};
+
     }
 
     deleteAll() {
@@ -100,9 +101,9 @@ class RoboticsDatabase {
             this.repository.write(() => {
                 this.repository.delete(this.repository.objects('Program'));
             });
-            return true;
+            return {operation: 'deleteAll', status: 'success', error: ''};
         } catch (e) {
-            return false;
+            return {operation: 'deleteAll', status: 'failure', error: e};
         }
     }
 

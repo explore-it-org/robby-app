@@ -9,16 +9,15 @@ export const mainHandler = (response) => {
 
     switch (store.getState().BLEConnection.device.version) {
         case 1:
-            handleResponse1(response);
-            break;
+            return handleResponse1(response);
         case 2:
         case 3:
         case 4:
-            handleResponse3(response);
-            break;
+            return handleResponse3(response);
         case 5:
         case 6:
-
+        default:
+            return handleResponse3(response);
     }
 };
 
@@ -31,7 +30,7 @@ const handleResponse1 = (response) => {
 
 };
 
-const handleResponse3 = (response) => {
+export const handleResponse3 = (response) => {
 
     /**
      * All response must be given to the reducer
@@ -77,5 +76,5 @@ const handleResponse3 = (response) => {
                 return bleAction.bleResponse('');
         }
     }
-    bleAction.bleResponse('');
+    return bleAction.bleResponse('');
 };

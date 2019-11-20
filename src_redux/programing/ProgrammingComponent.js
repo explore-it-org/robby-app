@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Alert} from 'react-native';
+import {StyleSheet, View, Alert, ToastAndroid} from 'react-native';
 import {Appbar} from 'react-native-paper';
 import RobotProxy from '../ble/RobotProxy';
 import {createAppContainer} from 'react-navigation';
@@ -19,7 +19,7 @@ import StepProgrammingComponent from '../programmingtabs/stepprogramming/StepPro
 import StepProgrammingContainer from '../programmingtabs/stepprogramming/StepProgrammingContainer';
 import BlockProgrammingContainer from '../programmingtabs/blockprogramming/BlockProgrammingContainer';
 import {
-    clearBlock
+    clearBlock,
 } from '../programmingtabs/blockprogramming/ActiveBlockAction';
 // import {storeBlocks, clearBlocksProgram} from '../../../stores/BlocksStore';
 
@@ -30,34 +30,37 @@ export default class ProgrammingComponent extends Component {
         currentRoute: 'Stepprogramming',
     };
 
-    componentDidMount(): void {
-        /*
-        RobotProxy.testScan(err => {
-                this.setState({
-                    ble_connection: {
-                        allowed: false,
-                        errormessage: err.message,
-                    },
-                });
-                this.openBLEErrorAlert();
-                console.log('error state is set to ' + this.state.ble_connection.allowed);
-            },
-            dh => {
-                this.setState({
-                    ble_connection: {
-                        allowed: true,
-                        errormessage: '',
-                    },
-                });
-                RobotProxy.stopScanning();
-                console.log('state is set to ' + this.state.ble_connection.allowed);
-            });*/
+    componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS): void {
+        let prev = prevProps.Program.lastChange;
+        let now = this.props.Program.lastChange;
+        if (prev !== now) {
+            switch (now.status) {
+                case 'success':
+                    ToastAndroid.show(now.operation + ' ' + now.status, ToastAndroid.SHORT);
+                    break;
+                case 'failure':
+                    Alert.alert(now.operation, now.error);
+            }
+        }
+        if (this.props.BLEConnection.error !== prevProps.BLEConnection.error) {
+            Alert.alert('ble error', this.props.BLEConnection.error);
+        } else {
+            prev = prevProps.BLEConnection.device;
+            now = this.props.BLEConnection.device;
+            if (prev !== now) {
+                if (prev.isUploading && !now.isUploading) {
+                    ToastAndroid.show('finished uploading', ToastAndroid.SHORT);
+                } else if (prev.isDownloading && !now.isDownloading) {
+                    ToastAndroid.show('finished downloading', ToastAndroid.SHORT);
+                } else if (prev.isRecording && !now.isDownloading) {
+                    ToastAndroid.show('finished downloading', ToastAndroid.SHORT);
+                } else if (prev.isGoing && !now.isGoing) {
+                    ToastAndroid.show('finished going', ToastAndroid.SHORT);
+                }
+            }
+        }
     }
 
-    /*
-        openBLEErrorAlert() {
-            Alert.alert('BLE Error', this.state.ble_connection.errormessage);
-        }*/
 
     // gets the current screen from navigation state
     getActiveRouteName(navigationState) {
@@ -71,15 +74,15 @@ export default class ProgrammingComponent extends Component {
         }
         return route.routeName;
     }
-    
+
     clear = () => {
         this.props.clearProgram();
-    }
+    };
 
     save = () => {
         this.props.saveProgram('Stepprogramming');
-    }
-    
+    };
+
     render() {
         return (
             <View style={[styles.container]}>
@@ -130,20 +133,20 @@ export default class ProgrammingComponent extends Component {
                         const currentScreen = this.getActiveRouteName(currentState);
                         const prevScreen = this.getActiveRouteName(prevState);
                         this.save = () => {
-                            this.props.saveProgram(currentScreen); 
+                            this.props.saveProgram(currentScreen);
                         };
                         switch (currentScreen) {
                             case 'Stepprogramming':
                                 // this.setState({save_and_new_btn_disabled: false});
-                                 this.clear = () => {
-                                     this.props.clearProgram();
-                                 };
+                                this.clear = () => {
+                                    this.props.clearProgram();
+                                };
                                 break;
                             case 'Blockprogramming':
                                 // this.setState({save_and_new_btn_disabled: false});
-                                  this.clear = () => {
-                                      this.props.clearBlock();
-                                  };
+                                this.clear = () => {
+                                    this.props.clearBlock();
+                                };
                                 break;
                             default:
                                 /*this.setState({save_and_new_btn_disabled: true});*/
@@ -171,7 +174,7 @@ export default class ProgrammingComponent extends Component {
                                    this.props.BLEConnection.device.isUploading ||
                                    this.props.BLEConnection.device.isGoing ||
                                    this.props.BLEConnection.device.isRecording ||
-                                   this.props.BLEConnection.device.isRunning||
+                                   this.props.BLEConnection.device.isRunning ||
                                    this.props.BLEConnection.device.isDownloading}
                                    onPress={() => {
                                        this.props.runRobot();
@@ -182,7 +185,7 @@ export default class ProgrammingComponent extends Component {
                                    this.props.BLEConnection.device.isUploading ||
                                    this.props.BLEConnection.device.isGoing ||
                                    this.props.BLEConnection.device.isRecording ||
-                                   this.props.BLEConnection.device.isRunning||
+                                   this.props.BLEConnection.device.isRunning ||
                                    this.props.BLEConnection.device.isDownloading}
                                    onPress={() => {
                                        this.props.startRecording();
@@ -193,7 +196,7 @@ export default class ProgrammingComponent extends Component {
                                    this.props.BLEConnection.device.isUploading ||
                                    this.props.BLEConnection.device.isGoing ||
                                    this.props.BLEConnection.device.isRecording ||
-                                   this.props.BLEConnection.device.isRunning||
+                                   this.props.BLEConnection.device.isRunning ||
                                    this.props.BLEConnection.device.isDownloading}
                                    onPress={() => {
                                        this.props.goRobot();
@@ -204,7 +207,7 @@ export default class ProgrammingComponent extends Component {
                                    this.props.BLEConnection.device.isUploading ||
                                    this.props.BLEConnection.device.isGoing ||
                                    this.props.BLEConnection.device.isRecording ||
-                                   this.props.BLEConnection.device.isRunning||
+                                   this.props.BLEConnection.device.isRunning ||
                                    this.props.BLEConnection.device.isDownloading}
                                    onPress={() => {
                                        this.props.download();
@@ -230,7 +233,7 @@ export default class ProgrammingComponent extends Component {
                                    disabled={this.props.BLEConnection.device.isUploading ||
                                    this.props.BLEConnection.device.isGoing ||
                                    this.props.BLEConnection.device.isRecording ||
-                                   this.props.BLEConnection.device.isRunning||
+                                   this.props.BLEConnection.device.isRunning ||
                                    this.props.BLEConnection.device.isDownloading}
                                    onPress={() => {
                                        this.save();
@@ -240,7 +243,7 @@ export default class ProgrammingComponent extends Component {
                                    disabled={this.props.BLEConnection.device.isUploading ||
                                    this.props.BLEConnection.device.isGoing ||
                                    this.props.BLEConnection.device.isRecording ||
-                                   this.props.BLEConnection.device.isRunning||
+                                   this.props.BLEConnection.device.isRunning ||
                                    this.props.BLEConnection.device.isDownloading}
                                    onPress={() => {
                                        this.clear();
