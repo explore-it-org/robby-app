@@ -6,7 +6,7 @@ export const setDuration = (duration) => ({
     type: ActionTypes.SET_DURATION,
     duration,
 });
-export const _setInterval = (interval) => ({
+export const setInterval = (interval) => ({
     type: ActionTypes.SET_INTERVALL,
     interval,
 });
@@ -16,7 +16,7 @@ export const setLoops = (loops) => ({
 });
 
 
-export const setInterval = (inter) => {
+export const _setInterval = (inter) => {
         return (dispatch, getState) => {
             RobotProxy.setInterval(inter).then(res => {
                 dispatch(_setInterval(inter));
