@@ -135,6 +135,7 @@ export default class ProgrammingComponent extends Component {
                         this.save = () => {
                             this.props.saveProgram(currentScreen);
                         };
+                        this.setState({currentRoute: currentScreen});
                         switch (currentScreen) {
                             case 'Stepprogramming':
                                 // this.setState({save_and_new_btn_disabled: false});
