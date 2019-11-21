@@ -44,10 +44,6 @@ class SettingsComponent extends Component {
         this.props.setDuration(duration.length === 0 ? 0 : parseInt(duration));
     }
 
-    changeLoops(loops) {
-        this.props.setLoops(loops.length === 0 ? 0 : parseInt(loops));
-    }
-
 
     render() {
         return (
@@ -127,31 +123,6 @@ class SettingsComponent extends Component {
                         <Text style={{height: 50, marginLeft: 20}}>
                             {i18n.t('Settings.duration-unit')}
                         </Text>
-                    </View>
-
-                    <Text style={{fontSize: 16, fontWeight: 'bold', paddingBottom: 15}}>
-                        {i18n.t('Settings.play')}
-                    </Text>
-                    <View style={{flexDirection: 'row', marginBottom: 10}}>
-                        <Text style={{height: 50, width: '20%', marginLeft: 40}}>
-                            {i18n.t('Settings.loops')}
-                        </Text>
-                        <TextInput
-                            style={{
-                                padding: 5,
-                                width: 60,
-                                height: 50,
-                                borderWidth: 1,
-                                borderColor: 'grey',
-                                backgroundColor: 'white',
-                                justifyContent: 'center',
-                            }}
-                            keyboardType="numeric"
-                            textAlign={'center'}
-                            mode="outlined"
-                            onChangeText={text => this.changeLoops(text)}
-                            value={this.props.Settings.loops.toString()}
-                        />
                     </View>
                 </View>
             </View>

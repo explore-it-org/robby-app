@@ -6,13 +6,11 @@ import store from '../store/store';
 
 class RobotProxy {
     isLearning: boolean;
-    loops: number;
 
     constructor() {
         isConnected = false;
         this.isLearning = false;
 
-        this.loops = 0;
         version = 0;
     }
 
@@ -114,11 +112,9 @@ class RobotProxy {
     }
 
     // Starts robot
-    go(loops) {
+    go() {
         if (this.isConnected) {
-            this.loops = loops;
             return BleService.sendCommandToActDevice('G');
-
         }
     }
 
@@ -126,9 +122,7 @@ class RobotProxy {
     stop() {
         if (this.isConnected) {
             this.isLearning = false;
-            this.loops = 0;
             return BleService.sendCommandToActDevice('S');
-
         }
     }
 

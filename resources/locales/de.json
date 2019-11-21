@@ -28,9 +28,7 @@
     "interval-unit": "pro Sekunde (1..50)",
     "learn": "Lernen:",
     "duration": "Dauer:",
-    "duration-unit": "Sekunden (1..80)",
-    "play": "Abspielen:",
-    "loops": "Loops:"
+    "duration-unit": "Sekunden (1..80)"
   },
   "App": {
     "programming": "Programmieren",
