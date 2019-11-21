@@ -10,7 +10,7 @@ import {
     runRobot, startRecording, goRobot, uploadToRobot, downloadToDevice,
 } from '../ble/BleAction';
 import {clearBlock} from '../programmingtabs/blockprogramming/ActiveBlockAction';
-import {clearProgram} from '../programmingtabs/stepprogramming/ActiveProgramAction';
+import {clearProgram} from '../programmingtabs/stepprogramming/ActiveInstructionAction';
 import {saveProgram} from '../database/DatabaseAction';
 
 import ProgrammingComponent from './ProgrammingComponent';

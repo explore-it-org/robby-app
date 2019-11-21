@@ -90,14 +90,15 @@ export const ActiveBlockReducer = (state = default_state_block, action) => {
                 return Object.assign({}, state, {
                     lastUpdate: Date.now(),
                     selectedBlockIndex: state.selectedBlockIndex - 1,
-                    Active_Block: Object.assign(new Program(), state.Active_Block, {
-                        blocks: [
-                            ...state.Active_Block.blocks.slice(0, state.selectedBlockIndex - 1),
-                            state.Active_Block.blocks[state.selectedBlockIndex],
-                            state.Active_Block.blocks[state.selectedBlockIndex - 1],
-                            ...state.Active_Block.blocks.slice(state.selectedBlockIndex + 1, state.Active_Block.blocks.length),
-                        ],
-                    }),
+                    Active_Block: Object.assign(new Program(),
+                        state.Active_Block, {
+                            blocks: [
+                                ...state.Active_Block.blocks.slice(0, state.selectedBlockIndex - 1),
+                                state.Active_Block.blocks[state.selectedBlockIndex],
+                                state.Active_Block.blocks[state.selectedBlockIndex - 1],
+                                ...state.Active_Block.blocks.slice(state.selectedBlockIndex + 1, state.Active_Block.blocks.length),
+                            ],
+                        }),
 
                 });
             } else {
@@ -105,14 +106,17 @@ export const ActiveBlockReducer = (state = default_state_block, action) => {
                     return state;
                 }
                 return Object.assign({}, state, {
-                    Active_Block: Object.assign(new Program(), state.Active_Block, {
-                        blocks: [
-                            ...state.Active_Block.blocks.slice(0, state.selectedBlockIndex),
-                            state.Active_Block.blocks[state.selectedBlockIndex + 1],
-                            state.Active_Block.blocks[state.selectedBlockIndex],
-                            ...state.Active_Block.blocks.slice(state.selectedBlockIndex + 2, state.Active_Block.blocks.length),
-                        ],
-                    }),
+                    lastUpdate: Date.now(),
+                    selectedBlockIndex: state.selectedBlockIndex + 1,
+                    Active_Block: Object.assign(new Program(),
+                        state.Active_Block, {
+                            blocks: [
+                                ...state.Active_Block.blocks.slice(0, state.selectedBlockIndex),
+                                state.Active_Block.blocks[state.selectedBlockIndex + 1],
+                                state.Active_Block.blocks[state.selectedBlockIndex],
+                                ...state.Active_Block.blocks.slice(state.selectedBlockIndex + 2, state.Active_Block.blocks.length),
+                            ],
+                        }),
 
                 });
             }
