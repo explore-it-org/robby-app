@@ -18,7 +18,7 @@ class RoboticsDatabase {
     add(program, operation = 'add', update = false, noNameChange = true): String {
         if (program.name === '') {
             // TODO replace i18n
-            return {operation: operation, status: 'failure', error: 'No empty name'};
+            return {operation: operation, status: 'failure', error: 'Name emtpy'};
         }
         if ((update && noNameChange) || this.nameIsUnused(program.name)) {
 
