@@ -27,6 +27,7 @@ export const ActiveBlockReducer = (state = default_state_block, action) => {
             let newBlock = Object.assign(new Block(), oldBlock, {rep: action.reps});
             return Object.assign({}, state, {
                 lastUpdate: Date.now(),
+                selectedBlockIndex: action.index,
                 Active_Block: Object.assign(new Program(), state.Active_Block, {
                     blocks: [
                         ...state.Active_Block.blocks.slice(0, action.index),
@@ -48,6 +49,7 @@ export const ActiveBlockReducer = (state = default_state_block, action) => {
             return Object.assign({}, state, {
                 lastUpdate: Date.now(),
                 Active_Block: activeMainProgram,
+                selectedBlockIndex: action.index,
                 possibleChildren: Database.findAllWhichCanBeAddedTo(activeMainProgram),
             });
 
