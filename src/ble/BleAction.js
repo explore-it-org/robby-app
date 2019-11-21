@@ -78,7 +78,7 @@ export const didGoRobot = () => ({
 
 export const goRobot = () => {
     return (dispatch, getState) => {
-        RobotProxy.go(1).then(res => {
+        RobotProxy.go().then(res => {
             dispatch(didGoRobot());
         }).catch(error => {
             dispatch(bleError(error));

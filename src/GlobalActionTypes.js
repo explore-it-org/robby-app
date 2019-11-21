@@ -75,6 +75,5 @@ export const CHANGE_BLOCK_SELECTED_ID = 'CHANGE_BLOCK_SELECTED_ID';
 export const LOAD_POSSIBLE_CHILDREN = 'LOAD_POSSIBLE_CHILDREN';
 
 // Settings Action Types
-export const SET_LOOPS = 'SET_LOOPS';
 export const SET_INTERVALL = 'SET_INTERVALL';
 export const SET_DURATION = 'SET_DURATION';

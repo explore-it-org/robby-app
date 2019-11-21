@@ -15,7 +15,7 @@ import {saveProgram} from '../database/DatabaseAction';
 
 import ProgrammingComponent from './ProgrammingComponent';
 import RobotProxy from '../ble/RobotProxy';
-import {setDuration, setInterval, setLoops} from '../settings/SettingsAction';
+import {setDuration, setInterval} from '../settings/SettingsAction';
 
 const mapStateToProps = state => ({
     Settings: state.Settings,
