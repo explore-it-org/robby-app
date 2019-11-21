@@ -232,6 +232,7 @@ class RobotProxy {
                         return BleService.sendCommandToActDevice('end');
                     });
                 default:
+                    // TODO return promise
                     console.log('upload: version not supported: ' + this.version);
             }
         }
