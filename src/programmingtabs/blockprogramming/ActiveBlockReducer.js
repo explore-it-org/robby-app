@@ -5,7 +5,7 @@ import {LOAD_POSSIBLE_CHILDREN} from '../../GlobalActionTypes';
 
 const default_state_block = {
     lastUpdate: Date.now(),
-    Active_Block: new Program('', ProgramType.BLOCKS, [], [new Block('', 0)]),
+    Active_Block: new Program('', ProgramType.BLOCKS, [], [new Block('', 1)]),
     possibleChildren: Database.findAll(),
     selectedBlockIndex: -1,
 };
