@@ -67,7 +67,7 @@ export const ActiveBlockReducer = (state = default_state_block, action) => {
 
 
         case ActionTypes.ADD_NEW_BLOCK:
-            let index = state.Active_Block.blocks.length;
+            let index = state.Active_Block.blocks.length - 1;
             if (state.selectedBlockIndex !== -1) {
                 index = state.selectedBlockIndex;
             }
@@ -75,9 +75,9 @@ export const ActiveBlockReducer = (state = default_state_block, action) => {
                 lastUpdate: Date.now(),
                 Active_Block: Object.assign(new Program(), state.Active_Block, {
                     blocks: [
-                        ...state.Active_Block.blocks.slice(0, index),
+                        ...state.Active_Block.blocks.slice(0, index + 1),
                         new Block('', 1),
-                        ...state.Active_Block.blocks.slice(index, state.Active_Block.blocks.length),
+                        ...state.Active_Block.blocks.slice(index + 1, state.Active_Block.blocks.length),
                     ],
                 }),
             });

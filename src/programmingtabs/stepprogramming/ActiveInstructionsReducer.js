@@ -12,7 +12,7 @@ export const ActiveInstructionsReducer = (state = default_state_Active_Instructi
 
     switch (action.type) {
         case ActionTypes.ADD_NEW_INSTRUCTION:
-            let index = state.ActiveProgram.steps.length;
+            let index = state.ActiveProgram.steps.length - 1;
             if (state.selectedIndex !== -1) {
                 index = state.selectedIndex;
             }
@@ -20,9 +20,9 @@ export const ActiveInstructionsReducer = (state = default_state_Active_Instructi
                 lastUpdate: Date.now(),
                 ActiveProgram: Object.assign(new Program(), state.ActiveProgram,
                     {
-                        steps: [...state.ActiveProgram.steps.slice(0, index),
+                        steps: [...state.ActiveProgram.steps.slice(0, index + 1),
                             new Instruction(0, 0),
-                            ...state.ActiveProgram.steps.slice(index, state.ActiveProgram.steps.length),
+                            ...state.ActiveProgram.steps.slice(index + 1, state.ActiveProgram.steps.length),
                         ],
                     }),
             });
