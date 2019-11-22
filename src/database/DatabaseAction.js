@@ -1,6 +1,8 @@
 import {ADD_PROGRAM, SAVE_PROGRAM, DUPLICATE_PROGRAM, DELETE_PROGRAM, DELETE_ALL} from '../GlobalActionTypes';
 import {loadChildren} from '../programmingtabs/blockprogramming/ActiveBlockAction';
 import {Program} from '../model/DatabaseModels';
+import Database from '../database/RoboticsDatabase'
+import { Alert } from 'react-native';
 
 export const add = (program) => ({
     type: ADD_PROGRAM,
@@ -37,8 +39,13 @@ export const remove = (program_id) => ({
 
 export const removeProgram = (program_id) => {
     return (dispatch, getState) => {
-        dispatch(remove(program_id));
-        dispatch(loadChildren());
+        let program = getState().ActiveBlock.Active_Block;
+        if(Database.isUsed(program,program_id)){
+            Alert.alert('Delete', 'Program is used by the currently opened program');
+        }else{
+            dispatch(remove(program_id));
+            dispatch(loadChildren());
+        }
     };
 };
 export const delete_all = () => ({
