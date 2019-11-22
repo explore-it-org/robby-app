@@ -55,6 +55,9 @@ export const ActiveBlockReducer = (state = default_state_block, action) => {
             });
 
         case ActionTypes.SET_ACTIVE_BLOCK:
+            if (action.index === state.selectedBlockIndex) {
+                action.index = -1;
+            }
             return Object.assign({}, state, {
                 lastUpdate: Date.now(),
                 selectedBlockIndex: action.index,

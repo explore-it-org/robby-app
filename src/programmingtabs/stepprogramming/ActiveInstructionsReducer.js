@@ -81,7 +81,9 @@ export const ActiveInstructionsReducer = (state = default_state_Active_Instructi
                     }),
             });
         case ActionTypes.SET_ACTIVE_INDEX:
-
+            if (action.index === state.selectedIndex) {
+                action.index = -1;
+            }
             return Object.assign({}, state, {
                 selectedIndex: action.index,
                 // dirty hack to force update
