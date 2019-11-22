@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, Alert, ToastAndroid} from 'react-native';
 import {Appbar} from 'react-native-paper';
-import {createAppContainer} from 'react-navigation';
+import {createAppContainer, NavigationActions} from 'react-navigation';
 import {createMaterialTopTabNavigator} from 'react-navigation-tabs';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -125,6 +125,7 @@ export default class ProgrammingComponent extends Component {
                 </Appbar>
 
                 <TabContainer
+                    ref={nav => (this.navigator = nav)}
                     onNavigationStateChange={(prevState, currentState, action) => {
                         const currentScreen = this.getActiveRouteName(currentState);
                         const prevScreen = this.getActiveRouteName(prevState);
@@ -206,10 +207,7 @@ export default class ProgrammingComponent extends Component {
                                    this.props.BLEConnection.device.isDownloading}
                                    onPress={() => {
                                        this.props.download();
-                                       //TabNavigator.navigate('Stepprogramming');
-                                       //TabContainer.navigate('Stepprogramming');
-                                       this.props.navigation.navigate('Stepprogramming');
-                                       //navigator.navigate('Stepprogramming');
+                                       this.navigator && this.navigator.dispatch(NavigationActions.navigate({routeName: 'Stepprogramming'}));
                                    }}/>
                     <Appbar.Action icon="file-upload"
                                    size={32}
@@ -252,6 +250,7 @@ export default class ProgrammingComponent extends Component {
 const TabNavigator = createMaterialTopTabNavigator({
     Stepprogramming: {
         screen: StepProgrammingContainer,
+        swipeEnabled: true,
         navigationOptions: {
             tabBarIcon: ({tintColor}) => (
                 <MaterialCommunityIcon name="page-layout-body" size={24} color={tintColor}/>
