@@ -34,7 +34,6 @@ export default class ProgramInput extends Component {
                   style={parseInt(index) === this.props.selected ? styles.selected_row : styles.row}>
                 <Picker
                     selectedValue={this.props.selectedProgram}
-                    key={Date.now()}
                     style={{height: 35, width: '60%'}}
                     onValueChange={(itemValue, itemIndex) => {
                         this.props.onProgramSelectionChange(itemValue.toString());
