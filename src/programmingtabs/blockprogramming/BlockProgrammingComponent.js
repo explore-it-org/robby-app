@@ -18,36 +18,16 @@ import ProgramInput from '../../controls/ProgramInput';
 export default class BlockProgrammingComponent extends Component {
 
     // TODO: Replace static text with translated Text!!
-    items = [];
-    renderProgramInput = ({item, index}) => (
-        <TouchableOpacity index={index}
-                          style={parseInt(index) === this.props.Block.selectedBlockIndex ? styles.selected_row : styles.row}
-                          onPress={() => {
-                              this.props.setActiveBlockIndex(index);
-                          }}>
-            <ProgramInput index={index}
-                          selected={this.props.Block.Active_Block.selectedBlockIndex}
-                          pickerItems={this.items}
-                          selectedProgram={this.props.Block.Active_Block.blocks[index].ref}
-                          onRepeatValueChange={(value) => {
-                              this.props.setActiveBlockIndex(-1);
-                              this.props.changeReps(parseInt(value), index);
-                          }}
-                          onProgramSelectionChange={(value) => {
-                              this.props.setActiveBlockIndex(-1);
-                              this.props.changeSelectedID(value, index);
-                          }}
-                          val={this.props.Block.Active_Block.blocks[index].rep}/>
-        </TouchableOpacity>
-    );
+
+
 
 
     render() {
         // TODO replace i18n
+        this.items = Object.assign([], []);
         this.items = [<Picker.Item key={0} label='Select a program'/>];
 
         this.props.Block.possibleChildren.forEach((p) => {
-            ;
             this.items.push(<Picker.Item key={p.id} label={p.name} value={p.id} testID={p.id}/>);
         });
         let select_controls;
@@ -109,7 +89,6 @@ export default class BlockProgrammingComponent extends Component {
                     scrollEnabled={true}>
                     <FlatList
                         data={this.props.Block.Active_Block.blocks}
-                        //extraData={this.state}
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={this.renderProgramInput}/>
                 </ScrollView>
@@ -127,7 +106,31 @@ export default class BlockProgrammingComponent extends Component {
         );
     }
 
+    renderProgramInput = ({item, index}) => (
+        <TouchableOpacity index={index}
+                          style={parseInt(index) === this.props.Block.selectedBlockIndex ? styles.selected_row : styles.row}
+                          onPress={() => {
+                              this.props.setActiveBlockIndex(index);
+                          }}>
+            <ProgramInput index={index}
+                          selected={this.props.Block.Active_Block.selectedBlockIndex}
+                          pickerItems={this.items}
+                          selectedProgram={this.props.Block.Active_Block.blocks[index].ref}
+                          onRepeatValueChange={(value) => {
+                              this.props.setActiveBlockIndex(-1);
+                              this.props.changeReps(parseInt(value), index);
+                          }}
+                          onProgramSelectionChange={(value) => {
+                              this.props.setActiveBlockIndex(-1);
+                              this.props.changeSelectedID(value, index);
+                          }}
+                          val={this.props.Block.Active_Block.blocks[index].rep}/>
+        </TouchableOpacity>
+    );
+
 }
+
+
 
 const styles = StyleSheet.create({
     row: {

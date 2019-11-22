@@ -6,7 +6,6 @@ import i18n from '../../resources/locales/i18n';
 
 
 export default class ProgramInput extends Component {
-    state = {};
 
     onChanged = (text) => {
         let newText = '';
@@ -31,12 +30,16 @@ export default class ProgramInput extends Component {
     render() {
         const index = this.props.index;
         return (
-            <View key={index} style={parseInt(index) === this.props.selected ? styles.selected_row : styles.row}>
-                <Picker selectedValue={this.props.selectedProgram}
-                        style={{height: 35, width: '60%'}}
-                        onValueChange={(itemValue, itemIndex) => {
-                            this.props.onProgramSelectionChange(itemValue.toString());
-                        }}>
+            <View key={this.props.selectedProgram}
+                  style={parseInt(index) === this.props.selected ? styles.selected_row : styles.row}>
+                <Picker
+                    selectedValue={this.props.selectedProgram}
+                    key={Date.now()}
+                    style={{height: 35, width: '60%'}}
+                    onValueChange={(itemValue, itemIndex) => {
+                        this.props.onProgramSelectionChange(itemValue.toString());
+                    }}>
+
                     {this.props.pickerItems}
                 </Picker>
                 <View style={{width: '23%'}}/>
