@@ -16,7 +16,7 @@ export const ActiveBlockReducer = (state = default_state_block, action) => {
                 lastUpdate: Date.now(),
                 selectedBlockIndex: -1,
                 possibleChildren: Database.findAll(),
-                Active_Block: new Program('', ProgramType.BLOCKS, [], [new Block(0, 0)]),
+                Active_Block: new Program('', ProgramType.BLOCKS, [], [new Block(0, 1)]),
             });
         case ActionTypes.CHANGE_BLOCK_NAME:
             return Object.assign({}, state, {
@@ -71,13 +71,12 @@ export const ActiveBlockReducer = (state = default_state_block, action) => {
             if (state.selectedBlockIndex !== -1) {
                 index = state.selectedBlockIndex;
             }
-            console.log(index);
             return Object.assign({}, state, {
                 lastUpdate: Date.now(),
                 Active_Block: Object.assign(new Program(), state.Active_Block, {
                     blocks: [
                         ...state.Active_Block.blocks.slice(0, index),
-                        new Block('', 0),
+                        new Block('', 1),
                         ...state.Active_Block.blocks.slice(index, state.Active_Block.blocks.length),
                     ],
                 }),
