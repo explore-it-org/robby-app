@@ -146,8 +146,8 @@ export default class ProgrammingComponent extends Component {
                                 };
                                 break;
                             default:
-                                this.clear = undefined;
-                                this.save = undefined;
+                                this.clear = () => {};
+                                this.save =  () => {};
                                 break;
                         }
                     }}
