@@ -18,7 +18,7 @@ class RoboticsDatabase {
     add(program, operation = 'add', update = false, noNameChange = true): String {
         if (program.name === '') {
             // TODO replace i18n
-            return {operation: operation, status: 'failure', error: 'No empty name'};
+            return {operation: operation, status: 'failure', error: 'Name emtpy'};
         }
         if ((update && noNameChange) || this.nameIsUnused(program.name)) {
 
@@ -111,7 +111,7 @@ class RoboticsDatabase {
             }
         }
         // TODO replace i18n
-        return {operation: 'delete', status: 'failure', error: 'Program is used by other program'};
+        return {operation: 'delete', status: 'failure', error: 'Program is used by another program'};
 
     }
 
@@ -134,6 +134,7 @@ class RoboticsDatabase {
     }
 
     // Checks whether the given `program` has an indirect reference to the program with the id `program_id`.
+    // TODO reduce to list of programs which us certain programs
     isUsedRecursive(program, program_id): boolean {
         return program_id === program.id || this.isUsed(program, program_id) || program.blocks.reduce((acc, p) => acc || this.isUsedRecursive(this.findOneByPK(Block.fromDatabase(p).ref), program_id), false);
     }

@@ -2,7 +2,7 @@ import * as ActionTypes from '../GlobalActionTypes';
 import RobotProxy from './RobotProxy';
 import {mainHandler} from './ResponseActionHandler';
 import {} from '../database/DatabaseAction';
-import {receiveDownload} from '../programmingtabs/stepprogramming/ActiveProgramAction';
+import {receiveDownload} from '../programmingtabs/stepprogramming/ActiveInstructionAction';
 import {Program, ProgramType} from '../model/DatabaseModels';
 
 

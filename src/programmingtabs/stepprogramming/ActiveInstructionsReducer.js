@@ -27,11 +27,6 @@ export const ActiveInstructionsReducer = (state = default_state_Active_Instructi
                     }),
             });
         case ActionTypes.CHANGE_INSTRUCTION_INDEX:
-
-            console.log(state.selectedIndex);
-            console.log(state.ActiveProgram.steps);
-
-            console.log(state.ActiveProgram.steps[state.selectedIndex]);
             if (!action.move_down) {
                 if (state.selectedIndex === 0) {
                     return state;
@@ -86,7 +81,9 @@ export const ActiveInstructionsReducer = (state = default_state_Active_Instructi
                     }),
             });
         case ActionTypes.SET_ACTIVE_INDEX:
-
+            if (action.index === state.selectedIndex) {
+                action.index = -1;
+            }
             return Object.assign({}, state, {
                 selectedIndex: action.index,
                 // dirty hack to force update

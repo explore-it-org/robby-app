@@ -3,7 +3,7 @@ import {bindActionCreators} from 'redux';
 import {add, save, delete_all, duplicate, remove, removeProgram} from '../../database/DatabaseAction';
 import {loadBlock} from '../blockprogramming/ActiveBlockAction';
 import OverviewComponent from './OverviewComponent';
-import {loadInstruction} from '../stepprogramming/ActiveProgramAction';
+import {loadInstruction} from '../stepprogramming/ActiveInstructionAction';
 
 const mapStateToProps = state => ({
     Settings: state.Settings,
