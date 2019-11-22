@@ -36,7 +36,7 @@ export default class ProgramInput extends Component {
                     selectedValue={this.props.selectedProgram}
                     style={{height: 35, width: '60%'}}
                     onValueChange={(itemValue, itemIndex) => {
-                        this.props.onProgramSelectionChange(itemValue.toString());
+                        this.props.onProgramSelectionChange(itemValue);
                     }}>
 
                     {this.props.pickerItems}
