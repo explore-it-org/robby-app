@@ -19,6 +19,8 @@ export default class ProgrammingComponent extends Component {
 
     state = {
         currentRoute: 'Stepprogramming',
+        clearButtonDisabled: false,
+        saveButtonDisabled: false, // TODO: Move to redux and disable button when program not dirty
     };
 
     componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS): void {
@@ -135,12 +137,15 @@ export default class ProgrammingComponent extends Component {
                         this.setState({currentRoute: currentScreen});
                         switch (currentScreen) {
                             case 'Stepprogramming':
+                                this.setState({clearButtonDisabled: false});
+                                this.setState({saveButtonDisabled: false});
                                 this.clear = () => {
                                     this.props.clearProgram();
                                 };
                                 break;
                             case 'Blockprogramming':
-
+                                this.setState({clearButtonDisabled: false});
+                                this.setState({saveButtonDisabled: false});
                                 this.clear = () => {
                                     this.props.clearBlock();
                                 };
@@ -148,6 +153,8 @@ export default class ProgrammingComponent extends Component {
                             default:
                                 this.clear = () => {};
                                 this.save =  () => {};
+                                this.setState({clearButtonDisabled: true});
+                                this.setState({saveButtonDisabled: true});
                                 break;
                         }
                     }}
@@ -226,7 +233,8 @@ export default class ProgrammingComponent extends Component {
                                    this.props.BLEConnection.device.isGoing ||
                                    this.props.BLEConnection.device.isRecording ||
                                    this.props.BLEConnection.device.isRunning ||
-                                   this.props.BLEConnection.device.isDownloading}
+                                   this.props.BLEConnection.device.isDownloading ||
+                                   this.state.saveButtonDisabled}
                                    onPress={() => {
                                        this.save();
                                    }}/>
@@ -236,7 +244,8 @@ export default class ProgrammingComponent extends Component {
                                    this.props.BLEConnection.device.isGoing ||
                                    this.props.BLEConnection.device.isRecording ||
                                    this.props.BLEConnection.device.isRunning ||
-                                   this.props.BLEConnection.device.isDownloading}
+                                   this.props.BLEConnection.device.isDownloading ||
+                                   this.state.clearButtonDisabled}
                                    onPress={() => {
                                        this.clear();
                                    }}/>
