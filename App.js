@@ -6,20 +6,23 @@ import Settings from './src/settings/SettingsContainer';
 import BleService from './src/ble/BleService';
 import {View, Text, StyleSheet, Alert} from 'react-native';
 import {getStatusBarHeight, ifIphoneX} from 'react-native-iphone-x-helper';
-// import {version} from './package.json';
+import {grantLocation} from './src/settings/SettingsAction';
 import i18n from './resources/locales/i18n';
 
 import GLOBAL from './src/utillity/Global';
 
 
 import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 
 class App extends Component {
 
 
-    componentDidMount(prevProps, prevState, snapsho) {
-        // TODO dispacht
-        let isGranted = BleService.requestLocationPermission();
+    componentDidMount() {
+        BleService.requestLocationPermission().then(a => {
+            console.log(a);
+            this.props.grantLocation(a);
+        });
     }
 
     render() {
@@ -27,7 +30,19 @@ class App extends Component {
     }
 }
 
-export default connect()(App);
+const mapStateToProps = state => ({
+    Settings: state.Settings,
+    BLEConnection: state.BLEConnection,
+});
+
+const mapDispatchToProps = dispatch =>
+    bindActionCreators(
+        {
+            grantLocation,
+        }, dispatch);
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
 
 class DrawerContent extends Component {
 
@@ -69,10 +84,6 @@ class DrawerContent extends Component {
 }
 
 
-const mapStateToProps = state => ({
-    Settings: state.Settings,
-    BLEConnection: state.BLEConnection,
-});
 const ReduxNavigator = connect(mapStateToProps)(DrawerContent);
 
 
