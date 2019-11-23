@@ -41,22 +41,18 @@ export class Program {
         return Database.duplicate(this);
     }
 
-    flatten(rep = 1) {
+    flatten() {
         var result = [];
         if (this.programType === ProgramType.BLOCKS) {
             this.blocks.forEach((block) => {
                 var prg = Database.findOneByPK(block.ref);
-
-                if (rep) {
-                    for (let i = 0; i < rep; i++) {
-                        result.push(...prg.flatten(block.rep));
-                    }
+                let prgFlat = prg.flatten();
+                for (let i = 0; i < block.rep; i++) {
+                    result.push(...prgFlat);
                 }
             });
         } else {
-            for (let i = 0; i < rep; i++) {
-                result.push(...this.steps);
-            }
+            result.push(...this.steps);
         }
         return result;
     }
@@ -78,7 +74,6 @@ export class Instruction {
     static fromDatabase(instruction) {
         return new Instruction(instruction.right, instruction.left);
     }
-
 }
 
 export class Block {
