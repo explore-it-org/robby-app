@@ -77,3 +77,4 @@ export const LOAD_POSSIBLE_CHILDREN = 'LOAD_POSSIBLE_CHILDREN';
 // Settings Action Types
 export const SET_INTERVALL = 'SET_INTERVALL';
 export const SET_DURATION = 'SET_DURATION';
+export const GRANT_LOCATION = 'GRANT_LOCATION';

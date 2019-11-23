@@ -5,6 +5,7 @@ const default_state_settings = {
     lastUpdate: Date.now(),
     duration: 1,
     interval: 0,
+    isGranted: false,
 
 };
 export const SettingsReducer = (state = default_state_settings, action) => {
@@ -17,6 +18,8 @@ export const SettingsReducer = (state = default_state_settings, action) => {
         case ActionType.SET_DURATION:
             console.log(Object.assign({}, state, {duration: action.duration, lastUpdate: Date.now()}));
             return Object.assign({}, state, {duration: action.duration, lastUpdate: Date.now()});
+        case ActionType.GRANT_LOCATION:
+            return Object.assign({}, state, {isGranted: action.isGranted});
         default:
             return state;
     }

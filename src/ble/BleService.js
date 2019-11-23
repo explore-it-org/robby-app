@@ -27,8 +27,10 @@ class BleService {
             );
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
                 console.log('Location permission granted');
+                return true;
             } else {
                 console.log('Location permission denied');
+                return false;
             }
         } catch (err) {
             console.warn(err);

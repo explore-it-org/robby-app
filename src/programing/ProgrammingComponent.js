@@ -13,6 +13,7 @@ import OverviewContainer from '../programmingtabs/overview/OverviewContainer';
 
 import StepProgrammingContainer from '../programmingtabs/stepprogramming/StepProgrammingContainer';
 import BlockProgrammingContainer from '../programmingtabs/blockprogramming/BlockProgrammingContainer';
+import BleService from '../ble/BleService';
 
 
 export default class ProgrammingComponent extends Component {
@@ -118,7 +119,12 @@ export default class ProgrammingComponent extends Component {
                                    size={32}
                                    disabled={this.props.BLEConnection.isConnecting}
                                    onPress={() => {
-                                       if (this.props.BLEConnection.isConnected) {
+                                       if (!this.props.Settings.isGranted) {
+                                           BleService.requestLocationPermission().then(a => {
+                                               console.log(a);
+                                               this.props.grantLocation(a);
+                                           });
+                                       } else if (this.props.BLEConnection.isConnected) {
                                            this.props.disconnect();
                                        } else {
                                            this.props.scanForRobot();
@@ -151,6 +157,7 @@ export default class ProgrammingComponent extends Component {
                                 };
                                 break;
                             default:
+
                                 this.clear = () => {};
                                 this.save =  () => {};
                                 this.setState({clearButtonDisabled: true});

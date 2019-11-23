@@ -11,6 +11,10 @@ export const setInterval = (interval) => ({
     interval,
 });
 
+export const grantLocation = (isGranted) => ({
+    type: ActionTypes.GRANT_LOCATION,
+    isGranted,
+});
 
 
 export const setIntervalAndSendToRobby = (inter) => {

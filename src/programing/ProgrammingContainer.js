@@ -15,7 +15,7 @@ import {saveProgram} from '../database/DatabaseAction';
 
 import ProgrammingComponent from './ProgrammingComponent';
 import RobotProxy from '../ble/RobotProxy';
-import {setDuration, setInterval} from '../settings/SettingsAction';
+import {grantLocation, setDuration, setInterval} from '../settings/SettingsAction';
 
 const mapStateToProps = state => ({
     Settings: state.Settings,
@@ -39,7 +39,8 @@ const mapDispatchToProps = dispatch =>
             download: downloadToDevice,
             clearBlock: clearBlock,
             clearProgram: clearProgram,
-            saveProgram: saveProgram
+            saveProgram: saveProgram,
+            grantLocation: grantLocation,
         }, dispatch);
 
 
