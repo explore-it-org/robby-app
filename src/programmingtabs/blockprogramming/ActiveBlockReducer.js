@@ -134,6 +134,7 @@ export const ActiveBlockReducer = (state = default_state_block, action) => {
             return Object.assign({}, state, {
                 Active_Block: a,
                 possibleChildren: b,
+                selectedBlockIndex: -1,
             });
         case ActionTypes.LOAD_POSSIBLE_CHILDREN:
             let z = Database.findAllWhichCanBeAddedTo(state.Active_Block);
