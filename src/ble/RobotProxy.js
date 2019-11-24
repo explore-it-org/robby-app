@@ -275,6 +275,7 @@ class RobotProxy {
                 speed_r = 0;
             }
             var res = {type: 'speedLine', left: Math.trunc(speed_l), right: Math.trunc(speed_r)};
+
             responseHandler(res);
         } else {
             response = response.trim().toLowerCase();
