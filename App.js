@@ -3,11 +3,11 @@ import {createAppContainer} from 'react-navigation';
 import {DrawerNavigatorItems, createDrawerNavigator} from 'react-navigation-drawer';
 import ProgrammingContainer from './src/programing/ProgrammingContainer';
 import Settings from './src/settings/SettingsContainer';
-import BleService from './src/ble/BleService';
 import {View, Text, StyleSheet, Alert} from 'react-native';
 import {getStatusBarHeight, ifIphoneX} from 'react-native-iphone-x-helper';
-import {grantLocation} from './src/settings/SettingsAction';
+import {grantLocation, setBLEState} from './src/settings/SettingsAction';
 import i18n from './resources/locales/i18n';
+import BleService from './src/ble/BleService';
 
 import GLOBAL from './src/utillity/Global';
 
@@ -20,9 +20,10 @@ class App extends Component {
 
     componentDidMount() {
         BleService.requestLocationPermission().then(a => {
-            console.log(a);
+
             this.props.grantLocation(a);
         });
+        BleService.checkBluetoothState(a => this.props.setBLEState(a));
     }
 
     render() {
@@ -39,6 +40,7 @@ const mapDispatchToProps = dispatch =>
     bindActionCreators(
         {
             grantLocation,
+            setBLEState,
         }, dispatch);
 
 

@@ -6,6 +6,7 @@ const default_state_settings = {
     duration: 1,
     interval: 0,
     isGranted: false,
+    bleState: '',
 
 };
 export const SettingsReducer = (state = default_state_settings, action) => {
@@ -20,6 +21,8 @@ export const SettingsReducer = (state = default_state_settings, action) => {
             return Object.assign({}, state, {duration: action.duration, lastUpdate: Date.now()});
         case ActionType.GRANT_LOCATION:
             return Object.assign({}, state, {isGranted: action.isGranted});
+        case ActionType.BLE_STATE:
+            return Object.assign({}, state, {bleState: action.bleState});
         default:
             return state;
     }

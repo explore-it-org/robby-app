@@ -121,9 +121,11 @@ export default class ProgrammingComponent extends Component {
                                    onPress={() => {
                                        if (!this.props.Settings.isGranted) {
                                            BleService.requestLocationPermission().then(a => {
-                                               console.log(a);
                                                this.props.grantLocation(a);
                                            });
+                                       } else if (this.props.Settings.bleState !== 'PoweredOn') {
+                                           // TODO i18n
+                                           Alert.alert('BluetoothLE is powered off', 'please turn on BLE');
                                        } else if (this.props.BLEConnection.isConnected) {
                                            this.props.disconnect();
                                        } else {
@@ -158,8 +160,10 @@ export default class ProgrammingComponent extends Component {
                                 break;
                             default:
 
-                                this.clear = () => {};
-                                this.save =  () => {};
+                                this.clear = () => {
+                                };
+                                this.save = () => {
+                                };
                                 this.setState({clearButtonDisabled: true});
                                 this.setState({saveButtonDisabled: true});
                                 break;

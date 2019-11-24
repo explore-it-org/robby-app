@@ -41,9 +41,7 @@ class BleService {
     checkBluetoothState(stateHandler) {
         // state of Bluetooth on client device (on/off/etc)
         this.manager.onStateChange(state => {
-            if (state === 'PoweredOn') {
-                stateHandler();
-            }
+            stateHandler(state);
         }, true);
     }
 

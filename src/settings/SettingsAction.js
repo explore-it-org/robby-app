@@ -16,6 +16,10 @@ export const grantLocation = (isGranted) => ({
     isGranted,
 });
 
+export const setBLEState = (bleState) => ({
+    type: ActionTypes.BLE_STATE,
+    bleState,
+});
 
 export const setIntervalAndSendToRobby = (inter) => {
         return (dispatch, getState) => {
