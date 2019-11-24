@@ -1,36 +1,29 @@
 import React, {Component} from 'react';
 import {createAppContainer} from 'react-navigation';
 import {DrawerNavigatorItems, createDrawerNavigator} from 'react-navigation-drawer';
-import Programming from './src/components/screens/programming/Programming';
-import Settings from './src/components/screens/settings/Settings';
-import BleService from './src/communication/BleService';
-import {
-    addDeviceNameChangeListener,
-    getDeviceName,
-} from './src/stores/SettingsStore';
-import {View, Text, StyleSheet} from 'react-native';
+import ProgrammingContainer from './src/programing/ProgrammingContainer';
+import Settings from './src/settings/SettingsContainer';
+import {View, Text, StyleSheet, Alert} from 'react-native';
 import {getStatusBarHeight, ifIphoneX} from 'react-native-iphone-x-helper';
-// import {version} from './package.json';
+import {grantLocation, setBLEState} from './src/settings/SettingsAction';
 import i18n from './resources/locales/i18n';
-import GLOBAL from './src/utility/Global';
-import {DatabaseTest} from './src/utility/DatabaseTest';
+import BleService from './src/ble/BleService';
+
+import GLOBAL from './src/utillity/Global';
 
 
-import * as ut from './src/utility/AppSettings';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 
-export default class App extends Component {
-    state = {device: undefined};
+class App extends Component {
+
 
     componentDidMount() {
-        BleService.requestLocationPermission();
-        let databasetest = new DatabaseTest();
-        databasetest.clearDatabase();
-        databasetest.recurive();
-        //databasetest.findOneByPK();
-        //databasetest.updatingEntries();
-        //databasetest.createDatabaseEntries();
-        databasetest.creatingDatabaseEntriesWithDependencies();
-        //
+        BleService.requestLocationPermission().then(a => {
+
+            this.props.grantLocation(a);
+        });
+        BleService.checkBluetoothState(a => this.props.setBLEState(a));
     }
 
     render() {
@@ -38,26 +31,29 @@ export default class App extends Component {
     }
 }
 
+const mapStateToProps = state => ({
+    Settings: state.Settings,
+    BLEConnection: state.BLEConnection,
+});
+
+const mapDispatchToProps = dispatch =>
+    bindActionCreators(
+        {
+            grantLocation,
+            setBLEState,
+        }, dispatch);
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
+
 class DrawerContent extends Component {
-    state = {
-        device_name: getDeviceName(),
-    };
-
-    constructor() {
-        super();
-        console.log('Welcome to ' + GLOBAL.SHORT_APP_NAME);
-
-        addDeviceNameChangeListener(name => {
-            this.setState({device_name: name});
-        });
-    }
 
     render() {
         return (
             <View style={styles.container}>
                 <View style={styles.deviceName}>
                     <Text style={{color: 'white', fontSize: 30}}>
-                        {this.state.device_name}
+                        {this.props.BLEConnection.device.name}
                     </Text>
                 </View>
                 <View style={styles.drawerItems}>
@@ -89,15 +85,20 @@ class DrawerContent extends Component {
     }
 }
 
+
+const ReduxNavigator = connect(mapStateToProps)(DrawerContent);
+
+
 const DrawerNavigator = createDrawerNavigator(
     {
-        [i18n.t('App.programming')]: {screen: Programming},
+        [i18n.t('App.programming')]: {screen: ProgrammingContainer},
         [i18n.t('App.settings')]: {screen: Settings},
     },
     {
-        contentComponent: DrawerContent,
+        contentComponent: ReduxNavigator,
     },
 );
+
 
 const DrawerContainer = createAppContainer(DrawerNavigator);
 
