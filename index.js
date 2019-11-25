@@ -5,8 +5,10 @@ import App from './App';
 import * as React from 'react';
 import {name as appName} from './app.json';
 import {DefaultTheme, Provider as PaperProvider} from 'react-native-paper';
-import store from './src/store/store';
+import store, { persistor } from './src/store/store';
 import {Provider as ReduxProvider} from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+
 
 
 const theme = {
@@ -23,7 +25,9 @@ export default function Main() {
     return (
         <ReduxProvider store={store}>
             <PaperProvider theme={theme}>
+                <PersistGate loading={null} persistor={persistor}>
                 <App/>
+                </PersistGate>
             </PaperProvider>
         </ReduxProvider>
     );

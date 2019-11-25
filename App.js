@@ -8,10 +8,7 @@ import {getStatusBarHeight, ifIphoneX} from 'react-native-iphone-x-helper';
 import {grantLocation, setBLEState} from './src/settings/SettingsAction';
 import i18n from './resources/locales/i18n';
 import BleService from './src/ble/BleService';
-
 import GLOBAL from './src/utillity/Global';
-
-
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 
@@ -20,7 +17,6 @@ class App extends Component {
 
     componentDidMount() {
         BleService.requestLocationPermission().then(a => {
-
             this.props.grantLocation(a);
         });
         BleService.checkBluetoothState(a => this.props.setBLEState(a));
