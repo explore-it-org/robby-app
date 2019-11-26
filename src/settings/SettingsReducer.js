@@ -6,7 +6,7 @@ const default_state_settings = {
     duration: 1,
     interval: 0,
     isGranted: false,
-    language: "de",
+    language: undefined,
     bleState: '',
 
 };

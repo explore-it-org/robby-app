@@ -20,6 +20,7 @@ class App extends Component {
             this.props.grantLocation(a);
         });
         BleService.checkBluetoothState(a => this.props.setBLEState(a));
+        i18n.locale = this.props.Settings.language;
     }
 
     render() {
