@@ -52,12 +52,6 @@ class SettingsComponent extends Component {
         Object.values(i18n.translations).forEach(
             k => this.items.push(<Picker.Item key={k.languageTag} label={k.language} value={k.languageTag} testID={k.language}/>)
         )
-        //alert(JSON.stringify(i18n));
-        // i18n.translations.forEach((l) => {
-        //     alert(JSON.stringify(l));
-        //     //this.items.push(<Picker.Item key={p.id} label={p.name} value={p.id} testID={p.id}/>);
-        // });
-
         return (
             <View style={[styles.container]}>
                 <Appbar>

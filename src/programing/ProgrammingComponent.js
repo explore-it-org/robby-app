@@ -28,15 +28,11 @@ export default class ProgrammingComponent extends Component {
         let prev = prevProps.Program.lastChange;
         let now = this.props.Program.lastChange;
         if (prev !== now) {
-            switch (now.status) {
-                case 'success':
-                    // TODO replace i18n
-                    ToastAndroid.show(now.operation + ' ' + now.status, ToastAndroid.SHORT);
-                    break;
-                case 'failure':
-                    // TODO replace i18n
-                    Alert.alert(now.operation, now.error);
-            }
+            if (now.status === i18n.t("RoboticsDatabase.success")) {
+                ToastAndroid.show(now.status, ToastAndroid.SHORT); // TODO show propper message??
+            }else{
+                Alert.alert(now.status, now.error);
+            } 
         }
         if (this.props.BLEConnection.error !== prevProps.BLEConnection.error) {
             Alert.alert('ble error', this.props.BLEConnection.error);

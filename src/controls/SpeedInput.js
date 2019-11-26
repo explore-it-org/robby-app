@@ -13,7 +13,6 @@ export default class SpeedInput extends Component {
         let numbers = '0123456789';
 
         if (parseInt(text) > 100) {
-            // TODO replace i18n
             Alert.alert(i18n.t('SpeedInput.invalidEntry'), i18n.t('SpeedInput.invalidEntryMessage'));
             newText = '100';
         } else {
@@ -21,7 +20,6 @@ export default class SpeedInput extends Component {
                 if (numbers.indexOf(text[i]) > -1) {
                     newText = newText + text[i];
                 } else {
-                    // TODO replace i18n
                     Alert.alert(i18n.t('SpeedInput.invalidEntry'), i18n.t('SpeedInput.invalidEntryMessage'));
                 }
             }

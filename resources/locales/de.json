@@ -38,5 +38,16 @@
   },
   "SettingsStore" : {
     "noConnection": "Keine Verbindung"
+  },
+  "RoboticsDatabase" : {
+    "success": "Erfolg",
+    "failure": "Error",
+    "emptyName": "Bitte geben Sie einen Namen ein",
+    "addFiled":"Programm konnte nicht gespeichert werden: ",
+    "nameTaken":"Name ist bereits vergeben",
+    "duplicateFailed":"Programm konnte nicht dupliziert werden: ",
+    "deleteFailed":"Programm konnte nicht gelöscht werden: ",
+    "programUsed":"Das Programm wird von einem anderen Programm verwendet.",
+    "deleteAllFailed":"Programme konnten nicht gelöscht werden: "
   }
 }
