@@ -7,6 +7,7 @@ import {Appbar} from 'react-native-paper';
 import {getStatusBarHeight, ifIphoneX} from 'react-native-iphone-x-helper';
 import i18n from '../../resources/locales/i18n';
 import {duration} from '@material-ui/core/styles';
+import { Picker } from 'native-base';
 
 
 class SettingsComponent extends Component {
@@ -46,6 +47,17 @@ class SettingsComponent extends Component {
 
 
     render() {
+        this.items = Object.assign([], []);
+        this.items = [<Picker.Item key={0} label='Select a language'/>];
+        Object.values(i18n.translations).forEach(
+            k => this.items.push(<Picker.Item key={k.languageTag} label={k.language} value={k.languageTag} testID={k.language}/>)
+        )
+        //alert(JSON.stringify(i18n));
+        // i18n.translations.forEach((l) => {
+        //     alert(JSON.stringify(l));
+        //     //this.items.push(<Picker.Item key={p.id} label={p.name} value={p.id} testID={p.id}/>);
+        // });
+
         return (
             <View style={[styles.container]}>
                 <Appbar>
@@ -123,6 +135,28 @@ class SettingsComponent extends Component {
                         <Text style={{height: 50, marginLeft: 20}}>
                             {i18n.t('Settings.duration-unit')}
                         </Text>
+                    </View>
+
+                    <Text style={{fontSize: 16, fontWeight: 'bold', paddingBottom: 15}}>
+                        Language:
+                    </Text>
+                    <View style={{flexDirection: 'row', marginBottom: 10}}>
+                        <Picker
+                            style={{
+                                padding: 5,
+                                width: 60,
+                                height: 50,
+                                backgroundColor: 'white',
+                                justifyContent: 'center',
+                            }}
+                            selectedValue={this.props.Settings.language}
+                            textAlign={'center'}
+                            onValueChange={(itemValue, itemIndex) => {
+                                this.props.setLanguage(itemValue);
+                                i18n.locale = itemValue; 
+                                }}>
+                            {this.items}
+                        </Picker>
                     </View>
                 </View>
             </View>

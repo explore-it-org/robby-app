@@ -26,6 +26,11 @@ export const setIntervalAndSendToRobby = (inter) => {
             RobotProxy.setInterval(inter).then(res => {
             });
         };
-    }
-;
+    };
+
+export const setLanguage = (language) => ({
+    type: ActionTypes.SET_LANGUAGE,
+    language
+});
+
 
