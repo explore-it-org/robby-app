@@ -1,4 +1,6 @@
 {
+  "language":"Englisch",
+  "languageTag":"en",
   "MainTab": {
     "speed": "Speed from 0-100"
   },

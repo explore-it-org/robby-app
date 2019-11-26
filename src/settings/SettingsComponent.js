@@ -49,8 +49,8 @@ class SettingsComponent extends Component {
     render() {
         this.items = Object.assign([], []);
         this.items = [<Picker.Item key={0} label='Select a language'/>];
-        Object.keys(i18n.translations).forEach(
-            k => this.items.push(<Picker.Item key={k} label={k} value={k} testID={k}/>)
+        Object.values(i18n.translations).forEach(
+            k => this.items.push(<Picker.Item key={k.languageTag} label={k.language} value={k.languageTag} testID={k.language}/>)
         )
         //alert(JSON.stringify(i18n));
         // i18n.translations.forEach((l) => {
