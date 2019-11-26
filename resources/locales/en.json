@@ -1,4 +1,6 @@
 {
+  "language":"Englisch",
+  "languageTag":"en",
   "MainTab": {
     "speed": "Speed from 0-100"
   },
@@ -28,9 +30,7 @@
     "interval-unit": "per second (1..50)",
     "learn": "Record:",
     "duration": "Duration:",
-    "duration-unit": "seconds (1..80)",
-    "play": "Play:",
-    "loops": "Loops:"
+    "duration-unit": "seconds (1..80)"
   },
   "App": {
     "programming": "Programming",

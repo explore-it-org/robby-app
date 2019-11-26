@@ -30,7 +30,7 @@ $ yarn install
 
 # Versioning
 
-In a React Native app different tools and technologies come together, like JavaScript, npm, Android, iOS, Gradle and Xcode. This fact requires from developers to manage versioning at several locations for each app. Keeping them all in sync manually is a tedious and error prone task but fortunately, there is [react-native-version](http://www.loukasandreadelis.com/react-native-app-versioning/) tool, an easier way to do it with a single command!
+In a React Native app different tools and technologies come together, like JavaScript, npm, Android, iOS, Gradle and Xcode. This fact requires from developers to manage versioning at several locations for each app. Keeping them all in sync manually is a tedious and error prone task but fortunately, there is [react-native-version](https://www.andreadelis.com/react-native-app-versioning/) tool, an easier way to do it with a single command!
 
 Examples:
 
