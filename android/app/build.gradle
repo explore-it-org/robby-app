@@ -131,6 +131,7 @@ android {
         applicationId "org.exploreit.robotics"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
+
         versionCode 6
         versionName "1.1.0"
     }
