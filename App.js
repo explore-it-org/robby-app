@@ -3,7 +3,7 @@ import {createAppContainer} from 'react-navigation';
 import {DrawerNavigatorItems, createDrawerNavigator} from 'react-navigation-drawer';
 import ProgrammingContainer from './src/programing/ProgrammingContainer';
 import Settings from './src/settings/SettingsContainer';
-import {View, Text, StyleSheet, Alert} from 'react-native';
+import {View, Text, StyleSheet, Alert, Platform, NativeModules} from 'react-native';
 import {getStatusBarHeight, ifIphoneX} from 'react-native-iphone-x-helper';
 import {grantLocation, setBLEState} from './src/settings/SettingsAction';
 import i18n from './resources/locales/i18n';
@@ -20,7 +20,19 @@ class App extends Component {
             this.props.grantLocation(a);
         });
         BleService.checkBluetoothState(a => this.props.setBLEState(a));
-        i18n.locale = this.props.Settings.language;
+        if(this.props.Settings.language) {
+            i18n.locale = this.props.Settings.language;
+        } else {
+            if(Platform.OS === "ios"){
+                // iOS:
+                i18n.defaultLocale = NativeModules.SettingsManager.settings.AppleLocale.split('_')[0];
+            }else{
+                // Android:
+                i18n.defaultLocale = NativeModules.I18nManager.localeIdentifier.split('_')[0];
+            }
+            i18n.locale =  i18n.defaultLocale;
+        }
+
     }
 
     render() {
