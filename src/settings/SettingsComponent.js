@@ -20,8 +20,7 @@ class SettingsComponent extends Component {
         let prev = prevProps.Settings.lastUpdate;
         let now = this.props.Settings.lastUpdate;
         if (prev !== now) {
-            // TODO replace i18n
-            ToastAndroid.show('settings udpated', ToastAndroid.SHORT);
+            ToastAndroid.show(i18n.t("Settings.updated"), ToastAndroid.SHORT);
         }
     }
 
@@ -48,16 +47,9 @@ class SettingsComponent extends Component {
 
     render() {
         this.items = Object.assign([], []);
-        this.items = [<Picker.Item key={0} label='Select a language'/>];
         Object.values(i18n.translations).forEach(
             k => this.items.push(<Picker.Item key={k.languageTag} label={k.language} value={k.languageTag} testID={k.language}/>)
         )
-        //alert(JSON.stringify(i18n));
-        // i18n.translations.forEach((l) => {
-        //     alert(JSON.stringify(l));
-        //     //this.items.push(<Picker.Item key={p.id} label={p.name} value={p.id} testID={p.id}/>);
-        // });
-
         return (
             <View style={[styles.container]}>
                 <Appbar>
@@ -138,7 +130,7 @@ class SettingsComponent extends Component {
                     </View>
 
                     <Text style={{fontSize: 16, fontWeight: 'bold', paddingBottom: 15}}>
-                        Language:
+                        {i18n.t("Settings.language")}
                     </Text>
                     <View style={{flexDirection: 'row', marginBottom: 10}}>
                         <Picker

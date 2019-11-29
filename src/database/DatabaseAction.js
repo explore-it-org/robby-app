@@ -3,6 +3,7 @@ import {loadChildren} from '../programmingtabs/blockprogramming/ActiveBlockActio
 import {Program} from '../model/DatabaseModels';
 import Database from '../database/RoboticsDatabase'
 import { Alert } from 'react-native';
+import i18n from '../../resources/locales/i18n';
 
 export const add = (program) => ({
     type: ADD_PROGRAM,
@@ -41,7 +42,7 @@ export const removeProgram = (program_id) => {
     return (dispatch, getState) => {
         let program = getState().ActiveBlock.Active_Block;
         if(Database.isUsed(program,program_id)){
-            Alert.alert('Delete', 'Program is used by the currently opened program');
+            Alert.alert(i18n.t("RoboticsDatabase.programUsedByActiveProgramTitle"), i18n.t('RoboticsDatabase.programUsedByActiveProgram'));
         }else{
             dispatch(remove(program_id));
             dispatch(loadChildren());

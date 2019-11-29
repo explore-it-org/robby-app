@@ -28,15 +28,11 @@ export default class ProgrammingComponent extends Component {
         let prev = prevProps.Program.lastChange;
         let now = this.props.Program.lastChange;
         if (prev !== now) {
-            switch (now.status) {
-                case 'success':
-                    // TODO replace i18n
-                    ToastAndroid.show(now.operation + ' ' + now.status, ToastAndroid.SHORT);
-                    break;
-                case 'failure':
-                    // TODO replace i18n
-                    Alert.alert(now.operation, now.error);
-            }
+            if (now.status === i18n.t("RoboticsDatabase.success")) {
+                ToastAndroid.show(now.status, ToastAndroid.SHORT); // TODO show propper message??
+            }else{
+                Alert.alert(now.status, now.error);
+            } 
         }
         if (this.props.BLEConnection.error !== prevProps.BLEConnection.error) {
             Alert.alert('ble error', this.props.BLEConnection.error);
@@ -45,17 +41,13 @@ export default class ProgrammingComponent extends Component {
             now = this.props.BLEConnection.device;
             if (prev !== now) {
                 if (prev.isUploading && !now.isUploading) {
-                    // TODO replace i18n
-                    ToastAndroid.show('finished uploading', ToastAndroid.SHORT);
+                    ToastAndroid.show(i18n.t("Programming.uploadMessage"), ToastAndroid.SHORT);
                 } else if (prev.isDownloading && !now.isDownloading) {
-                    // TODO replace i18n
-                    ToastAndroid.show('finished downloading', ToastAndroid.SHORT);
+                    ToastAndroid.show(i18n.t("Programming.downloadMessage"), ToastAndroid.SHORT);
                 } else if (prev.isRecording && !now.isDownloading) {
-                    // TODO replace i18n
-                    ToastAndroid.show('finished downloading', ToastAndroid.SHORT);
+                    ToastAndroid.show(i18n.t("Programming.downloadMessage"), ToastAndroid.SHORT);
                 } else if (prev.isGoing && !now.isGoing) {
-                    // TODO replace i18n
-                    ToastAndroid.show('finished going', ToastAndroid.SHORT);
+                    ToastAndroid.show(i18n.t("Programming.driveMessage"), ToastAndroid.SHORT);
                 }
             }
         }
@@ -124,8 +116,7 @@ export default class ProgrammingComponent extends Component {
                                                this.props.grantLocation(a);
                                            });
                                        } else if (this.props.Settings.bleState !== 'PoweredOn') {
-                                           // TODO i18n
-                                           Alert.alert('BluetoothLE is powered off', 'please turn on BLE');
+                                           Alert.alert(i18n.t('Programming.bluetoothNotTurnedOnTitle'), i18n.t('Programming.bluetoothNotTurnedOnMessage'));
                                        } else if (this.props.BLEConnection.isConnected) {
                                            this.props.disconnect();
                                        } else {

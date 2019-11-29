@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {StyleSheet, View, ScrollView, FlatList, TouchableOpacity, Button} from 'react-native';
 import {Text} from 'react-native-paper';
 import {ProgramType} from '../../model/DatabaseModels';
+import i18n from '../../../resources/locales/i18n';
 
 export default class OverviewComponent extends Component {
 
@@ -40,10 +41,10 @@ export default class OverviewComponent extends Component {
                                     <View style={{marginRight: 20}}>
                                         <Button color="#792387" onPress={() => {
                                             this.props.remove(item.id);
-                                        }} title="Delete"/>
+                                        }} title={i18n.t("ProgramOverview.delete")}/>
                                     </View>
                                     <View style={{marginRight: 20}}>
-                                        <Button color="#792387" title="Duplicate" onPress={() => {
+                                        <Button color="#792387" title={i18n.t("ProgramOverview.duplicate")} onPress={() => {
                                             this.props.duplicate(item);
                                         }}/>
                                     </View>
