@@ -41,17 +41,13 @@ export default class ProgrammingComponent extends Component {
             now = this.props.BLEConnection.device;
             if (prev !== now) {
                 if (prev.isUploading && !now.isUploading) {
-                    // TODO replace i18n
-                    ToastAndroid.show('finished uploading', ToastAndroid.SHORT);
+                    ToastAndroid.show(i18n.t("Programming.uploadMessage"), ToastAndroid.SHORT);
                 } else if (prev.isDownloading && !now.isDownloading) {
-                    // TODO replace i18n
-                    ToastAndroid.show('finished downloading', ToastAndroid.SHORT);
+                    ToastAndroid.show(i18n.t("Programming.downloadMessage"), ToastAndroid.SHORT);
                 } else if (prev.isRecording && !now.isDownloading) {
-                    // TODO replace i18n
-                    ToastAndroid.show('finished downloading', ToastAndroid.SHORT);
+                    ToastAndroid.show(i18n.t("Programming.downloadMessage"), ToastAndroid.SHORT);
                 } else if (prev.isGoing && !now.isGoing) {
-                    // TODO replace i18n
-                    ToastAndroid.show('finished going', ToastAndroid.SHORT);
+                    ToastAndroid.show(i18n.t("Programming.driveMessage"), ToastAndroid.SHORT);
                 }
             }
         }
@@ -120,8 +116,7 @@ export default class ProgrammingComponent extends Component {
                                                this.props.grantLocation(a);
                                            });
                                        } else if (this.props.Settings.bleState !== 'PoweredOn') {
-                                           // TODO i18n
-                                           Alert.alert('BluetoothLE is powered off', 'please turn on BLE');
+                                           Alert.alert(i18n.t('Programming.bluetoothNotTurnedOnTitle'), i18n.t('Programming.bluetoothNotTurnedOnMessage'));
                                        } else if (this.props.BLEConnection.isConnected) {
                                            this.props.disconnect();
                                        } else {

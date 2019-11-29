@@ -1,5 +1,6 @@
 import * as ActionType from '../GlobalActionTypes';
 import RobotProxy from './RobotProxy';
+import i18n from '../../resources/locales/i18n';
 
 
 const default_state_ble_connection = {
@@ -11,7 +12,7 @@ const default_state_ble_connection = {
     receivedDownloads: [],
     scannedDevices: [],
     device: {
-        name: 'Unknown',
+        name: i18n.t("Programming.bleDefaultDeviceName"),
         version: 1,
         isRecording: false,
         isRunning: false,
@@ -32,7 +33,7 @@ export const BleConnectionReducer = (state = default_state_ble_connection, actio
             return Object.assign({}, state, {
                 isConnecting: false,
                 isConnected: false,
-                device: {...state.device, name: 'Unknown'},
+                device: {...state.device, name: i18n.t("Programming.bleDefaultDeviceName")},
                 lastUpdate: Date.now(),
             });
         case ActionType.IS_CONNECTED:

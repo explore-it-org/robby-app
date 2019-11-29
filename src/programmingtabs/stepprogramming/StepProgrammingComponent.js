@@ -56,8 +56,7 @@ export default class StepProgrammingComponent extends Component {
             <View style={[styles.view, {flex: 1, justifyContent: 'center', alignItems: 'center'}]}>
                 <View style={{marginTop: 30, marginBottom: 20, height: 40, width: '80%', flexDirection: 'row'}}>
                     <TextInput
-                        // TODO replace i18n
-                        placeholder='Program name...'
+                        placeholder={i18n.t("Programming.programName")}
                         style={{
                         textAlign: 'center',
                         flex: 2,

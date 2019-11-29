@@ -75,7 +75,6 @@ class RoboticsDatabase {
         if (old === undefined) {
             return this.add(program);
         } else {
-            // TODO replace i18n
             return this.add(program, 'save', true, old.name === program.name);
         }
 

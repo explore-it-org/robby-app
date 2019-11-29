@@ -20,8 +20,7 @@ class SettingsComponent extends Component {
         let prev = prevProps.Settings.lastUpdate;
         let now = this.props.Settings.lastUpdate;
         if (prev !== now) {
-            // TODO replace i18n
-            ToastAndroid.show('settings udpated', ToastAndroid.SHORT);
+            ToastAndroid.show(i18n.t("Settings.updated"), ToastAndroid.SHORT);
         }
     }
 
@@ -132,7 +131,7 @@ class SettingsComponent extends Component {
                     </View>
 
                     <Text style={{fontSize: 16, fontWeight: 'bold', paddingBottom: 15}}>
-                        Language:
+                        {i18n.t("Settings.language")}
                     </Text>
                     <View style={{flexDirection: 'row', marginBottom: 10}}>
                         <Picker

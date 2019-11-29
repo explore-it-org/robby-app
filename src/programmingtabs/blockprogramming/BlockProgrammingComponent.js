@@ -13,19 +13,14 @@ import {
 import {FAB} from 'react-native-paper';
 import React from 'react';
 import ProgramInput from '../../controls/ProgramInput';
+import i18n from '../../../resources/locales/i18n';
 
 
 export default class BlockProgrammingComponent extends Component {
 
-    // TODO: Replace static text with translated Text!!
-
-
-
-
     render() {
-        // TODO replace i18n
         this.items = Object.assign([], []);
-        this.items = [<Picker.Item key={0} label='Select a program'/>];
+        this.items = [<Picker.Item key={0} label={i18n.t("BlockProgramming.programSelectionPrompt")}/>];
 
         this.props.Block.possibleChildren.forEach((p) => {
             this.items.push(<Picker.Item key={p.id} label={p.name} value={p.id} testID={p.id}/>);
@@ -68,8 +63,7 @@ export default class BlockProgrammingComponent extends Component {
             <View style={[styles.view, {flex: 1, justifyContent: 'center', alignItems: 'center'}]}>
                 <View style={{marginTop: 30, marginBottom: 20, height: 40, width: '80%', flexDirection: 'row'}}>
                     <TextInput
-                        // TODO replace i18n
-                        placeholder='Program name...'
+                        placeholder={i18n.t("Programming.programName")}
                         // TODO move to style
                         style={{
                             textAlign: 'center',

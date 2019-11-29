@@ -17,7 +17,14 @@
     "upload": "Upload",
     "uploadMessage": "All instructions successfully uploaded on the robot!",
     "drive": "Drive",
-    "driveMessage": "Instructions followed, terminated drive successfully!"
+    "driveMessage": "Instructions followed, terminated drive successfully!",
+    "bluetoothNotTurnedOnTitle":"BluetoothLE is powered off",
+    "bluetoothNotTurnedOnMessage":"Please turn on BLE",
+    "programName":"Program name",
+    "bleDefaultDeviceName": "Unknown"
+  },
+  "BlockPrgrogramming" : {
+    "programSelectionPrompt" : "Select a program..."
   },
   "SpeedInput": {
     "invalidEntry": "Invalid Entry",
@@ -30,7 +37,9 @@
     "interval-unit": "per second (1..50)",
     "learn": "Record:",
     "duration": "Duration:",
-    "duration-unit": "seconds (1..80)"
+    "duration-unit": "seconds (1..80)",
+    "language": "Language",
+    "updated": "Settings aktualisiert"
   },
   "App": {
     "programming": "Programming",
@@ -47,7 +56,9 @@
     "nameTaken":"Name is already taken",
     "duplicateFailed":"Failed to duplicate program: ",
     "deleteFailed":"Failed to delete program: ",
-    "programUsed":"Program is used by another program",
-    "deleteAllFailed":"Failed to delete all programs: "
+    "programUsed": "Program is used by another program",
+    "programUsedByActiveProgram": "Program is used by the currently opened program",
+    "programUsedByActiveProgramTitle": "Program cannot be deleted",
+    "deleteAllFailed": "Failed to delete all programs: "
   }
 }
