@@ -240,7 +240,7 @@ export default class ProgrammingComponent extends Component {
                                    onPress={() => {
                                        this.save();
                                    }}/>
-                    <Appbar.Action icon="delete"
+                    <Appbar.Action icon="insert-drive-file"
                                    size={32}
                                    disabled={this.props.BLEConnection.device.isUploading ||
                                    this.props.BLEConnection.device.isGoing ||
