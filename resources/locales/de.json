@@ -20,8 +20,7 @@
     "driveMessage": "Anweisungen abgearbeitet, Fahrt erfolgreich abgeschlossen!",
     "bluetoothNotTurnedOnTitle":"BluetoothLE is ausgeschaltet.",
     "bluetoothNotTurnedOnMessage":"Bitte schalten Sie BLE ein.",
-    "programName":"Programmname",
-    "bleDefaultDeviceName": "Unbekannt"
+    "programName":"Programmname"
   },
   "BlockProgramming":{
     "programSelectionPrompt" : "Wählen Sie ein Programm..."

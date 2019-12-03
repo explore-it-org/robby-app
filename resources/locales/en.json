@@ -1,5 +1,5 @@
 {
-  "language":"Englisch",
+  "language":"English",
   "languageTag":"en",
   "MainTab": {
     "speed": "Speed from 0-100"
@@ -20,8 +20,7 @@
     "driveMessage": "Instructions followed, terminated drive successfully!",
     "bluetoothNotTurnedOnTitle":"BluetoothLE is powered off",
     "bluetoothNotTurnedOnMessage":"Please turn on BLE",
-    "programName":"Program name",
-    "bleDefaultDeviceName": "Unknown"
+    "programName":"Program name"
   },
   "BlockPrgrogramming" : {
     "programSelectionPrompt" : "Select a program..."

@@ -8,6 +8,7 @@ import {DefaultTheme, Provider as PaperProvider} from 'react-native-paper';
 import store, { persistor } from './src/store/store';
 import {Provider as ReduxProvider} from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
+import Toast from './src/controls/Toast';
 
 
 
@@ -27,6 +28,7 @@ export default function Main() {
             <PaperProvider theme={theme}>
                 <PersistGate loading={null} persistor={persistor}>
                 <App/>
+                <Toast></Toast>
                 </PersistGate>
             </PaperProvider>
         </ReduxProvider>
