@@ -3812,10 +3812,10 @@ http-signature@~1.2.0:
     jsprim "^1.2.2"
     sshpk "^1.7.0"
 
-https-proxy-agent@^2.2.1:
-  version "2.2.2"
-  resolved "https://registry.yarnpkg.com/https-proxy-agent/-/https-proxy-agent-2.2.2.tgz#271ea8e90f836ac9f119daccd39c19ff7dfb0793"
-  integrity sha512-c8Ndjc9Bkpfx/vCJueCPy0jlP4ccCCSNDp8xwCZzPjKJUm+B+u9WX2x98Qx4n1PiMNTWo3D7KK5ifNV/yJyRzg==
+https-proxy-agent@^2.2.4:
+  version "2.2.4"
+  resolved "https://registry.yarnpkg.com/https-proxy-agent/-/https-proxy-agent-2.2.4.tgz#4ee7a737abd92678a293d9b34a1af4d0d08c787b"
+  integrity sha512-OmvfoQ53WLjtA9HeYP9RNrWMJzzAz1JGaSFr1nijg0PVR1JaD/xbJq1mdEIIlxGpXp9eSe/O2LgU9DJmTPd0Eg==
   dependencies:
     agent-base "^4.3.0"
     debug "^3.1.0"
@@ -6781,17 +6781,17 @@ readdirp@^2.2.1:
     micromatch "^3.1.10"
     readable-stream "^2.0.2"
 
-realm@3.4.2:
-  version "3.4.2"
-  resolved "https://registry.yarnpkg.com/realm/-/realm-3.4.2.tgz#5876b87911a94f6e01453d2055a1f97dd39d5618"
-  integrity sha512-7AQR+LTEWTy4BDOYorYsTOAKMQFqh8WHUi1C5gvRod24RgYsORXCeCsDdAFlQ9XJltrasTd7G6+KL0+uCuIcfw==
+realm@3.5.0:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/realm/-/realm-3.5.0.tgz#3998b6b6a437f42286f56dd2ec48b7b213ce0397"
+  integrity sha512-rI+VIyniKtpsHp3EpmluAoqHM+gHIgoqQ29NBUcpSpMAzvVDEVSpAJeEaO2fxJ9+pDyhjhCPFudvAjQ2z7waBg==
   dependencies:
     command-line-args "^4.0.6"
     decompress "^4.2.0"
     deepmerge "2.1.0"
     deprecated-react-native-listview "0.0.6"
     fs-extra "^4.0.3"
-    https-proxy-agent "^2.2.1"
+    https-proxy-agent "^2.2.4"
     ini "^1.3.5"
     nan "^2.12.1"
     node-fetch "^1.7.3"
