@@ -8,7 +8,7 @@
 
 ## Development:
 
-This app is based on React Native 0.60.xx. 
+This app is based on React Native 0.60.5. 
 
 ### Requirements:
 
@@ -58,7 +58,7 @@ Follow the instructions [Building Projects with Native Code](https://facebook.gi
 
 ## Run App on Android
 
-**NOTE**: You will need [Java 8](https://facebook.github.io/react-native/docs/getting-started#java-development-kit).
+**NOTE**: You must use [Java 8](https://facebook.github.io/react-native/docs/getting-started#java-development-kit).
 
 Have an Android emulator running (quickest way to get started), or a device connected
 
@@ -73,46 +73,59 @@ $ react-native log-android
 
 ## Run App on iOS
 
-No need to start a simulator first! Run command
+Only works on MacOs. 
 
-```
-$ react-native run-ios
-...
-$ react-native log-ios
-```
+Do not run app with react native cli!
 
-to start simulator (from Xcode) and deploy app or deploy app onto attached iPhone.
+Run `pod install` inside the `ios` folder if you have cloned this repo for the first time.
 
-**NOTE**:
+### Setup BLE
 
-- Several starts are needed for the first time! The whole compilation cycle takes too long to finish in time.
-- **Signing** properties in Xcode are needed. Start Xcode and go to the "Signing" paragraph.
+1. run `open ios/Robotics.xcworkspace/
+    1. Select/New/File...
+    2. Choose Swift file and click `Next`
+    3. Name it as you wish (does not matter)
+    4. Accept to create Objective-C bridging header
+2. manuel link ble by adding following lines to `ios/Podfile`
+    ```
+    pod 'react-native-ble-plx', :path => '../node_modules/react-native-ble-plx'
+    pod 'react-native-ble-plx-swift', :path => '../node_modules/react-native-ble-plx'
+    ``` 
+3. in `ios` folder run `pod update` 
+4. starting from iOS 13 add `NSBluetoothAlwaysUsageDescription` to `info.plist`
+
+### Setup realm db
+1. run `open node_modules/realm/src/RealmJS.xcodeproj`
+2. go to target
+3. delete testTarget
+4. pod update
+5. clean build folder (xcode)
+
+**NOTE**: realm db setup must be 
+This steps must be completed every single time you install or update the realm packages.
+
+### Actually run iOS build
+
+1. connect iPhone and Mac to the same network. The choosen network must be connect to the world wide web and also must no block websocket connection between Mac and iPhone.
+2. connect iPhone and Mac with the lightning cable. 
+3. select  iPhone as build target
+5. in xcode click on project
+    1. choose Robotics target
+        1. click on signing & capabilities and select you (or Dominik Gruntz) appelID from the team dropdwon
+    2. repeat this step for RoboticsTests target
+4. run the app
+
+
 
 # Upgrading the React Native Version
 
-The app depends on several libraries, which have native components. They are:
+60.5 is the latest version we are able to support. 
 
- - for BLE: `react-native-ble-plx`
- - for Navigation: `react-navigation` with `react-native-gesture-handler`
- - for Material Design: `react-native-vector-icons`
+In case the [ble-library](https://github.com/Polidea/react-native-ble-plx) suddenly decided to support 60.5 + you may use the react-native [upgrade tool](https://facebook.github.io/react-native/docs/upgrading) to upgrade. 
 
-To use them in android and ios, they must be *linked* to the target platform with:
+If you have to update multiple version it might be easier to just create a new project.
 
-```
-$ react-native link react-native-ble-plx
-$ react-native link react-native-gesture-handler
-$ react-native link react-native-vector-icons
-```
 
-# Hints for BLE support
-
-The library used in this project to support BLE is: https://github.com/Polidea/react-native-ble-plx
-```
-$ npm install --save react-native-ble-plx
-$ react-native link react-native-ble-plx
-
-$ npm install
-```
 
 ## Found UIDs
 
@@ -121,13 +134,6 @@ service uuid:        0000ffe0-0000-1000-8000-00805f9b34fb
 characteristic uuid: 0000ffe1-0000-1000-8000-00805f9b34fb
 ```
 
-
-
-
-Read project [react-native-plx-ble](https://github.com/Polidea/react-native-ble-plx) carefully. Their are some updates needed 
-    
- - for Android in `app/build.gradle` and `AndroidManifest.xml`!
- - for iOS. Open Xcode and add empty Swift file
 
 # Adding AppCenter
 
