@@ -101,7 +101,7 @@ Run `pod install` inside the `ios` folder if you have cloned this repo for the f
 4. pod update
 5. clean build folder (xcode)
 
-**NOTE**: realm db setup must be 
+**NOTE**: 
 This steps must be completed every single time you install or update the realm packages.
 
 ### Actually run iOS build
