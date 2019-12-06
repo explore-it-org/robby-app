@@ -1,5 +1,5 @@
 {
-  "language":"Englisch",
+  "language":"English",
   "languageTag":"en",
   "MainTab": {
     "speed": "Speed from 0-100"
@@ -15,13 +15,12 @@
     "record": "Record",
     "recordMessage": "Successfully recorded and saved on the robot!",
     "upload": "Upload",
-    "uploadMessage": "All instructions successfully uploaded on the robot!",
+    "uploadMessage":"Instructions successfully uploaded on the robot!",
     "drive": "Drive",
     "driveMessage": "Instructions followed, terminated drive successfully!",
-    "bluetoothNotTurnedOnTitle":"BluetoothLE is powered off",
-    "bluetoothNotTurnedOnMessage":"Please turn on BLE",
-    "programName":"Program name",
-    "bleDefaultDeviceName": "Unknown"
+    "bluetoothNotTurnedOnTitle":"Bluetooth is powered off",
+    "bluetoothNotTurnedOnMessage":"Please turn on Bluetooth",
+    "programName":"Program name"
   },
   "BlockPrgrogramming" : {
     "programSelectionPrompt" : "Select a program..."
@@ -37,9 +36,9 @@
     "interval-unit": "per second (1..50)",
     "learn": "Record:",
     "duration": "Duration:",
-    "duration-unit": "seconds (1..80)",
+    "duration-unit": "Seconds (1..80)",
     "language": "Language",
-    "updated": "Settings aktualisiert"
+    "updated": "Settings updated"
   },
   "App": {
     "programming": "Programming",

@@ -9,26 +9,25 @@
     "noConnection": "Keine Verbindung",
     "chooseDevice": "Gerät auswählen",
     "connecting": "Verbinden...",
-    "connectionError": "Error beim Verbindungsaufbau",
-    "download": "Download",
-    "downloadMessage": "Anweisungen erfolgreich von Roboter heruntergeladen!",
+    "connectionError":"Fehler beim Verbindungsaufbau",
+    "download":"Herunter laden ",
+    "downloadMessage": "Anweisungen erfolgreich vom Roboter heruntergeladen!",
     "record": "Aufzeichnen",
     "recordMessage": "Erfolgreich aufgezeichnet und auf dem Roboter gespeichert!",
     "upload": "Upload",
-    "uploadMessage": "Alle Anweisungen erfolgreich auf Roboter geladen!",
+    "uploadMessage": "Anweisungen erfolgreich auf den Roboter geladen!",
     "drive": "Fahren",
     "driveMessage": "Anweisungen abgearbeitet, Fahrt erfolgreich abgeschlossen!",
-    "bluetoothNotTurnedOnTitle":"BluetoothLE is ausgeschaltet.",
-    "bluetoothNotTurnedOnMessage":"Bitte schalten Sie BLE ein.",
-    "programName":"Programmname",
-    "bleDefaultDeviceName": "Unbekannt"
+    "bluetoothNotTurnedOnTitle":"Bluetooth ist ausgeschaltet.",
+    "bluetoothNotTurnedOnMessage":"Bitte schalten Sie Bluetooth ein.",
+    "programName":"Programmname"
   },
   "BlockProgramming":{
     "programSelectionPrompt" : "Wählen Sie ein Programm..."
   },
   "ProgramOverview": {
     "delete": "Löschen",
-    "duplicate": "Duplizieren"
+    "duplicate":"Verdoppeln"
   },
   "SpeedInput": {
     "invalidEntry": "Ungültige Eingabe",
@@ -37,13 +36,13 @@
   "Settings": {
     "device": "Gerät",
     "settings": "Einstellung:",
-    "interval": "Interval:",
+    "interval": "Intervall:",
     "interval-unit": "pro Sekunde (1..50)",
     "learn": "Lernen:",
     "duration": "Dauer:",
     "duration-unit": "Sekunden (1..80)",
     "language": "Sprache",
-    "updated": "Settings aktualisiert"
+    "updated ": "Einstellungen sind aktualisiert"
   },
   "App": {
     "programming": "Programmieren",
@@ -54,15 +53,15 @@
   },
   "RoboticsDatabase" : {
     "success": "Erfolg",
-    "failure": "Error",
+    "failure": "Fehler",
     "emptyName": "Bitte geben Sie einen Namen ein",
-    "addFiled":"Programm konnte nicht gespeichert werden: ",
+    "addFiled":"Programm konnte nicht gespeichert werden:",
     "nameTaken":"Name ist bereits vergeben",
-    "duplicateFailed":"Programm konnte nicht dupliziert werden: ",
-    "deleteFailed":"Programm konnte nicht gelöscht werden: ",
-    "programUsed":"Das Programm wird von einem anderen Programm verwendet.",
+    "duplicateFailed":"Programm konnte nicht dupliziert werden:",
+    "deleteFailed":"Programm konnte nicht gelöscht werden:",
+    "programUsed":"Das Programm wird von einem anderen Programm verwendet",
     "programUsedByActiveProgram": "Das Programm wird vom aktuell geöffneten Programm verwendet",
     "programUsedByActiveProgramTitle": "Programm kann nicht gelöscht werden",
-    "deleteAllFailed":"Programme konnten nicht gelöscht werden: "
+    "deleteAllFailed":"Programme konnten nicht gelöscht werden:"
   }
 }
