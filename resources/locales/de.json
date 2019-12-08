@@ -20,7 +20,8 @@
     "driveMessage": "Anweisungen abgearbeitet, Fahrt erfolgreich abgeschlossen!",
     "bluetoothNotTurnedOnTitle":"Bluetooth ist ausgeschaltet.",
     "bluetoothNotTurnedOnMessage":"Bitte schalten Sie Bluetooth ein.",
-    "programName":"Programmname"
+    "programName":"Programmname",
+    "bleDefaultDeviceName": "Unbekannt"
   },
   "BlockProgramming":{
     "programSelectionPrompt" : "Wählen Sie ein Programm..."
@@ -41,7 +42,7 @@
     "learn": "Lernen:",
     "duration": "Dauer:",
     "duration-unit": "Sekunden (1..80)",
-    "language": "Sprache",
+    "language": "Sprache:",
     "updated ": "Einstellungen sind aktualisiert"
   },
   "App": {
