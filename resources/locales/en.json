@@ -20,10 +20,15 @@
     "driveMessage": "Instructions followed, terminated drive successfully!",
     "bluetoothNotTurnedOnTitle":"Bluetooth is powered off",
     "bluetoothNotTurnedOnMessage":"Please turn on Bluetooth",
-    "programName":"Program name"
+    "programName":"Program name",
+    "bleDefaultDeviceName": "Unknown"
   },
   "BlockPrgrogramming" : {
     "programSelectionPrompt" : "Select a program..."
+  },
+  "ProgramOverview": {
+    "delete": "Delete",
+    "duplicate":"Duplicate"
   },
   "SpeedInput": {
     "invalidEntry": "Invalid Entry",
@@ -37,7 +42,7 @@
     "learn": "Record:",
     "duration": "Duration:",
     "duration-unit": "Seconds (1..80)",
-    "language": "Language",
+    "language": "Language:",
     "updated": "Settings updated"
   },
   "App": {
