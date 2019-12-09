@@ -18,17 +18,17 @@
     "uploadMessage":"Instructions successfully uploaded on the robot!",
     "drive": "Drive",
     "driveMessage": "Instructions followed, terminated drive successfully!",
-    "bluetoothNotTurnedOnTitle":"Bluetooth is powered off",
-    "bluetoothNotTurnedOnMessage":"Please turn on Bluetooth",
-    "programName":"Program name",
+    "bluetoothNotTurnedOnTitle": "Bluetooth is powered off",
+    "bluetoothNotTurnedOnMessage": "Please turn on Bluetooth",
+    "programName": "Program name",
     "bleDefaultDeviceName": "Unknown"
   },
-  "BlockPrgrogramming" : {
-    "programSelectionPrompt" : "Select a program..."
+  "BlockProgramming": {
+    "programSelectionPrompt": "Select a program..."
   },
   "ProgramOverview": {
     "delete": "Delete",
-    "duplicate":"Duplicate"
+    "duplicate": "Duplicate"
   },
   "SpeedInput": {
     "invalidEntry": "Invalid Entry",
@@ -49,17 +49,17 @@
     "programming": "Programming",
     "settings": "Settings"
   },
-  "SettingsStore" : {
+  "SettingsStore": {
     "noConnection": "No Connection"
   },
-  "RoboticsDatabase" : {
+  "RoboticsDatabase": {
     "success": "Success",
     "failure": "Failure",
     "emptyName": "Please enter a name",
-    "addFiled":"Failed to save program: ",
-    "nameTaken":"Name is already taken",
-    "duplicateFailed":"Failed to duplicate program: ",
-    "deleteFailed":"Failed to delete program: ",
+    "addFiled": "Failed to save program: ",
+    "nameTaken": "Name is already taken",
+    "duplicateFailed": "Failed to duplicate program: ",
+    "deleteFailed": "Failed to delete program: ",
     "programUsed": "Program is used by another program",
     "programUsedByActiveProgram": "Program is used by the currently opened program",
     "programUsedByActiveProgramTitle": "Program cannot be deleted",
