@@ -10,10 +10,10 @@ import {FAB} from 'react-native-paper';
 import React from 'react';
 import SpeedInput from '../../controls/SpeedInput';
 import i18n from '../../../resources/locales/i18n';
+import CustomIcon from '../../utillity/CustomIcon';
 
 
 export default class StepProgrammingComponent extends Component {
-
 
 
     render() {
@@ -24,7 +24,9 @@ export default class StepProgrammingComponent extends Component {
                     <FAB
                         disabled={this.props.Instruction.ActiveProgram.steps.length <= 1}
                         style={styles.delete}
-                        icon="delete"
+                        icon={({size, color}) => (
+                            <CustomIcon name="deletelight" size={size} color={color}/>
+                        )}
                         onPress={() => {
                             this.props.deleteInstruction();
                         }}
@@ -32,7 +34,9 @@ export default class StepProgrammingComponent extends Component {
                     <FAB
                         //disabled={this.props.Instruction.selectedIndex === 0} disabling move up and down button produces unexpected behaviour
                         style={styles.move_up}
-                        icon="arrow-upward"
+                        icon={({size, color}) => (
+                            <CustomIcon name="up" size={size} color={color}/>
+                        )}
                         onPress={() => {
                             console.log('move down clicked');
                             this.props.moveUp();
@@ -41,7 +45,9 @@ export default class StepProgrammingComponent extends Component {
                     <FAB
                         //disabled={this.props.Instruction.selectedIndex >= this.props.Instruction.ActiveProgram.steps.length - 1}
                         style={styles.move_down}
-                        icon="arrow-downward"
+                        icon={({size, color}) => (
+                            <CustomIcon name="down" size={size} color={color}/>
+                        )}
                         onPress={() => {
                             console.log('move up clicked');
                             this.props.moveDown();
@@ -56,14 +62,14 @@ export default class StepProgrammingComponent extends Component {
             <View style={[styles.view, {flex: 1, justifyContent: 'center', alignItems: 'center'}]}>
                 <View style={{marginTop: 30, marginBottom: 20, height: 40, width: '80%', flexDirection: 'row'}}>
                     <TextInput
-                        placeholder={i18n.t("Programming.programName")}
+                        placeholder={i18n.t('Programming.programName')}
                         style={{
-                        textAlign: 'center',
-                        flex: 2,
-                        height: 40,
-                        borderBottomColor: '#828282',
-                        borderBottomWidth: 1.0,
-                    }} value={this.props.Instruction.ActiveProgram.name} onChangeText={text => {
+                            textAlign: 'center',
+                            flex: 2,
+                            height: 40,
+                            borderBottomColor: '#828282',
+                            borderBottomWidth: 1.0,
+                        }} value={this.props.Instruction.ActiveProgram.name} onChangeText={text => {
                         this.props.setName(text);
                     }}/>
                 </View>
@@ -121,7 +127,9 @@ export default class StepProgrammingComponent extends Component {
                 <View>
                     <FAB
                         style={styles.fab}
-                        icon="add"
+                        icon={({size, color}) => (
+                            <CustomIcon name="plus" size={size} color={color}/>
+                        )}
                         onPress={() => {
                             this.props.addInstruction();
                         }}

@@ -4,8 +4,9 @@ import React from 'react';
 import NumericInput from './NumericInput';
 import i18n from '../../resources/locales/i18n';
 import SinglePickerMaterialDialog from '../materialdialog/SinglePickerMaterialDialog';
-import IconButton from '@material-ui/core/IconButton';
-import {Button} from 'react-native-paper';
+
+import {Button, FAB, IconButton} from 'react-native-paper';
+import CustomIcon from '../utillity/CustomIcon';
 
 
 export default class ProgramInput extends Component {
@@ -44,8 +45,10 @@ export default class ProgramInput extends Component {
                         onchange={this.props.onRepeatValueChange}
                         val={this.props.val === null ? 0 : this.props.val}/></View>
                 <Text>{selectedText}</Text>
-                <Button
-                    icon="camera"
+                <IconButton
+                    icon={({size, color}) => (
+                        <CustomIcon name="edit" size={size} color={color}/>
+                    )}
                     size={20}
                     onPress={() => this.setState({pickerOpen: true})}
                 />
