@@ -6,8 +6,9 @@ import {Appbar} from 'react-native-paper';
 //import { Icon } from 'react-native-elements';
 import {getStatusBarHeight, ifIphoneX} from 'react-native-iphone-x-helper';
 import i18n from '../../resources/locales/i18n';
-import { Picker } from 'native-base';
+import {Picker} from 'native-base';
 import Toast from '../controls/Toast';
+import {toggleSettings} from './SettingsAction';
 
 
 class SettingsComponent extends Component {
@@ -20,7 +21,7 @@ class SettingsComponent extends Component {
         let prev = prevProps.Settings.lastUpdate;
         let now = this.props.Settings.lastUpdate;
         if (prev !== now) {
-            Toast.show(i18n.t("Settings.updated"));
+            Toast.show(i18n.t('Settings.updated'));
         }
     }
 
@@ -41,26 +42,26 @@ class SettingsComponent extends Component {
     }
 
     changeDuration(duration) {
-        if(duration || duration.length > 0){
+        if (duration || duration.length > 0) {
             this.props.setDuration(parseInt(duration));
-        }else{
+        } else {
             this.props.setDuration();
         }
-        
+
     }
 
     renderIntervalField = () => {
-        if(this.props.BLEConnection.isConnected){
+        if (this.props.BLEConnection.isConnected) {
             return (
                 <View>
-                <Text style={{fontSize: 16, fontWeight: 'bold', paddingBottom: 15}}>
+                    <Text style={{fontSize: 16, fontWeight: 'bold', paddingBottom: 15}}>
                         {i18n.t('Settings.settings')}
                     </Text>
                     <View style={{flexDirection: 'row', marginBottom: 10}}>
                         <Text style={{height: 50, width: '20%', marginLeft: 40}}>
                             {i18n.t('Settings.interval')}
                         </Text>
-                        
+
                         <TextInput
                             style={{
                                 padding: 5,
@@ -82,22 +83,23 @@ class SettingsComponent extends Component {
                         </Text>
                     </View>
                 </View>
-            )
+            );
         }
-    }
+    };
 
     render() {
         this.items = Object.assign([], []);
         Object.values(i18n.translations).forEach(
-            k => this.items.push(<Picker.Item key={k.languageTag} label={k.language} value={k.languageTag} testID={k.language}/>)
-        )
+            k => this.items.push(<Picker.Item key={k.languageTag} label={k.language} value={k.languageTag}
+                                              testID={k.language}/>),
+        );
         return (
             <View style={[styles.container]}>
                 <Appbar>
                     <Appbar.Action
                         icon="menu"
                         size={32}
-                        onPress={() => this.props.navigation.openDrawer()}
+                        onPress={() => this.props.toggleSettings()}
                     />
                     <Appbar.Content
                         style={{position: 'absolute', left: 40}}
@@ -133,12 +135,16 @@ class SettingsComponent extends Component {
                             keyboardType="numeric"
                             textAlign={'center'}
                             mode="outlined"
-                            onFocus={() => { this.changeDuration('') }}
+                            onFocus={() => {
+                                this.changeDuration('');
+                            }}
                             onChangeText={text => this.changeDuration(text)}
                             value={() => {
-                                if(this.props.Settings.duration){
+                                if (this.props.Settings.duration) {
                                     return this.props.Settings.duration.toString();
-                                } else return '';
+                                } else {
+                                    return '';
+                                }
                             }}
                         />
                         <Text style={{height: 50, marginLeft: 20}}>
@@ -147,7 +153,7 @@ class SettingsComponent extends Component {
                     </View>
 
                     <Text style={{fontSize: 16, fontWeight: 'bold', paddingBottom: 15}}>
-                        {i18n.t("Settings.language")}
+                        {i18n.t('Settings.language')}
                     </Text>
                     <View style={{flexDirection: 'row', marginBottom: 10}}>
                         <Picker
@@ -162,8 +168,8 @@ class SettingsComponent extends Component {
                             textAlign={'center'}
                             onValueChange={(itemValue, itemIndex) => {
                                 this.props.setLanguage(itemValue);
-                                i18n.locale = itemValue; 
-                                }}>
+                                i18n.locale = itemValue;
+                            }}>
                             {this.items}
                         </Picker>
                     </View>

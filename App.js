@@ -8,10 +8,8 @@ import {getStatusBarHeight, ifIphoneX} from 'react-native-iphone-x-helper';
 import {grantLocation, setBLEState} from './src/settings/SettingsAction';
 import i18n from './resources/locales/i18n';
 import BleService from './src/ble/BleService';
-import GLOBAL from './src/utillity/Global';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import Toast from './src/controls/Toast';
 
 class App extends Component {
 
@@ -33,11 +31,10 @@ class App extends Component {
             }
             i18n.locale =  i18n.defaultLocale;
         }
-
     }
 
     render() {
-        return <DrawerContainer/>;
+        return <ProgrammingContainer/>;
     }
 }
 
@@ -55,63 +52,6 @@ const mapDispatchToProps = dispatch =>
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
-
-class DrawerContent extends Component {
-
-    render() {
-        return (
-            <View style={styles.container}>
-
-                <View style={styles.deviceName}>
-                    <Text style={{color: 'white', fontSize: 30}}>
-                        {this.props.BLEConnection.device.name}
-                    </Text>
-                </View>
-                <View style={styles.drawerItems}>
-                    <DrawerNavigatorItems {...this.props} />
-                </View>
-                <View style={styles.footer}>
-                    <Text
-                        style={{
-                            flex: 1,
-                            marginLeft: 15,
-                            color: 'white',
-                            fontWeight: 'bold',
-                        }}>
-                        {GLOBAL.APP_NAME}
-                    </Text>
-                    <Text
-                        style={{
-                            flex: 1,
-                            textAlign: 'right',
-                            marginRight: 15,
-                            color: 'white',
-                            fontWeight: 'bold',
-                        }}>
-                        v{GLOBAL.VERSION}
-                    </Text>
-                </View>
-            </View>
-        );
-    }
-}
-
-
-const ReduxNavigator = connect(mapStateToProps)(DrawerContent);
-
-
-const DrawerNavigator = createDrawerNavigator(
-    {
-        [i18n.t('App.programming')]: {screen: ProgrammingContainer},
-        [i18n.t('App.settings')]: {screen: Settings},
-    },
-    {
-        contentComponent: ReduxNavigator,
-    },
-);
-
-
-const DrawerContainer = createAppContainer(DrawerNavigator);
 
 const styles = StyleSheet.create({
     container: {

@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {setDuration, setInterval, setIntervalAndSendToRobby, setLanguage} from './SettingsAction';
+import {setDuration, setInterval, setIntervalAndSendToRobby, setLanguage, toggleSettings} from './SettingsAction';
 import BleAction from '../ble/BleAction';
 import SettingsComponent from './SettingsComponent';
 
@@ -15,7 +15,8 @@ const mapDispatchToProps = dispatch =>
             setDuration,
             setInterval,
             setIntervalAndSendToRobby,
-            setLanguage
+            setLanguage,
+            toggleSettings
         }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(SettingsComponent);

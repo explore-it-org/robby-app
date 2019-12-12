@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, Alert, ToastAndroid} from 'react-native';
-import {Appbar} from 'react-native-paper';
+import {Appbar, Modal, Portal} from 'react-native-paper';
 import {createAppContainer, NavigationActions} from 'react-navigation';
 import {createMaterialTopTabNavigator} from 'react-navigation-tabs';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -15,6 +15,7 @@ import StepProgrammingContainer from '../programmingtabs/stepprogramming/StepPro
 import BlockProgrammingContainer from '../programmingtabs/blockprogramming/BlockProgrammingContainer';
 import BleService from '../ble/BleService';
 import Toast from '../controls/Toast';
+import SettingsContainer from '../settings/SettingsContainer';
 
 
 export default class ProgrammingComponent extends Component {
@@ -29,11 +30,11 @@ export default class ProgrammingComponent extends Component {
         let prev = prevProps.Program.lastChange;
         let now = this.props.Program.lastChange;
         if (prev !== now) {
-            if (now.status === i18n.t("RoboticsDatabase.success")) {
+            if (now.status === i18n.t('RoboticsDatabase.success')) {
                 Toast.show(now.status); // TODO show propper message??
-            }else{
+            } else {
                 Alert.alert(now.status, now.error);
-            } 
+            }
         }
         if (this.props.BLEConnection.error !== prevProps.BLEConnection.error) {
             Alert.alert('ble error', this.props.BLEConnection.error);
@@ -42,13 +43,13 @@ export default class ProgrammingComponent extends Component {
             now = this.props.BLEConnection.device;
             if (prev !== now) {
                 if (prev.isUploading && !now.isUploading) {
-                    Toast.show(i18n.t("Programming.uploadMessage"));
+                    Toast.show(i18n.t('Programming.uploadMessage'));
                 } else if (prev.isDownloading && !now.isDownloading) {
-                    Toast.show(i18n.t("Programming.downloadMessage"));
+                    Toast.show(i18n.t('Programming.downloadMessage'));
                 } else if (prev.isRecording && !now.isDownloading) {
-                    Toast.show(i18n.t("Programming.downloadMessage"));
+                    Toast.show(i18n.t('Programming.downloadMessage'));
                 } else if (prev.isGoing && !now.isGoing) {
-                    Toast.show(i18n.t("Programming.driveMessage"));
+                    Toast.show(i18n.t('Programming.driveMessage'));
                 }
             }
         }
@@ -76,8 +77,10 @@ export default class ProgrammingComponent extends Component {
     };
 
     render() {
+        let settingsPage = this.props.Settings.visible ? <Portal><SettingsContainer/></Portal> : undefined;
         return (
             <View style={[styles.container]}>
+                {settingsPage}
                 <SinglePickerMaterialDialog
                     title={i18n.t('Programming.chooseDevice')}
                     items={this.props.BLEConnection.scannedDevices.map((row, index) => ({
@@ -100,8 +103,10 @@ export default class ProgrammingComponent extends Component {
                     }
                     colorAccent="#9c27b0"
                 />
+
+
                 <Appbar>
-                    <Appbar.Action icon="menu" size={32} onPress={() => this.props.navigation.openDrawer()}/>
+                    <Appbar.Action icon="menu" size={32} onPress={() => this.props.toggleSettings()}/>
                     <Appbar.Content style={{position: 'absolute', left: 40}} title="Explore-it" size={32}/>
                     <Appbar.Content style={{position: 'absolute', right: 40}}
                                     title={this.props.BLEConnection.device.name}
@@ -333,7 +338,7 @@ const styles = StyleSheet.create({
         margin: 16,
         right: 0,
         bottom: 0,
-        zIndex: 999
+        zIndex: 999,
     },
 });
 
