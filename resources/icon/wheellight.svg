@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 61 (89581) - https://sketch.com -->
+    <title>wheellight</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <circle id="path-1" cx="11.842623" cy="11.842623" r="11.842623"></circle>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="23.6852459" height="23.6852459" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+    </defs>
+    <g id="wheellight" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g fill-rule="nonzero" stroke="#533F07">
+            <use id="Oval" mask="url(#mask-2)" stroke-width="2.70688525" fill="#FFFAC0" stroke-dasharray="1.082754135131836,2.03016387439165" xlink:href="#path-1"></use>
+            <circle id="Oval-Copy" stroke-width="0.676721311" fill="#FFFFFF" cx="11.842623" cy="6.90819672" r="2.19934426"></circle>
+            <circle id="Oval-Copy-2" stroke-width="0.676721311" fill="#FFFFFF" cx="11.842623" cy="16.7770492" r="2.19934426"></circle>
+            <circle id="Oval-Copy" stroke-width="0.676721311" fill="#FFFFFF" transform="translate(6.908197, 11.842623) rotate(-90.000000) translate(-6.908197, -11.842623) " cx="6.90819672" cy="11.842623" r="2.19934426"></circle>
+            <circle id="Oval-Copy-2" stroke-width="0.676721311" fill="#FFFFFF" transform="translate(16.777049, 11.842623) rotate(-90.000000) translate(-16.777049, -11.842623) " cx="16.7770492" cy="11.842623" r="2.19934426"></circle>
+        </g>
+    </g>
+</svg>

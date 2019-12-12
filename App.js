@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     },
     deviceName: {
         flex: 1,
-        backgroundColor: '#9c27b0',
+        backgroundColor: '#2E5266',
         height: 140,
         alignItems: 'center',
         justifyContent: 'center',
@@ -75,11 +75,11 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
     },
     footer: {
-        backgroundColor: '#9c27b0',
+        backgroundColor: '#2E5266',
         height: 50,
         alignItems: 'center',
         borderTopWidth: 1,
-        borderTopColor: '#9c27b0',
+        borderTopColor: '#2E5266',
         flexDirection: 'row',
     },
 });
