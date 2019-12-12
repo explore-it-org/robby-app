@@ -38,8 +38,6 @@ const rootReducer = combineReducers({
 const pReducer = persistReducer(persistConfig, rootReducer);
 
 let store = createStore(pReducer, applyMiddleware(thunk));
-// let test = new dbtest.DatabaseTest(store);
-// test.createDatabaseEntries();
 
 export const persistor = persistStore(store);
 export default store;

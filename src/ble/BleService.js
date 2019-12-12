@@ -20,7 +20,11 @@ class BleService {
         if (Platform.OS === 'ios') {
             return true;
         }
-        // we are on android
+        if (Platform.version < 21) {
+            // location permission os not necessary for KitKat
+            return true;
+        }
+        // we are on android (at least API 21, Lollipop)
         try {
             const granted = await PermissionsAndroid.request(
                 PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,

@@ -20,7 +20,7 @@ export default class BlockProgrammingComponent extends Component {
 
     render() {
         this.items = Object.assign([], []);
-        this.items = [<Picker.Item key={0} label={i18n.t("BlockProgramming.programSelectionPrompt")}/>];
+        this.items = [<Picker.Item key={0} label={i18n.t('BlockProgramming.programSelectionPrompt')}/>];
 
         this.props.Block.possibleChildren.forEach((p) => {
             this.items.push(<Picker.Item key={p.id} label={p.name} value={p.id} testID={p.id}/>);
@@ -63,7 +63,7 @@ export default class BlockProgrammingComponent extends Component {
             <View style={[styles.view, {flex: 1, justifyContent: 'center', alignItems: 'center'}]}>
                 <View style={{marginTop: 30, marginBottom: 20, height: 40, width: '80%', flexDirection: 'row'}}>
                     <TextInput
-                        placeholder={i18n.t("Programming.programName")}
+                        placeholder={i18n.t('Programming.programName')}
                         // TODO move to style
                         style={{
                             textAlign: 'center',
@@ -108,7 +108,7 @@ export default class BlockProgrammingComponent extends Component {
                           }}>
             <ProgramInput index={index}
                           selected={this.props.Block.Active_Block.selectedBlockIndex}
-                          pickerItems={this.items}
+                          pickerItems={this.props.Block.possibleChildren}
                           selectedProgram={this.props.Block.Active_Block.blocks[index].ref}
                           onRepeatValueChange={(value) => {
                               this.props.setActiveBlockIndex(-1);
@@ -123,7 +123,6 @@ export default class BlockProgrammingComponent extends Component {
     );
 
 }
-
 
 
 const styles = StyleSheet.create({

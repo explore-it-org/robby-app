@@ -1,11 +1,18 @@
 import {Component} from 'react';
-import {StyleSheet, View, Alert, Picker} from 'react-native';
+import {StyleSheet, View, Alert, Picker, TextComponent, Text} from 'react-native';
 import React from 'react';
 import NumericInput from './NumericInput';
 import i18n from '../../resources/locales/i18n';
+import SinglePickerMaterialDialog from '../materialdialog/SinglePickerMaterialDialog';
+import IconButton from '@material-ui/core/IconButton';
+import {Button} from 'react-native-paper';
 
 
 export default class ProgramInput extends Component {
+
+    state = {
+        pickerOpen: false,
+    };
 
     onChanged = (text) => {
         let newText = '';
@@ -27,23 +34,45 @@ export default class ProgramInput extends Component {
 
     render() {
         const index = this.props.index;
+        const selectItem = this.props.pickerItems.find(v => v.id === this.props.selectedProgram);
+        const selectedText = selectItem === undefined ? i18n.t('BlockProgramming.programSelectionPrompt') : selectItem.name;
         return (
             <View key={this.props.selectedProgram}
                   style={parseInt(index) === this.props.selected ? styles.selected_row : styles.row}>
-                <Picker
-                    selectedValue={this.props.selectedProgram}
-                    style={{height: 35, width: '60%'}}
-                    onValueChange={(itemValue, itemIndex) => {
-                        this.props.onProgramSelectionChange(itemValue);
-                    }}>
-
-                    {this.props.pickerItems}
-                </Picker>
-                <View style={{width: '23%'}}/>
                 <View style={{width: '17%', height: '65%'}}>
                     <NumericInput
                         onchange={this.props.onRepeatValueChange}
-                        val={this.props.val}/></View>
+                        val={this.props.val === null ? 0 : this.props.val}/></View>
+                <Text>{selectedText}</Text>
+                <Button
+                    icon="camera"
+                    size={20}
+                    onPress={() => this.setState({pickerOpen: true})}
+                />
+                <SinglePickerMaterialDialog
+                    title={'choose one'}
+                    items={this.props.pickerItems.map(v => ({
+                        key: v.id,
+                        label: v.name,
+                        selected: v.name === selectedText,
+                    }))}
+                    visible={this.state.pickerOpen}
+                    onCancel={() => {
+                        this.setState({pickerOpen: false});
+                    }}
+                    onOk={
+                        result => {
+                            this.setState({pickerOpen: false});
+                            console.log('okeay');
+                            if (result.selectedLabel) {
+                                console.log(this.props.selectedProgram);
+                                this.props.onProgramSelectionChange(this.props.pickerItems.find(v => v.name === result.selectedLabel).id);
+                            }
+                        }
+                    }
+                    colorAccent="#9c27b0"
+                />
+                <View style={{width: '23%'}}/>
             </View>
         );
     }
@@ -73,3 +102,6 @@ const styles = StyleSheet.create({
     },
 
 });
+/*
+this.props.selectedProgram}
+ */
