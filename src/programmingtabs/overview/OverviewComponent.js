@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, ScrollView, FlatList, TouchableOpacity, Button} from 'react-native';
-import {Text} from 'react-native-paper';
+import {Divider, IconButton, Text} from 'react-native-paper';
 import {ProgramType} from '../../model/DatabaseModels';
 import i18n from '../../../resources/locales/i18n';
+import CustomIcon from '../../utillity/CustomIcon';
 
 export default class OverviewComponent extends Component {
 
@@ -30,23 +31,42 @@ export default class OverviewComponent extends Component {
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={({item, index}) => (
                             <TouchableOpacity
-                                style={{width: '100%', flexDirection: 'row'}}
+                                style={{width: '100%', flexDirection: 'row', borderBottomColor: 'lightgrey', borderBottomWidth: 1}}
                                 onPress={() => {
-                                    this.load(item);
+                                    //this.load(item);
                                 }}>
                                 <View style={{padding: 20, width: '100%', flexDirection: 'row'}}>
                                     <Text style={{flex: 1}}>
                                         {item.name}
                                     </Text>
                                     <View style={{marginRight: 20}}>
-                                        <Button color="#792387" onPress={() => {
-                                            this.props.remove(item.id);
-                                        }} title={i18n.t("ProgramOverview.delete")}/>
+                                        <IconButton
+                                            icon={({size, color}) => (
+                                                <CustomIcon name="open" size={size} color={color}/>
+                                            )}
+                                            onPress={() => {
+                                                this.load(item);
+                                            }}
+                                        />
                                     </View>
                                     <View style={{marginRight: 20}}>
-                                        <Button color="#792387" title={i18n.t("ProgramOverview.duplicate")} onPress={() => {
-                                            this.props.duplicate(item);
-                                        }}/>
+                                        <IconButton
+                                            icon={({size, color}) => (
+                                                <CustomIcon name="duplicate" size={size} color={color}/>
+                                            )}
+                                            onPress={() => {
+                                                this.props.duplicate(item);
+
+                                            }}/>
+                                    </View>
+                                    <View style={{marginRight: 20}}>
+                                        <IconButton
+                                            icon={({size, color}) => (
+                                                <CustomIcon name="deletedark" size={size} color={color}/>
+                                            )}
+                                            onPress={() => {
+                                                this.props.remove(item.id);
+                                            }}/>
                                     </View>
                                 </View>
                             </TouchableOpacity>
