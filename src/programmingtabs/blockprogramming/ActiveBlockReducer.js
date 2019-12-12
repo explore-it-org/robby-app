@@ -1,7 +1,6 @@
-import {Block, Instruction, Program, ProgramType} from '../../model/DatabaseModels';
+import {Block, Program, ProgramType} from '../../model/DatabaseModels';
 import * as ActionTypes from '../../GlobalActionTypes';
 import Database from '../../database/RoboticsDatabase';
-import {LOAD_POSSIBLE_CHILDREN} from '../../GlobalActionTypes';
 
 const default_state_block = {
     lastUpdate: Date.now(),
@@ -81,9 +80,9 @@ export const ActiveBlockReducer = (state = default_state_block, action) => {
             });
         case ActionTypes.DELETE_BLOCK_INDEX:
             return Object.assign({}, state, {
+                lastUpdate: Date.now(),
+                selectedBlockIndex: -1,
                 Active_Block: Object.assign(new Program(), state.Active_Block, {
-                    lastUpdate: Date.now(),
-                    selectedBlockIndex: -1,
                     blocks: [
                         ...state.Active_Block.blocks.slice(0, state.selectedBlockIndex),
                         ...state.Active_Block.blocks.slice(state.selectedBlockIndex + 1, state.Active_Block.blocks.length),

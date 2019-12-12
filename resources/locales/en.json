@@ -1,5 +1,5 @@
 {
-  "language":"Englisch",
+  "language":"English",
   "languageTag":"en",
   "MainTab": {
     "speed": "Speed from 0-100"
@@ -15,16 +15,20 @@
     "record": "Record",
     "recordMessage": "Successfully recorded and saved on the robot!",
     "upload": "Upload",
-    "uploadMessage": "All instructions successfully uploaded on the robot!",
+    "uploadMessage":"Instructions successfully uploaded on the robot!",
     "drive": "Drive",
     "driveMessage": "Instructions followed, terminated drive successfully!",
-    "bluetoothNotTurnedOnTitle":"BluetoothLE is powered off",
-    "bluetoothNotTurnedOnMessage":"Please turn on BLE",
-    "programName":"Program name",
+    "bluetoothNotTurnedOnTitle": "Bluetooth is powered off",
+    "bluetoothNotTurnedOnMessage": "Please turn on Bluetooth",
+    "programName": "Program name",
     "bleDefaultDeviceName": "Unknown"
   },
-  "BlockPrgrogramming" : {
-    "programSelectionPrompt" : "Select a program..."
+  "BlockProgramming": {
+    "programSelectionPrompt": "Select a program..."
+  },
+  "ProgramOverview": {
+    "delete": "Delete",
+    "duplicate": "Duplicate"
   },
   "SpeedInput": {
     "invalidEntry": "Invalid Entry",
@@ -37,25 +41,25 @@
     "interval-unit": "per second (1..50)",
     "learn": "Record:",
     "duration": "Duration:",
-    "duration-unit": "seconds (1..80)",
-    "language": "Language",
+    "duration-unit": "Seconds (1..80)",
+    "language": "Language:",
     "updated": "Settings updated"
   },
   "App": {
     "programming": "Programming",
     "settings": "Settings"
   },
-  "SettingsStore" : {
+  "SettingsStore": {
     "noConnection": "No Connection"
   },
-  "RoboticsDatabase" : {
+  "RoboticsDatabase": {
     "success": "Success",
     "failure": "Failure",
     "emptyName": "Please enter a name",
-    "addFiled":"Failed to save program: ",
-    "nameTaken":"Name is already taken",
-    "duplicateFailed":"Failed to duplicate program: ",
-    "deleteFailed":"Failed to delete program: ",
+    "addFiled": "Failed to save program: ",
+    "nameTaken": "Name is already taken",
+    "duplicateFailed": "Failed to duplicate program: ",
+    "deleteFailed": "Failed to delete program: ",
     "programUsed": "Program is used by another program",
     "programUsedByActiveProgram": "Program is used by the currently opened program",
     "programUsedByActiveProgramTitle": "Program cannot be deleted",
