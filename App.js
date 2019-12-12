@@ -11,6 +11,7 @@ import BleService from './src/ble/BleService';
 import GLOBAL from './src/utillity/Global';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
+import Toast from './src/controls/Toast';
 
 class App extends Component {
 
@@ -60,6 +61,7 @@ class DrawerContent extends Component {
     render() {
         return (
             <View style={styles.container}>
+
                 <View style={styles.deviceName}>
                     <Text style={{color: 'white', fontSize: 30}}>
                         {this.props.BLEConnection.device.name}

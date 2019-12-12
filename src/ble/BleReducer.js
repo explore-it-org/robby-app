@@ -12,7 +12,7 @@ const default_state_ble_connection = {
     receivedDownloads: [],
     scannedDevices: [],
     device: {
-        name: i18n.t("Programming.bleDefaultDeviceName"),
+        name: "Unknown",
         version: 1,
         isRecording: false,
         isRunning: false,
@@ -33,7 +33,7 @@ export const BleConnectionReducer = (state = default_state_ble_connection, actio
             return Object.assign({}, state, {
                 isConnecting: false,
                 isConnected: false,
-                device: {...state.device, name: i18n.t("Programming.bleDefaultDeviceName")},
+                device: {...state.device, name: "Unknown"},
                 lastUpdate: Date.now(),
             });
         case ActionType.IS_CONNECTED:

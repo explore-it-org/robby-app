@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Text, TextInput, Button, ToastAndroid, Alert} from 'react-native';
+import {StyleSheet, View, Text, TextInput} from 'react-native';
 import {Appbar} from 'react-native-paper';
 
 
 //import { Icon } from 'react-native-elements';
 import {getStatusBarHeight, ifIphoneX} from 'react-native-iphone-x-helper';
 import i18n from '../../resources/locales/i18n';
-import {duration} from '@material-ui/core/styles';
 import { Picker } from 'native-base';
+import Toast from '../controls/Toast';
 
 
 class SettingsComponent extends Component {
@@ -20,7 +20,7 @@ class SettingsComponent extends Component {
         let prev = prevProps.Settings.lastUpdate;
         let now = this.props.Settings.lastUpdate;
         if (prev !== now) {
-            ToastAndroid.show(i18n.t("Settings.updated"), ToastAndroid.SHORT);
+            Toast.show(i18n.t("Settings.updated"));
         }
     }
 
@@ -49,6 +49,42 @@ class SettingsComponent extends Component {
         
     }
 
+    renderIntervalField = () => {
+        if(this.props.BLEConnection.isConnected){
+            return (
+                <View>
+                <Text style={{fontSize: 16, fontWeight: 'bold', paddingBottom: 15}}>
+                        {i18n.t('Settings.settings')}
+                    </Text>
+                    <View style={{flexDirection: 'row', marginBottom: 10}}>
+                        <Text style={{height: 50, width: '20%', marginLeft: 40}}>
+                            {i18n.t('Settings.interval')}
+                        </Text>
+                        
+                        <TextInput
+                            style={{
+                                padding: 5,
+                                width: 60,
+                                height: 50,
+                                borderWidth: 1,
+                                borderColor: 'grey',
+                                backgroundColor: 'white',
+                                justifyContent: 'center',
+                            }}
+                            keyboardType="numeric"
+                            textAlign={'center'}
+                            mode="outlined"
+                            onChangeText={text => this.changeInterval(text)}
+                            value={this.props.Settings.interval.toString()}
+                        />
+                        <Text style={{height: 50, marginLeft: 20}}>
+                            {i18n.t('Settings.interval-unit')}
+                        </Text>
+                    </View>
+                </View>
+            )
+        }
+    }
 
     render() {
         this.items = Object.assign([], []);
@@ -77,35 +113,6 @@ class SettingsComponent extends Component {
                 </Appbar>
 
                 <View style={{flex: 1, padding: 40}}>
-                    <Text style={{fontSize: 16, fontWeight: 'bold', paddingBottom: 15}}>
-                        {i18n.t('Settings.settings')}
-                    </Text>
-                    <View style={{flexDirection: 'row', marginBottom: 10}}>
-                        <Text style={{height: 50, width: '20%', marginLeft: 40}}>
-                            {i18n.t('Settings.interval')}
-                        </Text>
-                        <TextInput
-                            style={{
-                                padding: 5,
-                                width: 60,
-                                height: 50,
-                                borderWidth: 1,
-                                borderColor: 'grey',
-                                backgroundColor: 'white',
-                                justifyContent: 'center',
-                            }}
-                            keyboardType="numeric"
-                            textAlign={'center'}
-                            mode="outlined"
-                            editable={this.props.BLEConnection.isConnected}
-                            onChangeText={text => this.changeInterval(text)}
-                            value={this.props.Settings.interval.toString()}
-                        />
-                        <Text style={{height: 50, marginLeft: 20}}>
-                            {i18n.t('Settings.interval-unit')}
-                        </Text>
-                    </View>
-
                     <Text style={{fontSize: 16, fontWeight: 'bold', paddingBottom: 15}}>
                         {i18n.t('Settings.learn')}
                     </Text>

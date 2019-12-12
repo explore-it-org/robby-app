@@ -156,6 +156,7 @@ const styles = StyleSheet.create({
         margin: 16,
         right: -200,
         bottom: 18,
+        zIndex: 999
     },
     delete: {
         position: 'absolute',

@@ -14,6 +14,7 @@ import OverviewContainer from '../programmingtabs/overview/OverviewContainer';
 import StepProgrammingContainer from '../programmingtabs/stepprogramming/StepProgrammingContainer';
 import BlockProgrammingContainer from '../programmingtabs/blockprogramming/BlockProgrammingContainer';
 import BleService from '../ble/BleService';
+import Toast from '../controls/Toast';
 
 
 export default class ProgrammingComponent extends Component {
@@ -29,7 +30,7 @@ export default class ProgrammingComponent extends Component {
         let now = this.props.Program.lastChange;
         if (prev !== now) {
             if (now.status === i18n.t("RoboticsDatabase.success")) {
-                ToastAndroid.show(now.status, ToastAndroid.SHORT); // TODO show propper message??
+                Toast.show(now.status); // TODO show propper message??
             }else{
                 Alert.alert(now.status, now.error);
             } 
@@ -41,13 +42,13 @@ export default class ProgrammingComponent extends Component {
             now = this.props.BLEConnection.device;
             if (prev !== now) {
                 if (prev.isUploading && !now.isUploading) {
-                    ToastAndroid.show(i18n.t("Programming.uploadMessage"), ToastAndroid.SHORT);
+                    Toast.show(i18n.t("Programming.uploadMessage"));
                 } else if (prev.isDownloading && !now.isDownloading) {
-                    ToastAndroid.show(i18n.t("Programming.downloadMessage"), ToastAndroid.SHORT);
+                    Toast.show(i18n.t("Programming.downloadMessage"));
                 } else if (prev.isRecording && !now.isDownloading) {
-                    ToastAndroid.show(i18n.t("Programming.downloadMessage"), ToastAndroid.SHORT);
+                    Toast.show(i18n.t("Programming.downloadMessage"));
                 } else if (prev.isGoing && !now.isGoing) {
-                    ToastAndroid.show(i18n.t("Programming.driveMessage"), ToastAndroid.SHORT);
+                    Toast.show(i18n.t("Programming.driveMessage"));
                 }
             }
         }
@@ -332,6 +333,7 @@ const styles = StyleSheet.create({
         margin: 16,
         right: 0,
         bottom: 0,
+        zIndex: 999
     },
 });
 
