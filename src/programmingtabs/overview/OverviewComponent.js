@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, ScrollView, FlatList, TouchableOpacity, Button} from 'react-native';
-import {Divider, IconButton, Text} from 'react-native-paper';
+import {StyleSheet, View, ScrollView, FlatList, TouchableOpacity} from 'react-native';
+import {IconButton, Text} from 'react-native-paper';
 import {ProgramType} from '../../model/DatabaseModels';
 import i18n from '../../../resources/locales/i18n';
 import CustomIcon from '../../utillity/CustomIcon';
@@ -31,15 +31,33 @@ export default class OverviewComponent extends Component {
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={({item, index}) => (
                             <TouchableOpacity
-                                style={{width: '100%', flexDirection: 'row', borderBottomColor: 'lightgrey', borderBottomWidth: 1}}
+                                style={{
+                                    width: '100%',
+                                    flexDirection: 'row',
+                                    borderBottomColor: '#e0e0e0',
+                                    borderBottomWidth: 1,
+                                    paddingTop: 5,
+                                    paddingBottom: 5,
+                                }}
                                 onPress={() => {
                                     //this.load(item);
                                 }}>
-                                <View style={{padding: 20, width: '100%', flexDirection: 'row'}}>
-                                    <Text style={{flex: 1}}>
-                                        {item.name}
-                                    </Text>
-                                    <View style={{marginRight: 20}}>
+
+
+                                <View style={{width: '100%', flexDirection: 'row'}}>
+                                    <View style={{
+                                        flex: 6,
+                                        flexDirection: 'column',
+                                        justifyContent: 'center',
+                                        paddingLeft: 10,
+                                    }}>
+                                        <Text
+                                            style={{fontSize: 16}}>
+                                            {item.name}
+                                        </Text>
+                                    </View>
+
+                                    <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center'}}>
                                         <IconButton
                                             icon={({size, color}) => (
                                                 <CustomIcon name="open" size={size} color={color}/>
@@ -49,17 +67,19 @@ export default class OverviewComponent extends Component {
                                             }}
                                         />
                                     </View>
-                                    <View style={{marginRight: 20}}>
+
+                                    <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center'}}>
                                         <IconButton
                                             icon={({size, color}) => (
                                                 <CustomIcon name="duplicate" size={size} color={color}/>
                                             )}
                                             onPress={() => {
                                                 this.props.duplicate(item);
-
                                             }}/>
                                     </View>
-                                    <View style={{marginRight: 20}}>
+
+
+                                    <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center'}}>
                                         <IconButton
                                             icon={({size, color}) => (
                                                 <CustomIcon name="deletedark" size={size} color={color}/>
@@ -69,6 +89,8 @@ export default class OverviewComponent extends Component {
                                             }}/>
                                     </View>
                                 </View>
+
+
                             </TouchableOpacity>
                         )}
                     />
