@@ -81,7 +81,7 @@ export default class StepProgrammingComponent extends Component {
                 </View>
 
 
-                <View style={{ height: 30, width: '100%', flexDirection: 'row'}}>
+                <View style={{height: 30, width: '100%', flexDirection: 'row'}}>
                     <View style={{flex: 1}}/>
                     <View style={{flex: 2, flexDirection: 'row', justifyContent: 'flex-start'}}>
                         <Image source={require('../../../resources/icon/wheeldarkx.png')}
@@ -110,8 +110,9 @@ export default class StepProgrammingComponent extends Component {
                         //extraData={this.state}
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={({item, index}) => (
+
                             <TouchableOpacity
-                                style={{width: '100%'}}
+                                style={{flex: 1}}
                                 onPress={() => {
                                     if (this.props.Instruction.selectedIndex === parseInt(index)) {
                                         this.props.setActiveIndex(-1);
@@ -132,6 +133,7 @@ export default class StepProgrammingComponent extends Component {
                                         col1={'#FFFFFF'}
                                         val2={item.left}
                                         col2={'#D6F5EE'}
+                                        left={true}
                                     />
                                     <SpeedInput
                                         style={{flex: 1}}
@@ -144,6 +146,7 @@ export default class StepProgrammingComponent extends Component {
                                         col1={'#CEE0F4'}
                                         val2={100 - item.right}
                                         col2={'#FFFFFF'}
+                                        left={false}
                                     />
                                 </View>
                             </TouchableOpacity>
@@ -177,13 +180,13 @@ const styles = StyleSheet.create({
     row: {
         height: 60,
         margin: 0,
-        width: '100%',
+        flex: 1,
         flexDirection: 'row',
     },
     selected_row: {
         height: 60,
         margin: 0,
-        width: '100%',
+        flex: 1,
         flexDirection: 'row',
         borderColor: '#d6d6d6',
         borderWidth: 1.0,
