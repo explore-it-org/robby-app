@@ -59,34 +59,45 @@ export default class StepProgrammingComponent extends Component {
         // TODO remove all style
 
         return (
+
             <View style={[styles.view, {flex: 1, justifyContent: 'center', alignItems: 'center'}]}>
-                <View style={{marginTop: 30, marginBottom: 20, height: 40, width: '80%', flexDirection: 'row'}}>
-                    <TextInput
-                        placeholder={i18n.t('Programming.programName')}
-                        style={{
-                            textAlign: 'center',
-                            flex: 2,
-                            height: 40,
-                            borderBottomColor: '#828282',
-                            borderBottomWidth: 1.0,
-                        }} value={this.props.Instruction.ActiveProgram.name} onChangeText={text => {
-                        this.props.setName(text);
-                    }}/>
+                <View style={{flexDirection: 'row', paddingVertical: 20}}>
+                    <View style={{flex: 1}}/>
+                    <View style={{flex: 8, flexDirection: 'row'}}>
+                        <TextInput
+                            placeholder={i18n.t('Programming.programName')}
+                            style={{
+                                textAlign: 'center',
+                                flex: 2,
+                                height: 40,
+                                borderBottomColor: '#828282',
+                                borderBottomWidth: 1.0,
+                            }}
+                            value={this.props.Instruction.ActiveProgram.name} onChangeText={text => {
+                            this.props.setName(text);
+                        }}/>
+                    </View>
+                    <View style={{flex: 1}}/>
                 </View>
 
-                <View style={{marginTop: 30, height: 30, width: '100%', flexDirection: 'row'}}>
-                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around', marginLeft: 35}}>
+
+                <View style={{ height: 30, width: '100%', flexDirection: 'row'}}>
+                    <View style={{flex: 1}}/>
+                    <View style={{flex: 2, flexDirection: 'row', justifyContent: 'flex-start'}}>
                         <Image source={require('../../../resources/icon/wheeldarkx.png')}
-                               style={{width: 25, height: 25}}/>
-                        <Text style={{textAlign: 'center', flex: 1}}>L</Text>
-                    </View>
-                    <Text style={{flex: 2, textAlign: 'center'}}>{i18n.t('MainTab.speed')}</Text>
-                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around', marginRight: 35}}>
-                        <Text style={{textAlign: 'center', flex: 1}}>R</Text>
-                        <Image source={require('../../../resources/icon/wheeldarkx.png')}
-                               style={{width: 25, height: 25}}/>
+                               style={{width: 20, height: 20}}/>
+                        <Text style={{textAlign: 'center', marginLeft: 5}}>L</Text>
                     </View>
 
+                    <Text style={{flex: 4, textAlign: 'center'}}>{i18n.t('MainTab.speed')}</Text>
+
+
+                    <View style={{flex: 2, flexDirection: 'row', justifyContent: 'flex-end'}}>
+                        <Text style={{textAlign: 'center', marginRight: 5}}>R</Text>
+                        <Image source={require('../../../resources/icon/wheeldarkx.png')}
+                               style={{width: 20, height: 20}}/>
+                    </View>
+                    <View style={{flex: 1}}/>
                 </View>
 
 

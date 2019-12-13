@@ -118,6 +118,9 @@ class SettingsComponent extends Component {
                     <Text style={{fontSize: 16, fontWeight: 'bold', paddingBottom: 15}}>
                         {i18n.t('Settings.learn')}
                     </Text>
+
+
+
                     <View style={{flexDirection: 'row', marginBottom: 10}}>
                         <Text style={{height: 50, width: '20%', marginLeft: 40}}>
                             {i18n.t('Settings.duration')}
