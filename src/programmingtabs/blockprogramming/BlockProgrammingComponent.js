@@ -68,6 +68,7 @@ export default class BlockProgrammingComponent extends Component {
         // TODO remove all style elements
         return (
             <View style={[styles.view, {flex: 1, justifyContent: 'center', alignItems: 'center'}]}>
+
                 <View style={{marginTop: 30, marginBottom: 20, height: 40, width: '80%', flexDirection: 'row'}}>
                     <TextInput
                         placeholder={i18n.t('Programming.programName')}
