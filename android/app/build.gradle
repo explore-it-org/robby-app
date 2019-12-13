@@ -131,8 +131,8 @@ android {
         applicationId "org.exploreit.robotics"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 9
-        versionName "1.1.2"
+        versionCode 10
+        versionName "1.1.3"
     }
     splits {
         abi {
