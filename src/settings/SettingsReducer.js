@@ -8,6 +8,7 @@ const default_state_settings = {
     isGranted: false,
     language: undefined,
     bleState: '',
+    visible: false,
 
 };
 export const SettingsReducer = (state = default_state_settings, action) => {
@@ -26,6 +27,8 @@ export const SettingsReducer = (state = default_state_settings, action) => {
             return Object.assign({}, state, {isGranted: action.isGranted});
         case ActionType.BLE_STATE:
             return Object.assign({}, state, {bleState: action.bleState});
+        case ActionType.TOGGLE_SETTINGS:
+            return Object.assign({}, state, {visible: !state.visible});
         default:
             return state;
     }

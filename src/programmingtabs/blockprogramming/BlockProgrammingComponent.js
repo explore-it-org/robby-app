@@ -14,6 +14,7 @@ import {FAB} from 'react-native-paper';
 import React from 'react';
 import ProgramInput from '../../controls/ProgramInput';
 import i18n from '../../../resources/locales/i18n';
+import CustomIcon from '../../utillity/CustomIcon';
 
 
 export default class BlockProgrammingComponent extends Component {
@@ -32,7 +33,9 @@ export default class BlockProgrammingComponent extends Component {
                     <FAB
                         //disabled={this.props.Instruction.ActiveProgram.steps.length <= 1}
                         style={styles.delete}
-                        icon="delete"
+                        icon={({size, color}) => (
+                            <CustomIcon name="deletelight" size={size} color={color}/>
+                        )}
                         onPress={() => {
                             this.props.deleteBlock();
                         }}
@@ -40,7 +43,9 @@ export default class BlockProgrammingComponent extends Component {
                     <FAB
                         //disabled={this.props.Instruction.selectedIndex === 0} disabling move up and down button produces unexpected behaviour
                         style={styles.move_up}
-                        icon="arrow-upward"
+                        icon={({size, color}) => (
+                            <CustomIcon name="up" size={size} color={color}/>
+                        )}
                         onPress={() => {
                             console.log('move down clicked');
                             this.props.moveUpBlock();
@@ -49,7 +54,9 @@ export default class BlockProgrammingComponent extends Component {
                     <FAB
                         //disabled={this.props.Instruction.selectedIndex >= this.props.Instruction.ActiveProgram.steps.length - 1}
                         style={styles.move_down}
-                        icon="arrow-downward"
+                        icon={({size, color}) => (
+                            <CustomIcon name="down" size={size} color={color}/>
+                        )}
                         onPress={() => {
                             console.log('move up clicked');
                             this.props.moveDownBlock();
@@ -89,7 +96,9 @@ export default class BlockProgrammingComponent extends Component {
                 <View>
                     <FAB
                         style={styles.fab}
-                        icon="add"
+                        icon={({size, color}) => (
+                            <CustomIcon name="plus" size={size} color={color}/>
+                        )}
                         onPress={() => {
                             this.props.addBlock();
                         }}

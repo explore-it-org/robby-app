@@ -4,16 +4,16 @@ import {
     FlatList,
     TouchableOpacity,
     Platform,
-    ScrollView, Alert,
+    ScrollView, Alert, Image,
 } from 'react-native';
 import {FAB} from 'react-native-paper';
 import React from 'react';
 import SpeedInput from '../../controls/SpeedInput';
 import i18n from '../../../resources/locales/i18n';
+import CustomIcon from '../../utillity/CustomIcon';
 
 
 export default class StepProgrammingComponent extends Component {
-
 
 
     render() {
@@ -24,7 +24,9 @@ export default class StepProgrammingComponent extends Component {
                     <FAB
                         disabled={this.props.Instruction.ActiveProgram.steps.length <= 1}
                         style={styles.delete}
-                        icon="delete"
+                        icon={({size, color}) => (
+                            <CustomIcon name="deletelight" size={size} color={color}/>
+                        )}
                         onPress={() => {
                             this.props.deleteInstruction();
                         }}
@@ -32,7 +34,9 @@ export default class StepProgrammingComponent extends Component {
                     <FAB
                         //disabled={this.props.Instruction.selectedIndex === 0} disabling move up and down button produces unexpected behaviour
                         style={styles.move_up}
-                        icon="arrow-upward"
+                        icon={({size, color}) => (
+                            <CustomIcon name="up" size={size} color={color}/>
+                        )}
                         onPress={() => {
                             console.log('move down clicked');
                             this.props.moveUp();
@@ -41,7 +45,9 @@ export default class StepProgrammingComponent extends Component {
                     <FAB
                         //disabled={this.props.Instruction.selectedIndex >= this.props.Instruction.ActiveProgram.steps.length - 1}
                         style={styles.move_down}
-                        icon="arrow-downward"
+                        icon={({size, color}) => (
+                            <CustomIcon name="down" size={size} color={color}/>
+                        )}
                         onPress={() => {
                             console.log('move up clicked');
                             this.props.moveDown();
@@ -56,22 +62,34 @@ export default class StepProgrammingComponent extends Component {
             <View style={[styles.view, {flex: 1, justifyContent: 'center', alignItems: 'center'}]}>
                 <View style={{marginTop: 30, marginBottom: 20, height: 40, width: '80%', flexDirection: 'row'}}>
                     <TextInput
-                        placeholder={i18n.t("Programming.programName")}
+                        placeholder={i18n.t('Programming.programName')}
                         style={{
-                        textAlign: 'center',
-                        flex: 2,
-                        height: 40,
-                        borderBottomColor: '#828282',
-                        borderBottomWidth: 1.0,
-                    }} value={this.props.Instruction.ActiveProgram.name} onChangeText={text => {
+                            textAlign: 'center',
+                            flex: 2,
+                            height: 40,
+                            borderBottomColor: '#828282',
+                            borderBottomWidth: 1.0,
+                        }} value={this.props.Instruction.ActiveProgram.name} onChangeText={text => {
                         this.props.setName(text);
                     }}/>
                 </View>
-                <View style={{marginTop: 30, height: 20, width: '100%', flexDirection: 'row'}}>
-                    <Text style={{flex: 1, textAlign: 'center'}}>L</Text>
+
+                <View style={{marginTop: 30, height: 30, width: '100%', flexDirection: 'row'}}>
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around', marginLeft: 35}}>
+                        <Image source={require('../../../resources/icon/wheeldarkx.png')}
+                               style={{width: 25, height: 25}}/>
+                        <Text style={{textAlign: 'center', flex: 1}}>L</Text>
+                    </View>
                     <Text style={{flex: 2, textAlign: 'center'}}>{i18n.t('MainTab.speed')}</Text>
-                    <Text style={{flex: 1, textAlign: 'center'}}>R</Text>
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around', marginRight: 35}}>
+                        <Text style={{textAlign: 'center', flex: 1}}>R</Text>
+                        <Image source={require('../../../resources/icon/wheeldarkx.png')}
+                               style={{width: 25, height: 25}}/>
+                    </View>
+
                 </View>
+
+
                 <ScrollView
                     style={{backgroundColor: 'white'}}
                     resetScrollToCoords={{x: 0, y: 0}}
@@ -82,6 +100,7 @@ export default class StepProgrammingComponent extends Component {
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={({item, index}) => (
                             <TouchableOpacity
+                                style={{width: '100%'}}
                                 onPress={() => {
                                     if (this.props.Instruction.selectedIndex === parseInt(index)) {
                                         this.props.setActiveIndex(-1);
@@ -92,26 +111,28 @@ export default class StepProgrammingComponent extends Component {
                                 <View key={index}
                                       style={parseInt(index) === this.props.Instruction.selectedIndex ? styles.selected_row : styles.row}>
                                     <SpeedInput
+                                        style={{flex: 1}}
                                         onchange={(text) => {
                                             this.props.setActiveIndex(-1);
                                             this.props.changeLeftSpeed(parseInt(text), parseInt(index));
                                         }}
                                         val={item.left}
                                         val1={100 - item.left}
-                                        col1={'#FAFAFA'}
+                                        col1={'#FFFFFF'}
                                         val2={item.left}
-                                        col2={'#E2F7F2'}
+                                        col2={'#D6F5EE'}
                                     />
                                     <SpeedInput
+                                        style={{flex: 1}}
                                         onchange={(text) => {
                                             this.props.setActiveIndex(-1);
                                             this.props.changeRightSpeed(parseInt(text), parseInt(index));
                                         }}
                                         val={item.right}
                                         val1={item.right}
-                                        col1={'#E4F1FF'}
+                                        col1={'#CEE0F4'}
                                         val2={100 - item.right}
-                                        col2={'#FAFAFA'}
+                                        col2={'#FFFFFF'}
                                     />
                                 </View>
                             </TouchableOpacity>
@@ -121,7 +142,9 @@ export default class StepProgrammingComponent extends Component {
                 <View>
                     <FAB
                         style={styles.fab}
-                        icon="add"
+                        icon={({size, color}) => (
+                            <CustomIcon name="plus" size={size} color={color}/>
+                        )}
                         onPress={() => {
                             this.props.addInstruction();
                         }}

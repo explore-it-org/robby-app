@@ -2,7 +2,6 @@ import Database from './RoboticsDatabase';
 import *  as ActionTypes from '../GlobalActionTypes';
 
 
-
 const default_state_Programs = {
     lastUpdate: Date.now(),
     Programs: Database.findAll(),

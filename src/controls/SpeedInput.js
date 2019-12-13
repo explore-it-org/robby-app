@@ -32,13 +32,14 @@ export default class SpeedInput extends Component {
         const flexValRight = isNaN(this.props.val2) ? 0 : this.props.val2;
         return (
             <View style={styles.outer}>
+                <View style={styles.numinput}>
+                    <NumericInput style={{marginLeft: 35}} onchange={this.onChanged} val={this.props.val}/>
+                </View>
                 <View style={styles.progressbar}>
                     <View style={{backgroundColor: this.props.col1, flex: flexValLeft}}/>
                     <View style={{backgroundColor: this.props.col2, flex: flexValRight}}/>
                 </View>
-                <View style={styles.numinput}>
-                    <NumericInput onchange={this.onChanged} val={this.props.val}/>
-                </View>
+
             </View>
         );
     }
@@ -48,7 +49,7 @@ const styles = StyleSheet.create({
     outer: {
         width: '50%',
         justifyContent: 'center',
-        alignItems: 'center',
+
     },
     progressbar: {
         position: 'absolute',
@@ -58,12 +59,13 @@ const styles = StyleSheet.create({
         zIndex: 0,
     },
     numinput: {
-        position: 'absolute',
-        justifyContent: 'center',
         zIndex: 1,
         flexDirection: 'row',
         width: '30%',
         height: '70%',
+        marginRight: 100,
+
+
     },
 
 });
