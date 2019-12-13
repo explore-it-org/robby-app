@@ -70,7 +70,7 @@ export default class BlockProgrammingComponent extends Component {
             <View
                 style={[styles.view, {flex: 1, justifyContent: 'center', alignItems: 'center'}]}>
 
-                <View style={{flexDirection: 'row'}}>
+                <View style={{flexDirection: 'row', paddingVertical: 20}}>
                     <View style={{flex: 1}}/>
                     <View style={{flex: 8, flexDirection: 'row'}}>
                         <TextInput
@@ -159,6 +159,7 @@ const styles = StyleSheet.create({
         borderColor: '#d6d6d6',
         borderWidth: 1.0,
         paddingVertical: 10,
+        alignContent: 'center',
         backgroundColor: '#FAFAFA',
     },
     view: {
