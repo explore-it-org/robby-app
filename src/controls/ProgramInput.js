@@ -38,20 +38,36 @@ export default class ProgramInput extends Component {
         const selectItem = this.props.pickerItems.find(v => v.id === this.props.selectedProgram);
         const selectedText = selectItem === undefined ? i18n.t('BlockProgramming.programSelectionPrompt') : selectItem.name;
         return (
+
             <View key={this.props.selectedProgram}
                   style={parseInt(index) === this.props.selected ? styles.selected_row : styles.row}>
-                <View style={{width: '17%', height: '65%'}}>
+
+
+                <View style={{flex: 1}}>
                     <NumericInput
                         onchange={this.props.onRepeatValueChange}
-                        val={this.props.val === null ? 0 : this.props.val}/></View>
-                <Text>{selectedText}</Text>
-                <IconButton
-                    icon={({size, color}) => (
-                        <CustomIcon name="edit" size={size} color={color}/>
-                    )}
-                    size={20}
-                    onPress={() => this.setState({pickerOpen: true})}
-                />
+                        val={this.props.val === null ? 0 : this.props.val}/>
+                </View>
+
+                <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center'}}>
+                    <Text style={{alignSelf: 'center', fontSize: 16}}> x </Text>
+                </View>
+
+
+                <View style={{flex: 4, flexDirection: 'column', justifyContent: 'center'}}>
+                    <Text style={{fontSize: 16}}>{selectedText}</Text>
+                </View>
+
+                <View style={{flex: 1,  justifyContent: 'center'}}>
+                    <IconButton
+                        icon={({size, color}) => (
+                            <CustomIcon name="edit" size={size} color={color}/>
+                        )}
+                        size={20}
+                        onPress={() => this.setState({pickerOpen: true})}
+                    />
+                </View>
+
                 <SinglePickerMaterialDialog
                     title={'choose one'}
                     items={this.props.pickerItems.map(v => ({
@@ -75,7 +91,7 @@ export default class ProgramInput extends Component {
                     }
                     colorAccent="#9c27b0"
                 />
-                <View style={{width: '23%'}}/>
+
             </View>
         );
     }
@@ -83,17 +99,14 @@ export default class ProgramInput extends Component {
 
 const styles = StyleSheet.create({
     row: {
-        height: 60,
-        margin: 0,
         width: '100%',
         flexDirection: 'row',
-        alignContent: 'center',
+        justifyContent: 'space-between',
     },
     selected_row: {
-        height: 60,
-        margin: 0,
         width: '100%',
         flexDirection: 'row',
+        justifyContent: 'space-around',
     },
     numinput: {
         justifyContent: 'center',
