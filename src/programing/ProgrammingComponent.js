@@ -330,11 +330,11 @@ const TabNavigator = createMaterialTopTabNavigator({
     },
 }, {
     tabBarOptions: {
-        activeTintColor: '#9c27b0',
+        activeTintColor: '#1E3888',
         inactiveTintColor: 'gray',
         showLabel: false,
         indicatorStyle: {
-            backgroundColor: '#9c27b0',
+            backgroundColor: '#1E3888',
         },
         style: {
             backgroundColor: 'white',

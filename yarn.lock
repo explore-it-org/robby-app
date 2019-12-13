@@ -6781,10 +6781,10 @@ readdirp@^2.2.1:
     micromatch "^3.1.10"
     readable-stream "^2.0.2"
 
-realm@3.5.0:
-  version "3.5.0"
-  resolved "https://registry.yarnpkg.com/realm/-/realm-3.5.0.tgz#3998b6b6a437f42286f56dd2ec48b7b213ce0397"
-  integrity sha512-rI+VIyniKtpsHp3EpmluAoqHM+gHIgoqQ29NBUcpSpMAzvVDEVSpAJeEaO2fxJ9+pDyhjhCPFudvAjQ2z7waBg==
+realm@3.6.0:
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/realm/-/realm-3.6.0.tgz#e65bd0ac9e2d06c7ad35afae21bc6ce0a7ed481b"
+  integrity sha512-nWG0W7CdbKh8XFHR0Ocj5viWEMi5IE2EWG7Nm2aBaI5gP3XByMHAkk1jAJVHyKuuvzdkMOkhHjlAXQlFdGvrxQ==
   dependencies:
     command-line-args "^4.0.6"
     decompress "^4.2.0"

@@ -104,7 +104,7 @@ PODS:
     - React-Core (= 0.60.5)
   - React-RCTWebSocket (0.60.5):
     - React-Core (= 0.60.5)
-  - RealmJS (3.5.0):
+  - RealmJS (3.6.0):
     - GCDWebServer
     - React
   - RNCAsyncStorage (1.6.3):
@@ -261,7 +261,7 @@ SPEC CHECKSUMS:
   React-RCTText: b074d89033583d4f2eb5faf7ea2db3a13c7553a2
   React-RCTVibration: 2105b2e0e2b66a6408fc69a46c8a7fb5b2fdade0
   React-RCTWebSocket: cd932a16b7214898b6b7f788c8bddb3637246ac4
-  RealmJS: 4fae41c22da442c8e8d0eba5fafc8add893a7f66
+  RealmJS: ccaef6c07181c21bbafc227f184bc32065f6b27a
   RNCAsyncStorage: 3c304d1adfaea02ec732ac218801cb13897aa8c0
   RNGestureHandler: 7add966bb5d90ee8cf38d4341f87814474357972
   RNLocalize: 07eb7a91d10021cdf59d80061ebf3adb8a5b5688
