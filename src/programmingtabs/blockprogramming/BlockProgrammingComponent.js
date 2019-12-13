@@ -67,24 +67,30 @@ export default class BlockProgrammingComponent extends Component {
 
         // TODO remove all style elements
         return (
-            <View style={[styles.view, {flex: 1, justifyContent: 'center', alignItems: 'center'}]}>
+            <View
+                style={[styles.view, {flex: 1, justifyContent: 'center', alignItems: 'center'}]}>
 
-                <View style={{marginTop: 30, marginBottom: 20, height: 40, width: '80%', flexDirection: 'row'}}>
-                    <TextInput
-                        placeholder={i18n.t('Programming.programName')}
-                        // TODO move to style
-                        style={{
-                            textAlign: 'center',
-                            flex: 2,
-                            height: 40,
-                            borderBottomColor: '#828282',
-                            borderBottomWidth: 1.0,
-                        }}
-                        value={this.props.Block.Active_Block.name}
-                        onChangeText={text => {
-                            this.props.setBlockName(text);
-                        }}/>
+                <View style={{flexDirection: 'row'}}>
+                    <View style={{flex: 1}}/>
+                    <View style={{flex: 8, flexDirection: 'row'}}>
+                        <TextInput
+                            placeholder={i18n.t('Programming.programName')}
+                            // TODO move to style
+                            style={{
+                                textAlign: 'center',
+                                flex: 2,
+                                height: 40,
+                                borderBottomColor: '#828282',
+                                borderBottomWidth: 1.0,
+                            }}
+                            value={this.props.Block.Active_Block.name}
+                            onChangeText={text => {
+                                this.props.setBlockName(text);
+                            }}/>
+                    </View>
+                    <View style={{flex: 1}}/>
                 </View>
+
                 <ScrollView
                     style={{backgroundColor: 'white'}}
                     resetScrollToCoords={{x: 0, y: 0}}
@@ -139,21 +145,19 @@ const styles = StyleSheet.create({
     row: {
         height: 60,
         margin: 0,
-        width: '100%',
+        flex: 1,
         flexDirection: 'row',
         alignContent: 'center',
-        paddingHorizontal: 30,
         paddingVertical: 10,
         backgroundColor: '#FAFAFA',
     },
     selected_row: {
         height: 60,
         margin: 0,
-        width: '100%',
+        flex: 1,
         flexDirection: 'row',
         borderColor: '#d6d6d6',
         borderWidth: 1.0,
-        paddingHorizontal: 30,
         paddingVertical: 10,
         backgroundColor: '#FAFAFA',
     },
@@ -166,7 +170,7 @@ const styles = StyleSheet.create({
         margin: 16,
         right: -200,
         bottom: 18,
-        zIndex: 999
+        zIndex: 999,
     },
     delete: {
         position: 'absolute',

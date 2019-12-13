@@ -40,8 +40,12 @@ export default class ProgramInput extends Component {
         return (
 
             <View key={this.props.selectedProgram}
-                  style={parseInt(index) === this.props.selected ? styles.selected_row : styles.row}>
+                  style={
+                      parseInt(index) === this.props.selected ?
+                          styles.selected_row :
+                          styles.row}>
 
+                <View style={{flex: 1}}/>
 
                 <View style={{flex: 1}}>
                     <NumericInput
@@ -54,11 +58,11 @@ export default class ProgramInput extends Component {
                 </View>
 
 
-                <View style={{flex: 4, flexDirection: 'column', justifyContent: 'center'}}>
+                <View style={{flex: 5, flexDirection: 'column', justifyContent: 'center'}}>
                     <Text style={{fontSize: 16}}>{selectedText}</Text>
                 </View>
 
-                <View style={{flex: 1,  justifyContent: 'center'}}>
+                <View style={{flex: 1, justifyContent: 'center'}}>
                     <IconButton
                         icon={({size, color}) => (
                             <CustomIcon name="edit" size={size} color={color}/>
@@ -67,6 +71,8 @@ export default class ProgramInput extends Component {
                         onPress={() => this.setState({pickerOpen: true})}
                     />
                 </View>
+
+                <View style={{flex: 1}}/>
 
                 <SinglePickerMaterialDialog
                     title={'choose one'}
@@ -101,12 +107,10 @@ const styles = StyleSheet.create({
     row: {
         width: '100%',
         flexDirection: 'row',
-        justifyContent: 'space-between',
     },
     selected_row: {
         width: '100%',
         flexDirection: 'row',
-        justifyContent: 'space-around',
     },
     numinput: {
         justifyContent: 'center',
