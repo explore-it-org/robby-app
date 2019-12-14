@@ -49,8 +49,8 @@ export default class ProgrammingComponent extends Component {
                     Toast.show(i18n.t('Programming.uploadMessage'));
                 } else if (prev.isDownloading && !now.isDownloading) {
                     Toast.show(i18n.t('Programming.downloadMessage'));
-                } else if (prev.isRecording && !now.isDownloading) {
-                    Toast.show(i18n.t('Programming.downloadMessage'));
+                } else if (prev.isRecording && !now.isRecording) {
+                    Toast.show(i18n.t('Programming.recordMessage'));
                 } else if (prev.isGoing && !now.isGoing) {
                     Toast.show(i18n.t('Programming.driveMessage'));
                 }
