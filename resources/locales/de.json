@@ -56,7 +56,7 @@
     "success": "Erfolg",
     "failure": "Fehler",
     "emptyName": "Bitte geben Sie einen Namen ein",
-    "addFiled": "Programm konnte nicht gespeichert werden:",
+    "addFailed": "Programm konnte nicht gespeichert werden:",
     "nameTaken": "Name ist bereits vergeben",
     "duplicateFailed": "Programm konnte nicht dupliziert werden:",
     "deleteFailed": "Programm konnte nicht gelöscht werden:",

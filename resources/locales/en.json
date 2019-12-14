@@ -56,7 +56,7 @@
     "success": "Success",
     "failure": "Failure",
     "emptyName": "Please enter a name",
-    "addFiled": "Failed to save program: ",
+    "addFailed": "Failed to save program: ",
     "nameTaken": "Name is already taken",
     "duplicateFailed": "Failed to duplicate program: ",
     "deleteFailed": "Failed to delete program: ",
