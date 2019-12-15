@@ -62,7 +62,6 @@
     "deleteFailed": "Programm konnte nicht gelöscht werden:",
     "programUsed": "Das Programm wird von einem anderen Programm verwendet",
     "programUsedByActiveProgram": "Das Programm wird vom aktuell geöffneten Programm verwendet",
-    "programUsedByActiveProgramTitle": "Programm kann nicht gelöscht werden",
-    "deleteAllFailed": "Programme konnten nicht gelöscht werden:"
+    "programUsedByActiveProgramTitle": "Programm kann nicht gelöscht werden"
   }
 }

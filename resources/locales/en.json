@@ -62,7 +62,6 @@
     "deleteFailed": "Failed to delete program: ",
     "programUsed": "Program is used by another program",
     "programUsedByActiveProgram": "Program is used by the currently opened program",
-    "programUsedByActiveProgramTitle": "Program cannot be deleted",
-    "deleteAllFailed": "Failed to delete all programs: "
+    "programUsedByActiveProgramTitle": "Program cannot be deleted"
   }
 }
