@@ -109,17 +109,6 @@ class RoboticsDatabase {
 
     }
 
-    deleteAll() {
-        try {
-            this.repository.write(() => {
-                this.repository.delete(this.repository.objects('Program'));
-            });
-            return {operation: 'deleteAll', status: i18n.t('RoboticsDatabase.success'), error: ''};
-        } catch (e) {
-            return {operation: 'deleteAll', status: i18n.t('RoboticsDatabase.failure'), error: i18n.t('RoboticsDatabase.deleteAllFailed') + e};
-        }
-    }
-
     // Checks whether the given `program` has a direct reference to the program with the id `program_id`.
     // This function is used to test whether the program `program_id` can be deleted.
     isUsed(program, program_id): boolean {

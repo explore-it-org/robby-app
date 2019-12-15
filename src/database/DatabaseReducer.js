@@ -41,14 +41,6 @@ export const ProgramsReducer = (state = default_state_Programs, action) => {
                     Programs: Database.findAll(),
                     lastChange: change,
                 });
-        case ActionTypes.DELETE_ALL:
-            change = Database.deleteAll();
-            return Object.assign({}, state,
-                {
-                    lastUpdate: Date.now(),
-                    Programs: Database.findAll(),
-                    lastChange: change,
-                });
         case ActionTypes.DELETE_PROGRAM:
             change = Database.delete(action.program_id);
             return Object.assign({}, state,

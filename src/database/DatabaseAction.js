@@ -1,4 +1,4 @@
-import {ADD_PROGRAM, SAVE_PROGRAM, DUPLICATE_PROGRAM, DELETE_PROGRAM, DELETE_ALL} from '../GlobalActionTypes';
+import {ADD_PROGRAM, SAVE_PROGRAM, DUPLICATE_PROGRAM, DELETE_PROGRAM} from '../GlobalActionTypes';
 import {loadChildren} from '../programmingtabs/blockprogramming/ActiveBlockAction';
 import {Program} from '../model/DatabaseModels';
 import Database from '../database/RoboticsDatabase'
@@ -33,6 +33,7 @@ export const duplicate = (program, newName = '') => ({
     program: program,
     newName: newName,
 });
+
 export const remove = (program_id) => ({
     type: DELETE_PROGRAM,
     program_id: program_id,
@@ -49,10 +50,3 @@ export const removeProgram = (program_id) => {
         }
     };
 };
-export const delete_all = () => ({
-    type: DELETE_ALL,
-});
-
-
-
-
