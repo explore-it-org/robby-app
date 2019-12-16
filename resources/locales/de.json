@@ -13,7 +13,7 @@
     "driveMessage": "Anweisungen abgearbeitet, Fahrt erfolgreich abgeschlossen!",
     "bluetoothNotTurnedOnTitle": "Bluetooth ist ausgeschaltet.",
     "bluetoothNotTurnedOnMessage": "Bitte schalten Sie Bluetooth ein.",
-    "programName": "Programmname"
+    "programName": "Programmname",
   },
   "BlockProgramming":{
     "programSelectionPrompt": "Wählen Sie ein Programm..."

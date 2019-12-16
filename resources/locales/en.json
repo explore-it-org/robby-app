@@ -6,14 +6,14 @@
   },
   "Programming": {
     "device": "Device",
-    "chooseDevice": "Choose Device",
+    "chooseDevice": "Choose a Device",
     "downloadMessage": "Instructions successfully downloaded!",
     "recordMessage": "Successfully recorded and saved on the robot!",
     "uploadMessage":"Instructions successfully uploaded on the robot!",
     "driveMessage": "Instructions followed, terminated drive successfully!",
     "bluetoothNotTurnedOnTitle": "Bluetooth is powered off",
     "bluetoothNotTurnedOnMessage": "Please turn on Bluetooth",
-    "programName": "Program name"
+    "programName": "Program name",
   },
   "BlockProgramming": {
     "programSelectionPrompt": "Select a program..."
