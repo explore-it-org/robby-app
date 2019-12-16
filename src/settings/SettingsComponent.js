@@ -43,12 +43,11 @@ class SettingsComponent extends Component {
     }
 
     changeDuration(duration) {
-        if (duration || duration.length > 0) {
+        if (duration) {
             this.props.setDuration(parseInt(duration));
         } else {
             this.props.setDuration();
         }
-
     }
 
 
@@ -144,19 +143,14 @@ class SettingsComponent extends Component {
                                 this.changeDuration('');
                             }}
                             onChangeText={text => this.changeDuration(text)}
-                            value={() => {
-                                if (this.props.Settings.duration) {
-                                    return this.props.Settings.duration.toString();
-                                } else {
-                                    return '';
-                                }
-                            }}
+                            value={this.props.Settings.duration.toString()
+                            }
                         />
                         <Text style={{height: 50, marginLeft: 20}}>
                             {i18n.t('Settings.duration-unit')}
                         </Text>
                     </View>
-
+                    {this.renderIntervalField()}
                     <Text style={{fontSize: 16, fontWeight: 'bold', paddingBottom: 15}}>
                         {i18n.t('Settings.language')}
                     </Text>
