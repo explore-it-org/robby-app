@@ -6,29 +6,17 @@
   },
   "Programming": {
     "device": "Device",
-    "noConnection": "No Connection ",
-    "chooseDevice": "Choose Device",
-    "connecting": "Connecting...",
-    "connectionError": "Error while connecting",
-    "download": "Download",
+    "chooseDevice": "Choose a Device",
     "downloadMessage": "Instructions successfully downloaded!",
-    "record": "Record",
     "recordMessage": "Successfully recorded and saved on the robot!",
-    "upload": "Upload",
     "uploadMessage":"Instructions successfully uploaded on the robot!",
-    "drive": "Drive",
     "driveMessage": "Instructions followed, terminated drive successfully!",
     "bluetoothNotTurnedOnTitle": "Bluetooth is powered off",
     "bluetoothNotTurnedOnMessage": "Please turn on Bluetooth",
     "programName": "Program name",
-    "bleDefaultDeviceName": "Unknown"
   },
   "BlockProgramming": {
     "programSelectionPrompt": "Select a program..."
-  },
-  "ProgramOverview": {
-    "delete": "Delete",
-    "duplicate": "Duplicate"
   },
   "SpeedInput": {
     "invalidEntry": "Invalid Entry",
@@ -44,13 +32,6 @@
     "duration-unit": "Seconds (1..80)",
     "language": "Language:",
     "updated": "Settings updated"
-  },
-  "App": {
-    "programming": "Programming",
-    "settings": "Settings"
-  },
-  "SettingsStore": {
-    "noConnection": "No Connection"
   },
   "RoboticsDatabase": {
     "success": "Success",
