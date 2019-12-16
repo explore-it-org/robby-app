@@ -3,14 +3,10 @@ import {StyleSheet, View, Alert, ToastAndroid, Image} from 'react-native';
 import {Appbar, Button, IconButton, Modal, Portal} from 'react-native-paper';
 import {createAppContainer, NavigationActions} from 'react-navigation';
 import {createMaterialTopTabNavigator} from 'react-navigation-tabs';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-
 import {getStatusBarHeight, ifIphoneX} from 'react-native-iphone-x-helper';
 import SinglePickerMaterialDialog from '../materialdialog/SinglePickerMaterialDialog';
 import i18n from '../../resources/locales/i18n';
-
 import OverviewContainer from '../programmingtabs/overview/OverviewContainer';
-
 import StepProgrammingContainer from '../programmingtabs/stepprogramming/StepProgrammingContainer';
 import BlockProgrammingContainer from '../programmingtabs/blockprogramming/BlockProgrammingContainer';
 import BleService from '../ble/BleService';
