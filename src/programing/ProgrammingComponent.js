@@ -124,7 +124,7 @@ export default class ProgrammingComponent extends Component {
                         icon={({size, color}) => (
                             (this.props.BLEConnection.isConnected) ?
                                 <CustomIcon name="bluetooth" size={size} color={color}/> :
-                                <CustomIcon name="open" size={size} color={color}/>
+                                <CustomIcon name="bluetooth-disabled" size={size} color={color}/>
                         )}
                         //{(this.props.BLEConnection.isConnected) ? 'bluetooth-connected' : 'bluetooth'}
                         style={{position: 'absolute', right: 0}}
@@ -357,7 +357,7 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         bottom: 0,
-        justifyContent: "space-evenly"
+        justifyContent: 'space-evenly',
     },
     col: {
         flex: 1,

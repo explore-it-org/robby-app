@@ -5,7 +5,6 @@ import {BleConnectionReducer} from '../ble/BleReducer';
 import {SettingsReducer} from '../settings/SettingsReducer';
 import {combineReducers} from 'redux';
 import thunk from 'redux-thunk';
-import * as dbtest from '../database/DatabaseTest';
 import {ActiveBlockReducer} from '../programmingtabs/blockprogramming/ActiveBlockReducer';
 import { persistReducer, persistStore } from 'redux-persist';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';

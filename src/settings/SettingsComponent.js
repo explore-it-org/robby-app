@@ -97,7 +97,7 @@ class SettingsComponent extends Component {
             <View style={[styles.container]}>
                 <Appbar>
                     <Appbar.Action
-                        icon="menu"
+                        icon="close"
                         size={32}
                         onPress={() => this.props.toggleSettings()}
                     />
@@ -118,7 +118,6 @@ class SettingsComponent extends Component {
                     <Text style={{fontSize: 16, fontWeight: 'bold', paddingBottom: 15}}>
                         {i18n.t('Settings.learn')}
                     </Text>
-
 
 
                     <View style={{flexDirection: 'row', marginBottom: 10}}>
