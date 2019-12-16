@@ -75,7 +75,7 @@ export default class BlockProgrammingComponent extends Component {
                     <View style={{flex: 8, flexDirection: 'row'}}>
                         <TextInput
                             placeholder={i18n.t('Programming.programName')}
-                            // TODO move to style
+                            maxLength={30}
                             style={{
                                 textAlign: 'center',
                                 flex: 2,

@@ -17,6 +17,7 @@ class SettingsComponent extends Component {
         lastUpdate: 0,
     };
 
+
     componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS): void {
         let prev = prevProps.Settings.lastUpdate;
         let now = this.props.Settings.lastUpdate;
@@ -49,6 +50,8 @@ class SettingsComponent extends Component {
         }
 
     }
+
+
 
     renderIntervalField = () => {
         if (this.props.BLEConnection.isConnected) {
