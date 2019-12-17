@@ -14,7 +14,7 @@ import Toast from './src/controls/Toast';
 const fontConfig = {
     default: {
         regular: {
-            fontFamily: 'Jost-600-Semi',
+            fontFamily: 'Jost-400-Book',
             fontWeight: 'normal',
         },
         medium: {
