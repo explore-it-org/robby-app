@@ -52,8 +52,9 @@ class BleService {
     checkDeviceScanStatus(errorHandler, successHandler) {
         this.manager.startDeviceScan(null, null, ((error, scannedDevice) => {
             if (error) {
-                errorHandler(error);
+                errorHandler(error.message);
             } else {
+                console.log('its working');
                 successHandler(true);
             }
         }));

@@ -34,23 +34,20 @@ export default class ProgrammingComponent extends Component {
                 Alert.alert(now.status, now.error);
             }
         }
-        if (this.props.BLEConnection.error !== prevProps.BLEConnection.error) {
-            Alert.alert('ble error', this.props.BLEConnection.error);
-        } else {
-            prev = prevProps.BLEConnection.device;
-            now = this.props.BLEConnection.device;
-            if (prev !== now) {
-                if (prev.isUploading && !now.isUploading) {
-                    Toast.show(i18n.t('Programming.uploadMessage'));
-                } else if (prev.isDownloading && !now.isDownloading) {
-                    Toast.show(i18n.t('Programming.downloadMessage'));
-                } else if (prev.isRecording && !now.isRecording) {
-                    Toast.show(i18n.t('Programming.recordMessage'));
-                } else if (prev.isGoing && !now.isGoing) {
-                    Toast.show(i18n.t('Programming.driveMessage'));
-                }
+        prev = prevProps.BLEConnection.device;
+        now = this.props.BLEConnection.device;
+        if (prev !== now) {
+            if (prev.isUploading && !now.isUploading) {
+                Toast.show(i18n.t('Programming.uploadMessage'));
+            } else if (prev.isDownloading && !now.isDownloading) {
+                Toast.show(i18n.t('Programming.downloadMessage'));
+            } else if (prev.isRecording && !now.isRecording) {
+                Toast.show(i18n.t('Programming.recordMessage'));
+            } else if (prev.isGoing && !now.isGoing) {
+                Toast.show(i18n.t('Programming.driveMessage'));
             }
         }
+
     }
 
     // gets the current screen from navigation state
@@ -134,6 +131,7 @@ export default class ProgrammingComponent extends Component {
                         size={32}
                         disabled={this.props.BLEConnection.isConnecting}
                         onPress={() => {
+                            //  this.props.scanStatus(); this will break a lot of things
                             if (!this.props.Settings.isGranted) {
                                 BleService.requestLocationPermission().then(a => {
                                     this.props.grantLocation(a);
@@ -142,6 +140,9 @@ export default class ProgrammingComponent extends Component {
                                 Alert.alert(i18n.t('Programming.bluetoothNotTurnedOnTitle'), i18n.t('Programming.bluetoothNotTurnedOnMessage'));
                             } else if (this.props.BLEConnection.isConnected) {
                                 this.props.disconnect();
+                            } else if (this.props.BLEConnection.error !== '') {
+                                Alert.alert('ble error', this.props.BLEConnection.error);
+                                this.props.scanningEnabled('');
                             } else {
                                 this.props.scanForRobot();
                             }
