@@ -14,6 +14,7 @@
     "bluetoothNotTurnedOnTitle": "Bluetooth ist ausgeschaltet.",
     "bluetoothNotTurnedOnMessage": "Bitte schalten Sie Bluetooth ein.",
     "programName": "Programmname",
+    "noConnectedDevice": "No connection"
   },
   "BlockProgramming":{
     "programSelectionPrompt": "Wählen Sie ein Programm..."
