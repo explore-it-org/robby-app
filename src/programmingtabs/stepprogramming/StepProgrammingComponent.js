@@ -75,6 +75,7 @@ export default class StepProgrammingComponent extends Component {
                                 height: 40,
                                 borderBottomColor: '#828282',
                                 borderBottomWidth: 1.0,
+                                fontFamily: 'Jost-500-Medium',
                             }}
                             value={this.props.Instruction.ActiveProgram.name} onChangeText={text => {
                             this.props.setName(text);
