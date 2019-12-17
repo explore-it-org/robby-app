@@ -50,9 +50,10 @@ class BleService {
     }
 
     checkDeviceScanStatus(errorHandler, successHandler) {
+        console.log("we are here")
         this.manager.startDeviceScan(null, null, ((error, scannedDevice) => {
             if (error) {
-                errorHandler(error);
+                errorHandler(error.message);
             } else {
                 successHandler(true);
             }
