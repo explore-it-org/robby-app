@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Text, TextInput} from 'react-native';
+import {StyleSheet, View} from 'react-native';
+import {Text, TextInput} from 'react-native-paper';
 import {Appbar} from 'react-native-paper';
 
 
@@ -9,7 +10,6 @@ import i18n from '../../resources/locales/i18n';
 import {Picker} from 'native-base';
 import Toast from '../controls/Toast';
 import {toggleSettings} from './SettingsAction';
-import {JostText} from '../controls/JostText';
 
 
 class SettingsComponent extends Component {
@@ -52,26 +52,22 @@ class SettingsComponent extends Component {
     }
 
 
-
     renderIntervalField = () => {
         if (this.props.BLEConnection.isConnected) {
             return (
                 <View>
-                    <JostText style={{fontSize: 16, fontWeight: 'bold', paddingBottom: 15}}>
+                    <Text style={{fontSize: 16, fontWeight: 'bold', paddingBottom: 15}}>
                         {i18n.t('Settings.settings')}
-                    </JostText>
+                    </Text>
                     <View style={{flexDirection: 'row', marginBottom: 10}}>
-                        <JostText style={{height: 50, width: '20%', marginLeft: 40}}>
+                        <Text style={{height: 50, width: '20%', marginLeft: 40}}>
                             {i18n.t('Settings.interval')}
-                        </JostText>
-
+                        </Text>
                         <TextInput
                             style={{
                                 padding: 5,
                                 width: 60,
                                 height: 50,
-                                borderWidth: 1,
-                                borderColor: 'grey',
                                 backgroundColor: 'white',
                                 justifyContent: 'center',
                             }}
@@ -81,9 +77,9 @@ class SettingsComponent extends Component {
                             onChangeText={text => this.changeInterval(text)}
                             value={this.props.Settings.interval.toString()}
                         />
-                        <JostText style={{height: 50, marginLeft: 20}}>
+                        <Text style={{height: 50, marginLeft: 20}}>
                             {i18n.t('Settings.interval-unit')}
-                        </JostText>
+                        </Text>
                     </View>
                 </View>
             );

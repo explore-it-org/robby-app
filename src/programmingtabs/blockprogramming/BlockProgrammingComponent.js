@@ -77,6 +77,7 @@ export default class BlockProgrammingComponent extends Component {
                             placeholder={i18n.t('Programming.programName')}
                             maxLength={30}
                             style={{
+                                fontFamily: 'Jost-500-Medium',
                                 textAlign: 'center',
                                 flex: 2,
                                 height: 40,

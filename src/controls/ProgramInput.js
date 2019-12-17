@@ -1,10 +1,10 @@
 import {Component} from 'react';
-import {StyleSheet, View, Alert, Picker, TextComponent, Text} from 'react-native';
+import {StyleSheet, View, Alert, Picker, TextComponent} from 'react-native';
 import React from 'react';
 import NumericInput from './NumericInput';
 import i18n from '../../resources/locales/i18n';
 import SinglePickerMaterialDialog from '../materialdialog/SinglePickerMaterialDialog';
-
+import {Text} from 'react-native-paper';
 import {Button, FAB, IconButton} from 'react-native-paper';
 import CustomIcon from '../utillity/CustomIcon';
 
@@ -54,12 +54,12 @@ export default class ProgramInput extends Component {
                 </View>
 
                 <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center'}}>
-                    <Text style={{alignSelf: 'center', fontSize: 16}}> x </Text>
+                    <Text style={{alignSelf: 'center'}}> x </Text>
                 </View>
 
 
                 <View style={{flex: 5, flexDirection: 'column', justifyContent: 'center'}}>
-                    <Text style={{fontSize: 16}}>{selectedText}</Text>
+                    <Text style={{}}>{selectedText}</Text>
                 </View>
 
                 <View style={{flex: 1, justifyContent: 'center'}}>
@@ -75,7 +75,7 @@ export default class ProgramInput extends Component {
                 <View style={{flex: 1}}/>
 
                 <SinglePickerMaterialDialog
-                    title={i18n.t("BlockProgramming.programSelectionPrompt")}
+                    title={i18n.t('BlockProgramming.programSelectionPrompt')}
                     items={this.props.pickerItems.map(v => ({
                         key: v.id,
                         label: v.name,
