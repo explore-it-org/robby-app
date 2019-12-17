@@ -7,7 +7,7 @@ import {
     disconnect,
     setDevice,
     stopRobot,
-    runRobot, startRecording, goRobot, uploadToRobot, downloadToDevice, scanStatus,
+    runRobot, startRecording, goRobot, uploadToRobot, downloadToDevice, scanStatus, scanningEnabled,
 } from '../ble/BleAction';
 import {clearBlock} from '../programmingtabs/blockprogramming/ActiveBlockAction';
 import {clearProgram} from '../programmingtabs/stepprogramming/ActiveInstructionAction';
@@ -42,7 +42,7 @@ const mapDispatchToProps = dispatch =>
             saveProgram: saveProgram,
             grantLocation: grantLocation,
             toggleSettings: toggleSettings,
-            scanStatus: scanStatus,
+            scanningEnabled: scanningEnabled,
         }, dispatch);
 
 

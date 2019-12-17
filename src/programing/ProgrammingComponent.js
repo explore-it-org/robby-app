@@ -34,7 +34,6 @@ export default class ProgrammingComponent extends Component {
                 Alert.alert(now.status, now.error);
             }
         }
-
         prev = prevProps.BLEConnection.device;
         now = this.props.BLEConnection.device;
         if (prev !== now) {
@@ -124,7 +123,7 @@ export default class ProgrammingComponent extends Component {
                         size={32}
                         disabled={this.props.BLEConnection.isConnecting}
                         onPress={() => {
-                            this.props.scanStatus();
+                            //  this.props.scanStatus(); this will break a lot of things
                             if (!this.props.Settings.isGranted) {
                                 BleService.requestLocationPermission().then(a => {
                                     this.props.grantLocation(a);
@@ -135,6 +134,7 @@ export default class ProgrammingComponent extends Component {
                                 this.props.disconnect();
                             } else if (this.props.BLEConnection.error !== '') {
                                 Alert.alert('ble error', this.props.BLEConnection.error);
+                                this.props.scanningEnabled('');
                             } else {
                                 this.props.scanForRobot();
                             }
