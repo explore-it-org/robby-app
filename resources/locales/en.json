@@ -1,6 +1,6 @@
 {
-  "language":"English",
-  "languageTag":"en",
+  "language": "English",
+  "languageTag": "en",
   "MainTab": {
     "speed": "Speed from 0-100"
   },
@@ -9,12 +9,12 @@
     "chooseDevice": "Choose a Device",
     "downloadMessage": "Instructions successfully downloaded!",
     "recordMessage": "Successfully recorded and saved on the robot!",
-    "uploadMessage":"Instructions successfully uploaded on the robot!",
+    "uploadMessage": "Instructions successfully uploaded on the robot!",
     "driveMessage": "Instructions followed, terminated drive successfully!",
     "bluetoothNotTurnedOnTitle": "Bluetooth is powered off",
     "bluetoothNotTurnedOnMessage": "Please turn on Bluetooth",
     "programName": "Program name",
-    "noConnectedDevice": "Keine Verbindung"
+    "noConnectedDevice": "No connection"
   },
   "BlockProgramming": {
     "programSelectionPrompt": "Select a program..."
