@@ -17,25 +17,25 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.0.1</string>
+	<string>2.0.2</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>12</string>
+	<string>13</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
-	<false/>
+	<false />
 	<key>LSRequiresIPhoneOS</key>
-	<true/>
+	<true />
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
-		<true/>
+		<true />
 		<key>NSExceptionDomains</key>
 		<dict>
 			<key>localhost</key>
 			<dict>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
-				<true/>
+				<true />
 			</dict>
 		</dict>
 	</dict>
@@ -44,7 +44,7 @@
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>Connects to Robotor for the purpose of sending instruction data</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string />
 	<key>UIAppFonts</key>
 	<array>
 		<string>icomoon.ttf</string>
@@ -80,6 +80,6 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
+	<false />
 </dict>
 </plist>
