@@ -1,6 +1,6 @@
 import {Component} from 'react';
 import {
-    StyleSheet, View, Text, TextInput,
+    StyleSheet, View, TextInput,
     FlatList,
     TouchableOpacity,
     Platform,
@@ -11,6 +11,8 @@ import React from 'react';
 import SpeedInput from '../../controls/SpeedInput';
 import i18n from '../../../resources/locales/i18n';
 import CustomIcon from '../../utillity/CustomIcon';
+import {JostText} from '../../controls/JostText';
+import {Text} from 'react-native-paper';
 
 
 export default class StepProgrammingComponent extends Component {
@@ -87,14 +89,19 @@ export default class StepProgrammingComponent extends Component {
                     <View style={{flex: 2, flexDirection: 'row', justifyContent: 'flex-start'}}>
                         <Image source={require('../../../resources/icon/wheeldarkx.png')}
                                style={{width: 20, height: 20}}/>
-                        <Text style={{textAlign: 'center', marginLeft: 5}}>L</Text>
+                        <View style={{textAlign: 'center', marginLeft: 5}}>
+                            <Text>L</Text>
+                        </View>
                     </View>
-
-                    <Text style={{flex: 4, textAlign: 'center'}}>{i18n.t('MainTab.speed')}</Text>
+                    <View style={{flex: 4, textAlign: 'center'}}>
+                        <Text style={{textAlign: 'center'}}>{i18n.t('MainTab.speed')}</Text>
+                    </View>
 
 
                     <View style={{flex: 2, flexDirection: 'row', justifyContent: 'flex-end'}}>
-                        <Text style={{textAlign: 'center', marginRight: 5}}>R</Text>
+                        <View style={{marginRight: 5}}>
+                            <Text>R</Text>
+                        </View>
                         <Image source={require('../../../resources/icon/wheeldarkx.png')}
                                style={{width: 20, height: 20}}/>
                     </View>

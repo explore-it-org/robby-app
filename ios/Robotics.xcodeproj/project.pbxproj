@@ -8,6 +8,24 @@
 
 /* Begin PBXBuildFile section */
 		00D103D323A3D75000DF5524 /* icomoon.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 00D103D223A3D74F00DF5524 /* icomoon.ttf */; };
+		00D103E623A8BB2F00DF5524 /* Jost-400-Book.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 00D103D423A8BB2D00DF5524 /* Jost-400-Book.ttf */; };
+		00D103E723A8BB2F00DF5524 /* Jost-600-SemiItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 00D103D523A8BB2D00DF5524 /* Jost-600-SemiItalic.ttf */; };
+		00D103E823A8BB2F00DF5524 /* Jost-800-Heavy.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 00D103D623A8BB2E00DF5524 /* Jost-800-Heavy.ttf */; };
+		00D103E923A8BB2F00DF5524 /* Jost-700-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 00D103D723A8BB2E00DF5524 /* Jost-700-BoldItalic.ttf */; };
+		00D103EA23A8BB2F00DF5524 /* Jost-100-HairlineItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 00D103D823A8BB2E00DF5524 /* Jost-100-HairlineItalic.ttf */; };
+		00D103EB23A8BB2F00DF5524 /* Jost-300-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 00D103D923A8BB2E00DF5524 /* Jost-300-Light.ttf */; };
+		00D103EC23A8BB2F00DF5524 /* Jost-200-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 00D103DA23A8BB2E00DF5524 /* Jost-200-Thin.ttf */; };
+		00D103ED23A8BB2F00DF5524 /* Jost-900-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 00D103DB23A8BB2E00DF5524 /* Jost-900-BlackItalic.ttf */; };
+		00D103EE23A8BB2F00DF5524 /* Jost-100-Hairline.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 00D103DC23A8BB2E00DF5524 /* Jost-100-Hairline.ttf */; };
+		00D103EF23A8BB2F00DF5524 /* Jost-500-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 00D103DD23A8BB2E00DF5524 /* Jost-500-Medium.ttf */; };
+		00D103F023A8BB2F00DF5524 /* Jost-300-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 00D103DE23A8BB2E00DF5524 /* Jost-300-LightItalic.ttf */; };
+		00D103F123A8BB2F00DF5524 /* Jost-700-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 00D103DF23A8BB2E00DF5524 /* Jost-700-Bold.ttf */; };
+		00D103F223A8BB2F00DF5524 /* Jost-500-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 00D103E023A8BB2F00DF5524 /* Jost-500-MediumItalic.ttf */; };
+		00D103F323A8BB2F00DF5524 /* Jost-900-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 00D103E123A8BB2F00DF5524 /* Jost-900-Black.ttf */; };
+		00D103F423A8BB2F00DF5524 /* Jost-400-BookItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 00D103E223A8BB2F00DF5524 /* Jost-400-BookItalic.ttf */; };
+		00D103F523A8BB2F00DF5524 /* Jost-600-Semi.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 00D103E323A8BB2F00DF5524 /* Jost-600-Semi.ttf */; };
+		00D103F623A8BB2F00DF5524 /* Jost-800-HeavyItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 00D103E423A8BB2F00DF5524 /* Jost-800-HeavyItalic.ttf */; };
+		00D103F723A8BB2F00DF5524 /* Jost-200-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 00D103E523A8BB2F00DF5524 /* Jost-200-ThinItalic.ttf */; };
 		00E356F31AD99517003FC87E /* RoboticsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* RoboticsTests.m */; };
 		00F6BC4C235700CB00815BAA /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F6BC4B235700CB00815BAA /* File.swift */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
@@ -44,6 +62,24 @@
 /* Begin PBXFileReference section */
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		00D103D223A3D74F00DF5524 /* icomoon.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = icomoon.ttf; sourceTree = "<group>"; };
+		00D103D423A8BB2D00DF5524 /* Jost-400-Book.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Jost-400-Book.ttf"; sourceTree = "<group>"; };
+		00D103D523A8BB2D00DF5524 /* Jost-600-SemiItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Jost-600-SemiItalic.ttf"; sourceTree = "<group>"; };
+		00D103D623A8BB2E00DF5524 /* Jost-800-Heavy.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Jost-800-Heavy.ttf"; sourceTree = "<group>"; };
+		00D103D723A8BB2E00DF5524 /* Jost-700-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Jost-700-BoldItalic.ttf"; sourceTree = "<group>"; };
+		00D103D823A8BB2E00DF5524 /* Jost-100-HairlineItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Jost-100-HairlineItalic.ttf"; sourceTree = "<group>"; };
+		00D103D923A8BB2E00DF5524 /* Jost-300-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Jost-300-Light.ttf"; sourceTree = "<group>"; };
+		00D103DA23A8BB2E00DF5524 /* Jost-200-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Jost-200-Thin.ttf"; sourceTree = "<group>"; };
+		00D103DB23A8BB2E00DF5524 /* Jost-900-BlackItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Jost-900-BlackItalic.ttf"; sourceTree = "<group>"; };
+		00D103DC23A8BB2E00DF5524 /* Jost-100-Hairline.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Jost-100-Hairline.ttf"; sourceTree = "<group>"; };
+		00D103DD23A8BB2E00DF5524 /* Jost-500-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Jost-500-Medium.ttf"; sourceTree = "<group>"; };
+		00D103DE23A8BB2E00DF5524 /* Jost-300-LightItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Jost-300-LightItalic.ttf"; sourceTree = "<group>"; };
+		00D103DF23A8BB2E00DF5524 /* Jost-700-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Jost-700-Bold.ttf"; sourceTree = "<group>"; };
+		00D103E023A8BB2F00DF5524 /* Jost-500-MediumItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Jost-500-MediumItalic.ttf"; sourceTree = "<group>"; };
+		00D103E123A8BB2F00DF5524 /* Jost-900-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Jost-900-Black.ttf"; sourceTree = "<group>"; };
+		00D103E223A8BB2F00DF5524 /* Jost-400-BookItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Jost-400-BookItalic.ttf"; sourceTree = "<group>"; };
+		00D103E323A8BB2F00DF5524 /* Jost-600-Semi.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Jost-600-Semi.ttf"; sourceTree = "<group>"; };
+		00D103E423A8BB2F00DF5524 /* Jost-800-HeavyItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Jost-800-HeavyItalic.ttf"; sourceTree = "<group>"; };
+		00D103E523A8BB2F00DF5524 /* Jost-200-ThinItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Jost-200-ThinItalic.ttf"; sourceTree = "<group>"; };
 		00E356EE1AD99517003FC87E /* RoboticsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RoboticsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* RoboticsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RoboticsTests.m; sourceTree = "<group>"; };
@@ -225,6 +261,24 @@
 		FF513FE95B4649E68F50ADBC /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				00D103DC23A8BB2E00DF5524 /* Jost-100-Hairline.ttf */,
+				00D103D823A8BB2E00DF5524 /* Jost-100-HairlineItalic.ttf */,
+				00D103DA23A8BB2E00DF5524 /* Jost-200-Thin.ttf */,
+				00D103E523A8BB2F00DF5524 /* Jost-200-ThinItalic.ttf */,
+				00D103D923A8BB2E00DF5524 /* Jost-300-Light.ttf */,
+				00D103DE23A8BB2E00DF5524 /* Jost-300-LightItalic.ttf */,
+				00D103D423A8BB2D00DF5524 /* Jost-400-Book.ttf */,
+				00D103E223A8BB2F00DF5524 /* Jost-400-BookItalic.ttf */,
+				00D103DD23A8BB2E00DF5524 /* Jost-500-Medium.ttf */,
+				00D103E023A8BB2F00DF5524 /* Jost-500-MediumItalic.ttf */,
+				00D103E323A8BB2F00DF5524 /* Jost-600-Semi.ttf */,
+				00D103D523A8BB2D00DF5524 /* Jost-600-SemiItalic.ttf */,
+				00D103DF23A8BB2E00DF5524 /* Jost-700-Bold.ttf */,
+				00D103D723A8BB2E00DF5524 /* Jost-700-BoldItalic.ttf */,
+				00D103D623A8BB2E00DF5524 /* Jost-800-Heavy.ttf */,
+				00D103E423A8BB2F00DF5524 /* Jost-800-HeavyItalic.ttf */,
+				00D103E123A8BB2F00DF5524 /* Jost-900-Black.ttf */,
+				00D103DB23A8BB2E00DF5524 /* Jost-900-BlackItalic.ttf */,
 				EB35A56F77554D39A69AD75F /* AntDesign.ttf */,
 				E947CC2CCD9446D2AED2B285 /* Entypo.ttf */,
 				74631FA8AD724916B4C584ED /* EvilIcons.ttf */,
@@ -390,9 +444,27 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00D103F423A8BB2F00DF5524 /* Jost-400-BookItalic.ttf in Resources */,
+				00D103EF23A8BB2F00DF5524 /* Jost-500-Medium.ttf in Resources */,
+				00D103F123A8BB2F00DF5524 /* Jost-700-Bold.ttf in Resources */,
+				00D103E923A8BB2F00DF5524 /* Jost-700-BoldItalic.ttf in Resources */,
 				00D103D323A3D75000DF5524 /* icomoon.ttf in Resources */,
+				00D103ED23A8BB2F00DF5524 /* Jost-900-BlackItalic.ttf in Resources */,
+				00D103F723A8BB2F00DF5524 /* Jost-200-ThinItalic.ttf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				00D103EE23A8BB2F00DF5524 /* Jost-100-Hairline.ttf in Resources */,
+				00D103E623A8BB2F00DF5524 /* Jost-400-Book.ttf in Resources */,
+				00D103F623A8BB2F00DF5524 /* Jost-800-HeavyItalic.ttf in Resources */,
+				00D103EB23A8BB2F00DF5524 /* Jost-300-Light.ttf in Resources */,
+				00D103EA23A8BB2F00DF5524 /* Jost-100-HairlineItalic.ttf in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				00D103F223A8BB2F00DF5524 /* Jost-500-MediumItalic.ttf in Resources */,
+				00D103E723A8BB2F00DF5524 /* Jost-600-SemiItalic.ttf in Resources */,
+				00D103F523A8BB2F00DF5524 /* Jost-600-Semi.ttf in Resources */,
+				00D103EC23A8BB2F00DF5524 /* Jost-200-Thin.ttf in Resources */,
+				00D103E823A8BB2F00DF5524 /* Jost-800-Heavy.ttf in Resources */,
+				00D103F323A8BB2F00DF5524 /* Jost-900-Black.ttf in Resources */,
+				00D103F023A8BB2F00DF5524 /* Jost-300-LightItalic.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

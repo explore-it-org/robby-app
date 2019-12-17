@@ -9,6 +9,7 @@ import i18n from '../../resources/locales/i18n';
 import {Picker} from 'native-base';
 import Toast from '../controls/Toast';
 import {toggleSettings} from './SettingsAction';
+import {JostText} from '../controls/JostText';
 
 
 class SettingsComponent extends Component {
@@ -56,13 +57,13 @@ class SettingsComponent extends Component {
         if (this.props.BLEConnection.isConnected) {
             return (
                 <View>
-                    <Text style={{fontSize: 16, fontWeight: 'bold', paddingBottom: 15}}>
+                    <JostText style={{fontSize: 16, fontWeight: 'bold', paddingBottom: 15}}>
                         {i18n.t('Settings.settings')}
-                    </Text>
+                    </JostText>
                     <View style={{flexDirection: 'row', marginBottom: 10}}>
-                        <Text style={{height: 50, width: '20%', marginLeft: 40}}>
+                        <JostText style={{height: 50, width: '20%', marginLeft: 40}}>
                             {i18n.t('Settings.interval')}
-                        </Text>
+                        </JostText>
 
                         <TextInput
                             style={{
@@ -80,9 +81,9 @@ class SettingsComponent extends Component {
                             onChangeText={text => this.changeInterval(text)}
                             value={this.props.Settings.interval.toString()}
                         />
-                        <Text style={{height: 50, marginLeft: 20}}>
+                        <JostText style={{height: 50, marginLeft: 20}}>
                             {i18n.t('Settings.interval-unit')}
-                        </Text>
+                        </JostText>
                     </View>
                 </View>
             );

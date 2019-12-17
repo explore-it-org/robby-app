@@ -22,18 +22,20 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>12</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSRequiresIPhoneOS</key>
-	<true />
+	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
-		<true />
+		<true/>
 		<key>NSExceptionDomains</key>
 		<dict>
 			<key>localhost</key>
 			<dict>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
-				<true />
+				<true/>
 			</dict>
 		</dict>
 	</dict>
@@ -42,7 +44,7 @@
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>Connects to Robotor for the purpose of sending instruction data</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string />
+	<string></string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>icomoon.ttf</string>
@@ -62,6 +64,24 @@
 		<string>Octicons.ttf</string>
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
+		<string>Jost-100-Hairline.ttf</string>
+		<string>Jost-100-HairlineItalic.ttf</string>
+		<string>Jost-200-Thin.ttf</string>
+		<string>Jost-200-ThinItalic.ttf</string>
+		<string>Jost-300-Light.ttf</string>
+		<string>Jost-300-LightItalic.ttf</string>
+		<string>Jost-400-Book.ttf</string>
+		<string>Jost-400-BookItalic.ttf</string>
+		<string>Jost-500-Medium.ttf</string>
+		<string>Jost-500-MediumItalic.ttf</string>
+		<string>Jost-600-Semi.ttf</string>
+		<string>Jost-600-SemiItalic.ttf</string>
+		<string>Jost-700-Bold.ttf</string>
+		<string>Jost-700-BoldItalic.ttf</string>
+		<string>Jost-800-Heavy.ttf</string>
+		<string>Jost-800-HeavyItalic.ttf</string>
+		<string>Jost-900-Black.ttf</string>
+		<string>Jost-900-BlackItalic.ttf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
@@ -76,6 +96,6 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false />
+	<false/>
 </dict>
 </plist>
