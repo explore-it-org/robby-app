@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {Text, TextInput} from 'react-native-paper';
 import {Appbar} from 'react-native-paper';
 
@@ -10,6 +10,7 @@ import i18n from '../../resources/locales/i18n';
 import {Picker} from 'native-base';
 import Toast from '../controls/Toast';
 import {toggleSettings} from './SettingsAction';
+import SettingsContainer from './SettingsContainer';
 
 
 class SettingsComponent extends Component {
@@ -93,84 +94,87 @@ class SettingsComponent extends Component {
                                               testID={k.language}/>),
         );
         return (
-            <View style={[styles.container]}>
-                <Appbar>
-                    <Appbar.Action
-                        icon="close"
-                        size={32}
-                        onPress={() => this.props.toggleSettings()}
-                    />
-                    <Appbar.Content
-                        style={{position: 'absolute', left: 40}}
-                        title="Explore-it"
-                        size={32}
-                    />
-                    <Appbar.Content
-                        style={{position: 'absolute', right: 0}}
-                        title={this.props.BLEConnection.device.name}
-                        subtitle={i18n.t('Settings.device')}
-                        size={32}
-                    />
-                </Appbar>
-
-                <View style={{flex: 1, padding: 40}}>
-                    <Text style={{fontSize: 16, fontWeight: 'bold', paddingBottom: 15}}>
-                        {i18n.t('Settings.learn')}
-                    </Text>
-
-
-                    <View style={{flexDirection: 'row', marginBottom: 10}}>
-                        <Text style={{height: 50, width: '20%', marginLeft: 40}}>
-                            {i18n.t('Settings.duration')}
-                        </Text>
-                        <TextInput
-                            style={{
-                                padding: 5,
-                                width: 60,
-                                height: 50,
-                                borderWidth: 1,
-                                borderColor: 'grey',
-                                backgroundColor: 'white',
-                                justifyContent: 'center',
-                            }}
-                            keyboardType="numeric"
-                            textAlign={'center'}
-                            mode="outlined"
-                            onFocus={() => {
-                                this.changeDuration('');
-                            }}
-                            onChangeText={text => this.changeDuration(text)}
-                            value={this.props.Settings.duration.toString()
-                            }
+            <SafeAreaView style={{
+                flex: 1,
+                backgroundColor: '#2E5266',
+            }}>
+                <View style={[styles.container]}>
+                    <Appbar>
+                        <Appbar.Action
+                            icon="close"
+                            size={32}
+                            onPress={() => this.props.toggleSettings()}
                         />
-                        <Text style={{height: 50, marginLeft: 20}}>
-                            {i18n.t('Settings.duration-unit')}
+                        <Appbar.Content
+                            style={{position: 'absolute', left: 40}}
+                            title="Explore-it"
+                            size={32}
+                        />
+                        <Appbar.Content
+                            style={{position: 'absolute', right: 0}}
+                            title={this.props.BLEConnection.device.name}
+                            subtitle={i18n.t('Settings.device')}
+                            size={32}
+                        />
+                    </Appbar>
+
+                    <View style={{flex: 1, padding: 40}}>
+                        <Text style={{fontSize: 16, fontWeight: 'bold', paddingBottom: 15}}>
+                            {i18n.t('Settings.learn')}
                         </Text>
-                    </View>
-                    {this.renderIntervalField()}
-                    <Text style={{fontSize: 16, fontWeight: 'bold', paddingBottom: 15}}>
-                        {i18n.t('Settings.language')}
-                    </Text>
-                    <View style={{flexDirection: 'row', marginBottom: 10}}>
-                        <Picker
-                            style={{
-                                padding: 5,
-                                width: 60,
-                                height: 50,
-                                backgroundColor: 'white',
-                                justifyContent: 'center',
-                            }}
-                            selectedValue={this.props.Settings.language}
-                            textAlign={'center'}
-                            onValueChange={(itemValue, itemIndex) => {
-                                this.props.setLanguage(itemValue);
-                                i18n.locale = itemValue;
-                            }}>
-                            {this.items}
-                        </Picker>
+
+
+                        <View style={{flexDirection: 'row', marginBottom: 10}}>
+                            <Text style={{height: 50, width: '20%', marginLeft: 40}}>
+                                {i18n.t('Settings.duration')}
+                            </Text>
+                            <TextInput
+                                style={{
+                                    padding: 5,
+                                    width: 60,
+                                    height: 50,
+                                    backgroundColor: 'white',
+                                    justifyContent: 'center',
+                                }}
+                                keyboardType="numeric"
+                                textAlign={'center'}
+                                mode="outlined"
+                                onFocus={() => {
+                                    this.changeDuration('');
+                                }}
+                                onChangeText={text => this.changeDuration(text)}
+                                value={this.props.Settings.duration.toString()
+                                }
+                            />
+                            <Text style={{height: 50, marginLeft: 20}}>
+                                {i18n.t('Settings.duration-unit')}
+                            </Text>
+                        </View>
+                        {this.renderIntervalField()}
+                        <Text style={{fontSize: 16, fontWeight: 'bold', paddingBottom: 15}}>
+                            {i18n.t('Settings.language')}
+                        </Text>
+                        <View style={{flexDirection: 'row', marginBottom: 10}}>
+                            <Picker
+                                style={{
+                                    padding: 5,
+                                    width: 60,
+                                    height: 50,
+                                    backgroundColor: 'white',
+                                    justifyContent: 'center',
+                                }}
+                                selectedValue={this.props.Settings.language}
+                                textAlign={'center'}
+                                onValueChange={(itemValue, itemIndex) => {
+                                    this.props.setLanguage(itemValue);
+                                    i18n.locale = itemValue;
+                                }}>
+                                {this.items}
+                            </Picker>
+                        </View>
                     </View>
                 </View>
-            </View>
+            </SafeAreaView>
         )
             ;
     }

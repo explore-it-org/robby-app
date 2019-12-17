@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Alert, ToastAndroid, Image} from 'react-native';
+import {StyleSheet, View, Alert, ToastAndroid, Image, SafeAreaViewComponent} from 'react-native';
 import {Appbar, Button, IconButton, Modal, Portal} from 'react-native-paper';
 import {createAppContainer, NavigationActions} from 'react-navigation';
 import {createMaterialTopTabNavigator} from 'react-navigation-tabs';
@@ -12,7 +12,6 @@ import BlockProgrammingContainer from '../programmingtabs/blockprogramming/Block
 import BleService from '../ble/BleService';
 import Toast from '../controls/Toast';
 import SettingsContainer from '../settings/SettingsContainer';
-
 import CustomIcon from '../utillity/CustomIcon';
 
 
