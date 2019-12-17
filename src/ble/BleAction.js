@@ -38,6 +38,10 @@ export const succesScanning = (robot) => ({
     type: ActionTypes.SUCCESS_SCANNING,
     robot,
 });
+export const scanningEnabled = (error) => ({
+    type: ActionTypes.ENABLED_SCANNING,
+    error
+});
 export const stopScanning = () => ({
     type: ActionTypes.STOP_SCANNING,
 });
@@ -131,6 +135,17 @@ export const scanningForDevices = () => {
     };
 };
 
+export const scanStatus = () => {
+    return (dispatch, getState) => {
+        RobotProxy.testScan((error) => {
+            RobotProxy.stopScanning()
+            dispatch(failedScanning(error));
+        }, (success) => {
+            RobotProxy.stopScanning()
+            dispatch(scanningEnabled());
+        });
+    };
+};
 export const connectToDevice = () => {
     return (dispatch, getState) => {
         dispatch(connectToBle());

@@ -12,7 +12,7 @@ const default_state_ble_connection = {
     receivedDownloads: [],
     scannedDevices: [],
     device: {
-        name: "Unknown",
+        name: 'Unknown',
         version: 1,
         isRecording: false,
         isRunning: false,
@@ -33,7 +33,7 @@ export const BleConnectionReducer = (state = default_state_ble_connection, actio
             return Object.assign({}, state, {
                 isConnecting: false,
                 isConnected: false,
-                device: {...state.device, name: "Unknown"},
+                device: {...state.device, name: 'Unknown'},
                 lastUpdate: Date.now(),
             });
         case ActionType.IS_CONNECTED:
@@ -50,7 +50,9 @@ export const BleConnectionReducer = (state = default_state_ble_connection, actio
         case ActionType.BLE_RESPONSE:
             return state;
         case ActionType.SUCCESS_SCANNING:
-            return Object.assign({}, state, {scannedDevices: [...state.scannedDevices, action.robot]});
+            return Object.assign({}, state, {scannedDevices: [...state.scannedDevices, action.robot], error: ''});
+        case ActionType.ENABLED_SCANNING:
+            return Object.assign({}, state, {error: action.error});
         case ActionType.FAILURE_SCANNING:
             return Object.assign({}, state, {error: action.error, isScanning: false, scannedDevices: []});
         case ActionType.START_SCANNING:
