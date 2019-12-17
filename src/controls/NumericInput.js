@@ -51,7 +51,7 @@ export default class NumericInput extends Component {
 
 const styles = StyleSheet.create({
     input: {
-        fontFamily: 'Jost-400-Book',
+        fontFamily: 'Jost-Book',
         width: '100%',
         height: '100%',
         borderRadius: 5,
