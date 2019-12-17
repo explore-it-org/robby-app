@@ -93,6 +93,17 @@ class SettingsComponent extends Component {
             k => this.items.push(<Picker.Item key={k.languageTag} label={k.language} value={k.languageTag}
                                               testID={k.language}/>),
         );
+
+        let deviceName = this.props.BLEConnection.isConnected ? 
+        <Appbar.Content style={{position: 'absolute', right: 40}}
+        title={this.props.BLEConnection.device.name}
+        subtitle={i18n.t('Programming.device')}
+        size={32}/> 
+        : 
+        <Appbar.Content style={{position: 'absolute', right: 40}}
+        title={i18n.t('Programming.noConnectedDevice')}
+        size={32}/>
+
         return (
             <SafeAreaView style={{
                 flex: 1,
@@ -110,12 +121,7 @@ class SettingsComponent extends Component {
                             title="Explore-it"
                             size={32}
                         />
-                        <Appbar.Content
-                            style={{position: 'absolute', right: 0}}
-                            title={this.props.BLEConnection.device.name}
-                            subtitle={i18n.t('Settings.device')}
-                            size={32}
-                        />
+                        {deviceName}
                     </Appbar>
 
                     <View style={{flex: 1, padding: 40}}>
