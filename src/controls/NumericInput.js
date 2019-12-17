@@ -27,7 +27,7 @@ export default class NumericInput extends Component {
             <View style={{
                 height: '100%',
                 width: '100%',
-                backgroundColor: 'white',
+                backgroundColor: 'rgba(52, 52, 52, 0.0)',
                 justifyContent: 'center',
             }}>
                 <TextInput
@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
         height: '100%',
         borderRadius: 5,
         borderWidth: 1,
-        overflow: 'hidden'
+        overflow: 'hidden',
+        backgroundColor: 'white',
     },
 });
