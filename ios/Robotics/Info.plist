@@ -62,26 +62,10 @@
 		<string>MaterialCommunityIcons.ttf</string>
 		<string>MaterialIcons.ttf</string>
 		<string>Octicons.ttf</string>
-		<string>SimpleLineIcons.ttf</string>
-		<string>Zocial.ttf</string>
-		<string>Jost-100-Hairline.ttf</string>
-		<string>Jost-100-HairlineItalic.ttf</string>
-		<string>Jost-200-Thin.ttf</string>
-		<string>Jost-200-ThinItalic.ttf</string>
-		<string>Jost-300-Light.ttf</string>
-		<string>Jost-300-LightItalic.ttf</string>
-		<string>Jost-400-Book.ttf</string>
-		<string>Jost-400-BookItalic.ttf</string>
-		<string>Jost-500-Medium.ttf</string>
-		<string>Jost-500-MediumItalic.ttf</string>
-		<string>Jost-600-Semi.ttf</string>
-		<string>Jost-600-SemiItalic.ttf</string>
-		<string>Jost-700-Bold.ttf</string>
-		<string>Jost-700-BoldItalic.ttf</string>
-		<string>Jost-800-Heavy.ttf</string>
-		<string>Jost-800-HeavyItalic.ttf</string>
-		<string>Jost-900-Black.ttf</string>
-		<string>Jost-900-BlackItalic.ttf</string>
+		<string>Jost-Book.ttf</string>
+		<string>Jost-Light.ttf</string>
+		<string>Jost-Medium.ttf</string>
+		<string>Jost-Thin.ttf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

@@ -61,7 +61,7 @@ export default class Toast extends Component {
                 alignSelf: 'center',
                 opacity: this.state.opacity,
             }}>
-                <Text style={{color: 'white', fontFamily: 'Jost-300-Light'}}>{this.state.message}</Text>
+                <Text style={{color: 'white', fontFamily: 'Jost-Light'}}>{this.state.message}</Text>
             </Animated.View>
         );
     }

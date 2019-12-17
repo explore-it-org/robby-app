@@ -1,6 +1,6 @@
 /** @format */
 
-import {Alert, AppRegistry} from 'react-native';
+import {Alert, AppRegistry, SafeAreaView} from 'react-native';
 import App from './App';
 import * as React from 'react';
 import {name as appName} from './app.json';
@@ -12,21 +12,39 @@ import Toast from './src/controls/Toast';
 
 
 const fontConfig = {
-    default: {
+    ios: {
         regular: {
-            fontFamily: 'Jost-400-Book',
+            fontFamily: 'Jost-Book',
             fontWeight: 'normal',
         },
         medium: {
-            fontFamily: 'Jost-500-Medium',
+            fontFamily: 'Jost-Medium',
             fontWeight: 'normal',
         },
         light: {
-            fontFamily: 'Jost-300-Light',
+            fontFamily: 'Jost-Light',
             fontWeight: 'normal',
         },
         thin: {
-            fontFamily: 'Jost-200-Thin',
+            fontFamily: 'Jost-Thin',
+            fontWeight: 'normal',
+        },
+    },
+    default: {
+        regular: {
+            fontFamily: 'Jost-Book',
+            fontWeight: 'normal',
+        },
+        medium: {
+            fontFamily: 'Jost-Medium',
+            fontWeight: 'normal',
+        },
+        light: {
+            fontFamily: 'Jost-Light',
+            fontWeight: 'normal',
+        },
+        thin: {
+            fontFamily: 'Jost-Thin',
             fontWeight: 'normal',
         },
     },
@@ -48,13 +66,14 @@ export default function Main() {
         <ReduxProvider store={store}>
             <PaperProvider settings={{icon: props => <MyIcon {...props} />}} theme={theme}>
                 <PersistGate loading={null} persistor={persistor}>
-                    <App/>
-                    <Toast/>
+                    <SafeAreaView style={{flex: 1, backgroundColor: theme.colors.primary}}>
+                        <App/>
+                        <Toast/>
+                    </SafeAreaView>
                 </PersistGate>
             </PaperProvider>
         </ReduxProvider>
     );
 }
-
 
 AppRegistry.registerComponent(appName, () => Main);
