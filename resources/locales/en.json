@@ -2,7 +2,9 @@
   "language": "English",
   "languageTag": "en",
   "MainTab": {
-    "speed": "Speed from 0-100"
+    "speed": "Speed from 0-100",
+    "left": "L",
+    "right": "R"
   },
   "Programming": {
     "chooseDevice": "Choose a Device",

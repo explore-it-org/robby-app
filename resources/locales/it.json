@@ -2,7 +2,9 @@
   "language":"Italiano",
   "languageTag":"it",
   "MainTab": {
-    "speed": "Velocità da 0 a 100"
+    "speed": "Velocità da 0 a 100",
+    "left": "S",
+    "right": "D"
   },
   "Programming": {
     "device": "Dispositivo",

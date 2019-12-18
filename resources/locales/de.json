@@ -2,7 +2,9 @@
   "language":"Deutsch",
   "languageTag":"de",
   "MainTab": {
-    "speed": "Geschwindigkeit von 0-100"
+    "speed": "Geschwindigkeit von 0-100",
+    "left": "L",
+    "right": "R"
   },
   "Programming": {
     "chooseDevice": "Gerät auswählen",
