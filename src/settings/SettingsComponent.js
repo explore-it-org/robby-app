@@ -11,6 +11,7 @@ import {Picker} from 'native-base';
 import Toast from '../controls/Toast';
 import {toggleSettings} from './SettingsAction';
 import SettingsContainer from './SettingsContainer';
+import NumericInput from '../controls/NumericInput';
 
 
 class SettingsComponent extends Component {
@@ -56,39 +57,30 @@ class SettingsComponent extends Component {
     renderIntervalField = () => {
         if (this.props.BLEConnection.isConnected) {
             return (
-                <View>
-                    <Text style={{fontSize: 16, fontWeight: 'bold', paddingBottom: 15}}>
-                        {i18n.t('Settings.settings')}
+            <View style={{flex: 0, marginTop: 25}}>
+                <View style={{flexDirection: 'row', marginBottom: 10}}>
+                    <Text style={{fontSize:16, height: 50, width: '20%', marginLeft: 10, fontWeight: 'bold'}}>
+                        {i18n.t('Settings.interval')}
                     </Text>
-                    <View style={{flexDirection: 'row', marginBottom: 10}}>
-                        <Text style={{height: 50, width: '20%', marginLeft: 40}}>
-                            {i18n.t('Settings.interval')}
-                        </Text>
-                        <TextInput
-                            style={{
-                                padding: 5,
-                                width: 60,
-                                height: 50,
-                                backgroundColor: 'white',
-                                justifyContent: 'center',
-                            }}
-                            keyboardType="numeric"
-                            textAlign={'center'}
-                            mode="outlined"
-                            onChangeText={text => this.changeInterval(text)}
-                            value={this.props.Settings.interval.toString()}
-                        />
-                        <Text style={{height: 50, marginLeft: 20}}>
-                            {i18n.t('Settings.interval-unit')}
-                        </Text>
+                    <View style={{width:'20%', height:50, marginTop: -12.5, marginLeft:10}}>
+                                <NumericInput
+                                    onchange={text => this.changeInterval(text)}
+                                    val={this.props.Settings.interval !== undefined?this.props.Settings.interval.toString(): ''}
+                                />
                     </View>
+                    <Text style={{height: 50, marginLeft: 20}}>
+                        {i18n.t('Settings.interval-unit')}
+                    </Text>
                 </View>
+                <View style={{borderBottomColor: 'lightgrey',borderBottomWidth: 1}}/>
+            </View>
             );
         }
     };
 
     render() {
         this.items = Object.assign([], []);
+        let hr = <View style={{borderBottomColor: 'lightgrey',borderBottomWidth: 1}}/>;
         Object.values(i18n.translations).forEach(
             k => this.items.push(<Picker.Item key={k.languageTag} label={k.language} value={k.languageTag}
                                               testID={k.language}/>),
@@ -123,40 +115,24 @@ class SettingsComponent extends Component {
                         {deviceName}
                     </Appbar>
 
-                    <View style={{flex: 1, padding: 40}}>
-                        <Text style={{fontSize: 16, fontWeight: 'bold', paddingBottom: 15}}>
-                            {i18n.t('Settings.learn')}
-                        </Text>
-
-
+                    <View style={{flex: 0, padding: 10, marginTop: 25}}>
                         <View style={{flexDirection: 'row', marginBottom: 10}}>
-                            <Text style={{height: 50, width: '20%', marginLeft: 40}}>
+                            <Text style={{fontSize:16, height: 50, width: '20%', marginLeft: 10, fontWeight: 'bold'}}>
                                 {i18n.t('Settings.duration')}
                             </Text>
-                            <TextInput
-                                style={{
-                                    padding: 5,
-                                    width: 60,
-                                    height: 50,
-                                    backgroundColor: 'white',
-                                    justifyContent: 'center',
-                                }}
-                                keyboardType="numeric"
-                                textAlign={'center'}
-                                mode="outlined"
-                                onFocus={() => {
-                                    this.changeDuration('');
-                                }}
-                                onChangeText={text => this.changeDuration(text)}
-                                value={this.props.Settings.duration.toString()
-                                }
-                            />
+                            <View style={{width:'20%', height:50, marginTop: -12.5, marginLeft:10}}>
+                                <NumericInput
+                                    onchange={text => this.changeDuration(text)}
+                                    val={this.props.Settings.duration !== undefined?this.props.Settings.duration.toString(): ''}
+                                />
+                            </View>
                             <Text style={{height: 50, marginLeft: 20}}>
                                 {i18n.t('Settings.duration-unit')}
                             </Text>
                         </View>
+                        {hr}
                         {this.renderIntervalField()}
-                        <Text style={{fontSize: 16, fontWeight: 'bold', paddingBottom: 15}}>
+                        <Text style={{fontSize: 16, marginLeft: 10, marginTop:25, fontWeight: 'bold', paddingBottom: 15}}>
                             {i18n.t('Settings.language')}
                         </Text>
                         <View style={{flexDirection: 'row', marginBottom: 10}}>
@@ -167,6 +143,7 @@ class SettingsComponent extends Component {
                                     height: 50,
                                     backgroundColor: 'white',
                                     justifyContent: 'center',
+                                    marginLeft: 10
                                 }}
                                 selectedValue={this.props.Settings.language}
                                 textAlign={'center'}
@@ -178,6 +155,7 @@ class SettingsComponent extends Component {
                                 {this.items}
                             </Picker>
                         </View>
+                        {hr}
                     </View>
                 </View>
             </SafeAreaView>
