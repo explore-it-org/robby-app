@@ -24,7 +24,6 @@
     "invalidEntryMessage": "È possibile inserire solo numeri interi tra 0 e 100."
   },
   "Settings": {
-    "device": "Dispositivo",
     "settings": "Impostazioni:",
     "interval": "Intervallo:",
     "interval-unit": "al secondo (1..50)",
