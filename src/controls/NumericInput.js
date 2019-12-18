@@ -38,6 +38,10 @@ export default class NumericInput extends Component {
                     mode="outlined"
                     value={txtValue}
                     onFocus={() => {
+                        
+                        if(this.props.onfocus){
+                            this.props.onfocus();
+                        }
                         this.props.onchange('');
                     }}
                     onBlur={() => {
