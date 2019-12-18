@@ -5,7 +5,6 @@
     "speed": "Speed from 0-100"
   },
   "Programming": {
-    "device": "Device",
     "chooseDevice": "Choose a Device",
     "downloadMessage": "Instructions successfully downloaded!",
     "recordMessage": "Successfully recorded and saved on the robot!",
