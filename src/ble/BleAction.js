@@ -2,8 +2,13 @@ import * as ActionTypes from '../GlobalActionTypes';
 import RobotProxy from './RobotProxy';
 import {mainHandler} from './ResponseActionHandler';
 import {} from '../database/DatabaseAction';
-import {receiveDownload} from '../programmingtabs/stepprogramming/ActiveInstructionAction';
+import {
+    clearProgram,
+    emptyInstructionList,
+    receiveDownload,
+} from '../programmingtabs/stepprogramming/ActiveInstructionAction';
 import {Program, ProgramType} from '../model/DatabaseModels';
+import {Alert} from 'react-native';
 
 
 export const connectToBle = () => ({
@@ -40,7 +45,7 @@ export const succesScanning = (robot) => ({
 });
 export const scanningEnabled = (error) => ({
     type: ActionTypes.ENABLED_SCANNING,
-    error
+    error,
 });
 export const stopScanning = () => ({
     type: ActionTypes.STOP_SCANNING,
@@ -129,6 +134,7 @@ export const scanningForDevices = () => {
         dispatch(startScanning());
         RobotProxy.scanningForRobots((error) => {
             dispatch(failedScanning(error));
+            Alert.alert('ble error', error);
         }, (robot) => {
             dispatch(succesScanning(robot));
         });
@@ -138,10 +144,10 @@ export const scanningForDevices = () => {
 export const scanStatus = () => {
     return (dispatch, getState) => {
         RobotProxy.testScan((error) => {
-            RobotProxy.stopScanning()
+            RobotProxy.stopScanning();
             dispatch(failedScanning(error));
         }, (success) => {
-            RobotProxy.stopScanning()
+            RobotProxy.stopScanning();
             dispatch(scanningEnabled());
         });
     };
@@ -174,7 +180,6 @@ export const failedUplaod = (error) => ({
 export const uploadToRobot = (ActiveProgram) => {
     return (dispatch, getState) => {
         let a = null;
-        console.log(ActiveProgram);
         if (ActiveProgram === 'Stepprogramming') {
             a = getState().ActiveProgram.ActiveProgram.flatten();
             console.log(a);
@@ -182,7 +187,6 @@ export const uploadToRobot = (ActiveProgram) => {
             a = getState().ActiveBlock.Active_Block.flatten();
             console.log(a);
         }
-        console.log(getState().BLEConnection.device.version);
         dispatch(startUpload());
         RobotProxy.upload(a, getState().BLEConnection.device.version).then(res => {
 
@@ -218,6 +222,7 @@ export const receivedChunck = (chunk) => ({
 export const downloadToDevice = () => {
     return (dispatch, getState) => {
         dispatch(startDownloading());
+        dispatch(emptyInstructionList());
         RobotProxy.download().then(res => {
 
         }).catch(error => {

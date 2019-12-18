@@ -9,7 +9,7 @@ import {
     SET_PROGRAM_NAME,
     LOAD_INSTRUCTION,
     RECEIVED_DOWNLOAD,
-    CLEAR_PROGRAM,
+    CLEAR_PROGRAM, EMPTY_INSTRUCTION_LIST,
 } from '../../GlobalActionTypes';
 
 export const moveUp = () => ({
@@ -58,3 +58,7 @@ export const receiveDownload = (program) => ({
     type: RECEIVED_DOWNLOAD,
     program,
 });
+
+export const emptyInstructionList = () => ({
+    type: EMPTY_INSTRUCTION_LIST,
+})
