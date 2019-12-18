@@ -16,8 +16,8 @@
     "programName": "Programmname",
     "noConnectedDevice": "Keine Verbindung"
   },
-  "BlockProgramming":{
-    "programSelectionPrompt": "Wählen Sie ein Programm..."
+  "BlockProgramming": {
+    "programSelectionPrompt": "..."
   },
   "SpeedInput": {
     "invalidEntry": "Ungültige Eingabe",
