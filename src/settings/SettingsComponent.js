@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {SafeAreaView, StyleSheet, View} from 'react-native';
+import {Image, Linking, Picker, SafeAreaView, StyleSheet, View} from 'react-native';
 import {Text, TextInput} from 'react-native-paper';
 import {Appbar} from 'react-native-paper';
 
@@ -7,7 +7,6 @@ import {Appbar} from 'react-native-paper';
 //import { Icon } from 'react-native-elements';
 import {getStatusBarHeight, ifIphoneX} from 'react-native-iphone-x-helper';
 import i18n from '../../resources/locales/i18n';
-import {Picker} from 'native-base';
 import Toast from '../controls/Toast';
 import {toggleSettings} from './SettingsAction';
 import SettingsContainer from './SettingsContainer';
@@ -57,30 +56,30 @@ class SettingsComponent extends Component {
     renderIntervalField = () => {
         if (this.props.BLEConnection.isConnected) {
             return (
-            <View style={{flex: 0, marginTop: 25}}>
-                <View style={{flexDirection: 'row', marginBottom: 10}}>
-                    <Text style={{fontSize:16, height: 50, width: '20%', marginLeft: 10, fontWeight: 'bold'}}>
-                        {i18n.t('Settings.interval')}
-                    </Text>
-                    <View style={{width:'20%', height:50, marginTop: -12.5, marginLeft:10}}>
-                                <NumericInput
-                                    onchange={text => this.changeInterval(text)}
-                                    val={this.props.Settings.interval !== undefined?this.props.Settings.interval.toString(): ''}
-                                />
+                <View style={{flex: 0, marginTop: 25}}>
+                    <View style={{flexDirection: 'row', marginBottom: 10}}>
+                        <Text style={{fontSize: 16, height: 50, width: '20%', marginLeft: 10, fontWeight: 'bold'}}>
+                            {i18n.t('Settings.interval')}
+                        </Text>
+                        <View style={{width: '20%', height: 50, marginTop: -12.5, marginLeft: 10}}>
+                            <NumericInput
+                                onchange={text => this.changeInterval(text)}
+                                val={this.props.Settings.interval !== undefined ? this.props.Settings.interval.toString() : ''}
+                            />
+                        </View>
+                        <Text style={{height: 50, marginLeft: 20}}>
+                            {i18n.t('Settings.interval-unit')}
+                        </Text>
                     </View>
-                    <Text style={{height: 50, marginLeft: 20}}>
-                        {i18n.t('Settings.interval-unit')}
-                    </Text>
+                    <View style={{borderBottomColor: 'lightgrey', borderBottomWidth: 1}}/>
                 </View>
-                <View style={{borderBottomColor: 'lightgrey',borderBottomWidth: 1}}/>
-            </View>
             );
         }
     };
 
     render() {
         this.items = Object.assign([], []);
-        let hr = <View style={{borderBottomColor: 'lightgrey',borderBottomWidth: 1}}/>;
+        let hr = <View style={{borderBottomColor: 'lightgrey', borderBottomWidth: 1}}/>;
         Object.values(i18n.translations).forEach(
             k => this.items.push(<Picker.Item key={k.languageTag} label={k.language} value={k.languageTag}
                                               testID={k.language}/>),
@@ -104,7 +103,7 @@ class SettingsComponent extends Component {
                     <Appbar>
                         <Appbar.Action
                             icon="close"
-                            size={32}
+                            size={26}
                             onPress={() => this.props.toggleSettings()}
                         />
                         <Appbar.Content
@@ -116,47 +115,90 @@ class SettingsComponent extends Component {
                     </Appbar>
 
                     <View style={{flex: 0, padding: 10, marginTop: 25}}>
-                        <View style={{flexDirection: 'row', marginBottom: 10}}>
-                            <Text style={{fontSize:16, height: 50, width: '20%', marginLeft: 10, fontWeight: 'bold'}}>
-                                {i18n.t('Settings.duration')}
-                            </Text>
-                            <View style={{width:'20%', height:50, marginTop: -12.5, marginLeft:10}}>
-                                <NumericInput
-                                    onchange={text => this.changeDuration(text)}
-                                    val={this.props.Settings.duration !== undefined?this.props.Settings.duration.toString(): ''}
-                                />
-                            </View>
-                            <Text style={{height: 50, marginLeft: 20}}>
-                                {i18n.t('Settings.duration-unit')}
-                            </Text>
-                        </View>
-                        {hr}
-                        {this.renderIntervalField()}
-                        <Text style={{fontSize: 16, marginLeft: 10, marginTop:25, fontWeight: 'bold', paddingBottom: 15}}>
-                            {i18n.t('Settings.language')}
-                        </Text>
-                        <View style={{flexDirection: 'row', marginBottom: 10}}>
-                            <Picker
-                                style={{
-                                    padding: 5,
-                                    width: 60,
-                                    height: 50,
-                                    backgroundColor: 'white',
-                                    justifyContent: 'center',
-                                    marginLeft: 10
-                                }}
-                                selectedValue={this.props.Settings.language}
-                                textAlign={'center'}
-                                onValueChange={(itemValue, itemIndex) => {
-                                    this.props.setLanguage(itemValue);
-                                    i18n.locale = itemValue;
-                                    this.props.forceReloadBlocks();
+
+                        <View style={{flexDirection: 'column', justifyContent: 'space-between'}}>
+
+                            <View>
+
+                                <View style={{flexDirection: 'row', marginBottom: 10}}>
+                                    <Text style={{
+                                        fontSize: 16,
+                                        height: 50,
+                                        width: '20%',
+                                        marginLeft: 10,
+                                        fontWeight: 'bold',
+                                    }}>
+                                        {i18n.t('Settings.duration')}
+                                    </Text>
+                                    <View style={{width: '20%', height: 50, marginTop: -12.5, marginLeft: 10}}>
+                                        <NumericInput
+                                            onchange={text => this.changeDuration(text)}
+                                            val={this.props.Settings.duration !== undefined ? this.props.Settings.duration.toString() : ''}
+                                        />
+                                    </View>
+                                    <Text style={{height: 50, marginLeft: 20}}>
+                                        {i18n.t('Settings.duration-unit')}
+                                    </Text>
+                                </View>
+
+
+                                {hr}
+
+                                {this.renderIntervalField()}
+
+                                <Text style={{
+                                    fontSize: 16,
+                                    marginLeft: 10,
+                                    marginTop: 25,
+                                    fontWeight: 'bold',
+                                    paddingBottom: 15,
                                 }}>
-                                {this.items}
-                            </Picker>
+                                    {i18n.t('Settings.language')}
+                                </Text>
+                                <View style={{flexDirection: 'row', marginBottom: 10}}>
+
+                                    <Picker
+                                        style={{
+                                            padding: 5,
+                                            marginRight: 10,
+                                            flex: 1,
+                                            height: 50,
+                                            backgroundColor: 'white',
+                                            justifyContent: 'center',
+                                            marginLeft: 10,
+                                            borderRadius: 5,
+                                            borderWidth: 1,
+                                            overflow: 'hidden',
+                                        }}
+                                        selectedValue={this.props.Settings.language}
+                                        textAlign={'center'}
+                                        onValueChange={(itemValue, itemIndex) => {
+                                            this.props.setLanguage(itemValue);
+                                            i18n.locale = itemValue;
+                                            this.props.forceReloadBlocks();
+                                        }}>
+                                        {this.items}
+                                    </Picker>
+                                </View>
+                                {hr}
+
+
+                            </View>
+
+                            <View style={{}}>
+
+                                <View style={{
+                                    justifyContent: 'center',
+                                    flexDirection: 'row',
+                                    paddingVertical: 100,
+                                }}>
+                                    <Image style={{alignSelf: 'flex-end', opacity: 0.7}}
+                                           source={require('../../resources/icon/logo.png')}/>
+                                </View>
+                            </View>
                         </View>
-                        {hr}
                     </View>
+
                 </View>
             </SafeAreaView>
         )
