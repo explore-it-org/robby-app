@@ -16,6 +16,7 @@ const mapStateToProps = state => ({
     Settings: state.Settings,
     Program: state.Program,
     Instruction: state.ActiveProgram,
+    BLE: state.BLEConnection,
 });
 
 const mapDispatchToProps = dispatch =>

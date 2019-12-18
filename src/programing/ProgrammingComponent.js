@@ -73,17 +73,17 @@ export default class ProgrammingComponent extends Component {
 
     render() {
         let settingsPage = this.props.Settings.visible ? <Portal><SettingsContainer/></Portal> : undefined;
-        
-        let deviceName = this.props.BLEConnection.isConnected ? 
+
+        let deviceName = this.props.BLEConnection.isConnected ?
         <Appbar.Content style={{position: 'absolute', right: 40}}
         title={this.props.BLEConnection.device.name}
         subtitle={i18n.t('Programming.device')}
-        size={32}/> 
-        : 
+        size={32}/>
+        :
         <Appbar.Content style={{position: 'absolute', right: 40}}
         title={i18n.t('Programming.noConnectedDevice')}
         size={32}/>
-        
+
         return (
             <View style={[styles.container]}>
                 {settingsPage}
@@ -140,9 +140,6 @@ export default class ProgrammingComponent extends Component {
                                 Alert.alert(i18n.t('Programming.bluetoothNotTurnedOnTitle'), i18n.t('Programming.bluetoothNotTurnedOnMessage'));
                             } else if (this.props.BLEConnection.isConnected) {
                                 this.props.disconnect();
-                            } else if (this.props.BLEConnection.error !== '') {
-                                Alert.alert('ble error', this.props.BLEConnection.error);
-                                this.props.scanningEnabled('');
                             } else {
                                 this.props.scanForRobot();
                             }

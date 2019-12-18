@@ -137,6 +137,12 @@ export const ActiveInstructionsReducer = (state = default_state_Active_Instructi
                 ActiveProgram: new Program('', ProgramType.STEPS, [new Instruction(0, 0)]),
                 selectedIndex: -1,
             });
+        case ActionTypes.EMPTY_INSTRUCTION_LIST:
+            return Object.assign({}, state, {
+                lastUpdate: Date.now(),
+                ActiveProgram: new Program('', ProgramType.STEPS, []),
+                selectedIndex: -1,
+            });
         default:
             return state;
 

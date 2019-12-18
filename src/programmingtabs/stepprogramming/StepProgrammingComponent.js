@@ -4,7 +4,7 @@ import {
     FlatList,
     TouchableOpacity,
     Platform,
-    ScrollView, Alert, Image,
+    ScrollView, Alert, Image, ProgressViewIOSComponent, ProgressBarAndroidComponent, ActivityIndicator,
 } from 'react-native';
 import {FAB} from 'react-native-paper';
 import React from 'react';
@@ -12,7 +12,7 @@ import SpeedInput from '../../controls/SpeedInput';
 import i18n from '../../../resources/locales/i18n';
 import CustomIcon from '../../utillity/CustomIcon';
 import {JostText} from '../../controls/JostText';
-import {Text} from 'react-native-paper';
+import {Text, ProgressBar, Colors} from 'react-native-paper';
 
 
 export default class StepProgrammingComponent extends Component {
@@ -57,12 +57,22 @@ export default class StepProgrammingComponent extends Component {
                     />
                 </View>;
         }
+        let step_content;
+        if (this.props.BLE.device.isDownloading) {
+
+            console.log('showing download');
+            step_content =
+                <View style={{flexDirection: 'row', flex: 1, justifyContent: 'center'}}>
+                    <ActivityIndicator size="large" color='#2E5266'/>
+                </View>;
+        }
 
         // TODO remove all style
 
         return (
 
             <View style={[styles.view, {flex: 1, justifyContent: 'center', alignItems: 'center'}]}>
+
                 <View style={{flexDirection: 'row', paddingVertical: 20}}>
                     <View style={{flex: 1}}/>
                     <View style={{flex: 8, flexDirection: 'row'}}>
@@ -107,7 +117,10 @@ export default class StepProgrammingComponent extends Component {
                                style={{width: 20, height: 20}}/>
                     </View>
                     <View style={{flex: 1}}/>
+
                 </View>
+
+                {step_content}
 
 
                 <ScrollView
