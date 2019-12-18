@@ -2,7 +2,9 @@
   "language":"Deutsch",
   "languageTag":"de",
   "MainTab": {
-    "speed": "Geschwindigkeit von 0-100"
+    "speed": "Geschwindigkeit von 0-100",
+    "left": "L",
+    "right": "R"
   },
   "Programming": {
     "chooseDevice": "Gerät auswählen",
@@ -13,9 +15,7 @@
     "bluetoothNotTurnedOnTitle": "Bluetooth ist ausgeschaltet.",
     "bluetoothNotTurnedOnMessage": "Bitte schalten Sie Bluetooth ein.",
     "programName": "Programmname",
-    "noConnectedDevice": "Keine Verbindung",
-	"left": "L",
-	"right": "R"
+    "noConnectedDevice": "Keine Verbindung"
   },
   "BlockProgramming": {
     "programSelectionPrompt": "..."

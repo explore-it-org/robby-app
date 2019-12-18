@@ -2,7 +2,9 @@
   "language":"Italiano",
   "languageTag":"it",
   "MainTab": {
-    "speed": "Velocità da 0 a 100"
+    "speed": "Velocità da 0 a 100",
+    "left": "S",
+    "right": "D"
   },
   "Programming": {
     "device": "Dispositivo",
@@ -14,9 +16,7 @@
     "bluetoothNotTurnedOnTitle": "Bluetooth è spento",
     "bluetoothNotTurnedOnMessage": "Accendere Bluetooth",
     "programName": "Nome del programma",
-    "noConnectedDevice": "Nessuna connessione",
-	"left": "S",
-	"right": "D"
+    "noConnectedDevice": "Nessuna connessione"
   },
   "BlockProgramming": {
     "programSelectionPrompt": "..."

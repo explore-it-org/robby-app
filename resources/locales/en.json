@@ -2,7 +2,9 @@
   "language": "English",
   "languageTag": "en",
   "MainTab": {
-    "speed": "Speed from 0-100"
+    "speed": "Speed from 0-100",
+    "left": "L",
+    "right": "R"
   },
   "Programming": {
     "chooseDevice": "Choose a Device",
@@ -13,9 +15,7 @@
     "bluetoothNotTurnedOnTitle": "Bluetooth is powered off",
     "bluetoothNotTurnedOnMessage": "Please turn on Bluetooth",
     "programName": "Program name",
-    "noConnectedDevice": "No connection",
-	"left": "L",
-	"right": "R"
+    "noConnectedDevice": "No connection"
   },
   "BlockProgramming": {
     "programSelectionPrompt": "..."

@@ -102,7 +102,7 @@ export default class StepProgrammingComponent extends Component {
                         <Image source={require('../../../resources/icon/wheeldarkx.png')}
                                style={{width: 20, height: 20}}/>
                         <View style={{textAlign: 'center', marginLeft: 5}}>
-                            <Text style={{fontSize: 16}}>L</Text>
+                            <Text style={{fontSize: 16}}>{i18n.t('MainTab.left')}</Text>
                         </View>
                     </View>
                     <View style={{flex: 4, textAlign: 'center'}}>
@@ -112,7 +112,7 @@ export default class StepProgrammingComponent extends Component {
 
                     <View style={{flex: 2, flexDirection: 'row', justifyContent: 'flex-end'}}>
                         <View style={{marginRight: 5}}>
-                            <Text style={{fontSize: 16}}>R</Text>
+                            <Text style={{fontSize: 16}}>{i18n.t('MainTab.right')}</Text>
                         </View>
                         <Image source={require('../../../resources/icon/wheeldarkx.png')}
                                style={{width: 20, height: 20}}/>
