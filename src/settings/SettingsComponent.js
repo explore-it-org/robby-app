@@ -167,7 +167,6 @@ class SettingsComponent extends Component {
                                             justifyContent: 'center',
                                             marginLeft: 10,
                                             borderRadius: 5,
-                                            borderWidth: 1,
                                             overflow: 'hidden',
                                         }}
                                         selectedValue={this.props.Settings.language}
