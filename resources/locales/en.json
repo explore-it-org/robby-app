@@ -23,7 +23,6 @@
     "invalidEntryMessage": "Please only enter integers between 0-100."
   },
   "Settings": {
-    "device": "Device",
     "settings": "Settings:",
     "interval": "Interval:",
     "interval-unit": "per second (1..50)",
