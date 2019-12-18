@@ -78,10 +78,11 @@ export default class BlockProgrammingComponent extends Component {
                             maxLength={30}
                             style={{
                                 fontFamily: 'Jost-Medium',
+                                fontSize: 16,
                                 textAlign: 'center',
                                 flex: 2,
                                 height: 40,
-                                borderBottomColor: '#828282',
+                                borderBottomColor: '#2E5266',
                                 borderBottomWidth: 1.0,
                             }}
                             value={this.props.Block.Active_Block.name}

@@ -22,6 +22,7 @@ export default class ProgrammingComponent extends Component {
         currentRoute: 'Stepprogramming',
         clearButtonDisabled: false,
         saveButtonDisabled: false, // TODO: Move to redux and disable button when program not dirty
+        iconSize: 26,
     };
 
     componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS): void {
@@ -75,14 +76,14 @@ export default class ProgrammingComponent extends Component {
         let settingsPage = this.props.Settings.visible ? <Portal><SettingsContainer/></Portal> : undefined;
 
         let deviceName = this.props.BLEConnection.isConnected ?
-        <Appbar.Content style={{position: 'absolute', right: 40}}
-        title={this.props.BLEConnection.device.name}
-        subtitle={i18n.t('Programming.device')}
-        size={32}/>
-        :
-        <Appbar.Content style={{position: 'absolute', right: 40}}
-        title={i18n.t('Programming.noConnectedDevice')}
-        size={32}/>
+            <Appbar.Content style={{position: 'absolute', right: 40}}
+                            title={this.props.BLEConnection.device.name}
+                            subtitle={i18n.t('Programming.device')}
+                            size={this.state.iconSize}/>
+            :
+            <Appbar.Content style={{position: 'absolute', right: 40}}
+                            title={i18n.t('Programming.noConnectedDevice')}
+                            size={this.state.iconSize}/>;
 
         return (
             <View style={[styles.container]}>
@@ -116,10 +117,11 @@ export default class ProgrammingComponent extends Component {
                         icon={({size, color}) => (
                             <CustomIcon name="gear" size={size} color={color}/>
                         )}
-                        size={32}
+                        size={this.state.iconSize}
                         onPress={() => this.props.toggleSettings()}/>
-                    <Appbar.Content style={{position: 'absolute', left: 40}} title="Explore-it" size={32}/>
-                   {deviceName}
+                    <Appbar.Content style={{position: 'absolute', left: 40}} title="Explore-it"
+                                    size={this.state.iconSize}/>
+                    {deviceName}
                     <Appbar.Action
                         icon={({size, color}) => (
                             (this.props.BLEConnection.isConnected) ?
@@ -128,7 +130,7 @@ export default class ProgrammingComponent extends Component {
                         )}
                         //{(this.props.BLEConnection.isConnected) ? 'bluetooth-connected' : 'bluetooth'}
                         style={{position: 'absolute', right: 0}}
-                        size={32}
+                        size={this.state.iconSize}
                         disabled={this.props.BLEConnection.isConnecting}
                         onPress={() => {
                             //  this.props.scanStatus(); this will break a lot of things
@@ -187,7 +189,7 @@ export default class ProgrammingComponent extends Component {
                         icon={({size, color}) => (
                             <CustomIcon name="stop" size={size} color={color}/>
                         )}
-                        size={32}
+                        size={this.state.iconSize}
                         disabled={!this.props.BLEConnection.isConnected ||
                         !(this.props.BLEConnection.device.isUploading ||
                             this.props.BLEConnection.device.isGoing ||
@@ -201,7 +203,7 @@ export default class ProgrammingComponent extends Component {
                         icon={({size, color}) => (
                             <CustomIcon name="play" size={size} color={color}/>
                         )}
-                        size={32}
+                        size={this.state.iconSize}
                         disabled={!this.props.BLEConnection.isConnected ||
                         this.props.BLEConnection.device.isUploading ||
                         this.props.BLEConnection.device.isGoing ||
@@ -215,7 +217,7 @@ export default class ProgrammingComponent extends Component {
                         icon={({size, color}) => (
                             <CustomIcon name="record" size={size} color={color}/>
                         )}
-                        size={32}
+                        size={this.state.iconSize}
                         disabled={!this.props.BLEConnection.isConnected ||
                         this.props.BLEConnection.device.isUploading ||
                         this.props.BLEConnection.device.isGoing ||
@@ -229,7 +231,7 @@ export default class ProgrammingComponent extends Component {
                         icon={({size, color}) => (
                             <CustomIcon name="playcode" size={size} color={color}/>
                         )}
-                        size={32}
+                        size={this.state.iconSize}
                         disabled={!this.props.BLEConnection.isConnected ||
                         this.props.BLEConnection.device.isUploading ||
                         this.props.BLEConnection.device.isGoing ||
@@ -243,7 +245,7 @@ export default class ProgrammingComponent extends Component {
                         icon={({size, color}) => (
                             <CustomIcon name="download" size={size} color={color}/>
                         )}
-                        size={32}
+                        size={this.state.iconSize}
                         disabled={!this.props.BLEConnection.isConnected ||
                         this.props.BLEConnection.device.isUploading ||
                         this.props.BLEConnection.device.isGoing ||
@@ -258,7 +260,7 @@ export default class ProgrammingComponent extends Component {
                         icon={({size, color}) => (
                             <CustomIcon name="upload" size={size} color={color}/>
                         )}
-                        size={32}
+                        size={this.state.iconSize}
                         disabled={!this.props.BLEConnection.isConnected ||
                         this.props.BLEConnection.device.isUploading ||
                         this.props.BLEConnection.device.isGoing ||
@@ -272,7 +274,7 @@ export default class ProgrammingComponent extends Component {
                         icon={({size, color}) => (
                             <CustomIcon name="save" size={size} color={color}/>
                         )}
-                        size={32}
+                        size={this.state.iconSize}
                         disabled={this.props.BLEConnection.device.isUploading ||
                         this.props.BLEConnection.device.isGoing ||
                         this.props.BLEConnection.device.isRecording ||
@@ -286,7 +288,7 @@ export default class ProgrammingComponent extends Component {
                         icon={({size, color}) => (
                             <CustomIcon name="new" size={size} color={color}/>
                         )}
-                        size={32}
+                        size={this.state.iconSize}
                         disabled={this.props.BLEConnection.device.isUploading ||
                         this.props.BLEConnection.device.isGoing ||
                         this.props.BLEConnection.device.isRecording ||

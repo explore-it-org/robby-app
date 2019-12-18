@@ -54,12 +54,12 @@ export default class ProgramInput extends Component {
                 </View>
 
                 <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center'}}>
-                    <Text style={{alignSelf: 'center'}}> x </Text>
+                    <Text style={{alignSelf: 'center', fontSize: 16}}> x </Text>
                 </View>
 
 
                 <View style={{flex: 5, flexDirection: 'column', justifyContent: 'center'}}>
-                    <Text style={{}}>{selectedText}</Text>
+                    <Text style={{fontSize: 16}}>{selectedText}</Text>
                 </View>
 
                 <View style={{flex: 1, justifyContent: 'center'}}>
@@ -67,7 +67,7 @@ export default class ProgramInput extends Component {
                         icon={({size, color}) => (
                             <CustomIcon name="edit" size={size} color={color}/>
                         )}
-                        size={20}
+                        size={24}
                         onPress={() => this.setState({pickerOpen: true})}
                     />
                 </View>

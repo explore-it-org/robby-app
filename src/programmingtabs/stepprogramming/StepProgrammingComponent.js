@@ -81,9 +81,10 @@ export default class StepProgrammingComponent extends Component {
                             maxLength={30}
                             style={{
                                 textAlign: 'center',
+                                fontSize: 16,
                                 flex: 2,
                                 height: 40,
-                                borderBottomColor: '#828282',
+                                borderBottomColor: '#2E5266',
                                 borderBottomWidth: 1.0,
                                 fontFamily: 'Jost-Medium',
                             }}
@@ -101,17 +102,17 @@ export default class StepProgrammingComponent extends Component {
                         <Image source={require('../../../resources/icon/wheeldarkx.png')}
                                style={{width: 20, height: 20}}/>
                         <View style={{textAlign: 'center', marginLeft: 5}}>
-                            <Text>L</Text>
+                            <Text style={{fontSize: 16}}>L</Text>
                         </View>
                     </View>
                     <View style={{flex: 4, textAlign: 'center'}}>
-                        <Text style={{textAlign: 'center'}}>{i18n.t('MainTab.speed')}</Text>
+                        <Text style={{textAlign: 'center', fontSize: 16}}>{i18n.t('MainTab.speed')}</Text>
                     </View>
 
 
                     <View style={{flex: 2, flexDirection: 'row', justifyContent: 'flex-end'}}>
                         <View style={{marginRight: 5}}>
-                            <Text>R</Text>
+                            <Text style={{fontSize: 16}}>R</Text>
                         </View>
                         <Image source={require('../../../resources/icon/wheeldarkx.png')}
                                style={{width: 20, height: 20}}/>
