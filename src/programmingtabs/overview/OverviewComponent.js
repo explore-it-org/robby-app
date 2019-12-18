@@ -60,7 +60,7 @@ export default class OverviewComponent extends Component {
                                     <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center'}}>
                                         <IconButton
                                             size={20}
-                                            color={'#6a6968'}
+                                            color={'gray'}
                                             icon={({size, color}) => (
                                                 <CustomIcon name="open" size={size} color={color}/>
                                             )}
@@ -73,7 +73,7 @@ export default class OverviewComponent extends Component {
                                     <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center'}}>
                                         <IconButton
                                             size={20}
-                                            color={'#6a6968'}
+                                            color={'gray'}
                                             icon={({size, color}) => (
                                                 <CustomIcon name="duplicate" size={size} color={color}/>
                                             )}
@@ -86,7 +86,7 @@ export default class OverviewComponent extends Component {
                                     <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center'}}>
                                         <IconButton
                                             size={20}
-                                            color={'#6a6968'}
+                                            color={'gray'}
                                             icon={({size, color}) => (
                                                 <CustomIcon name="deletedark" size={size} color={color}/>
                                             )}

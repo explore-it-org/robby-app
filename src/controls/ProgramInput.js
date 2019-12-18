@@ -68,7 +68,7 @@ export default class ProgramInput extends Component {
                             <CustomIcon name="edit" size={size} color={color}/>
                         )}
                         size={20}
-                        color={'#6a6968'}
+                        color={'gray'}
                         onPress={() => this.setState({pickerOpen: true})}
                     />
                 </View>
