@@ -1,0 +1,49 @@
+{
+  "language":"Italiano",
+  "languageTag":"it",
+  "MainTab": {
+    "speed": "Velocità da 0 a 100"
+  },
+  "Programming": {
+    "device": "Dispositivo",
+    "chooseDevice": "Scegli dispositivo",
+    "downloadMessage": "Il download delle istruzioni è andato a buon fine!",
+    "recordMessage": "Registrato e salvato sul robot!",
+    "uploadMessage": "Le istruzioni sono state caricate sul robot!",
+    "driveMessage": "Le istruzioni sono state seguite, la trasmissione è andata a buon fine!",
+    "bluetoothNotTurnedOnTitle": "Bluetooth è spento",
+    "bluetoothNotTurnedOnMessage": "Accendere Bluetooth",
+    "programName": "Nome del programma",
+    "noConnectedDevice": "Nessuna connessione"
+  },
+  "BlockProgramming": {
+    "programSelectionPrompt": "..."
+  },
+  "SpeedInput": {
+    "invalidEntry": "Il valore inserito non è valido",
+    "invalidEntryMessage": "È possibile inserire solo numeri interi tra 0 e 100."
+  },
+  "Settings": {
+    "device": "Dispositivo",
+    "settings": "Impostazioni:",
+    "interval": "Intervallo:",
+    "interval-unit": "al secondo (1..50)",
+    "learn": "Registra:",
+    "duration": "Durata:",
+    "duration-unit": "Secondi (1..80)",
+    "language": "Lingua",
+    "updated": "Le impostazioni sono state aggiornate"
+  },
+  "RoboticsDatabase": {
+    "success": "Riuscito",
+    "failure": "Fallito",
+    "emptyName": "Inserire un nome",
+    "addFiled": "Impossibile salvare il programma: ",
+    "nameTaken": "questo nome è già in uso",
+    "duplicateFailed": "Impossibile duplicare il programma: ",
+    "deleteFailed": "Impossibile cancellare il programma: ",
+    "programUsed": "il programma è in uso da parte di un altro programma",
+    "programUsedByActiveProgram": "il programma è in uso da parte del programma attualmente aperto",
+    "programUsedByActiveProgramTitle": "il programma non può essere cancellato"
+  }
+}

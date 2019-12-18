@@ -17,7 +17,7 @@
     "noConnectedDevice": "No connection"
   },
   "BlockProgramming": {
-    "programSelectionPrompt": "Select a program..."
+    "programSelectionPrompt": "..."
   },
   "SpeedInput": {
     "invalidEntry": "Invalid Entry",
