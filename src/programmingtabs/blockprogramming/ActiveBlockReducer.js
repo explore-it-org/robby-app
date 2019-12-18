@@ -61,8 +61,10 @@ export const ActiveBlockReducer = (state = default_state_block, action) => {
                 // dirty hack to force update
                 Active_Block: Object.assign(new Program(), state.Active_Block, {blocks: [...state.Active_Block.blocks]}),
             });
-
-
+        case ActionTypes.FORCE_RELOAD_BLOCK:
+            return Object.assign({}, state, {
+                Active_Block: Object.assign(new Program(), state.Active_Block, {blocks: [...state.Active_Block.blocks]}),
+            });
         case ActionTypes.ADD_NEW_BLOCK:
             let index = state.Active_Block.blocks.length - 1;
             if (state.selectedBlockIndex !== -1) {

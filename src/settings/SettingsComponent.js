@@ -94,14 +94,14 @@ class SettingsComponent extends Component {
                                               testID={k.language}/>),
         );
 
-        let deviceName = this.props.BLEConnection.isConnected ? 
-        <Appbar.Content style={{position: 'absolute', right: 40}}
-        title={this.props.BLEConnection.device.name}
-        size={32}/> 
-        : 
-        <Appbar.Content style={{position: 'absolute', right: 40}}
-        title={i18n.t('Programming.noConnectedDevice')}
-        size={32}/>
+        let deviceName = this.props.BLEConnection.isConnected ?
+            <Appbar.Content style={{position: 'absolute', right: 40}}
+                            title={this.props.BLEConnection.device.name}
+                            size={32}/>
+            :
+            <Appbar.Content style={{position: 'absolute', right: 40}}
+                            title={i18n.t('Programming.noConnectedDevice')}
+                            size={32}/>;
 
         return (
             <SafeAreaView style={{
@@ -173,6 +173,7 @@ class SettingsComponent extends Component {
                                 onValueChange={(itemValue, itemIndex) => {
                                     this.props.setLanguage(itemValue);
                                     i18n.locale = itemValue;
+                                    this.props.forceReloadBlocks();
                                 }}>
                                 {this.items}
                             </Picker>

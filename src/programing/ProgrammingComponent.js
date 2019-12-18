@@ -77,7 +77,7 @@ export default class ProgrammingComponent extends Component {
 
         let deviceName = this.props.BLEConnection.isConnected ?
             <Appbar.Content style={{position: 'absolute', right: 40}}
-                            title={this.props.BLEConnection.device.name}}
+                            title={this.props.BLEConnection.device.name}
                             size={this.state.iconSize}/>
             :
             <Appbar.Content style={{position: 'absolute', right: 40}}
