@@ -14,7 +14,9 @@
     "bluetoothNotTurnedOnTitle": "Bluetooth è spento",
     "bluetoothNotTurnedOnMessage": "Accendere Bluetooth",
     "programName": "Nome del programma",
-    "noConnectedDevice": "Nessuna connessione"
+    "noConnectedDevice": "Nessuna connessione",
+	"left": "S",
+	"right": "D"
   },
   "BlockProgramming": {
     "programSelectionPrompt": "..."

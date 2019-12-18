@@ -13,7 +13,9 @@
     "bluetoothNotTurnedOnTitle": "Bluetooth is powered off",
     "bluetoothNotTurnedOnMessage": "Please turn on Bluetooth",
     "programName": "Program name",
-    "noConnectedDevice": "No connection"
+    "noConnectedDevice": "No connection",
+	"left": "L",
+	"right": "R"
   },
   "BlockProgramming": {
     "programSelectionPrompt": "..."
