@@ -5,7 +5,6 @@
     "speed": "Geschwindigkeit von 0-100"
   },
   "Programming": {
-    "device": "Gerät",
     "chooseDevice": "Gerät auswählen",
     "downloadMessage": "Anweisungen erfolgreich vom Roboter heruntergeladen!",
     "recordMessage": "Erfolgreich aufgezeichnet und auf dem Roboter gespeichert!",

@@ -97,7 +97,6 @@ class SettingsComponent extends Component {
         let deviceName = this.props.BLEConnection.isConnected ? 
         <Appbar.Content style={{position: 'absolute', right: 40}}
         title={this.props.BLEConnection.device.name}
-        subtitle={i18n.t('Programming.device')}
         size={32}/> 
         : 
         <Appbar.Content style={{position: 'absolute', right: 40}}
