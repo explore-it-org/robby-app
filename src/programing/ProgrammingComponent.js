@@ -107,7 +107,7 @@ export default class ProgrammingComponent extends Component {
                             }
                         }
                     }
-                    colorAccent="#9c27b0"
+                    colorAccent='#1E3888'
                 />
 
 
