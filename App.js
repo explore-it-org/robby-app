@@ -32,7 +32,13 @@ class App extends Component {
         } else {
             if (Platform.OS === 'ios') {
                 // iOS:
-                i18n.defaultLocale = NativeModules.SettingsManager.settings.AppleLocale.split('_')[0];
+                let local;
+                try {
+                    local = NativeModules.SettingsManager.settings.AppleLocale.split('_')[0];
+                } catch (e) {
+                    local = 'en';
+                }
+                i18n.defaultLocale = local;
             } else {
                 // Android:
                 i18n.defaultLocale = NativeModules.I18nManager.localeIdentifier.split('_')[0];
@@ -72,12 +78,6 @@ const styles = StyleSheet.create({
         height: 140,
         alignItems: 'center',
         justifyContent: 'center',
-        ...ifIphoneX(
-            {
-                paddingTop: getStatusBarHeight() + 10,
-            },
-            {},
-        ),
     },
     drawerItems: {
         flex: 3,

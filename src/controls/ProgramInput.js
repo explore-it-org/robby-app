@@ -97,7 +97,7 @@ export default class ProgramInput extends Component {
                             }
                         }
                     }
-                    colorAccent="#9c27b0"
+                    colorAccent='#1E3888'
                 />
 
             </View>

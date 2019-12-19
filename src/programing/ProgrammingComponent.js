@@ -107,7 +107,7 @@ export default class ProgrammingComponent extends Component {
                             }
                         }
                     }
-                    colorAccent="#9c27b0"
+                    colorAccent='#1E3888'
                 />
 
 
@@ -350,9 +350,6 @@ const TabContainer = createAppContainer(TabNavigator);
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        ...ifIphoneX({
-            paddingTop: getStatusBarHeight() + 10,
-        }, {}),
     },
     bottom: {
         position: 'absolute',

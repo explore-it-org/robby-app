@@ -1,14 +1,25 @@
 import React, {Component} from 'react';
-import {Image, Linking, Picker, SafeAreaView, StyleSheet, View} from 'react-native';
-import {Text, TextInput} from 'react-native-paper';
+import {
+    Alert,
+    Image,
+    Linking,
+    Picker,
+    SafeAreaView, ScrollView,
+    StyleSheet,
+    TouchableOpacity,
+    TouchableOpacityComponent,
+    View,
+} from 'react-native';
+import {Text, TextInput} from 'react-native';
 import {Appbar} from 'react-native-paper';
+import GLOBAL from '../utillity/Global';
 
 
 //import { Icon } from 'react-native-elements';
 import {getStatusBarHeight, ifIphoneX} from 'react-native-iphone-x-helper';
 import i18n from '../../resources/locales/i18n';
 import Toast from '../controls/Toast';
-import {toggleSettings} from './SettingsAction';
+import {setDuration, setInterval, toggleSettings} from './SettingsAction';
 import SettingsContainer from './SettingsContainer';
 import NumericInput from '../controls/NumericInput';
 
@@ -17,6 +28,8 @@ class SettingsComponent extends Component {
 
     state = {
         lastUpdate: 0,
+        duration: this.props.Settings.duration.toString(),
+        interval: this.props.Settings.interval.toString(),
     };
 
 
@@ -28,48 +41,101 @@ class SettingsComponent extends Component {
         }
     }
 
-    actuallyChangeInterval(interval) {
-        if (this.state.lastUpdate === interval) {
-            this.props.setIntervalAndSendToRobby(interval.length === 0 ? 0 : parseInt(interval));
+    actuallyChangeInterval() {
+        let newInterval = parseInt(this.state.interval);
+        if (!isNaN(newInterval)) {
+            this.props.setIntervalAndSendToRobby(newInterval);
+        } else {
+            this.setState({interval: this.props.Settings.interval.toString()});
         }
     }
 
     changeInterval(interval) {
-        this.props.setInterval(interval);
-        this.setState({lastUpdate: interval});
-        setTimeout(() => {
-            this.actuallyChangeInterval(interval);
-        }, 400);
-
-
+        let newText = '';
+        let numbers = '0123456789';
+        if (parseInt(interval) > 50) {
+            Alert.alert('error', 'to big');
+            newText = '50';
+        } else {
+            for (let i = 0; i < interval.length; i++) {
+                if (numbers.indexOf(interval[i]) > -1) {
+                    newText = newText + interval[i];
+                } else {
+                    Alert.alert(i18n.t('SpeedInput.invalidEntry'), i18n.t('SpeedInput.invalidEntryMessage'));
+                }
+            }
+        }
+        this.setState({interval: newText});
     }
 
     changeDuration(duration) {
-        if (duration) {
-            this.props.setDuration(parseInt(duration));
+        let newText = '';
+        let numbers = '0123456789';
+        if (parseInt(duration) > 80) {
+            Alert.alert('error', 'to big');
+            newText = '80';
         } else {
-            this.props.setDuration();
+            for (let i = 0; i < duration.length; i++) {
+                if (numbers.indexOf(duration[i]) > -1) {
+                    newText = newText + duration[i];
+                } else {
+                    Alert.alert(i18n.t('SpeedInput.invalidEntry'), i18n.t('SpeedInput.invalidEntryMessage'));
+                }
+            }
         }
+        this.setState({duration: newText});
+    }
+
+    actuallyChangeDuration() {
+        let newDuration = parseInt(this.state.duration);
+        if (!isNaN(newDuration)) {
+            this.props.setDuration(newDuration);
+        } else {
+            this.setState({duration: this.props.Settings.duration.toString()});
+        }
+
     }
 
 
     renderIntervalField = () => {
         if (this.props.BLEConnection.isConnected) {
             return (
-                <View style={{flex: 0, marginTop: 25}}>
-                    <View style={{flexDirection: 'row', marginBottom: 10}}>
-                        <Text style={{fontSize: 16, height: 50, width: '20%', marginLeft: 10, fontWeight: 'bold'}}>
-                            {i18n.t('Settings.interval')}
-                        </Text>
-                        <View style={{width: '20%', height: 50, marginTop: -12.5, marginLeft: 10}}>
-                            <NumericInput
-                                onchange={text => this.changeInterval(text)}
-                                val={this.props.Settings.interval !== undefined ? this.props.Settings.interval.toString() : ''}
+                <View style={{marginTop: 10}}>
+                    <View style={{
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        marginBottom: 10,
+                    }}>
+                        <View style={{flex: 1}}/>
+                        <View style={{flex: 4, alignSelf: 'center'}}>
+                            <Text style={{
+                                fontSize: 16,
+                                fontWeight: 'bold',
+                            }}>
+                                {i18n.t('Settings.interval')}
+                            </Text>
+                        </View>
+                        <View style={{flex: 4, alignSelf: 'center'}}>
+                            <TextInput
+                                style={styles.input}
+                                keyboardType='numeric'
+                                onChangeText={(text) => this.changeInterval(text)}
+                                textAlign={'center'}
+                                value={this.state.interval}
+                                onFocus={() => {
+                                    this.setState({interval: ''});
+                                }}
+                                onBlur={() => {
+                                    this.actuallyChangeInterval();
+                                }}
                             />
                         </View>
-                        <Text style={{height: 50, marginLeft: 20}}>
-                            {i18n.t('Settings.interval-unit')}
-                        </Text>
+                        <View style={{flex: 6, alignSelf: 'center', marginLeft: 5}}>
+                            <Text style={{}}>
+                                {i18n.t('Settings.interval-unit')}
+                            </Text>
+                        </View>
+                        <View style={{flex: 4}}/>
                     </View>
                     <View style={{borderBottomColor: 'lightgrey', borderBottomWidth: 1}}/>
                 </View>
@@ -99,138 +165,166 @@ class SettingsComponent extends Component {
                 flex: 1,
                 backgroundColor: '#2E5266',
             }}>
-                <View style={[styles.container]}>
-                    <Appbar>
-                        <Appbar.Action
-                            icon="close"
-                            size={26}
-                            onPress={() => this.props.toggleSettings()}
-                        />
-                        <Appbar.Content
-                            style={{position: 'absolute', left: 40}}
-                            title="Explore-it"
-                            size={32}
-                        />
-                        {deviceName}
-                    </Appbar>
+                <ScrollView style={{
+                    flex: 1,
+                    backgroundColor: 'white',
 
-                    <View style={{flex: 0, padding: 10, marginTop: 25}}>
+                }}>
+                    <View style={[styles.container]}>
+                        <Appbar>
+                            <Appbar.Action
+                                icon="close"
+                                size={26}
+                                onPress={() => this.props.toggleSettings()}
+                            />
+                            <Appbar.Content
+                                style={{position: 'absolute', left: 40}}
+                                title="Explore-it"
+                                size={32}
+                            />
+                            {deviceName}
+                        </Appbar>
 
-                        <View style={{flexDirection: 'column', justifyContent: 'space-between'}}>
+                        <View style={{flex: 0, padding: 10, marginTop: 10}}>
 
                             <View>
+                                <View style={{flexDirection: 'column', justifyContent: 'space-between'}}>
+                                    <View>
 
-                                <View style={{flexDirection: 'row', marginBottom: 10}}>
-                                    <Text style={{
-                                        fontSize: 16,
-                                        height: 50,
-                                        width: '20%',
-                                        marginLeft: 10,
-                                        fontWeight: 'bold',
-                                    }}>
-                                        {i18n.t('Settings.duration')}
-                                    </Text>
-                                    <View style={{width: '20%', height: 50, marginTop: -12.5, marginLeft: 10}}>
-                                        <NumericInput
-                                            onchange={text => this.changeDuration(text)}
-                                            val={this.props.Settings.duration !== undefined ? this.props.Settings.duration.toString() : ''}
-                                        />
-                                    </View>
-                                    <Text style={{height: 50, marginLeft: 20}}>
-                                        {i18n.t('Settings.duration-unit')}
-                                    </Text>
-                                </View>
-
-
-                                {hr}
-
-                                {this.renderIntervalField()}
-
-                                <Text style={{
-                                    fontSize: 16,
-                                    marginLeft: 10,
-                                    marginTop: 25,
-                                    fontWeight: 'bold',
-                                    paddingBottom: 15,
-                                }}>
-                                    {i18n.t('Settings.language')}
-                                </Text>
-                                <View style={{flexDirection: 'row', marginBottom: 10}}>
-
-                                    <Picker
-                                        style={{
-                                            padding: 5,
-                                            marginRight: 10,
-                                            flex: 1,
-                                            height: 50,
-                                            backgroundColor: 'white',
-                                            justifyContent: 'center',
-                                            marginLeft: 10,
-                                            borderRadius: 5,
-                                            overflow: 'hidden',
-                                        }}
-                                        selectedValue={this.props.Settings.language}
-                                        textAlign={'center'}
-                                        onValueChange={(itemValue, itemIndex) => {
-                                            this.props.setLanguage(itemValue);
-                                            i18n.locale = itemValue;
-                                            this.props.forceReloadBlocks();
+                                        <View style={{
+                                            flexDirection: 'row',
+                                            justifyContent: 'flex-start',
+                                            marginBottom: 10,
                                         }}>
-                                        {this.items}
-                                    </Picker>
+                                            <View style={{flex: 1}}/>
+                                            <View style={{flex: 4, alignSelf: 'center'}}>
+                                                <Text style={{
+                                                    fontSize: 16,
+                                                    fontWeight: 'bold',
+                                                }}>
+                                                    {i18n.t('Settings.duration')}
+                                                </Text>
+                                            </View>
+                                            <View style={{flex: 4, alignSelf: 'center'}}>
+                                                <TextInput
+                                                    style={styles.input}
+                                                    keyboardType='numeric'
+                                                    onChangeText={(text) => this.changeDuration(text)}
+                                                    textAlign={'center'}
+                                                    value={this.state.duration}
+                                                    onFocus={() => {
+                                                        this.setState({duration: ''});
+                                                    }}
+                                                    onBlur={() => {
+                                                        this.actuallyChangeDuration();
+                                                    }}
+                                                />
+                                            </View>
+                                            <View style={{flex: 6, alignSelf: 'center', marginLeft: 5}}>
+                                                <Text style={{}}>
+                                                    {i18n.t('Settings.duration-unit')}
+                                                </Text>
+                                            </View>
+                                            <View style={{flex: 4}}/>
+                                        </View>
+                                        {hr}
+
+
+                                        {this.renderIntervalField()}
+
+                                    </View>
+
+                                    <View style={{
+                                        flexDirection: 'row',
+                                        justifyContent: 'flex-start',
+                                        marginVertical: 10,
+                                    }}>
+                                        <View style={{flex: 1}}/>
+                                        <View style={{flex: 4, alignSelf: 'center'}}>
+                                            <Text style={{
+                                                fontSize: 16,
+                                                fontWeight: 'bold',
+                                            }}>
+                                                {i18n.t('Settings.language')}
+                                            </Text>
+                                        </View>
+                                        <View style={{flex: 10, alignSelf: 'center'}}>
+                                            <Picker
+                                                style={styles.input}
+                                                selectedValue={this.props.Settings.language}
+                                                textAlign={'center'}
+                                                onValueChange={(itemValue, itemIndex) => {
+                                                    this.props.setLanguage(itemValue);
+                                                    i18n.locale = itemValue;
+                                                    this.props.forceReloadBlocks();
+                                                }}>
+                                                {this.items}
+                                            </Picker>
+                                        </View>
+                                        <View style={{flex: 4}}/>
+                                    </View>
+                                    {hr}
+
                                 </View>
-                                {hr}
 
 
                             </View>
+                        </View>
 
-                            <View style={{}}>
-
-                                <View style={{
+                        <View style={{justifyContent: 'flex-end'}}>
+                            <TouchableOpacity
+                                onPress={() => Linking.openURL('https://www.explore-it.org/').catch((err) => console.error('An error occurred', err))}
+                            >
+                                <View
+                                    style={{
+                                        justifyContent: 'center',
+                                        flexDirection: 'row',
+                                        marginTop: 40,
+                                    }}>
+                                    <Text
+                                        style={{fontFamily: 'Jost-Medium', fontSize: 20, color: 'blue'}}>
+                                        www.explore-it.org
+                                    </Text>
+                                </View>
+                            </TouchableOpacity>
+                            <View
+                                style={{
                                     justifyContent: 'center',
                                     flexDirection: 'row',
-                                    paddingVertical: 100,
                                 }}>
-                                    <Image style={{alignSelf: 'flex-end', opacity: 0.7}}
-                                           source={require('../../resources/icon/logo.png')}/>
-                                </View>
+                                <Text
+                                    style={{fontFamily: 'Jost-Thin', color: 'grey'}}>©</Text>
+                            </View>
+
+                            <View
+                                style={{
+                                    justifyContent: 'center',
+                                    flexDirection: 'row',
+                                }}>
+                                <Text
+                                    style={{fontFamily: 'Jost-Thin', color: 'grey'}}>v{GLOBAL.VERSION}</Text>
                             </View>
                         </View>
                     </View>
-
-                </View>
+                </ScrollView>
             </SafeAreaView>
-        )
-            ;
+        );
     }
 }
-
-//                    <Text style={{marginTop: 20, fontSize: 16, fontWeight: 'bold'}}>
-//                        {i18n.t('SettingsComponent.calibrate')}
-//                    </Text>
-//                    <View style={{ flex: 1, flexDirection: 'row'}}>
-//                        <CalibrationInput val={5} limit={20} />
-//                        <View style={{ flex: 1, alignItems: 'center', height: 220, justifyContent: 'center'}}>
-//                            <Icon
-//                                reverse
-//                                name='play-arrow'
-//                                color='#9c27b0'
-//                                size={32}
-//                                onPress={() => alert('run')} />
-//                        </View>
-//                        <CalibrationInput val={19} limit={20} />
-//                    </View>
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FAFAFA',
-        ...ifIphoneX(
-            {
-                paddingTop: getStatusBarHeight() + 10,
-            },
-            {},
-        ),
+
+    },
+    input: {
+        fontFamily: 'Jost-Book',
+        justifyContent: 'center',
+        height: 50,
+        borderRadius: 5,
+        borderWidth: 1,
+        overflow: 'hidden',
+        backgroundColor: 'white',
     },
 });
 
