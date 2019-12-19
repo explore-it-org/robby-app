@@ -32,7 +32,7 @@
     "learn": "Registra:",
     "duration": "Durata:",
     "duration-unit": "Secondi (1..80)",
-    "language": "Lingua",
+    "language": "Lingua:",
     "updated": "Le impostazioni sono state aggiornate"
   },
   "RoboticsDatabase": {
