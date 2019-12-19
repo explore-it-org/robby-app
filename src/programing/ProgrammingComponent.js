@@ -350,9 +350,6 @@ const TabContainer = createAppContainer(TabNavigator);
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        ...ifIphoneX({
-            paddingTop: getStatusBarHeight() + 10,
-        }, {}),
     },
     bottom: {
         position: 'absolute',
