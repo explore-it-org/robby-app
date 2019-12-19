@@ -48,6 +48,7 @@ class SettingsComponent extends Component {
         } else {
             this.setState({interval: this.props.Settings.interval.toString()});
         }
+
     }
 
     changeInterval(interval) {
@@ -87,12 +88,14 @@ class SettingsComponent extends Component {
     }
 
     actuallyChangeDuration() {
+        console.log('we are in blurred');
         let newDuration = parseInt(this.state.duration);
         if (!isNaN(newDuration)) {
             this.props.setDuration(newDuration);
         } else {
             this.setState({duration: this.props.Settings.duration.toString()});
         }
+        console.log('we are here and d is  ' + newDuration.toString());
 
     }
 
@@ -169,7 +172,8 @@ class SettingsComponent extends Component {
                     flex: 1,
                     backgroundColor: 'white',
 
-                }}>
+                }}
+                >
                     <View style={[styles.container]}>
                         <Appbar>
                             <Appbar.Action
