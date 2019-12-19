@@ -185,6 +185,7 @@ export default class StepProgrammingComponent extends Component {
                         icon={({size, color}) => (
                             <CustomIcon name="plus" size={size} color={color}/>
                         )}
+                        disabled={this.props.Instruction.ActiveProgram.steps.length >= 4095}
                         onPress={() => {
                             this.props.addInstruction();
                         }}

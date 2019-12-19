@@ -7,6 +7,7 @@ const default_state_block = {
     Active_Block: new Program('', ProgramType.BLOCKS, [], [new Block('', 1)]),
     possibleChildren: Database.findAll(),
     selectedBlockIndex: -1,
+    size: 0,
 };
 export const ActiveBlockReducer = (state = default_state_block, action) => {
     switch (action.type) {
