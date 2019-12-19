@@ -4,7 +4,7 @@ import {
     Image,
     Linking,
     Picker,
-    SafeAreaView,
+    SafeAreaView, ScrollView,
     StyleSheet,
     TouchableOpacity,
     TouchableOpacityComponent,
@@ -46,7 +46,7 @@ class SettingsComponent extends Component {
         if (!isNaN(newInterval)) {
             this.props.setIntervalAndSendToRobby(newInterval);
         } else {
-            this.setState({duration: this.props.Settings.interval.toString()});
+            this.setState({interval: this.props.Settings.interval.toString()});
         }
     }
 
@@ -98,7 +98,7 @@ class SettingsComponent extends Component {
 
 
     renderIntervalField = () => {
-        if (!this.props.BLEConnection.isConnected) {
+        if (this.props.BLEConnection.isConnected) {
             return (
                 <View style={{marginTop: 10}}>
                     <View style={{
@@ -165,33 +165,79 @@ class SettingsComponent extends Component {
                 flex: 1,
                 backgroundColor: '#2E5266',
             }}>
-                <View style={[styles.container]}>
-                    <Appbar>
-                        <Appbar.Action
-                            icon="close"
-                            size={26}
-                            onPress={() => this.props.toggleSettings()}
-                        />
-                        <Appbar.Content
-                            style={{position: 'absolute', left: 40}}
-                            title="Explore-it"
-                            size={32}
-                        />
-                        {deviceName}
-                    </Appbar>
+                <ScrollView style={{
+                    flex: 1,
+                    backgroundColor: 'white',
 
-                    <View style={{flex: 0, padding: 10, marginTop: 25}}>
+                }}>
+                    <View style={[styles.container]}>
+                        <Appbar>
+                            <Appbar.Action
+                                icon="close"
+                                size={26}
+                                onPress={() => this.props.toggleSettings()}
+                            />
+                            <Appbar.Content
+                                style={{position: 'absolute', left: 40}}
+                                title="Explore-it"
+                                size={32}
+                            />
+                            {deviceName}
+                        </Appbar>
 
-                        <View>
-                            <View style={{flexDirection: 'column', justifyContent: 'space-between'}}>
+                        <View style={{flex: 0, padding: 10, marginTop: 10}}>
+
+                            <View>
+                                <View style={{flexDirection: 'column', justifyContent: 'space-between'}}>
+                                    <View>
+
+                                        <View style={{
+                                            flexDirection: 'row',
+                                            justifyContent: 'flex-start',
+                                            marginBottom: 10,
+                                        }}>
+                                            <View style={{flex: 1}}/>
+                                            <View style={{flex: 4, alignSelf: 'center'}}>
+                                                <Text style={{
+                                                    fontSize: 16,
+                                                    fontWeight: 'bold',
+                                                }}>
+                                                    {i18n.t('Settings.duration')}
+                                                </Text>
+                                            </View>
+                                            <View style={{flex: 4, alignSelf: 'center'}}>
+                                                <TextInput
+                                                    style={styles.input}
+                                                    keyboardType='numeric'
+                                                    onChangeText={(text) => this.changeDuration(text)}
+                                                    textAlign={'center'}
+                                                    value={this.state.duration}
+                                                    onFocus={() => {
+                                                        this.setState({duration: ''});
+                                                    }}
+                                                    onBlur={() => {
+                                                        this.actuallyChangeDuration();
+                                                    }}
+                                                />
+                                            </View>
+                                            <View style={{flex: 6, alignSelf: 'center', marginLeft: 5}}>
+                                                <Text style={{}}>
+                                                    {i18n.t('Settings.duration-unit')}
+                                                </Text>
+                                            </View>
+                                            <View style={{flex: 4}}/>
+                                        </View>
+                                        {hr}
 
 
-                                <View>
+                                        {this.renderIntervalField()}
+
+                                    </View>
 
                                     <View style={{
                                         flexDirection: 'row',
                                         justifyContent: 'flex-start',
-                                        marginBottom: 10,
+                                        marginVertical: 10,
                                     }}>
                                         <View style={{flex: 1}}/>
                                         <View style={{flex: 4, alignSelf: 'center'}}>
@@ -199,108 +245,68 @@ class SettingsComponent extends Component {
                                                 fontSize: 16,
                                                 fontWeight: 'bold',
                                             }}>
-                                                {i18n.t('Settings.duration')}
+                                                {i18n.t('Settings.language')}
                                             </Text>
                                         </View>
-                                        <View style={{flex: 4, alignSelf: 'center'}}>
-                                            <TextInput
+                                        <View style={{flex: 10, alignSelf: 'center'}}>
+                                            <Picker
                                                 style={styles.input}
-                                                keyboardType='numeric'
-                                                onChangeText={(text) => this.changeDuration(text)}
+                                                selectedValue={this.props.Settings.language}
                                                 textAlign={'center'}
-                                                value={this.state.duration}
-                                                onFocus={() => {
-                                                    this.setState({duration: ''});
-                                                }}
-                                                onBlur={() => {
-                                                    this.actuallyChangeDuration();
-                                                }}
-                                            />
-                                        </View>
-                                        <View style={{flex: 6, alignSelf: 'center', marginLeft: 5}}>
-                                            <Text style={{}}>
-                                                {i18n.t('Settings.duration-unit')}
-                                            </Text>
+                                                onValueChange={(itemValue, itemIndex) => {
+                                                    this.props.setLanguage(itemValue);
+                                                    i18n.locale = itemValue;
+                                                    this.props.forceReloadBlocks();
+                                                }}>
+                                                {this.items}
+                                            </Picker>
                                         </View>
                                         <View style={{flex: 4}}/>
                                     </View>
                                     {hr}
 
-
-                                    {this.renderIntervalField()}
-
                                 </View>
 
-                                <View style={{
-                                    flexDirection: 'row',
-                                    justifyContent: 'flex-start',
-                                    marginVertical: 10,
-                                }}>
-                                    <View style={{flex: 1}}/>
-                                    <View style={{flex: 4, alignSelf: 'center'}}>
-                                        <Text style={{
-                                            fontSize: 16,
-                                            fontWeight: 'bold',
-                                        }}>
-                                            {i18n.t('Settings.language')}
-                                        </Text>
-                                    </View>
-                                    <View style={{flex: 10, alignSelf: 'center'}}>
-                                        <Picker
-                                            style={styles.input}
-                                            selectedValue={this.props.Settings.language}
-                                            textAlign={'center'}
-                                            onValueChange={(itemValue, itemIndex) => {
-                                                this.props.setLanguage(itemValue);
-                                                i18n.locale = itemValue;
-                                                this.props.forceReloadBlocks();
-                                            }}>
-                                            {this.items}
-                                        </Picker>
-                                    </View>
-                                    <View style={{flex: 4}}/>
-                                </View>
-                                {hr}
 
                             </View>
+                        </View>
 
-                            <View style={{}}>
-                                <TouchableOpacity
-                                    onPress={() => Linking.openURL('https://www.explore-it.org/').catch((err) => console.error('An error occurred', err))}
-                                >
-                                    <View style={{
-                                        justifyContent: 'center',
-                                        flexDirection: 'row',
-                                        paddingTop: 100,
-                                    }}>
-                                        <Image style={{alignSelf: 'flex-end', opacity: 0.7}}
-                                               source={require('../../resources/icon/logo.png')}/>
-                                    </View>
-
-                                    <View
-                                        style={{
-                                            justifyContent: 'center',
-                                            flexDirection: 'row',
-                                            marginTop: 40,
-                                        }}>
-                                        <Text
-                                            style={{fontFamily: 'Jost-Medium', fontSize: 20, color: 'blue'}}
-                                        >Explore-it </Text>
-                                    </View>
-                                </TouchableOpacity>
+                        <View style={{justifyContent: 'flex-end'}}>
+                            <TouchableOpacity
+                                onPress={() => Linking.openURL('https://www.explore-it.org/').catch((err) => console.error('An error occurred', err))}
+                            >
                                 <View
                                     style={{
                                         justifyContent: 'center',
                                         flexDirection: 'row',
+                                        marginTop: 40,
                                     }}>
                                     <Text
-                                        style={{fontFamily: 'Jost-Thin', color: 'grey'}}>v{GLOBAL.VERSION}</Text>
+                                        style={{fontFamily: 'Jost-Medium', fontSize: 20, color: 'blue'}}>
+                                        www.explore-it.org
+                                    </Text>
                                 </View>
+                            </TouchableOpacity>
+                            <View
+                                style={{
+                                    justifyContent: 'center',
+                                    flexDirection: 'row',
+                                }}>
+                                <Text
+                                    style={{fontFamily: 'Jost-Thin', color: 'grey'}}>©</Text>
+                            </View>
+
+                            <View
+                                style={{
+                                    justifyContent: 'center',
+                                    flexDirection: 'row',
+                                }}>
+                                <Text
+                                    style={{fontFamily: 'Jost-Thin', color: 'grey'}}>v{GLOBAL.VERSION}</Text>
                             </View>
                         </View>
                     </View>
-
-                </View>
+                </ScrollView>
             </SafeAreaView>
         );
     }
@@ -309,10 +315,12 @@ class SettingsComponent extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FAFAFA',
+
     },
     input: {
         fontFamily: 'Jost-Book',
+        justifyContent: 'center',
+        height: 50,
         borderRadius: 5,
         borderWidth: 1,
         overflow: 'hidden',
