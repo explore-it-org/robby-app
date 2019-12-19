@@ -1,7 +1,17 @@
 import React, {Component} from 'react';
-import {Image, Linking, Picker, SafeAreaView, StyleSheet, View} from 'react-native';
+import {
+    Image,
+    Linking,
+    Picker,
+    SafeAreaView,
+    StyleSheet,
+    TouchableOpacity,
+    TouchableOpacityComponent,
+    View,
+} from 'react-native';
 import {Text, TextInput} from 'react-native-paper';
 import {Appbar} from 'react-native-paper';
+import GLOBAL from '../utillity/Global';
 
 
 //import { Icon } from 'react-native-elements';
@@ -185,14 +195,36 @@ class SettingsComponent extends Component {
                             </View>
 
                             <View style={{}}>
+                                <TouchableOpacity
+                                    onPress={() => Linking.openURL('https://www.explore-it.org/').catch((err) => console.error('An error occurred', err))}
+                                >
+                                    <View style={{
+                                        justifyContent: 'center',
+                                        flexDirection: 'row',
+                                        paddingTop: 100,
+                                    }}>
+                                        <Image style={{alignSelf: 'flex-end', opacity: 0.7}}
+                                               source={require('../../resources/icon/logo.png')}/>
+                                    </View>
 
-                                <View style={{
-                                    justifyContent: 'center',
-                                    flexDirection: 'row',
-                                    paddingVertical: 100,
-                                }}>
-                                    <Image style={{alignSelf: 'flex-end', opacity: 0.7}}
-                                           source={require('../../resources/icon/logo.png')}/>
+                                    <View
+                                        style={{
+                                            justifyContent: 'center',
+                                            flexDirection: 'row',
+                                            marginTop: 40,
+                                        }}>
+                                        <Text
+                                            style={{fontFamily: 'Jost-Medium', fontSize: 20, color: 'blue'}}
+                                        >Explore-it </Text>
+                                    </View>
+                                </TouchableOpacity>
+                                <View
+                                    style={{
+                                        justifyContent: 'center',
+                                        flexDirection: 'row',
+                                    }}>
+                                    <Text
+                                        style={{fontFamily: 'Jost-Thin', color: 'grey'}}>v{GLOBAL.VERSION}</Text>
                                 </View>
                             </View>
                         </View>
@@ -200,26 +232,9 @@ class SettingsComponent extends Component {
 
                 </View>
             </SafeAreaView>
-        )
-            ;
+        );
     }
 }
-
-//                    <Text style={{marginTop: 20, fontSize: 16, fontWeight: 'bold'}}>
-//                        {i18n.t('SettingsComponent.calibrate')}
-//                    </Text>
-//                    <View style={{ flex: 1, flexDirection: 'row'}}>
-//                        <CalibrationInput val={5} limit={20} />
-//                        <View style={{ flex: 1, alignItems: 'center', height: 220, justifyContent: 'center'}}>
-//                            <Icon
-//                                reverse
-//                                name='play-arrow'
-//                                color='#9c27b0'
-//                                size={32}
-//                                onPress={() => alert('run')} />
-//                        </View>
-//                        <CalibrationInput val={19} limit={20} />
-//                    </View>
 
 const styles = StyleSheet.create({
     container: {
