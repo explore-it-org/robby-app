@@ -29,20 +29,11 @@ export default class BlockProgrammingComponent extends Component {
         let select_controls;
         if (this.props.Block.selectedBlockIndex >= 0) {
             select_controls =
-                <View>
-                    <FAB
-                        //disabled={this.props.Instruction.ActiveProgram.steps.length <= 1}
-                        style={styles.delete}
-                        icon={({size, color}) => (
-                            <CustomIcon name="deletelight" size={size} color={color}/>
-                        )}
-                        onPress={() => {
-                            this.props.deleteBlock();
-                        }}
-                    />
+                <View style={{flexDirection: 'row', marginRight: 20}}>
+
                     <FAB
                         //disabled={this.props.Instruction.selectedIndex === 0} disabling move up and down button produces unexpected behaviour
-                        style={styles.move_up}
+                        style={styles.fab}
                         icon={({size, color}) => (
                             <CustomIcon name="up" size={size} color={color}/>
                         )}
@@ -53,13 +44,23 @@ export default class BlockProgrammingComponent extends Component {
                     />
                     <FAB
                         //disabled={this.props.Instruction.selectedIndex >= this.props.Instruction.ActiveProgram.steps.length - 1}
-                        style={styles.move_down}
+                        style={styles.fab}
                         icon={({size, color}) => (
                             <CustomIcon name="down" size={size} color={color}/>
                         )}
                         onPress={() => {
                             console.log('move up clicked');
                             this.props.moveDownBlock();
+                        }}
+                    />
+                    <FAB
+                        //disabled={this.props.Instruction.ActiveProgram.steps.length <= 1}
+                        style={styles.fab}
+                        icon={({size, color}) => (
+                            <CustomIcon name="deletelight" size={size} color={color}/>
+                        )}
+                        onPress={() => {
+                            this.props.deleteBlock();
                         }}
                     />
                 </View>;
@@ -102,7 +103,8 @@ export default class BlockProgrammingComponent extends Component {
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={this.renderProgramInput}/>
                 </ScrollView>
-                <View>
+                <View style={styles.fabLine}>
+                    {select_controls}
                     <FAB
                         style={styles.fab}
                         icon={({size, color}) => (
@@ -112,8 +114,9 @@ export default class BlockProgrammingComponent extends Component {
                             this.props.addBlock();
                         }}
                     />
+
                 </View>
-                {select_controls}
+
             </View>
         );
     }
@@ -169,29 +172,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     fab: {
-        position: 'absolute',
-        margin: 16,
-        right: -200,
-        bottom: 18,
-        zIndex: 999,
-    },
-    delete: {
-        position: 'absolute',
-        margin: 16,
-        right: -105,
-        bottom: 18,
-    },
-    move_up: {
-        position: 'absolute',
-        margin: 16,
-        right: -30,
-        bottom: 18,
-    },
-    move_down: {
-        position: 'absolute',
-        margin: 16,
-        right: 45,
-        bottom: 18,
+        margin: 7,
     },
     numinput: {
         justifyContent: 'center',
@@ -199,5 +180,13 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         width: '30%',
         height: '70%',
+    },
+    fabLine: {
+        position: 'absolute',
+        bottom: 18,
+        flex: 1,
+        alignSelf: 'flex-end',
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
     },
 });

@@ -22,20 +22,11 @@ export default class StepProgrammingComponent extends Component {
         let select_controls;
         if (this.props.Instruction.selectedIndex >= 0) {
             select_controls =
-                <View>
-                    <FAB
-                        disabled={this.props.Instruction.ActiveProgram.steps.length <= 1}
-                        style={styles.delete}
-                        icon={({size, color}) => (
-                            <CustomIcon name="deletelight" size={size} color={color}/>
-                        )}
-                        onPress={() => {
-                            this.props.deleteInstruction();
-                        }}
-                    />
+                <View style={{flexDirection: 'row', marginRight: 20}}>
+
                     <FAB
                         //disabled={this.props.Instruction.selectedIndex === 0} disabling move up and down button produces unexpected behaviour
-                        style={styles.move_up}
+                        style={styles.fab}
                         icon={({size, color}) => (
                             <CustomIcon name="up" size={size} color={color}/>
                         )}
@@ -46,13 +37,23 @@ export default class StepProgrammingComponent extends Component {
                     />
                     <FAB
                         //disabled={this.props.Instruction.selectedIndex >= this.props.Instruction.ActiveProgram.steps.length - 1}
-                        style={styles.move_down}
+                        style={styles.fab}
                         icon={({size, color}) => (
                             <CustomIcon name="down" size={size} color={color}/>
                         )}
                         onPress={() => {
                             console.log('move up clicked');
                             this.props.moveDown();
+                        }}
+                    />
+                    <FAB
+                        disabled={this.props.Instruction.ActiveProgram.steps.length <= 1}
+                        style={styles.fab}
+                        icon={({size, color}) => (
+                            <CustomIcon name="deletelight" size={size} color={color}/>
+                        )}
+                        onPress={() => {
+                            this.props.deleteInstruction();
                         }}
                     />
                 </View>;
@@ -70,6 +71,7 @@ export default class StepProgrammingComponent extends Component {
         // TODO remove all style
 
         return (
+
 
             <View style={[styles.view, {flex: 1, justifyContent: 'center', alignItems: 'center'}]}>
 
@@ -176,7 +178,8 @@ export default class StepProgrammingComponent extends Component {
                         )}
                     />
                 </ScrollView>
-                <View>
+                <View style={styles.fabLine}>
+                    {select_controls}
                     <FAB
                         style={styles.fab}
                         icon={({size, color}) => (
@@ -186,8 +189,9 @@ export default class StepProgrammingComponent extends Component {
                             this.props.addInstruction();
                         }}
                     />
+
                 </View>
-                {select_controls}
+
             </View>
         );
     }
@@ -219,28 +223,19 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     fab: {
-        position: 'absolute',
-        margin: 16,
-        right: -200,
-        bottom: 18,
+        margin: 7,
     },
-    delete: {
+    delete: {},
+    move_up: {},
+    move_down: {},
+    fabLine: {
         position: 'absolute',
-        margin: 16,
-        right: -105,
         bottom: 18,
+        flex: 1,
+        alignSelf: 'flex-end',
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
     },
-    move_up: {
-        position: 'absolute',
-        margin: 16,
-        right: -30,
-        bottom: 18,
-    },
-    move_down: {
-        position: 'absolute',
-        margin: 16,
-        right: 45,
-        bottom: 18,
-    },
+
 });
 
