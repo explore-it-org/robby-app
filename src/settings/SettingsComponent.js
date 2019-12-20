@@ -54,7 +54,7 @@ class SettingsComponent extends Component {
         let newText = '';
         let numbers = '0123456789';
         if (parseInt(interval) > 50) {
-            Alert.alert('error', 'to big');
+            Alert.alert(i18n.t('Settings.error'), i18n.t('Settings.tooBig'));
             newText = '50';
         } else {
             for (let i = 0; i < interval.length; i++) {
@@ -72,7 +72,7 @@ class SettingsComponent extends Component {
         let newText = '';
         let numbers = '0123456789';
         if (parseInt(duration) > 80) {
-            Alert.alert('error', 'to big');
+            Alert.alert(i18n.t('Settings.error'), i18n.t('Settings.tooBig'));
             newText = '80';
         } else {
             for (let i = 0; i < duration.length; i++) {
