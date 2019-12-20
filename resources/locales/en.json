@@ -32,7 +32,9 @@
     "duration": "Duration:",
     "duration-unit": "Seconds (1..80)",
     "language": "Language:",
-    "updated": "Settings updated"
+    "updated": "Settings updated",
+    "error": "Error",
+    "tooBig": "The entered number is too large."
   },
   "RoboticsDatabase": {
     "success": "Success",

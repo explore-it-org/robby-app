@@ -33,7 +33,9 @@
     "duration": "Durata:",
     "duration-unit": "Secondi (1..80)",
     "language": "Lingua:",
-    "updated": "Le impostazioni sono state aggiornate"
+    "updated": "Le impostazioni sono state aggiornate",
+    "error": "Errore",
+    "tooBig": "Il numero inserito è troppo grande."
   },
   "RoboticsDatabase": {
     "success": "Riuscito",
@@ -45,6 +47,6 @@
     "deleteFailed": "Impossibile cancellare il programma: ",
     "programUsed": "il programma è in uso da parte di un altro programma",
     "programUsedByActiveProgram": "il programma è in uso da parte del programma attualmente aperto",
-    "programUsedByActiveProgramTitle": "il programma non può essere cancellato"
+    "programUsedByActiveProgramTitle": "il programma non può essere cancellato",
   }
 }
