@@ -163,7 +163,8 @@ class SettingsComponent extends Component {
         return (
             <SafeAreaView style={{
                 flex: 1,
-                backgroundColor: '#2E5266',
+                backgroundColor: 'white'
+                //backgroundColor: '#2E5266',
             }}>
                 <ScrollView style={{
                     flex: 1,
@@ -270,16 +271,23 @@ class SettingsComponent extends Component {
 
                             </View>
                         </View>
-
-                        <View style={{justifyContent: 'flex-end'}}>
+                    </View>
+                </ScrollView>
+                <View style={{flex: 1, justifyContent: 'flex-end'}}>
                             <TouchableOpacity
                                 onPress={() => Linking.openURL('https://www.explore-it.org/').catch((err) => console.error('An error occurred', err))}
                             >
+                                <View style={{
+                                        justifyContent: 'center',
+                                        flexDirection: 'row'
+                                    }}>
+                                <Image source={require('../../resources/icon/logo.png')}></Image>
+                                </View>
                                 <View
                                     style={{
                                         justifyContent: 'center',
                                         flexDirection: 'row',
-                                        marginTop: 40,
+                                        marginTop: 10,
                                     }}>
                                     <Text
                                         style={{fontFamily: 'Jost-Medium', fontSize: 20, color: 'blue'}}>
@@ -292,8 +300,6 @@ class SettingsComponent extends Component {
                                     justifyContent: 'center',
                                     flexDirection: 'row',
                                 }}>
-                                <Text
-                                    style={{fontFamily: 'Jost-Thin', color: 'grey'}}>©</Text>
                             </View>
 
                             <View
@@ -302,11 +308,9 @@ class SettingsComponent extends Component {
                                     flexDirection: 'row',
                                 }}>
                                 <Text
-                                    style={{fontFamily: 'Jost-Thin', color: 'grey'}}>v{GLOBAL.VERSION}</Text>
+                                    style={{fontFamily: 'Jost', marginTop: 10, marginBottom: 20}}>v{GLOBAL.VERSION}</Text>
                             </View>
                         </View>
-                    </View>
-                </ScrollView>
             </SafeAreaView>
         );
     }
@@ -315,7 +319,15 @@ class SettingsComponent extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-
+    },
+    bottomView: {
+        width: '100%',
+        height: 50,
+        backgroundColor: '#EE5407',
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'absolute', //Here is the trick
+        bottom: 0, //Here is the trick
     },
     input: {
         fontFamily: 'Jost-Book',
