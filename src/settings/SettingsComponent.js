@@ -308,7 +308,7 @@ class SettingsComponent extends Component {
                                     flexDirection: 'row',
                                 }}>
                                 <Text
-                                    style={{fontFamily: 'Jost', marginTop: 10, marginBottom: 20}}>v{GLOBAL.VERSION}</Text>
+                                    style={{fontFamily: 'Jost-Thin', marginTop: 10, marginBottom: 20}}>v{GLOBAL.VERSION}</Text>
                             </View>
                         </View>
             </SafeAreaView>
