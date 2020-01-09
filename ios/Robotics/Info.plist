@@ -40,9 +40,9 @@
 		</dict>
 	</dict>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>Sends instruction to roboter </string>
+	<string>This app uses Bluetooth (BLE) to communicate with the robot, sending new instructions and retrieving stored ones.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>Connects to Robotor for the purpose of sending instruction data</string>
+	<string>This app uses Bluetooth (BLE) to communicate with the robot, sending new instructions and retrieving stored ones.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>UIAppFonts</key>
