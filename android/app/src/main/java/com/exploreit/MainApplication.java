@@ -1,4 +1,4 @@
-package org.exploreit.robotics;
+package com.exploreit;
 
 import android.app.Application;
 import android.util.Log;

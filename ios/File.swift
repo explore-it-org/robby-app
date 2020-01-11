@@ -1,9 +1,9 @@
 //
 //  File.swift
-//  Robotics
+//  ExploreIt
 //
-//  Created by Robin Schoch on 16.10.19.
-//  Copyright © 2019 Facebook. All rights reserved.
+//  Created by Robin Schoch on 11.01.20.
+//  Copyright © 2020 Facebook. All rights reserved.
 //
 
 import Foundation
