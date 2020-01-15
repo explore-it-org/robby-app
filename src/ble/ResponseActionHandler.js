@@ -4,6 +4,8 @@ import * as bleAction from './BleAction';
 import {Instruction} from '../model/DatabaseModels';
 import store from '../store/store';
 import {resolve} from 'react-native-svg/src/lib/resolve';
+let downloading = false;
+let linecount = 0;
 
 export const mainHandler = (response) => {
 
@@ -17,7 +19,7 @@ export const mainHandler = (response) => {
         case 5:
         case 6:
         default:
-            return handleResponse3(response);
+            return handleResponse6(response);
     }
 };
 
@@ -28,11 +30,31 @@ const handleResponse1 = (response) => {
     return bleAction.bleResponse('');
 };
 
+const convertStringToByteArray = (str) => {
+    String.prototype.encodeHex = function () {
+    var bytes = [];
+    for (var i = 0; i < this.length; ++i) {
+     bytes.push(this.charCodeAt(i));
+    }
+    return bytes;
+    };
+   
+    var byteArray = str.encodeHex();
+    console.log(byteArray);
+    return byteArray
+}
+
+const toHexString = (byteArray) => {
+    return Array.from(byteArray, function(byte) {
+      return ('0' + (byte & 0xFF).toString(16)).slice(-2);
+    }).join('')
+  }
 
 /**
  * All return value must be plain
  */
 export const handleResponse3 = (response) => {
+    console.log(toHexString(convertStringToByteArray(response)));
     if (response.startsWith('VER')) {
         return bleAction.updateDeviceVersion(parseInt(response.substring(4)));
     } else if (response.startsWith('I=')) {
@@ -72,3 +94,63 @@ export const handleResponse3 = (response) => {
     }
     return bleAction.bleResponse('');
 };
+function createMultiArray(packet){
+    let result = [];
+    while (packet.length > 0) {
+
+        let chunk = packet.splice(0,2)
+      
+        result.push(chunk);
+      }
+
+      return result;
+}
+export const handleResponse6 = (response) => {
+    console.log(toHexString(convertStringToByteArray(response)));
+    if (response.startsWith('VER')) {
+        return bleAction.updateDeviceVersion(parseInt(response.substring(4)));
+    } else if (response.startsWith('I=')) {
+        // Response to I?:  I=02
+        return settingsAction.setInterval(parseInt(response.substring(2)));
+    } else if(response.trim().toLowerCase() === '_sr_') {
+        // stop
+        this.isLearning = false;
+        return bleAction.stoppedRobot();
+    } else if(response.trim().toLowerCase() === 'full') {
+        // finished learning or uploading
+                // var res = {type: this.isLearning ? 'finishedLearning' : 'finishedUpload'};
+                return bleAction.successUplaod();
+    } else if(response.trim().toLowerCase() === '_end') {
+        // done driving
+        var res = {type: 'finishedDriving'};
+        this.loops--;
+        if (this.loops > 0) {
+            BleService.sendCommandToActDevice('G');
+        } else {
+            return bleAction.stoppedRobot();
+        }
+    }else{
+        if(this.downloading){
+            if(this.linecount > 0){
+            let multiArray = createMultiArray(convertStringToByteArray(response));
+            let instructions = [];
+            for(arr in multiArray){
+                var left = arr[0];
+                var right = arr[1];
+                let instruction = new Instruction(Math.trunc(left / 2.55 + 0.5), Math.trunc(right / 2.55 + 0.5));
+                instructions.push(instruction);
+            }
+            return bleAction.receivedChunck(instructions);
+        }else{
+            this.downloading = false;
+            return bleAction.finishedDownloading();
+        }
+        }else{
+            this.linecount = parseInt('0x' + toHexString(convertStringToByteArray(response)));
+            console.log("linecount " + linecount);
+            this.downloading = true;
+            return bleAction.bleResponse('');
+        }
+    }
+    return bleAction.bleResponse('');
+}
