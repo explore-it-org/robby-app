@@ -9,6 +9,7 @@ import {
     TouchableOpacity,
     TouchableOpacityComponent,
     View,
+    Platform,
 } from 'react-native';
 import {Text, TextInput} from 'react-native';
 import {Appbar} from 'react-native-paper';
@@ -22,6 +23,7 @@ import Toast from '../controls/Toast';
 import {setDuration, setInterval, toggleSettings} from './SettingsAction';
 import SettingsContainer from './SettingsContainer';
 import NumericInput from '../controls/NumericInput';
+import LanguageInput from '../controls/LanguageInput';
 
 
 class SettingsComponent extends Component {
@@ -96,7 +98,34 @@ class SettingsComponent extends Component {
 
     }
 
-
+    renderPicker = () => {
+        if(Platform.OS === 'ios'){
+            return(
+            <LanguageInput 
+                pickerItems={this.languages}
+                selectedItem={this.props.Settings.language}
+                onValueChange={(itemValue) => {
+                    this.props.setLanguage(itemValue);
+                    i18n.locale = itemValue;
+                    this.props.forceReloadBlocks();
+                }}
+            ></LanguageInput>)
+        }else{
+            return (
+                <Picker
+                    style={styles.input}
+                    selectedValue={this.props.Settings.language}
+                    textAlign={'center'}
+                    onValueChange={(itemValue, itemIndex) => {
+                        this.props.setLanguage(itemValue);
+                        i18n.locale = itemValue;
+                        this.props.forceReloadBlocks();
+                    }}>
+                    {this.items}
+                </Picker>
+            )
+        }
+    }
     renderIntervalField = () => {
         if (this.props.BLEConnection.isConnected) {
             return (
@@ -150,6 +179,11 @@ class SettingsComponent extends Component {
             k => this.items.push(<Picker.Item key={k.languageTag} label={k.language} value={k.languageTag}
                                               testID={k.language}/>),
         );
+        this.languages = Object.assign([], []);
+        Object.values(i18n.translations).forEach(
+            k => this.languages.push({value: k.languageTag, text: k.language}),
+        );
+
 
         let deviceName = this.props.BLEConnection.isConnected ?
             <Appbar.Content style={{position: 'absolute', right: 40}}
@@ -180,7 +214,7 @@ class SettingsComponent extends Component {
                             />
                             <Appbar.Content
                                 style={{position: 'absolute', left: 40}}
-                                title="Explore-it"
+                                title="explore-it"
                                 size={32}
                             />
                             {deviceName}
@@ -250,17 +284,7 @@ class SettingsComponent extends Component {
                                             </Text>
                                         </View>
                                         <View style={{flex: 10, alignSelf: 'center'}}>
-                                            <Picker
-                                                style={styles.input}
-                                                selectedValue={this.props.Settings.language}
-                                                textAlign={'center'}
-                                                onValueChange={(itemValue, itemIndex) => {
-                                                    this.props.setLanguage(itemValue);
-                                                    i18n.locale = itemValue;
-                                                    this.props.forceReloadBlocks();
-                                                }}>
-                                                {this.items}
-                                            </Picker>
+                                            {this.renderPicker()}
                                         </View>
                                         <View style={{flex: 4}}/>
                                     </View>
@@ -281,7 +305,7 @@ class SettingsComponent extends Component {
                                         justifyContent: 'center',
                                         flexDirection: 'row'
                                     }}>
-                                <Image source={require('../../resources/icon/logo.png')}></Image>
+                                        <Image resizeMode={"contain"} style={{width: 150}} source={require('../../resources/icon/logo.png')}></Image>
                                 </View>
                                 <View
                                     style={{
