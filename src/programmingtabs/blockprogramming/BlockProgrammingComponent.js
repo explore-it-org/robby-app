@@ -38,7 +38,6 @@ export default class BlockProgrammingComponent extends Component {
                             <CustomIcon name="up" size={size} color={color}/>
                         )}
                         onPress={() => {
-                            console.log('move down clicked');
                             this.props.moveUpBlock();
                         }}
                     />
@@ -49,7 +48,6 @@ export default class BlockProgrammingComponent extends Component {
                             <CustomIcon name="down" size={size} color={color}/>
                         )}
                         onPress={() => {
-                            console.log('move up clicked');
                             this.props.moveDownBlock();
                         }}
                     />

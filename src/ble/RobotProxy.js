@@ -32,10 +32,7 @@ class RobotProxy {
     }
 
     scanningForRobotsRedux() {
-        //let dispatch = store.dispatch;
-        console.log('we have began scanning for devices');
         return function (dispatch) {
-            console.log('pelae');
             dispatch(bleActions.startScanning());
             return BleService.scanningForRobots(
                 (error) => {
@@ -141,6 +138,7 @@ class RobotProxy {
                 case 2:
                 case 3:
                 case 4:
+                case 6:
 
                     return BleService.sendCommandToActDevice('F')
                         .then((c) => {
@@ -225,9 +223,36 @@ class RobotProxy {
                     return promise.then((c) => {
                         return BleService.sendCommandToActDevice('end');
                     });
-                default:
-                    // TODO return promise
-                    console.log('upload: version not supported: ' + this.version);
+                    case 6:
+                        var promise = BleService.sendCommandToActDevice('F')
+                        .then((c) => {
+                            var hex = Number(instructions.length * 2 - 1).toString(16).toUpperCase();
+                            while (hex.length < 4) {
+                                hex = '0' + hex;
+                            }
+                            return BleService.sendCommandToActDevice('d' + hex);
+                        })
+                        .then((c) => {
+                            return BleService.sendCommandToActDevice('E');
+                        })
+                        .then((c) =>{
+                            let bytes = new Uint8Array(instructions.length * 2);
+                        for (let i = 0; i < instructions.length; i++) {
+                            let item = instructions[i];
+                            let left = item.left !== 0 ? parseInt(item.left * 2.55 + 0.5) : 0;
+                            let right = item.right !== 0 ? parseInt(item.right * 2.55 + 0.5) : 0;
+                            bytes[2 * i] = left;
+                            bytes[2 * i + 1] = right;
+                        }
+                            return BleService.sendCommandToActDevice(bytes);
+                        });
+                        return promise.then((c) => {
+                            return BleService.sendCommandToActDevice('end');
+                        });
+                    default:
+                        return new Promise(function(resolve, reject) {
+                            console.log('upload: version not supported: ' + this.version);
+                        });
             }
         }
     }
@@ -254,13 +279,10 @@ class RobotProxy {
 
     // handles responses from the robot
     handleResponse(responseHandler, response) {
-        console.log('Response: ' + response + ' (len ' + response.length + ')');
         if (response.startsWith('VER')) {
-            console.log('Protocol Version: ' + response);
             this.version = parseInt(response.substring(4));
         } else if (response.startsWith('I=')) {
             // Response to I?:  I=02
-            console.log('Interval: ' + response);
             let value = parseInt(response.substring(2));
 
             responseHandler({type: 'interval', value: value});

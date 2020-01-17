@@ -54,7 +54,6 @@ class BleService {
             if (error) {
                 errorHandler(error.message);
             } else {
-                console.log('its working');
                 successHandler(true);
             }
         }));
@@ -130,9 +129,7 @@ class BleService {
                     (error, characteristic) => {
                         if (this.c === localc) {
                             if (!error) {
-                                let response = Buffer.from(characteristic.value, 'base64').toString(
-                                    'latin1',
-                                );
+                                let response = Buffer.from(characteristic.value, 'base64');
                                 responseHandler(response);
                             }
 
@@ -167,7 +164,6 @@ class BleService {
             Buffer.from(command).toString('base64'),
             null,
         ).catch(reason => {
-            console.log(0);
             throw reason;
         });
     }

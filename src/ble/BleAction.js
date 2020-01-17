@@ -188,10 +188,8 @@ export const uploadToRobot = (ActiveProgram) => {
         let a = null;
         if (ActiveProgram === 'Stepprogramming') {
             a = getState().ActiveProgram.ActiveProgram.flatten();
-            console.log(a);
         } else {
             a = getState().ActiveBlock.Active_Block.flatten();
-            console.log(a);
         }
         dispatch(startUpload());
         RobotProxy.upload(a, getState().BLEConnection.device.version).then(res => {
