@@ -275,63 +275,6 @@ class RobotProxy {
                 });
         }
     }
-
-
-    // handles responses from the robot
-    handleResponse(responseHandler, response) {
-        if (response.startsWith('VER')) {
-            this.version = parseInt(response.substring(4));
-        } else if (response.startsWith('I=')) {
-            // Response to I?:  I=02
-            let value = parseInt(response.substring(2));
-
-            responseHandler({type: 'interval', value: value});
-        } else if (response.match('\\b[0-9]{3}\\b,\\b[0-9]{3}\\b')) {
-            let read_instructions = response.trim().split(',');
-            let speed_l = read_instructions[0] / 2.55 + 0.5;
-            let speed_r = read_instructions[1] / 2.55 + 0.5;
-            if (speed_l < 0) {
-                speed_l = 0;
-            }
-            if (speed_r < 0) {
-                speed_r = 0;
-            }
-            var res = {type: 'speedLine', left: Math.trunc(speed_l), right: Math.trunc(speed_r)};
-
-            responseHandler(res);
-        } else {
-            response = response.trim().toLowerCase();
-            switch (response) {
-                case (',,,,'):
-                    // finished download (beam)
-                    responseHandler({type: 'finishedDownload'});
-                    break;
-                case ('_sr_'):
-                    // stop
-                    this.isLearning = false;
-                    responseHandler({type: 'stop'});
-                    break;
-                case ('full'):
-                    // finished learning or uploading
-                    var res = {type: this.isLearning ? 'finishedLearning' : 'finishedUpload'};
-                    responseHandler(res);
-                    break;
-                case ('_end'):
-                    // done driving
-                    var res = {type: 'finishedDriving'};
-                    this.loops--;
-                    if (this.loops > 0) {
-                        BleService.sendCommandToActDevice('G');
-
-                    } else {
-                        responseHandler(res);
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
 }
 
 

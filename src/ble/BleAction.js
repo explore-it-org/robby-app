@@ -9,6 +9,7 @@ import {
 } from '../programmingtabs/stepprogramming/ActiveInstructionAction';
 import {Program, ProgramType} from '../model/DatabaseModels';
 import {Alert} from 'react-native';
+import { ResponseManager } from './ResponseHandler';
 
 
 export const connectToBle = () => ({
@@ -162,7 +163,8 @@ export const connectToDevice = () => {
     return (dispatch, getState) => {
         dispatch(connectToBle());
         RobotProxy.connect2((response) => {
-            dispatch(mainHandler(response));
+            var handler = new ResponseManager().getHandler(getState().BLEConnection.device.version);
+            dispatch(handler.handleResponse(response));
         }, (robot) => {
             console.log(robot.name);
             dispatch(connectedToBle(robot));
@@ -188,8 +190,10 @@ export const uploadToRobot = (ActiveProgram) => {
         let a = null;
         if (ActiveProgram === 'Stepprogramming') {
             a = getState().ActiveProgram.ActiveProgram.flatten();
+
         } else {
             a = getState().ActiveBlock.Active_Block.flatten();
+            console.log(a);
         }
         dispatch(startUpload());
         RobotProxy.upload(a, getState().BLEConnection.device.version).then(res => {
@@ -227,10 +231,6 @@ export const downloadToDevice = () => {
     return (dispatch, getState) => {
         dispatch(startDownloading());
         dispatch(emptyInstructionList());
-        RobotProxy.download().then(res => {
-
-        }).catch(error => {
-            dispatch(errorDownloading(error));
-        });
+        new ResponseManager().getHandler(getState().BLEConnection.device.version).startDownloading();
     };
 };
