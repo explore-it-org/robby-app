@@ -106,7 +106,7 @@ class BleService {
         this.manager.stopDeviceScan();
     }
 
-    connectToActDevice(responseHandler, connectionHandler, errorHandler) {
+    connectToActDevice(responseHandler, connectionHandler, errorHandler, disconnectHandler) {
         console.log('BleService connecting...');
         this.actDevice
             .connect()
@@ -139,7 +139,7 @@ class BleService {
                 );
 
                 device.onDisconnected((error, device) => {
-                    errorHandler(error);
+                    disconnectHandler(error);
                 });
                 
                 console.log('BleService connection done - ' + device.name);

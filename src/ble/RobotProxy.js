@@ -69,7 +69,7 @@ class RobotProxy {
         };
     }
 
-    connect2(responseHandler, connectionHandler, errorHandler) {
+    connect2(responseHandler, connectionHandler, errorHandler, disconnectHandler) {
         BleService.connectToActDevice(
             (response) => {
                 responseHandler(response);
@@ -88,6 +88,9 @@ class RobotProxy {
                     });
             },
             errorHandler,
+            (error) => {
+                disconnectHandler(error);
+            }
         );
     }
 

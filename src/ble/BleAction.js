@@ -21,6 +21,9 @@ export const connectedToBle = (robot) => ({
 export const connectionFailed = (error) => ({
     type: ActionTypes.FAILURE_CONNECTING,
 });
+export const connectionLost = (error) => ({
+    type: ActionTypes.LOST_CONNECTION
+})
 export const disconnect = () => ({
     type: ActionTypes.DISCONNECT,
 });
@@ -169,6 +172,8 @@ export const connectToDevice = () => {
             dispatch(connectedToBle(robot));
         }, (error) => {
             dispatch(connectionFailed(error));
+        }, (error) => {
+            dispatch(connectionLost(error));
         });
     };
 };

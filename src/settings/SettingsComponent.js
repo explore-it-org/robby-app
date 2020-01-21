@@ -7,7 +7,6 @@ import {
     SafeAreaView, ScrollView,
     StyleSheet,
     TouchableOpacity,
-    TouchableOpacityComponent,
     View,
 } from 'react-native';
 import {Text, TextInput} from 'react-native';
@@ -15,13 +14,8 @@ import {Appbar} from 'react-native-paper';
 import GLOBAL from '../utillity/Global';
 
 
-//import { Icon } from 'react-native-elements';
-import {getStatusBarHeight, ifIphoneX} from 'react-native-iphone-x-helper';
 import i18n from '../../resources/locales/i18n';
 import Toast from '../controls/Toast';
-import {setDuration, setInterval, toggleSettings} from './SettingsAction';
-import SettingsContainer from './SettingsContainer';
-import NumericInput from '../controls/NumericInput';
 
 
 class SettingsComponent extends Component {
@@ -254,7 +248,7 @@ class SettingsComponent extends Component {
                                                 style={styles.input}
                                                 selectedValue={this.props.Settings.language}
                                                 textAlign={'center'}
-                                                onValueChange={(itemValue, itemIndex) => {
+                                                onValueChange={(itemValue) => {
                                                     this.props.setLanguage(itemValue);
                                                     i18n.locale = itemValue;
                                                     this.props.forceReloadBlocks();

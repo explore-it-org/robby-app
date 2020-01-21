@@ -37,8 +37,10 @@ export const BleConnectionReducer = (state = default_state_ble_connection, actio
                 device: {...state.device, name: ''},
                 lastUpdate: Date.now(),
             });
+        case ActionType.LOST_CONNECTION:
+            RobotProxy.disconnect();
+            return default_state_ble_connection;
         case ActionType.IS_CONNECTED:
-
             return Object.assign({}, state, {
                 isConnecting: false,
                 isConnected: true,
