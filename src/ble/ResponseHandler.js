@@ -9,9 +9,9 @@ export class ResponseManager {
             this._handlers = {
                 1: new ResponseHandlerV1(),
                 2: new ResponseHandlerV3(),
-                3:new ResponseHandlerV3(),
-                4:new ResponseHandlerV3(),
-                5:new ResponseHandlerV6(),
+                3: new ResponseHandlerV3(),
+                4: new ResponseHandlerV3(),
+                5: new ResponseHandlerV6(),
                 6: new ResponseHandlerV6()
             };
             ResponseManager.instance = this;
@@ -21,7 +21,7 @@ export class ResponseManager {
     }
 
     getHandler(version){
-        return this._handlers[version];
+        return this._handlers[version] || new ResponseHandlerV1();
     }
     
 }
@@ -68,7 +68,8 @@ class ResponseHandlerV3 extends ResponseHandler{
             'latin1',
         );
         if (response.startsWith('VER')) {
-            return bleAction.updateDeviceVersion(parseInt(response.substring(4)));
+            return Promise.reject(new Error('This should never happen'));
+            //return bleAction.updateDeviceVersion(parseInt(response.substring(4)));
         } else if (response.startsWith('I=')) {
             // Response to I?:  I=02
             return settingsAction.setInterval(parseInt(response.substring(2)));
@@ -135,53 +136,56 @@ class ResponseHandlerV6 extends ResponseHandler{
     handleResponse(response){
         let buffer = response;
         buffer = [...buffer]; // converting to javascript array
-        response = response.toString(
-            'latin1',
-        );
-    if (response.startsWith('VER')) {
-        return bleAction.updateDeviceVersion(parseInt(response.substring(4)));
-    } else if (response.startsWith('I=')) {
-        // Response to I?:  I=02
-        return settingsAction.setInterval(parseInt(response.substring(2)));
-    } else if(response.trim().toLowerCase() === '_sr_') {
-        // stop
-        return bleAction.stoppedRobot();
-    } else if(response.trim().toLowerCase() === 'full') {
-        return bleAction.successUplaod();
-    } else if(response.trim().toLowerCase() === '_end') {
-        return bleAction.stoppedRobot();
-    }else{
-        if(this._linecounter >= 0 && this._downloading){
-            if(this._linecounter > 0 && buffer.length > 1){
-                let pointer = buffer.shift();
-                if(this._previousLine + 1 !== pointer){
-                    this._lostLines.push(pointer - 1);
-                }
-                this._previousLine = pointer;
-                let instructions = [];
-                for(let i = 0; i < (buffer.length / 2); i++){
-                    var left = buffer[i*2];
-                    var right = buffer[i*2 + 1];
-                    let instruction = new Instruction(Math.trunc(left / 2.55 + 0.5), Math.trunc(right / 2.55 + 0.5));
-                    instructions.push(instruction);
-                }
-                this._linecounter--;
-                return bleAction.receivedChunck(instructions);
-            }else{
-                if(this._lostLines.length){
-                    // request the lost lines...
-                    console.log("lost lines: ", lostLines);
-                }
-                this._linecounter = -1;
-                return this.finishedDownloading();
+        if(!this._downloading){
+            response = response.toString(
+                'latin1',
+            );
+            if (response.startsWith('VER')) {
+                return Promise.reject(new Error('This should never happen'));
+                //return bleAction.updateDeviceVersion(parseInt(response.substring(4)));
+            } else if (response.startsWith('I=')) {
+                // Response to I?:  I=02
+                return settingsAction.setInterval(parseInt(response.substring(2)));
+            } else if(response.trim().toLowerCase() === '_sr_') {
+                // stop
+                return bleAction.stoppedRobot();
+            } else if(response.trim().toLowerCase() === 'full') {
+                return bleAction.successUplaod();
+            } else if(response.trim().toLowerCase() === '_end') {
+                return bleAction.stoppedRobot();
             }
-        }else if(buffer.length == 2){
-            this._linecounter = Math.ceil((parseInt('0x' + this.toHexString(buffer)) + 1) / 18);
-            this._previousLine = -1;
-            this._lostLines = [];
-            return bleAction.bleResponse('');
+        } else {
+            if(this._linecounter >= 0 && this._downloading){
+                if(this._linecounter > 0 && buffer.length > 1){
+                    let pointer = buffer.shift();
+                    if(this._previousLine + 1 !== pointer){
+                        this._lostLines.push(pointer - 1);
+                    }
+                    this._previousLine = pointer;
+                    let instructions = [];
+                    for(let i = 0; i < (buffer.length / 2); i++){
+                        var left = buffer[i*2];
+                        var right = buffer[i*2 + 1];
+                        let instruction = new Instruction(Math.trunc(left / 2.55 + 0.5), Math.trunc(right / 2.55 + 0.5));
+                        instructions.push(instruction);
+                    }
+                    this._linecounter--;
+                    return bleAction.receivedChunck(instructions);
+                }else{
+                    if(this._lostLines.length){
+                        // request the lost lines...
+                        console.log("lost lines: ", lostLines);
+                    }
+                    this._linecounter = -1;
+                    return this.finishedDownloading();
+                }
+            }else if(buffer.length == 2){
+                this._linecounter = Math.ceil((parseInt('0x' + this.toHexString(buffer)) + 1) / 18);
+                this._previousLine = -1;
+                this._lostLines = [];
+                return bleAction.bleResponse('');
+            }
         }
-    }
     return bleAction.bleResponse('');
     }
 }

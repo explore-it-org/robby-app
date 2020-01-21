@@ -137,6 +137,11 @@ class BleService {
                     },
                     transactionId,
                 );
+
+                device.onDisconnected((error, device) => {
+                    errorHandler(error);
+                });
+                
                 console.log('BleService connection done - ' + device.name);
                 console.log('transaction id: ' + transactionId);
                 connectionHandler(device);

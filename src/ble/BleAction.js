@@ -1,6 +1,5 @@
 import * as ActionTypes from '../GlobalActionTypes';
 import RobotProxy from './RobotProxy';
-import {mainHandler} from './ResponseActionHandler';
 import {} from '../database/DatabaseAction';
 import {
     clearProgram,
