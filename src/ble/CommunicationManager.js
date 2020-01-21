@@ -3,29 +3,29 @@ import * as settingsAction from '../settings/SettingsAction';
 import BleService from './BleService';
 import { Instruction } from '../model/DatabaseModels';
 
-export class ResponseManager {
+export class CommunicationManager {
     constructor(){
-        if(! ResponseManager.instance){
+        if(! CommunicationManager.instance){
             this._handlers = {
-                1: new ResponseHandlerV1(),
-                2: new ResponseHandlerV3(),
-                3: new ResponseHandlerV3(),
-                4: new ResponseHandlerV3(),
-                5: new ResponseHandlerV6(),
-                6: new ResponseHandlerV6()
+                1: new CommunicationHandlerV1(),
+                2: new CommunicationHandlerV3(),
+                3: new CommunicationHandlerV3(),
+                4: new CommunicationHandlerV3(),
+                5: new CommunicationHandlerV6(),
+                6: new CommunicationHandlerV6()
             };
-            ResponseManager.instance = this;
+            CommunicationManager.instance = this;
         }
 
-        return ResponseManager.instance;
+        return CommunicationManager.instance;
     }
 
     getHandler(version){
-        return this._handlers[version] || new ResponseHandlerV1();
+        return this._handlers[version] || new CommunicationHandlerV1();
     }
     
 }
-export class ResponseHandler{
+export class CommunicationHandler{
     constructor(){
         this._downloading = false;
     }
@@ -52,11 +52,15 @@ export class ResponseHandler{
         return bleAction.errorDownloading(error);
     }
 
+    record(duration, interval){}
+
     handleResponse(response){}
+
+    upload(instructions){}
 
 }
 
-class ResponseHandlerV3 extends ResponseHandler{
+class CommunicationHandlerV3 extends CommunicationHandler{
     
     startDownloading(){
         super.startDownloading();
@@ -96,12 +100,46 @@ class ResponseHandlerV3 extends ResponseHandler{
                     return bleAction.bleResponse('');
             }
         }
-        return bleAction.bleResponse('');
+    }
+
+    record(duration, interval){
+        return BleService.sendCommandToActDevice('F')
+                        .then((c) => {
+                            return BleService.sendCommandToActDevice('D' + duration);
+                        })
+                        .then((c) => {
+                            return BleService.sendCommandToActDevice('L');
+                        });
+    }
+
+    upload(instructions){
+        var promise = BleService.sendCommandToActDevice('F')
+                        .then((c) => {
+                            var hex = Number(instructions.length * 2 - 1).toString(16).toUpperCase();
+                            while (hex.length < 4) {
+                                hex = '0' + hex;
+                            }
+                            return BleService.sendCommandToActDevice('d' + hex);
+                        })
+                        .then((c) => {
+                            return BleService.sendCommandToActDevice('E');
+                        });
+
+                    for (let i = 0; i < instructions.length; i++) {
+                        let item = instructions[i];
+                        let speed = this.speed_padding(item.left) + ',' + this.speed_padding(item.right) + 'xx';
+                        promise = promise.then((c) => {
+                            return BleService.sendCommandToActDevice(speed);
+                        });
+                    }
+                    return promise.then((c) => {
+                        return BleService.sendCommandToActDevice('end');
+                    });
     }
 }
 
 
-class ResponseHandlerV1 extends ResponseHandler{
+class CommunicationHandlerV1 extends CommunicationHandler{
     handleResponse(response){
         response = response.toString(
             'latin1',
@@ -111,9 +149,17 @@ class ResponseHandlerV1 extends ResponseHandler{
         }
         return bleAction.bleResponse('');
     }
+
+    record(duration, interval){
+        //what to do here?
+    }
+
+    upload(instructions){
+        // and here?
+    }
 }
 
-class ResponseHandlerV6 extends ResponseHandler{
+class CommunicationHandlerV6 extends CommunicationHandler{
 
     constructor(){
         super();
@@ -187,5 +233,47 @@ class ResponseHandlerV6 extends ResponseHandler{
             }
         }
     return bleAction.bleResponse('');
+    }
+
+    record(duration, interval){
+        return BleService.sendCommandToActDevice('F')
+            .then((c) => {
+                var hex = Number(interval * duration * 2 - 1).toString(16).toUpperCase();
+                while (hex.length < 4) {
+                    hex = '0' + hex;
+                }
+                return BleService.sendCommandToActDevice('d' + hex);
+            })
+            .then((c) => {
+                return BleService.sendCommandToActDevice('L');
+            });
+    }
+
+    upload(instructions){
+        var promise = BleService.sendCommandToActDevice('F')
+            .then((c) => {
+                var hex = Number(instructions.length * 2 - 1).toString(16).toUpperCase();
+                while (hex.length < 4) {
+                    hex = '0' + hex;
+                }
+                return BleService.sendCommandToActDevice('d' + hex);
+            })
+            .then((c) => {
+                return BleService.sendCommandToActDevice('E');
+            })
+            .then((c) =>{
+                let bytes = new Uint8Array(instructions.length * 2);
+            for (let i = 0; i < instructions.length; i++) {
+                let item = instructions[i];
+                let left = item.left !== 0 ? parseInt(item.left * 2.55 + 0.5) : 0;
+                let right = item.right !== 0 ? parseInt(item.right * 2.55 + 0.5) : 0;
+                bytes[2 * i] = left;
+                bytes[2 * i + 1] = right;
+            }
+                return BleService.sendCommandToActDevice(bytes);
+            });
+            return promise.then((c) => {
+                return BleService.sendCommandToActDevice('end');
+            });
     }
 }

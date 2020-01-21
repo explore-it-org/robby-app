@@ -1,6 +1,7 @@
 import BleService from './BleService';
 import * as bleActions from './BleAction';
 import store from '../store/store';
+import { CommunicationManager } from './CommunicationManager';
 
 // import { throwStatement } from '@babel/types';
 
@@ -128,37 +129,9 @@ class RobotProxy {
     record(duration, interval, version) {
         if (this.isConnected) {
             this.isLearning = true;
-            switch (version) {
-                case 1:
-                    return BleService.sendCommandToActDevice('F')
-                        .then((c) => {
-                            return BleService.sendCommandToActDevice('D' + duration);
-                        })
-                        .then((c) => {
-                            return BleService.sendCommandToActDevice('L');
-                        });
-
-                case 2:
-                case 3:
-                case 4:
-                case 6:
-
-                    return BleService.sendCommandToActDevice('F')
-                        .then((c) => {
-                            var hex = Number(interval * duration * 2 - 1).toString(16).toUpperCase();
-                            while (hex.length < 4) {
-                                hex = '0' + hex;
-                            }
-                            return BleService.sendCommandToActDevice('d' + hex);
-                        })
-                        .then((c) => {
-                            return BleService.sendCommandToActDevice('L');
-                        });
-
-                default:
-                    // TODO return promise
-                    console.log('record: version not supported: ' + this.version);
-            }
+            return new CommunicationManager().getHandler(version).record(duration, interval);
+        }else{
+            alert("APPARENTLY NOT CONNECTED");
         }
     }
 
@@ -177,86 +150,7 @@ class RobotProxy {
     // Uploads speed entries from the app to the robot
     upload(instructions, version) {
         if (this.isConnected) {
-            switch (version) {
-                case 1:
-                    var promise = BleService.sendCommandToActDevice('F')
-                        .then((c) => {
-                            return BleService.sendCommandToActDevice('D' + instructions.length);
-                        })
-                        .then((c) => {
-                            return BleService.sendCommandToActDevice('I1');
-                        })
-                        .then((c) => {
-                            return BleService.sendCommandToActDevice('E');
-                        });
-
-                    for (let i = 0; i < instructions.length; i++) {
-                        let item = instructions[i];
-                        let speed = this.speed_padding(item.left) + ',' + this.speed_padding(item.right) + 'xx';
-                        promise = promise.then((c) => {
-                            return BleService.sendCommandToActDevice(speed);
-                        });
-                    }
-                    return promise.then((c) => {
-                        return BleService.sendCommandToActDevice('end');
-                    });
-
-                case 2:
-                case 3:
-                case 4:
-                    var promise = BleService.sendCommandToActDevice('F')
-                        .then((c) => {
-                            var hex = Number(instructions.length * 2 - 1).toString(16).toUpperCase();
-                            while (hex.length < 4) {
-                                hex = '0' + hex;
-                            }
-                            return BleService.sendCommandToActDevice('d' + hex);
-                        })
-                        .then((c) => {
-                            return BleService.sendCommandToActDevice('E');
-                        });
-
-                    for (let i = 0; i < instructions.length; i++) {
-                        let item = instructions[i];
-                        let speed = this.speed_padding(item.left) + ',' + this.speed_padding(item.right) + 'xx';
-                        promise = promise.then((c) => {
-                            return BleService.sendCommandToActDevice(speed);
-                        });
-                    }
-                    return promise.then((c) => {
-                        return BleService.sendCommandToActDevice('end');
-                    });
-                    case 6:
-                        var promise = BleService.sendCommandToActDevice('F')
-                        .then((c) => {
-                            var hex = Number(instructions.length * 2 - 1).toString(16).toUpperCase();
-                            while (hex.length < 4) {
-                                hex = '0' + hex;
-                            }
-                            return BleService.sendCommandToActDevice('d' + hex);
-                        })
-                        .then((c) => {
-                            return BleService.sendCommandToActDevice('E');
-                        })
-                        .then((c) =>{
-                            let bytes = new Uint8Array(instructions.length * 2);
-                        for (let i = 0; i < instructions.length; i++) {
-                            let item = instructions[i];
-                            let left = item.left !== 0 ? parseInt(item.left * 2.55 + 0.5) : 0;
-                            let right = item.right !== 0 ? parseInt(item.right * 2.55 + 0.5) : 0;
-                            bytes[2 * i] = left;
-                            bytes[2 * i + 1] = right;
-                        }
-                            return BleService.sendCommandToActDevice(bytes);
-                        });
-                        return promise.then((c) => {
-                            return BleService.sendCommandToActDevice('end');
-                        });
-                    default:
-                        return new Promise(function(resolve, reject) {
-                            console.log('upload: version not supported: ' + this.version);
-                        });
-            }
+            return new CommunicationManager().getHandler(version).upload(instructions);
         }
     }
 
