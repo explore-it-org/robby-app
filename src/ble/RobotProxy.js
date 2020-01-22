@@ -135,17 +135,6 @@ class RobotProxy {
         }
     }
 
-    speed_padding(speed) {
-        if (speed !== 0) {
-            speed = parseInt(speed * 2.55 + 0.5);
-        }
-        speed = String(speed);
-        while (speed.length < 3) {
-            speed = '0' + speed;
-        }
-        return speed;
-    }
-
 
     // Uploads speed entries from the app to the robot
     upload(instructions, version) {

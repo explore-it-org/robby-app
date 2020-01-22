@@ -114,27 +114,38 @@ class CommunicationHandlerV3 extends CommunicationHandler{
 
     upload(instructions){
         var promise = BleService.sendCommandToActDevice('F')
-                        .then((c) => {
-                            var hex = Number(instructions.length * 2 - 1).toString(16).toUpperCase();
-                            while (hex.length < 4) {
-                                hex = '0' + hex;
-                            }
-                            return BleService.sendCommandToActDevice('d' + hex);
-                        })
-                        .then((c) => {
-                            return BleService.sendCommandToActDevice('E');
-                        });
+            .then((c) => {
+                var hex = Number(instructions.length * 2 - 1).toString(16).toUpperCase();
+                while (hex.length < 4) {
+                    hex = '0' + hex;
+                }
+                return BleService.sendCommandToActDevice('d' + hex);
+            })
+            .then((c) => {
+                return BleService.sendCommandToActDevice('E');
+            });
 
-                    for (let i = 0; i < instructions.length; i++) {
-                        let item = instructions[i];
-                        let speed = this.speed_padding(item.left) + ',' + this.speed_padding(item.right) + 'xx';
-                        promise = promise.then((c) => {
-                            return BleService.sendCommandToActDevice(speed);
-                        });
-                    }
-                    return promise.then((c) => {
-                        return BleService.sendCommandToActDevice('end');
-                    });
+        for (let i = 0; i < instructions.length; i++) {
+            let item = instructions[i];
+            let speed = this.speed_padding(item.left) + ',' + this.speed_padding(item.right) + 'xx';
+            promise = promise.then((c) => {
+                return BleService.sendCommandToActDevice(speed);
+            });
+        }
+        return promise.then((c) => {
+            return BleService.sendCommandToActDevice('end');
+        });
+    }
+
+    speed_padding(speed) {
+        if (speed !== 0) {
+            speed = parseInt(speed * 2.55 + 0.5);
+        }
+        speed = String(speed);
+        while (speed.length < 3) {
+            speed = '0' + speed;
+        }
+        return speed;
     }
 }
 
