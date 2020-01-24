@@ -31,16 +31,10 @@ export default class OverviewComponent extends Component {
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={({item, index}) => (
                             <TouchableOpacity
-                                style={{
-                                    width: '100%',
-                                    flexDirection: 'row',
-                                    borderBottomColor: '#e0e0e0',
-                                    borderBottomWidth: 1,
-                                    paddingTop: 5,
-                                    paddingBottom: 5,
-                                }}
+                                style={parseInt(index) === this.props.Overview.selectedProgramIndex ? styles.selected_row : styles.row}
                                 onPress={() => {
-                                    //this.load(item);
+                                    this.props.setSelectedIndex(index);
+                                    this.props.setSelectedProgram(item);
                                 }}>
 
 
@@ -162,4 +156,22 @@ const styles = StyleSheet.create({
         width: '30%',
         height: '70%',
     },
+    row: {
+        width: '100%',
+        flexDirection: 'row',
+        borderBottomColor: '#e0e0e0',
+        borderBottomWidth: 1,
+        paddingTop: 5,
+        paddingBottom: 5,
+    },
+    selected_row: {
+        width: '100%',
+        flexDirection: 'row',
+        borderBottomColor: '#d6d6d6',
+        borderBottomWidth: 1,
+        paddingTop: 5,
+        paddingBottom: 5,
+        borderColor: '#d6d6d6',
+        backgroundColor: '#F0F0F0',
+    }
 });

@@ -95,7 +95,12 @@ export default class BlockProgrammingComponent extends Component {
                 <ScrollView
                     style={{backgroundColor: 'white'}}
                     resetScrollToCoords={{x: 0, y: 0}}
-                    scrollEnabled={true}>
+                    scrollEnabled={true}
+                    ref={ref => this.scrollView = ref}
+                    onContentSizeChange={(contentWidth, contentHeight)=>{        
+                        this.scrollView.scrollToEnd({animated: true});
+                    }}
+                    >
                     <FlatList
                         data={this.props.Block.Active_Block.blocks}
                         keyExtractor={(item, index) => index.toString()}
@@ -159,10 +164,10 @@ const styles = StyleSheet.create({
         margin: 0,
         flex: 1,
         flexDirection: 'row',
-        borderColor: '#d6d6d6',
         borderWidth: 1.0,
         paddingVertical: 10,
         alignContent: 'center',
+        borderColor: '#d6d6d6',
         backgroundColor: '#FAFAFA',
     },
     view: {
