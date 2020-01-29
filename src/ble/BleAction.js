@@ -194,12 +194,11 @@ export const uploadToRobot = (ActiveTab) => {
     return (dispatch, getState) => {
         let a = null;
         if (ActiveTab === 'Stepprogramming') {
-            a = getState().ActiveProgram.ActiveProgram.flatten();
-
+            a = Program.flatten(getState().ActiveProgram.ActiveProgram);
         } else if(ActiveTab === 'Blockprogramming') {
-            a = getState().ActiveBlock.Active_Block.flatten();
+            a = Program.flatten(getState().ActiveBlock.Active_Block);
         }else {
-            a = getState().Overview.selectedProgram.flatten();
+            a = Program.flatten(getState().Overview.selectedProgram);
         }
         dispatch(startUpload());
         RobotProxy.upload(a, getState().BLEConnection.device.version).then(res => {

@@ -191,7 +191,6 @@ class CommunicationHandlerV6 extends CommunicationHandler{
     
     handleResponse(response){
         let buffer = response;
-        buffer = [...buffer]; // converting to javascript array
         if(!this._downloading){
             response = response.toString(
                 'latin1',
