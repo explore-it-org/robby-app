@@ -15,10 +15,12 @@
     "bluetoothNotTurnedOnTitle": "Bluetooth is powered off",
     "bluetoothNotTurnedOnMessage": "Please turn on Bluetooth",
     "programName": "Program name",
-    "noConnectedDevice": "No connection"
+    "noConnectedDevice": "No connection",
+    "dialogCancelButton": "CANCEL"
   },
   "BlockProgramming": {
-    "programSelectionPrompt": "..."
+    "programSelectionPrompt": "...",
+    "programSelectionPromptTitle": "Select a program"
   },
   "SpeedInput": {
     "invalidEntry": "Invalid Entry",
@@ -34,7 +36,11 @@
     "language": "Language:",
     "updated": "Settings updated",
     "error": "Error",
-    "tooBig": "The entered number is too large."
+    "tooBig": "The entered number is too large.",
+    "websiteURL":"https://www.explore-it.org/en",
+    "invalidEntry": "Invalid Entry",
+    "invalidDurationMessage": "Please only enter integers between 1-80.",
+    "invalidIntervalMessage": "Please only enter integers between 1-50."
   },
   "RoboticsDatabase": {
     "success": "Success",

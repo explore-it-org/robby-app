@@ -58,12 +58,14 @@ class SettingsComponent extends Component {
         if (parseInt(interval) > 50) {
             Alert.alert(i18n.t('Settings.error'), i18n.t('Settings.tooBig'));
             newText = '50';
+        }else if(parseInt(interval) === 0){
+                newText = '1';
         } else {
             for (let i = 0; i < interval.length; i++) {
                 if (numbers.indexOf(interval[i]) > -1) {
                     newText = newText + interval[i];
                 } else {
-                    Alert.alert(i18n.t('SpeedInput.invalidEntry'), i18n.t('SpeedInput.invalidEntryMessage'));
+                    Alert.alert(i18n.t('Settings.invalidEntry'), i18n.t('Settings.invalidIntervalMessage'));
                 }
             }
         }
@@ -76,12 +78,14 @@ class SettingsComponent extends Component {
         if (parseInt(duration) > 80) {
             Alert.alert(i18n.t('Settings.error'), i18n.t('Settings.tooBig'));
             newText = '80';
+        }else if(parseInt(duration) === 0){
+            newText = '1';
         } else {
             for (let i = 0; i < duration.length; i++) {
                 if (numbers.indexOf(duration[i]) > -1) {
                     newText = newText + duration[i];
                 } else {
-                    Alert.alert(i18n.t('SpeedInput.invalidEntry'), i18n.t('SpeedInput.invalidEntryMessage'));
+                    Alert.alert(i18n.t('Settings.invalidEntry'), i18n.t('Settings.invalidDurationMessage'));
                 }
             }
         }
@@ -136,7 +140,7 @@ class SettingsComponent extends Component {
                         marginBottom: 10,
                     }}>
                         <View style={{flex: 1}}/>
-                        <View style={{flex: 4, alignSelf: 'center'}}>
+                        <View style={{flex: 5, alignSelf: 'center'}}>
                             <Text style={{
                                 fontSize: 16,
                                 fontWeight: 'bold',
@@ -164,7 +168,7 @@ class SettingsComponent extends Component {
                                 {i18n.t('Settings.interval-unit')}
                             </Text>
                         </View>
-                        <View style={{flex: 4}}/>
+                        <View style={{flex: 2}}/>
                     </View>
                     <View style={{borderBottomColor: 'lightgrey', borderBottomWidth: 1}}/>
                 </View>
@@ -232,7 +236,7 @@ class SettingsComponent extends Component {
                                             marginBottom: 10,
                                         }}>
                                             <View style={{flex: 1}}/>
-                                            <View style={{flex: 4, alignSelf: 'center'}}>
+                                            <View style={{flex: 5, alignSelf: 'center'}}>
                                                 <Text style={{
                                                     fontSize: 16,
                                                     fontWeight: 'bold',
@@ -260,7 +264,7 @@ class SettingsComponent extends Component {
                                                     {i18n.t('Settings.duration-unit')}
                                                 </Text>
                                             </View>
-                                            <View style={{flex: 4}}/>
+                                            <View style={{flex: 2}}/>
                                         </View>
                                         {hr}
 
@@ -275,7 +279,7 @@ class SettingsComponent extends Component {
                                         marginVertical: 10,
                                     }}>
                                         <View style={{flex: 1}}/>
-                                        <View style={{flex: 4, alignSelf: 'center'}}>
+                                        <View style={{flex: 5, alignSelf: 'center'}}>
                                             <Text style={{
                                                 fontSize: 16,
                                                 fontWeight: 'bold',
@@ -286,7 +290,7 @@ class SettingsComponent extends Component {
                                         <View style={{flex: 10, alignSelf: 'center'}}>
                                             {this.renderPicker()}
                                         </View>
-                                        <View style={{flex: 4}}/>
+                                        <View style={{flex: 2}}/>
                                     </View>
                                     {hr}
 
@@ -299,13 +303,13 @@ class SettingsComponent extends Component {
                 </ScrollView>
                 <View style={{flex: 1, justifyContent: 'flex-end'}}>
                             <TouchableOpacity
-                                onPress={() => Linking.openURL('https://www.explore-it.org/').catch((err) => console.error('An error occurred', err))}
+                                onPress={() => Linking.openURL(i18n.t("Settings.websiteURL")).catch((err) => console.error('An error occurred', err))}
                             >
                                 <View style={{
                                         justifyContent: 'center',
                                         flexDirection: 'row'
                                     }}>
-                                        <Image resizeMode={"contain"} style={{width: 150}} source={require('../../resources/icon/logo.png')}></Image>
+                                <Image style={{width: 160, resizeMode: 'contain'}} source={require('../../resources/icon/logo.png')}></Image>
                                 </View>
                                 <View
                                     style={{
