@@ -16,10 +16,12 @@
     "bluetoothNotTurnedOnTitle": "Bluetooth è spento",
     "bluetoothNotTurnedOnMessage": "Accendere Bluetooth",
     "programName": "Nome del programma",
-    "noConnectedDevice": "Nessuna connessione"
+    "noConnectedDevice": "Nessuna connessione",
+    "dialogCancelButton": "ANNULLA"
   },
   "BlockProgramming": {
-    "programSelectionPrompt": "..."
+    "programSelectionPrompt": "...",
+    "programSelectionPromptTitle": "Selezionare un programma"
   },
   "SpeedInput": {
     "invalidEntry": "Il valore inserito non è valido",
@@ -35,7 +37,11 @@
     "language": "Lingua:",
     "updated": "Le impostazioni sono state aggiornate",
     "error": "Errore",
-    "tooBig": "Il numero inserito è troppo grande."
+    "tooBig": "Il numero inserito è troppo grande.",
+    "websiteURL":"https://www.explore-it.org/it",
+    "invalidEntry": "Il valore inserito non è valido",
+    "invalidDurationMessage": "È possibile inserire solo numeri interi tra 1 e 80.",
+    "invalidIntervalMessage": "È possibile inserire solo numeri interi tra 1 e 50."
   },
   "RoboticsDatabase": {
     "success": "Riuscito",

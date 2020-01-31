@@ -8,14 +8,17 @@ import {
     StyleSheet,
     TouchableOpacity,
     View,
+    Platform,
 } from 'react-native';
 import {Text, TextInput} from 'react-native';
 import {Appbar} from 'react-native-paper';
 import GLOBAL from '../utillity/Global';
-
-
 import i18n from '../../resources/locales/i18n';
 import Toast from '../controls/Toast';
+import {setDuration, setInterval, toggleSettings} from './SettingsAction';
+import SettingsContainer from './SettingsContainer';
+import NumericInput from '../controls/NumericInput';
+import LanguageInput from '../controls/LanguageInput';
 
 
 class SettingsComponent extends Component {
@@ -50,12 +53,14 @@ class SettingsComponent extends Component {
         if (parseInt(interval) > 50) {
             Alert.alert(i18n.t('Settings.error'), i18n.t('Settings.tooBig'));
             newText = '50';
+        }else if(parseInt(interval) === 0){
+                newText = '1';
         } else {
             for (let i = 0; i < interval.length; i++) {
                 if (numbers.indexOf(interval[i]) > -1) {
                     newText = newText + interval[i];
                 } else {
-                    Alert.alert(i18n.t('SpeedInput.invalidEntry'), i18n.t('SpeedInput.invalidEntryMessage'));
+                    Alert.alert(i18n.t('Settings.invalidEntry'), i18n.t('Settings.invalidIntervalMessage'));
                 }
             }
         }
@@ -68,12 +73,14 @@ class SettingsComponent extends Component {
         if (parseInt(duration) > 80) {
             Alert.alert(i18n.t('Settings.error'), i18n.t('Settings.tooBig'));
             newText = '80';
+        }else if(parseInt(duration) === 0){
+            newText = '1';
         } else {
             for (let i = 0; i < duration.length; i++) {
                 if (numbers.indexOf(duration[i]) > -1) {
                     newText = newText + duration[i];
                 } else {
-                    Alert.alert(i18n.t('SpeedInput.invalidEntry'), i18n.t('SpeedInput.invalidEntryMessage'));
+                    Alert.alert(i18n.t('Settings.invalidEntry'), i18n.t('Settings.invalidDurationMessage'));
                 }
             }
         }
@@ -90,7 +97,34 @@ class SettingsComponent extends Component {
 
     }
 
-
+    renderPicker = () => {
+        if(Platform.OS === 'ios'){
+            return(
+            <LanguageInput 
+                pickerItems={this.languages}
+                selectedItem={this.props.Settings.language}
+                onValueChange={(itemValue) => {
+                    this.props.setLanguage(itemValue);
+                    i18n.locale = itemValue;
+                    this.props.forceReloadBlocks();
+                }}
+            ></LanguageInput>)
+        }else{
+            return (
+                <Picker
+                    style={styles.input}
+                    selectedValue={this.props.Settings.language}
+                    textAlign={'center'}
+                    onValueChange={(itemValue, itemIndex) => {
+                        this.props.setLanguage(itemValue);
+                        i18n.locale = itemValue;
+                        this.props.forceReloadBlocks();
+                    }}>
+                    {this.items}
+                </Picker>
+            )
+        }
+    }
     renderIntervalField = () => {
         if (this.props.BLEConnection.isConnected) {
             return (
@@ -101,7 +135,7 @@ class SettingsComponent extends Component {
                         marginBottom: 10,
                     }}>
                         <View style={{flex: 1}}/>
-                        <View style={{flex: 4, alignSelf: 'center'}}>
+                        <View style={{flex: 5, alignSelf: 'center'}}>
                             <Text style={{
                                 fontSize: 16,
                                 fontWeight: 'bold',
@@ -129,7 +163,7 @@ class SettingsComponent extends Component {
                                 {i18n.t('Settings.interval-unit')}
                             </Text>
                         </View>
-                        <View style={{flex: 4}}/>
+                        <View style={{flex: 2}}/>
                     </View>
                     <View style={{borderBottomColor: 'lightgrey', borderBottomWidth: 1}}/>
                 </View>
@@ -144,6 +178,11 @@ class SettingsComponent extends Component {
             k => this.items.push(<Picker.Item key={k.languageTag} label={k.language} value={k.languageTag}
                                               testID={k.language}/>),
         );
+        this.languages = Object.assign([], []);
+        Object.values(i18n.translations).forEach(
+            k => this.languages.push({value: k.languageTag, text: k.language}),
+        );
+
 
         let deviceName = this.props.BLEConnection.isConnected ?
             <Appbar.Content style={{position: 'absolute', right: 40}}
@@ -174,7 +213,7 @@ class SettingsComponent extends Component {
                             />
                             <Appbar.Content
                                 style={{position: 'absolute', left: 40}}
-                                title="Explore-it"
+                                title="explore-it"
                                 size={32}
                             />
                             {deviceName}
@@ -192,7 +231,7 @@ class SettingsComponent extends Component {
                                             marginBottom: 10,
                                         }}>
                                             <View style={{flex: 1}}/>
-                                            <View style={{flex: 4, alignSelf: 'center'}}>
+                                            <View style={{flex: 5, alignSelf: 'center'}}>
                                                 <Text style={{
                                                     fontSize: 16,
                                                     fontWeight: 'bold',
@@ -220,7 +259,7 @@ class SettingsComponent extends Component {
                                                     {i18n.t('Settings.duration-unit')}
                                                 </Text>
                                             </View>
-                                            <View style={{flex: 4}}/>
+                                            <View style={{flex: 2}}/>
                                         </View>
                                         {hr}
 
@@ -235,7 +274,7 @@ class SettingsComponent extends Component {
                                         marginVertical: 10,
                                     }}>
                                         <View style={{flex: 1}}/>
-                                        <View style={{flex: 4, alignSelf: 'center'}}>
+                                        <View style={{flex: 5, alignSelf: 'center'}}>
                                             <Text style={{
                                                 fontSize: 16,
                                                 fontWeight: 'bold',
@@ -244,19 +283,9 @@ class SettingsComponent extends Component {
                                             </Text>
                                         </View>
                                         <View style={{flex: 10, alignSelf: 'center'}}>
-                                            <Picker
-                                                style={styles.input}
-                                                selectedValue={this.props.Settings.language}
-                                                textAlign={'center'}
-                                                onValueChange={(itemValue) => {
-                                                    this.props.setLanguage(itemValue);
-                                                    i18n.locale = itemValue;
-                                                    this.props.forceReloadBlocks();
-                                                }}>
-                                                {this.items}
-                                            </Picker>
+                                            {this.renderPicker()}
                                         </View>
-                                        <View style={{flex: 4}}/>
+                                        <View style={{flex: 2}}/>
                                     </View>
                                     {hr}
 
@@ -269,13 +298,13 @@ class SettingsComponent extends Component {
                 </ScrollView>
                 <View style={{flex: 1, justifyContent: 'flex-end'}}>
                             <TouchableOpacity
-                                onPress={() => Linking.openURL('https://www.explore-it.org/').catch((err) => console.error('An error occurred', err))}
+                                onPress={() => Linking.openURL(i18n.t("Settings.websiteURL")).catch((err) => console.error('An error occurred', err))}
                             >
                                 <View style={{
                                         justifyContent: 'center',
                                         flexDirection: 'row'
                                     }}>
-                                <Image source={require('../../resources/icon/logo.png')}></Image>
+                                <Image style={{width: 160, resizeMode: 'contain'}} source={require('../../resources/icon/logo.png')}></Image>
                                 </View>
                                 <View
                                     style={{
