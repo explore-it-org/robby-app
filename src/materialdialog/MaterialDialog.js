@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import colors from './colors';
 import {material} from 'react-native-typography';
+import i18n from '../../resources/locales/i18n';
 // import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview'
 
 const {height} = Dimensions.get('window');
@@ -97,7 +98,7 @@ const MaterialDialog = ({
                                             testID="dialog-cancel-button"
                                             colorAccent={colorAccent}
                                             onPress={onCancel}
-                                            label={cancelLabel}
+                                            label={i18n.t("Programming.dialogCancelButton")}
                                         />
                                         <ActionButton
                                             testID="dialog-ok-button"
