@@ -281,7 +281,7 @@ class SettingsComponent extends Component {
                                         justifyContent: 'center',
                                         flexDirection: 'row'
                                     }}>
-                                <Image source={require('../../resources/icon/logo.png')}></Image>
+                                <Image style={{width: 160, resizeMode: 'contain'}} source={require('../../resources/icon/logo.png')}></Image>
                                 </View>
                                 <View
                                     style={{
