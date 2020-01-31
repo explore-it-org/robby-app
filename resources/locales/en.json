@@ -34,7 +34,8 @@
     "language": "Language:",
     "updated": "Settings updated",
     "error": "Error",
-    "tooBig": "The entered number is too large."
+    "tooBig": "The entered number is too large.",
+    "websiteURL":"https://www.explore-it.org/en"
   },
   "RoboticsDatabase": {
     "success": "Success",
