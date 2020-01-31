@@ -20,7 +20,8 @@
     "dialogCancelButton": "ANNULLA"
   },
   "BlockProgramming": {
-    "programSelectionPrompt": "..."
+    "programSelectionPrompt": "...",
+    "programSelectionPromptTitle": "Selezionare un programma"
   },
   "SpeedInput": {
     "invalidEntry": "Il valore inserito non è valido",

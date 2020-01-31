@@ -19,7 +19,8 @@
     "dialogCancelButton": "ABBRECHEN"
   },
   "BlockProgramming": {
-    "programSelectionPrompt": "..."
+    "programSelectionPrompt": "...",
+    "programSelectionPromptTitle": "Wähle ein Programm"
   },
   "SpeedInput": {
     "invalidEntry": "Ungültige Eingabe",
