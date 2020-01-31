@@ -56,12 +56,14 @@ class SettingsComponent extends Component {
         if (parseInt(interval) > 50) {
             Alert.alert(i18n.t('Settings.error'), i18n.t('Settings.tooBig'));
             newText = '50';
+        }else if(parseInt(interval) === 0){
+                newText = '1';
         } else {
             for (let i = 0; i < interval.length; i++) {
                 if (numbers.indexOf(interval[i]) > -1) {
                     newText = newText + interval[i];
                 } else {
-                    Alert.alert(i18n.t('SpeedInput.invalidEntry'), i18n.t('SpeedInput.invalidEntryMessage'));
+                    Alert.alert(i18n.t('Settings.invalidEntry'), i18n.t('Settings.invalidIntervalMessage'));
                 }
             }
         }
@@ -81,7 +83,7 @@ class SettingsComponent extends Component {
                 if (numbers.indexOf(duration[i]) > -1) {
                     newText = newText + duration[i];
                 } else {
-                    Alert.alert(i18n.t('SpeedInput.invalidEntry'), i18n.t('SpeedInput.invalidEntryMessage'));
+                    Alert.alert(i18n.t('Settings.invalidEntry'), i18n.t('Settings.invalidDurationMessage'));
                 }
             }
         }

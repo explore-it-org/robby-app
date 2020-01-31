@@ -38,7 +38,10 @@
     "updated": "Le impostazioni sono state aggiornate",
     "error": "Errore",
     "tooBig": "Il numero inserito è troppo grande.",
-    "websiteURL":"https://www.explore-it.org/it"
+    "websiteURL":"https://www.explore-it.org/it",
+    "invalidEntry": "Il valore inserito non è valido",
+    "invalidDurationMessage": "È possibile inserire solo numeri interi tra 1 e 80.",
+    "invalidIntervalMessage": "È possibile inserire solo numeri interi tra 1 e 50."
   },
   "RoboticsDatabase": {
     "success": "Riuscito",
