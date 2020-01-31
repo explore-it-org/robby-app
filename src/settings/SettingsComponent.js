@@ -277,7 +277,7 @@ class SettingsComponent extends Component {
                 </ScrollView>
                 <View style={{flex: 1, justifyContent: 'flex-end'}}>
                             <TouchableOpacity
-                                onPress={() => Linking.openURL('https://www.explore-it.org/').catch((err) => console.error('An error occurred', err))}
+                                onPress={() => Linking.openURL(i18n.t("Settings.websiteURL")).catch((err) => console.error('An error occurred', err))}
                             >
                                 <View style={{
                                         justifyContent: 'center',
