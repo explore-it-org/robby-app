@@ -76,7 +76,7 @@ export default class ProgramInput extends Component {
                 <View style={{flex: 1}}/>
 
                 <SinglePickerMaterialDialog
-                    title={i18n.t('BlockProgramming.programSelectionPrompt')}
+                    title={i18n.t("BlockProgramming.programSelectionPromptTitle")}
                     selected={selectedText}
                     items={this.props.pickerItems.map(v => ({
                         key: v.id,
