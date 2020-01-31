@@ -7,62 +7,35 @@ import SinglePickerMaterialDialog from '../materialdialog/SinglePickerMaterialDi
 import {Text} from 'react-native-paper';
 import {Button, FAB, IconButton} from 'react-native-paper';
 import CustomIcon from '../utillity/CustomIcon';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
-export default class ProgramInput extends Component {
+export default class LanguageInput extends Component {
 
     state = {
         pickerOpen: false,
     };
 
-    onChanged = (text) => {
-        let newText = '';
-        let numbers = '0123456789';
-        if (parseInt(text) > 100) {
-            Alert.alert(i18n.t('SpeedInput.invalidEntry'), i18n.t('SpeedInput.invalidEntryMessage'));
-            newText = '100';
-        } else {
-            for (let i = 0; i < text.length; i++) {
-                if (numbers.indexOf(text[i]) > -1) {
-                    newText = newText + text[i];
-                } else {
-                    Alert.alert(i18n.t('SpeedInput.invalidEntry'), i18n.t('SpeedInput.invalidEntryMessage'));
-                }
-            }
-        }
-        this.props.onRepeatValueChange(parseInt(newText));
-    };
+   
 
     render() {
         const index = this.props.index;
-        const selectItem = this.props.pickerItems.find(v => v.id === this.props.selectedProgram);
-        const selectedText = selectItem === undefined ? i18n.t('BlockProgramming.programSelectionPrompt') : selectItem.name;
+        const selectItem = this.props.pickerItems.find(v => v.value === this.props.selectedItem);
+        const selectedText = selectItem === undefined ? i18n.t('BlockProgramming.programSelectionPrompt') : selectItem.text;
         return (
 
-            <View key={this.props.selectedProgram}
+            <View key={this.props.selectedLanguage}
                   style={
                       parseInt(index) === this.props.selected ?
                           styles.selected_row :
                           styles.row}>
-
-                <View style={{flex: 1}}/>
-
-                <View style={{flex: 1}}>
-                    <NumericInput
-                        onchange={this.props.onRepeatValueChange}
-                        val={this.props.val === null ? 0 : this.props.val}/>
-                </View>
-
-                <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center'}}>
-                    <Text style={{alignSelf: 'center', fontSize: 16}}> x </Text>
-                </View>
-
-
-                <View style={{flex: 5, flexDirection: 'column', justifyContent: 'center'}}>
+                <TouchableOpacity style={{flex:1, alignItems: 'center', flexDirection: 'row', justifyContent: 'center'}} 
+                    onPress={() => this.setState({pickerOpen: true})}>
+                <View style={{}}>
                     <Text style={{fontSize: 16}}>{selectedText}</Text>
                 </View>
-
-                <View style={{flex: 1, justifyContent: 'center'}}>
+                
+                <View>
                     <IconButton
                         icon={({size, color}) => (
                             <CustomIcon name="edit" size={size} color={color}/>
@@ -72,16 +45,17 @@ export default class ProgramInput extends Component {
                         onPress={() => this.setState({pickerOpen: true})}
                     />
                 </View>
+                </TouchableOpacity>
+                
 
                 <View style={{flex: 1}}/>
 
                 <SinglePickerMaterialDialog
-                    title={i18n.t("BlockProgramming.programSelectionPromptTitle")}
                     selected={selectedText}
                     items={this.props.pickerItems.map(v => ({
-                        key: v.id,
-                        label: v.name,
-                        selected: v.name === selectedText,
+                        key: v.value,
+                        label: v.text,
+                        selected: v.text === selectedText,
                     }))}
                     visible={this.state.pickerOpen}
                     onCancel={() => {
@@ -90,8 +64,9 @@ export default class ProgramInput extends Component {
                     onOk={
                         result => {
                             this.setState({pickerOpen: false});
+                            console.log('okeay');
                             if (result.selectedLabel) {
-                                this.props.onProgramSelectionChange(this.props.pickerItems.find(v => v.name === result.selectedLabel).id);
+                                this.props.onValueChange(this.props.pickerItems.find(v => v.text === result.selectedLabel).value);
                             }
                         }
                     }

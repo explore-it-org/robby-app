@@ -119,7 +119,7 @@ export default class ProgrammingComponent extends Component {
                         )}
                         size={this.state.iconSize}
                         onPress={() => this.props.toggleSettings()}/>
-                    <Appbar.Content style={{position: 'absolute', left: 40}} title="Explore-it"
+                    <Appbar.Content style={{position: 'absolute', left: 40}} title="explore-it"
                                     size={this.state.iconSize}/>
                     {deviceName}
                     <Appbar.Action

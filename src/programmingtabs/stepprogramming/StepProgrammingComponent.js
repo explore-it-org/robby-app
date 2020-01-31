@@ -94,7 +94,7 @@ export default class StepProgrammingComponent extends Component {
                 </View>
 
 
-                <View style={{height: 40, width: '100%', flexDirection: 'row'}}>
+                <View style={{width: '100%', flexDirection: 'row', paddingBottom:30}}>
                     <View style={{flex: 1}}/>
                     <View style={{flex: 2, flexDirection: 'row', justifyContent: 'flex-start'}}>
                         <Image source={require('../../../resources/icon/wheeldarkx.png')}
