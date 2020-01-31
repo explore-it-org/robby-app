@@ -180,7 +180,7 @@ class SettingsComponent extends Component {
                             />
                             <Appbar.Content
                                 style={{position: 'absolute', left: 40}}
-                                title="Explore-it"
+                                title="explore-it"
                                 size={32}
                             />
                             {deviceName}
