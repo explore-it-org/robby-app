@@ -74,6 +74,8 @@ class SettingsComponent extends Component {
         if (parseInt(duration) > 80) {
             Alert.alert(i18n.t('Settings.error'), i18n.t('Settings.tooBig'));
             newText = '80';
+        }else if(parseInt(duration) === 0){
+            newText = '1';
         } else {
             for (let i = 0; i < duration.length; i++) {
                 if (numbers.indexOf(duration[i]) > -1) {
