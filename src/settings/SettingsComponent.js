@@ -107,7 +107,7 @@ class SettingsComponent extends Component {
                         marginBottom: 10,
                     }}>
                         <View style={{flex: 1}}/>
-                        <View style={{flex: 4, alignSelf: 'center'}}>
+                        <View style={{flex: 5, alignSelf: 'center'}}>
                             <Text style={{
                                 fontSize: 16,
                                 fontWeight: 'bold',
@@ -135,7 +135,7 @@ class SettingsComponent extends Component {
                                 {i18n.t('Settings.interval-unit')}
                             </Text>
                         </View>
-                        <View style={{flex: 4}}/>
+                        <View style={{flex: 2}}/>
                     </View>
                     <View style={{borderBottomColor: 'lightgrey', borderBottomWidth: 1}}/>
                 </View>
@@ -198,7 +198,7 @@ class SettingsComponent extends Component {
                                             marginBottom: 10,
                                         }}>
                                             <View style={{flex: 1}}/>
-                                            <View style={{flex: 4, alignSelf: 'center'}}>
+                                            <View style={{flex: 5, alignSelf: 'center'}}>
                                                 <Text style={{
                                                     fontSize: 16,
                                                     fontWeight: 'bold',
@@ -226,7 +226,7 @@ class SettingsComponent extends Component {
                                                     {i18n.t('Settings.duration-unit')}
                                                 </Text>
                                             </View>
-                                            <View style={{flex: 4}}/>
+                                            <View style={{flex: 2}}/>
                                         </View>
                                         {hr}
 
@@ -241,7 +241,7 @@ class SettingsComponent extends Component {
                                         marginVertical: 10,
                                     }}>
                                         <View style={{flex: 1}}/>
-                                        <View style={{flex: 4, alignSelf: 'center'}}>
+                                        <View style={{flex: 5, alignSelf: 'center'}}>
                                             <Text style={{
                                                 fontSize: 16,
                                                 fontWeight: 'bold',
@@ -262,7 +262,7 @@ class SettingsComponent extends Component {
                                                 {this.items}
                                             </Picker>
                                         </View>
-                                        <View style={{flex: 4}}/>
+                                        <View style={{flex: 2}}/>
                                     </View>
                                     {hr}
 
