@@ -5,7 +5,7 @@ import ProgrammingContainer from './src/programing/ProgrammingContainer';
 import Settings from './src/settings/SettingsContainer';
 import {View, Text, StyleSheet, Alert, Platform, NativeModules} from 'react-native';
 import {getStatusBarHeight, ifIphoneX} from 'react-native-iphone-x-helper';
-import {grantLocation, setBLEState} from './src/settings/SettingsAction';
+import {grantLocation, setBLEState, setLanguage} from './src/settings/SettingsAction';
 import i18n from './resources/locales/i18n';
 import BleService from './src/ble/BleService';
 import {connect} from 'react-redux';
@@ -32,18 +32,19 @@ class App extends Component {
         } else {
             if (Platform.OS === 'ios') {
                 // iOS:
-                let local;
+                let locale;
                 try {
-                    local = NativeModules.SettingsManager.settings.AppleLocale.split('_')[0];
+                    locale = NativeModules.SettingsManager.settings.AppleLocale.split('_')[0];
                 } catch (e) {
-                    local = 'en';
+                    locale = 'en';
                 }
-                i18n.defaultLocale = local;
+                i18n.defaultLocale = locale;
             } else {
                 // Android:
                 i18n.defaultLocale = NativeModules.I18nManager.localeIdentifier.split('_')[0];
             }
             i18n.locale = i18n.defaultLocale;
+            this.props.setLanguage(i18n.locale);
         }
     }
 
@@ -63,6 +64,7 @@ const mapDispatchToProps = dispatch =>
             grantLocation,
             setBLEState,
             scanningEnabled,
+            setLanguage
         }, dispatch);
 
 
