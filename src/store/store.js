@@ -9,7 +9,7 @@ import {ActiveBlockReducer} from '../programmingtabs/blockprogramming/ActiveBloc
 import { persistReducer, persistStore } from 'redux-persist';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import AsyncStorage from '@react-native-community/async-storage';
-
+import {OverviewReducer} from '../programmingtabs/overview/OverviewReducer';
 
 
 const persistConfig = {
@@ -32,6 +32,7 @@ const rootReducer = combineReducers({
     Settings: SettingsReducer,
     ActiveProgram: ActiveInstructionsReducer,
     ActiveBlock: persistReducer(activeBlockPersistConfig, ActiveBlockReducer),
+    Overview: OverviewReducer
 });
 
 const pReducer = persistReducer(persistConfig, rootReducer);

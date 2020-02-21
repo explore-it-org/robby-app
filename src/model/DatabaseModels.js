@@ -24,35 +24,35 @@ export class Program {
         }
     }
 
-    length() {
-        switch (this.programType === ProgramType.STEPS) {
+    static length(program) {
+        switch (program.programType === ProgramType.STEPS) {
             case false:
-                return this.steps.length;
+                return program.steps.length;
             case true:
-                return this.blocks.reduce((acc, b) => acc + b.rep * Database.findOneByPK(b.ref).length(), 0);
+                return program.blocks.reduce((acc, b) => acc + b.rep * Program.length(Database.findOneByPK(b.ref)), 0);
         }
     }
 
-    delete() {
-        return Database.delete(this.id);
+    static delete(program) {
+        return Database.delete(program.id);
     }
 
-    duplicate() {
-        return Database.duplicate(this);
+    static duplicate(program) {
+        return Database.duplicate(program);
     }
 
-    flatten() {
+    static flatten(program) {
         var result = [];
-        if (this.programType === ProgramType.BLOCKS) {
-            this.blocks.forEach((block) => {
+        if (program.programType === ProgramType.BLOCKS) {
+            program.blocks.forEach((block) => {
                 var prg = Database.findOneByPK(block.ref);
-                let prgFlat = prg.flatten();
+                let prgFlat = Program.flatten(prg);
                 for (let i = 0; i < block.rep; i++) {
                     result.push(...prgFlat);
                 }
             });
         } else {
-            result.push(...this.steps);
+            result.push(...program.steps);
         }
         return result;
     }

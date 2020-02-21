@@ -125,7 +125,12 @@ export default class StepProgrammingComponent extends Component {
                 <ScrollView
                     style={{backgroundColor: 'white'}}
                     resetScrollToCoords={{x: 0, y: 0}}
-                    scrollEnabled={true}>
+                    scrollEnabled={true}
+                    ref={ref => this.scrollView = ref}
+                    onContentSizeChange={(contentWidth, contentHeight)=>{        
+                        this.scrollView.scrollToEnd({animated: true});
+                    }}
+                    >
                     <FlatList
                         data={this.props.Instruction.ActiveProgram.steps}
                         //extraData={this.state}

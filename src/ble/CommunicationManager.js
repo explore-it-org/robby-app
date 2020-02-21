@@ -113,28 +113,27 @@ class CommunicationHandlerV3 extends CommunicationHandler{
     }
 
     upload(instructions){
-        var promise = BleService.sendCommandToActDevice('F')
+        return BleService.sendCommandToActDevice('F')
             .then((c) => {
                 var hex = Number(instructions.length * 2 - 1).toString(16).toUpperCase();
                 while (hex.length < 4) {
                     hex = '0' + hex;
                 }
-                return BleService.sendCommandToActDevice('d' + hex);
+                return BleService.sendCommandToActDevice('d' + hex).then((d) =>{
+                    return BleService.sendCommandToActDevice('E');
+                })
             })
             .then((c) => {
-                return BleService.sendCommandToActDevice('E');
+                for (let i = 0; i < instructions.length; i++) {
+                    let item = instructions[i];
+                    let speed = this.speed_padding(item.left) + ',' + this.speed_padding(item.right) + 'xx';
+                    promise = promise.then((c) => {
+                        return BleService.sendCommandToActDevice(speed)
+                    });
+                }
+            }).then((c) => {
+                return BleService.sendCommandToActDevice('end');
             });
-
-        for (let i = 0; i < instructions.length; i++) {
-            let item = instructions[i];
-            let speed = this.speed_padding(item.left) + ',' + this.speed_padding(item.right) + 'xx';
-            promise = promise.then((c) => {
-                return BleService.sendCommandToActDevice(speed);
-            });
-        }
-        return promise.then((c) => {
-            return BleService.sendCommandToActDevice('end');
-        });
     }
 
     speed_padding(speed) {
@@ -192,7 +191,6 @@ class CommunicationHandlerV6 extends CommunicationHandler{
     
     handleResponse(response){
         let buffer = response;
-        buffer = [...buffer]; // converting to javascript array
         if(!this._downloading){
             response = response.toString(
                 'latin1',

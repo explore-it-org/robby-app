@@ -22,6 +22,7 @@ export default class ProgrammingComponent extends Component {
         currentRoute: 'Stepprogramming',
         clearButtonDisabled: false,
         saveButtonDisabled: false, // TODO: Move to redux and disable button when program not dirty
+        uploadButtonDisable: false,
         iconSize: 26,
     };
 
@@ -160,6 +161,7 @@ export default class ProgrammingComponent extends Component {
                             case 'Stepprogramming':
                                 this.setState({clearButtonDisabled: false});
                                 this.setState({saveButtonDisabled: false});
+                                this.setState({uploadButtonDisable: false});
                                 this.clear = () => {
                                     this.props.clearProgram();
                                 };
@@ -167,6 +169,7 @@ export default class ProgrammingComponent extends Component {
                             case 'Blockprogramming':
                                 this.setState({clearButtonDisabled: false});
                                 this.setState({saveButtonDisabled: false});
+                                this.setState({uploadButtonDisable: false});
                                 this.clear = () => {
                                     this.props.clearBlock();
                                 };
@@ -178,6 +181,7 @@ export default class ProgrammingComponent extends Component {
                                 };
                                 this.setState({clearButtonDisabled: true});
                                 this.setState({saveButtonDisabled: true});
+                                this.setState({uploadButtonDisable: true});
                                 break;
                         }
                     }}
@@ -265,7 +269,8 @@ export default class ProgrammingComponent extends Component {
                         this.props.BLEConnection.device.isGoing ||
                         this.props.BLEConnection.device.isRecording ||
                         this.props.BLEConnection.device.isRunning ||
-                        this.props.BLEConnection.device.isDownloading}
+                        this.props.BLEConnection.device.isDownloading ||
+                        this.state.uploadButtonDisable && this.props.Overview.selectedProgramIndex < 0}
                         onPress={() => {
                             this.props.upload(this.state.currentRoute);
                         }}/>
