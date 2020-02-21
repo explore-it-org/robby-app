@@ -54,7 +54,6 @@ class BleService {
             if (error) {
                 errorHandler(error.message);
             } else {
-                console.log('its working');
                 successHandler(true);
             }
         }));
@@ -107,7 +106,7 @@ class BleService {
         this.manager.stopDeviceScan();
     }
 
-    connectToActDevice(responseHandler, connectionHandler, errorHandler) {
+    connectToActDevice(responseHandler, connectionHandler, errorHandler, disconnectHandler) {
         console.log('BleService connecting...');
         this.actDevice
             .connect()
@@ -130,9 +129,7 @@ class BleService {
                     (error, characteristic) => {
                         if (this.c === localc) {
                             if (!error) {
-                                let response = Buffer.from(characteristic.value, 'base64').toString(
-                                    'latin1',
-                                );
+                                let response = Buffer.from(characteristic.value, 'base64');
                                 responseHandler(response);
                             }
 
@@ -140,6 +137,11 @@ class BleService {
                     },
                     transactionId,
                 );
+
+                device.onDisconnected((error, device) => {
+                    disconnectHandler(error);
+                });
+                
                 console.log('BleService connection done - ' + device.name);
                 console.log('transaction id: ' + transactionId);
                 connectionHandler(device);
@@ -167,7 +169,6 @@ class BleService {
             Buffer.from(command).toString('base64'),
             null,
         ).catch(reason => {
-            console.log(0);
             throw reason;
         });
     }

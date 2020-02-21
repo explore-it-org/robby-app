@@ -31,7 +31,6 @@ export default class StepProgrammingComponent extends Component {
                             <CustomIcon name="up" size={size} color={color}/>
                         )}
                         onPress={() => {
-                            console.log('move down clicked');
                             this.props.moveUp();
                         }}
                     />
@@ -42,7 +41,6 @@ export default class StepProgrammingComponent extends Component {
                             <CustomIcon name="down" size={size} color={color}/>
                         )}
                         onPress={() => {
-                            console.log('move up clicked');
                             this.props.moveDown();
                         }}
                     />
@@ -60,8 +58,6 @@ export default class StepProgrammingComponent extends Component {
         }
         let step_content;
         if (this.props.BLE.device.isDownloading) {
-
-            console.log('showing download');
             step_content =
                 <View style={{flexDirection: 'row', flex: 1, justifyContent: 'center'}}>
                     <ActivityIndicator size="large" color='#2E5266'/>

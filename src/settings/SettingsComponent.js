@@ -7,17 +7,12 @@ import {
     SafeAreaView, ScrollView,
     StyleSheet,
     TouchableOpacity,
-    TouchableOpacityComponent,
     View,
     Platform,
 } from 'react-native';
 import {Text, TextInput} from 'react-native';
 import {Appbar} from 'react-native-paper';
 import GLOBAL from '../utillity/Global';
-
-
-//import { Icon } from 'react-native-elements';
-import {getStatusBarHeight, ifIphoneX} from 'react-native-iphone-x-helper';
 import i18n from '../../resources/locales/i18n';
 import Toast from '../controls/Toast';
 import {setDuration, setInterval, toggleSettings} from './SettingsAction';

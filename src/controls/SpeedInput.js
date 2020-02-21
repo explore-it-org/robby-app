@@ -28,9 +28,6 @@ export default class SpeedInput extends Component {
     };
 
     componentDidMount(): void {
-        //let magicalInput =
-        console.log(this.props.val);
-
     }
 
     render() {

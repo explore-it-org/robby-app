@@ -90,9 +90,7 @@ export default class ProgramInput extends Component {
                     onOk={
                         result => {
                             this.setState({pickerOpen: false});
-                            console.log('okeay');
                             if (result.selectedLabel) {
-                                console.log(this.props.selectedProgram);
                                 this.props.onProgramSelectionChange(this.props.pickerItems.find(v => v.name === result.selectedLabel).id);
                             }
                         }

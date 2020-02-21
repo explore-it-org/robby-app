@@ -1,6 +1,5 @@
 import * as ActionTypes from '../GlobalActionTypes';
 import RobotProxy from './RobotProxy';
-import {mainHandler} from './ResponseActionHandler';
 import {} from '../database/DatabaseAction';
 import {
     clearProgram,
@@ -9,6 +8,7 @@ import {
 } from '../programmingtabs/stepprogramming/ActiveInstructionAction';
 import {Program, ProgramType} from '../model/DatabaseModels';
 import {Alert} from 'react-native';
+import { CommunicationManager } from './CommunicationManager';
 
 
 export const connectToBle = () => ({
@@ -21,6 +21,9 @@ export const connectedToBle = (robot) => ({
 export const connectionFailed = (error) => ({
     type: ActionTypes.FAILURE_CONNECTING,
 });
+export const connectionLost = (error) => ({
+    type: ActionTypes.LOST_CONNECTION
+})
 export const disconnect = () => ({
     type: ActionTypes.DISCONNECT,
 });
@@ -162,12 +165,15 @@ export const connectToDevice = () => {
     return (dispatch, getState) => {
         dispatch(connectToBle());
         RobotProxy.connect2((response) => {
-            dispatch(mainHandler(response));
+            var handler = new CommunicationManager().getHandler(getState().BLEConnection.device.version);
+            dispatch(handler.handleResponse(response));
         }, (robot) => {
             console.log(robot.name);
             dispatch(connectedToBle(robot));
         }, (error) => {
             dispatch(connectionFailed(error));
+        }, (error) => {
+            dispatch(connectionLost(error));
         });
     };
 };
@@ -183,15 +189,15 @@ export const failedUplaod = (error) => ({
     type: ActionTypes.FAILURE_UPLOADING,
     error,
 });
+
 export const uploadToRobot = (ActiveProgram) => {
     return (dispatch, getState) => {
         let a = null;
         if (ActiveProgram === 'Stepprogramming') {
             a = getState().ActiveProgram.ActiveProgram.flatten();
-            console.log(a);
+
         } else {
             a = getState().ActiveBlock.Active_Block.flatten();
-            console.log(a);
         }
         dispatch(startUpload());
         RobotProxy.upload(a, getState().BLEConnection.device.version).then(res => {
@@ -229,10 +235,6 @@ export const downloadToDevice = () => {
     return (dispatch, getState) => {
         dispatch(startDownloading());
         dispatch(emptyInstructionList());
-        RobotProxy.download().then(res => {
-
-        }).catch(error => {
-            dispatch(errorDownloading(error));
-        });
+        new CommunicationManager().getHandler(getState().BLEConnection.device.version).startDownloading();
     };
 };
