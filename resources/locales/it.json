@@ -18,10 +18,10 @@
     "programName": "Nome del programma",
     "noConnectedDevice": "_ _ : _ _",
     "dialogCancelButton": "ANNULLA",
-    "unsupportedAppVersionTitle": "Version nicht unterstützt",
-    "unsupportedAppVersionMessage": "Die App ist möglicherweise zu alt...",
-    "unsupportedRobotVersionTitle": "Version nicht unterstützt",
-    "unsupportedRobotVersionMessage": "Die Version des Roboters wird nicht mehr unterstützt. Bitte wende dich an explore-it um den Roboter auf die neuste version zu updaten."
+    "unsupportedAppVersionTitle": "Versione non supportata",
+    "unsupportedAppVersionMessage": "La versione dell'applicazione potrebbe essere obsoleta. Si prega di scaricare l'ultima versione dall'appstore / playstore.",
+    "unsupportedRobotVersionTitle": "Versione non supportata",
+    "unsupportedRobotVersionMessage": "La versione del firmware del robot non è più supportata. Si prega di contattare explore-it per ottenere il vostro robot aggiornato."
   },
   "BlockProgramming": {
     "programSelectionPrompt": "...",
