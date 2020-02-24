@@ -15,8 +15,13 @@
     "bluetoothNotTurnedOnTitle": "Bluetooth ist ausgeschaltet.",
     "bluetoothNotTurnedOnMessage": "Bitte schalten Sie Bluetooth ein.",
     "programName": "Programmname",
-    "noConnectedDevice": "Keine Verbindung",
-    "dialogCancelButton": "ABBRECHEN"
+    "noConnectedDevice": "_ _ : _ _",
+    "dialogCancelButton": "ABBRECHEN",
+    "unsupportedAppVersionTitle": "Version nicht unterstützt",
+    "unsupportedAppVersionMessage": "Die App ist möglicherweise zu alt. Bitte lade die neuste Version aus dem Appstore / Playstore herunter.",
+    "unsupportedRobotVersionTitle": "Version nicht unterstützt",
+    "unsupportedRobotVersionMessage": "Die Version des Roboters wird nicht mehr unterstützt. Bitte wende dich an explore-it um den Roboter auf die neuste version zu updaten."
+
   },
   "BlockProgramming": {
     "programSelectionPrompt": "...",

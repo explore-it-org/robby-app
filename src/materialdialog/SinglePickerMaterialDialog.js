@@ -11,12 +11,14 @@ export default class SinglePickerMaterialDialog extends PureComponent {
 
     state = {
         selectedLabel: undefined,
+        selectedValue: undefined,
         visible: false,
     };
 
     onRowPress(item) {
         this.setState({
             selectedLabel: item.label,
+            selectedValue: item.val
         });
     }
 
@@ -29,6 +31,7 @@ export default class SinglePickerMaterialDialog extends PureComponent {
                 selected: props.selected,
                 visible: props.visible,
                 selectedLabel: undefined,
+                selectedValue: undefined,
             };
         }
         // Return null to indicate no change to state.
@@ -83,9 +86,11 @@ export default class SinglePickerMaterialDialog extends PureComponent {
                 }}
                 onOk={() => {
                     const selectedLabel = this.state.selectedLabel;
-                    this.setState({selectedLabel: undefined});
+                    const selectedValue = this.state.selectedValue;
+                    this.setState({selectedLabel: undefined, selectedValue: undefined});
                     this.props.onOk({
-                        selectedLabel: this.state.selectedLabel,
+                        selectedLabel,
+                        selectedValue
                     });
                 }}
             >

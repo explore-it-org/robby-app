@@ -34,7 +34,7 @@ class SettingsComponent extends Component {
         let prev = prevProps.Settings.lastUpdate;
         let now = this.props.Settings.lastUpdate;
         if (prev !== now) {
-            Toast.show(i18n.t('Settings.updated'));
+            Toast.show(i18n.t('Settings.updated'), 2000);
         }
     }
 
@@ -128,14 +128,14 @@ class SettingsComponent extends Component {
     renderIntervalField = () => {
         if (this.props.BLEConnection.isConnected) {
             return (
-                <View style={{marginTop: 10}}>
+                <View>
                     <View style={{
                         flexDirection: 'row',
                         justifyContent: 'flex-start',
-                        marginBottom: 10,
+                        marginBottom: 5,
                     }}>
                         <View style={{flex: 1}}/>
-                        <View style={{flex: 5, alignSelf: 'center'}}>
+                        <View style={{flex: 17, alignSelf: 'center'}}>
                             <Text style={{
                                 fontSize: 16,
                                 fontWeight: 'bold',
@@ -143,6 +143,13 @@ class SettingsComponent extends Component {
                                 {i18n.t('Settings.interval')}
                             </Text>
                         </View>
+                    </View>
+                    <View style={{
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        marginBottom: 10,
+                    }}>
+                        <View style={{flex: 1}}/>
                         <View style={{flex: 4, alignSelf: 'center'}}>
                             <TextInput
                                 style={styles.input}
@@ -158,7 +165,7 @@ class SettingsComponent extends Component {
                                 }}
                             />
                         </View>
-                        <View style={{flex: 6, alignSelf: 'center', marginLeft: 5}}>
+                        <View style={{flex: 11, alignSelf: 'center', marginLeft: 5}}>
                             <Text style={{}}>
                                 {i18n.t('Settings.interval-unit')}
                             </Text>
@@ -186,7 +193,7 @@ class SettingsComponent extends Component {
 
         let deviceName = this.props.BLEConnection.isConnected ?
             <Appbar.Content style={{position: 'absolute', right: 40}}
-                            title={this.props.BLEConnection.device.name}
+                            title={this.props.BLEConnection.device.name.substr(this.props.BLEConnection.device.name.length - 5)}
                             size={32}/>
             :
             <Appbar.Content style={{position: 'absolute', right: 40}}
@@ -210,12 +217,14 @@ class SettingsComponent extends Component {
                                 icon="close"
                                 size={26}
                                 onPress={() => this.props.toggleSettings()}
+                                style={{position: 'absolute', right: 0}}
                             />
                             <Appbar.Content
-                                style={{position: 'absolute', left: 40}}
-                                title="explore-it"
+                                style={{position: 'absolute', left: 80}}
+                                title="Robotics"
                                 size={32}
                             />
+                            <Image style={{width: 80, resizeMode: 'contain', left: 10}} source={require('../../resources/icon/logo.png')}></Image>
                             {deviceName}
                         </Appbar>
 
@@ -224,14 +233,15 @@ class SettingsComponent extends Component {
                             <View>
                                 <View style={{flexDirection: 'column', justifyContent: 'space-between'}}>
                                     <View>
-
-                                        <View style={{
+                                    {this.renderIntervalField()}
+                                    <View style={{
                                             flexDirection: 'row',
                                             justifyContent: 'flex-start',
-                                            marginBottom: 10,
+                                            marginTop: 10,
+                                            marginBottom: 5
                                         }}>
                                             <View style={{flex: 1}}/>
-                                            <View style={{flex: 5, alignSelf: 'center'}}>
+                                            <View style={{flex: 17, alignSelf: 'center'}}>
                                                 <Text style={{
                                                     fontSize: 16,
                                                     fontWeight: 'bold',
@@ -239,6 +249,13 @@ class SettingsComponent extends Component {
                                                     {i18n.t('Settings.duration')}
                                                 </Text>
                                             </View>
+                                    </View>
+                                        <View style={{
+                                            flexDirection: 'row',
+                                            justifyContent: 'flex-start',
+                                            marginBottom: 10
+                                        }}>
+                                            <View style={{flex: 1}}/> 
                                             <View style={{flex: 4, alignSelf: 'center'}}>
                                                 <TextInput
                                                     style={styles.input}
@@ -254,7 +271,7 @@ class SettingsComponent extends Component {
                                                     }}
                                                 />
                                             </View>
-                                            <View style={{flex: 6, alignSelf: 'center', marginLeft: 5}}>
+                                            <View style={{flex: 11, alignSelf: 'center', marginLeft: 5}}>
                                                 <Text style={{}}>
                                                     {i18n.t('Settings.duration-unit')}
                                                 </Text>
@@ -262,9 +279,6 @@ class SettingsComponent extends Component {
                                             <View style={{flex: 2}}/>
                                         </View>
                                         {hr}
-
-
-                                        {this.renderIntervalField()}
 
                                     </View>
 

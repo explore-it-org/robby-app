@@ -16,8 +16,12 @@
     "bluetoothNotTurnedOnTitle": "Bluetooth è spento",
     "bluetoothNotTurnedOnMessage": "Accendere Bluetooth",
     "programName": "Nome del programma",
-    "noConnectedDevice": "Nessuna connessione",
-    "dialogCancelButton": "ANNULLA"
+    "noConnectedDevice": "_ _ : _ _",
+    "dialogCancelButton": "ANNULLA",
+    "unsupportedAppVersionTitle": "Version nicht unterstützt",
+    "unsupportedAppVersionMessage": "Die App ist möglicherweise zu alt...",
+    "unsupportedRobotVersionTitle": "Version nicht unterstützt",
+    "unsupportedRobotVersionMessage": "Die Version des Roboters wird nicht mehr unterstützt. Bitte wende dich an explore-it um den Roboter auf die neuste version zu updaten."
   },
   "BlockProgramming": {
     "programSelectionPrompt": "...",

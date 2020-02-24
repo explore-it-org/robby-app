@@ -162,15 +162,17 @@ class BleService {
     }
 
     sendCommandToActDevice(command): Promise<Characteristic> {
-        console.log('sendCommandToActDevice: ' + command);
-        return this.actDevice.writeCharacteristicWithResponseForService(
-            serviceUUID,
-            characteristicsUUID,
-            Buffer.from(command).toString('base64'),
-            null,
-        ).catch(reason => {
-            throw reason;
-        });
+        if(this.actDevice){
+            console.log('sendCommandToActDevice: ' + command);
+            return this.actDevice.writeCharacteristicWithResponseForService(
+                serviceUUID,
+                characteristicsUUID,
+                Buffer.from(command).toString('base64'),
+                null,
+            ).catch(reason => {
+                throw reason;
+            });
+            }
     }
 
     shutdown() {

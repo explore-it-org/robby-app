@@ -2,6 +2,9 @@ import * as bleAction from './BleAction';
 import * as settingsAction from '../settings/SettingsAction';
 import BleService from './BleService';
 import { Instruction } from '../model/DatabaseModels';
+import i18n from '../../resources/locales/i18n';
+import RobotProxy from './RobotProxy';
+import { Alert } from 'react-native';
 
 export class CommunicationManager {
     constructor(){
@@ -11,8 +14,7 @@ export class CommunicationManager {
                 2: new CommunicationHandlerV3(),
                 3: new CommunicationHandlerV3(),
                 4: new CommunicationHandlerV3(),
-                5: new CommunicationHandlerV6(),
-                6: new CommunicationHandlerV6()
+                9: new CommunicationHandlerV6()
             };
             CommunicationManager.instance = this;
         }
@@ -21,6 +23,15 @@ export class CommunicationManager {
     }
 
     getHandler(version){
+        let supportedVersions = Object.keys(this._handlers);
+        if(!supportedVersions.includes(version)){
+            if(version > Math.max(...supportedVersions)){
+                Alert.alert(i18n.t('Programming.unsupportedAppVersionTitle'), i18n.t('Programming.unsupportedAppVersionMessage')); 
+            }else{
+                Alert.alert(i18n.t('Programming.unsupportedRobotVersionTitle'), i18n.t('Programming.unsupportedRobotVersionMessage')); 
+            }
+            RobotProxy.disconnect();
+        }
         return this._handlers[version] || new CommunicationHandlerV1();
     }
     
@@ -39,7 +50,7 @@ export class CommunicationHandler{
     }
 
     startDownloading(){
-        this._downloading = true; 
+        this._downloading = true;
     }
 
     finishedDownloading(){
@@ -80,7 +91,7 @@ class CommunicationHandlerV3 extends CommunicationHandler{
         } else if (response.match('\\b[0-9]{3}\\b,\\b[0-9]{3}\\b')) {
             let read_instructions = response.trim().split(',');
             let instruction = new Instruction(Math.trunc(read_instructions[1] / 2.55 + 0.5), Math.trunc(read_instructions[0] / 2.55 + 0.5));
-            return bleAction.receivedChunck([instruction]);
+            return bleAction.receivedChunk([instruction]);
         } else {
             response = response.trim().toLowerCase();
             switch (response) {
@@ -190,7 +201,7 @@ class CommunicationHandlerV6 extends CommunicationHandler{
     }
     
     handleResponse(response){
-        let buffer = response;
+        let buffer = [...response];
         if(!this._downloading){
             response = response.toString(
                 'latin1',
@@ -211,7 +222,6 @@ class CommunicationHandlerV6 extends CommunicationHandler{
             }
         } else {
             if(this._linecounter >= 0 && this._downloading){
-                if(this._linecounter > 0 && buffer.length > 1){
                     let pointer = buffer.shift();
                     if(this._previousLine + 1 !== pointer){
                         this._lostLines.push(pointer - 1);
@@ -225,16 +235,16 @@ class CommunicationHandlerV6 extends CommunicationHandler{
                         instructions.push(instruction);
                     }
                     this._linecounter--;
-                    return bleAction.receivedChunck(instructions);
-                }else{
-                    if(this._lostLines.length){
-                        // request the lost lines...
-                        console.log("lost lines: ", lostLines);
+                    if(this._linecounter === 0){
+                        if(this._lostLines.length){
+                            // request the lost lines...
+                            alert("lost lines: ", lostLines);
+                        }
+                        this._linecounter = -1;
+                        return bleAction.receivedChunk(instructions, true);
                     }
-                    this._linecounter = -1;
-                    return this.finishedDownloading();
-                }
-            }else if(buffer.length == 2){
+                    return bleAction.receivedChunk(instructions, false);
+            }else{
                 this._linecounter = Math.ceil((parseInt('0x' + this.toHexString(buffer)) + 1) / 18);
                 this._previousLine = -1;
                 this._lostLines = [];
