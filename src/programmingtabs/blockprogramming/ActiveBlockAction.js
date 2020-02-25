@@ -7,7 +7,7 @@ import {
     SET_ACTIVE_BLOCK,
     CHANGE_REPS,
     LOAD_BLOCK,
-    CHANGE_BLOCK_SELECTED_ID, LOAD_POSSIBLE_CHILDREN,
+    CHANGE_BLOCK_SELECTED_ID, LOAD_POSSIBLE_CHILDREN, FORCE_RELOAD_BLOCK,
 } from '../../GlobalActionTypes';
 
 export const moveUpBlock = () => ({
@@ -52,4 +52,8 @@ export const changeSelectedID = (id, index) => ({
 });
 export const loadChildren = () => ({
     type: LOAD_POSSIBLE_CHILDREN,
+});
+
+export const forceReloadBlocks = () => ({
+    type: FORCE_RELOAD_BLOCK,
 });

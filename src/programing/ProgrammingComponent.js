@@ -1,64 +1,55 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Alert, ToastAndroid} from 'react-native';
-import {Appbar} from 'react-native-paper';
+import {StyleSheet, View, Alert, ToastAndroid, Image, SafeAreaViewComponent} from 'react-native';
+import {Appbar, Button, IconButton, Modal, Portal} from 'react-native-paper';
 import {createAppContainer, NavigationActions} from 'react-navigation';
 import {createMaterialTopTabNavigator} from 'react-navigation-tabs';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-
 import {getStatusBarHeight, ifIphoneX} from 'react-native-iphone-x-helper';
 import SinglePickerMaterialDialog from '../materialdialog/SinglePickerMaterialDialog';
 import i18n from '../../resources/locales/i18n';
-
 import OverviewContainer from '../programmingtabs/overview/OverviewContainer';
-
 import StepProgrammingContainer from '../programmingtabs/stepprogramming/StepProgrammingContainer';
 import BlockProgrammingContainer from '../programmingtabs/blockprogramming/BlockProgrammingContainer';
 import BleService from '../ble/BleService';
+import Toast from '../controls/Toast';
+import SettingsContainer from '../settings/SettingsContainer';
+import CustomIcon from '../utillity/CustomIcon';
 
 
 export default class ProgrammingComponent extends Component {
+
 
     state = {
         currentRoute: 'Stepprogramming',
         clearButtonDisabled: false,
         saveButtonDisabled: false, // TODO: Move to redux and disable button when program not dirty
+        uploadButtonDisable: false,
+        iconSize: 26,
     };
 
     componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS): void {
         let prev = prevProps.Program.lastChange;
         let now = this.props.Program.lastChange;
         if (prev !== now) {
-            switch (now.status) {
-                case 'success':
-                    // TODO replace i18n
-                    ToastAndroid.show(now.operation + ' ' + now.status, ToastAndroid.SHORT);
-                    break;
-                case 'failure':
-                    // TODO replace i18n
-                    Alert.alert(now.operation, now.error);
+            if (now.status === i18n.t('RoboticsDatabase.success')) {
+                Toast.show(now.status, 2000); // TODO show propper message??
+            } else {
+                Alert.alert(now.status, now.error);
             }
         }
-        if (this.props.BLEConnection.error !== prevProps.BLEConnection.error) {
-            Alert.alert('ble error', this.props.BLEConnection.error);
-        } else {
-            prev = prevProps.BLEConnection.device;
-            now = this.props.BLEConnection.device;
-            if (prev !== now) {
-                if (prev.isUploading && !now.isUploading) {
-                    // TODO replace i18n
-                    ToastAndroid.show('finished uploading', ToastAndroid.SHORT);
-                } else if (prev.isDownloading && !now.isDownloading) {
-                    // TODO replace i18n
-                    ToastAndroid.show('finished downloading', ToastAndroid.SHORT);
-                } else if (prev.isRecording && !now.isDownloading) {
-                    // TODO replace i18n
-                    ToastAndroid.show('finished downloading', ToastAndroid.SHORT);
-                } else if (prev.isGoing && !now.isGoing) {
-                    // TODO replace i18n
-                    ToastAndroid.show('finished going', ToastAndroid.SHORT);
-                }
+        prev = prevProps.BLEConnection.device;
+        now = this.props.BLEConnection.device;
+        if (prev !== now) {
+            if (prev.isUploading && !now.isUploading) {
+                Toast.show(i18n.t('Programming.uploadMessage'), 2000);
+            } else if (prev.isDownloading && !now.isDownloading) {
+                Toast.show(i18n.t('Programming.downloadMessage'), 2000);
+            } else if (prev.isRecording && !now.isRecording) {
+                Toast.show(i18n.t('Programming.recordMessage'), 2000);
+            } else if (prev.isGoing && !now.isGoing) {
+                Toast.show(i18n.t('Programming.driveMessage'), 2000);
             }
         }
+
     }
 
     // gets the current screen from navigation state
@@ -83,14 +74,27 @@ export default class ProgrammingComponent extends Component {
     };
 
     render() {
+        let settingsPage = this.props.Settings.visible ? <Portal><SettingsContainer/></Portal> : undefined;
+
+        let deviceName = this.props.BLEConnection.isConnected ?
+            <Appbar.Content style={{position: 'absolute', right: 80}}
+                            title={this.props.BLEConnection.device.name.substr(this.props.BLEConnection.device.name.length - 5)}
+                            size={this.state.iconSize}/>
+            :
+            <Appbar.Content style={{position: 'absolute', right: 80}}
+                            title={i18n.t('Programming.noConnectedDevice')}
+                            size={this.state.iconSize}/>;
+
         return (
             <View style={[styles.container]}>
+                {settingsPage}
                 <SinglePickerMaterialDialog
                     title={i18n.t('Programming.chooseDevice')}
                     items={this.props.BLEConnection.scannedDevices.map((row, index) => ({
                         key: index.toString(),
-                        label: row,
+                        label: row.substr(row.length - 5),
                         selected: false,
+                        val: row
                     }))}
                     visible={this.props.BLEConnection.isScanning}
                     onCancel={() => {
@@ -98,40 +102,55 @@ export default class ProgrammingComponent extends Component {
                     }}
                     onOk={
                         result => {
-                            this.props.stopScanning();
-                            if (result.selectedLabel) {
-                                this.props.setActiveDevice(result.selectedLabel);
+                            console.log(result);                            this.props.stopScanning();
+                            if (result.selectedValue) {
+                                this.props.setActiveDevice(result.selectedValue);
                                 this.props.connectToRobot();
                             }
                         }
                     }
-                    colorAccent="#9c27b0"
+                    colorAccent='#1E3888'
                 />
+
+
                 <Appbar>
-                    <Appbar.Action icon="menu" size={32} onPress={() => this.props.navigation.openDrawer()}/>
-                    <Appbar.Content style={{position: 'absolute', left: 40}} title="Explore-it" size={32}/>
-                    <Appbar.Content style={{position: 'absolute', right: 40}}
-                                    title={this.props.BLEConnection.device.name}
-                                    subtitle={i18n.t('Programming.device')}
-                                    size={32}/>
-                    <Appbar.Action icon={(this.props.BLEConnection.isConnected) ? 'bluetooth-connected' : 'bluetooth'}
-                                   style={{position: 'absolute', right: 0}}
-                                   size={32}
-                                   disabled={this.props.BLEConnection.isConnecting}
-                                   onPress={() => {
-                                       if (!this.props.Settings.isGranted) {
-                                           BleService.requestLocationPermission().then(a => {
-                                               this.props.grantLocation(a);
-                                           });
-                                       } else if (this.props.Settings.bleState !== 'PoweredOn') {
-                                           // TODO i18n
-                                           Alert.alert('BluetoothLE is powered off', 'please turn on BLE');
-                                       } else if (this.props.BLEConnection.isConnected) {
-                                           this.props.disconnect();
-                                       } else {
-                                           this.props.scanForRobot();
-                                       }
-                                   }}/>
+                    
+                    <Appbar.Content style={{position: 'absolute', left: 88}} title="Robotics"
+                                    size={this.state.iconSize}/>
+                    <Image style={{width: 80, resizeMode: 'contain', left: 10}} source={require('../../resources/icon/logo.png')}></Image>
+                        <Appbar.Action
+                        icon={({size, color}) => (
+                            <CustomIcon name="gear" size={size} color={color}/>
+                        )}
+                        size={this.state.iconSize}
+                        style={{position: 'absolute', right: 0}}
+                        onPress={() => this.props.toggleSettings()}/>
+                       
+                    {deviceName}
+                    <Appbar.Action
+                        icon={({size, color}) => (
+                            (this.props.BLEConnection.isConnected) ?
+                                <CustomIcon name="bluetooth" size={size} color={color}/> :
+                                <CustomIcon name="bluetooth-disabled" size={size} color={color}/>
+                        )}
+                        //{(this.props.BLEConnection.isConnected) ? 'bluetooth-connected' : 'bluetooth'}
+                        style={{position: 'absolute', right: 40}}
+                        size={this.state.iconSize}
+                        disabled={this.props.BLEConnection.isConnecting}
+                        onPress={() => {
+                            //  this.props.scanStatus(); this will break a lot of things
+                            if (!this.props.Settings.isGranted) {
+                                BleService.requestLocationPermission().then(a => {
+                                    this.props.grantLocation(a);
+                                });
+                            } else if (this.props.Settings.bleState !== 'PoweredOn') {
+                                Alert.alert(i18n.t('Programming.bluetoothNotTurnedOnTitle'), i18n.t('Programming.bluetoothNotTurnedOnMessage'));
+                            } else if (this.props.BLEConnection.isConnected) {
+                                this.props.disconnect();
+                            } else {
+                                this.props.scanForRobot();
+                            }
+                        }}/>
                 </Appbar>
 
                 <TabContainer
@@ -147,6 +166,7 @@ export default class ProgrammingComponent extends Component {
                             case 'Stepprogramming':
                                 this.setState({clearButtonDisabled: false});
                                 this.setState({saveButtonDisabled: false});
+                                this.setState({uploadButtonDisable: false});
                                 this.clear = () => {
                                     this.props.clearProgram();
                                 };
@@ -154,112 +174,139 @@ export default class ProgrammingComponent extends Component {
                             case 'Blockprogramming':
                                 this.setState({clearButtonDisabled: false});
                                 this.setState({saveButtonDisabled: false});
+                                this.setState({uploadButtonDisable: false});
                                 this.clear = () => {
                                     this.props.clearBlock();
                                 };
                                 break;
                             default:
-
                                 this.clear = () => {
                                 };
                                 this.save = () => {
                                 };
                                 this.setState({clearButtonDisabled: true});
                                 this.setState({saveButtonDisabled: true});
+                                this.setState({uploadButtonDisable: true});
                                 break;
                         }
                     }}
                 />
 
                 <Appbar style={styles.bottom}>
-                    <Appbar.Action icon="stop" size={32}
-                                   disabled={!this.props.BLEConnection.isConnected ||
-                                   !(this.props.BLEConnection.device.isUploading ||
-                                       this.props.BLEConnection.device.isGoing ||
-                                       this.props.BLEConnection.device.isRecording ||
-                                       this.props.BLEConnection.device.isRunning ||
-                                       this.props.BLEConnection.device.isDownloading)}
-                                   onPress={() => {
-                                       this.props.stopRobot();
-                                   }}/>
-                    <Appbar.Action icon="play-arrow"
-                                   size={32}
-                                   disabled={!this.props.BLEConnection.isConnected ||
-                                   this.props.BLEConnection.device.isUploading ||
-                                   this.props.BLEConnection.device.isGoing ||
-                                   this.props.BLEConnection.device.isRecording ||
-                                   this.props.BLEConnection.device.isRunning ||
-                                   this.props.BLEConnection.device.isDownloading}
-                                   onPress={() => {
-                                       this.props.runRobot();
-                                   }}/>
-                    <Appbar.Action icon="fiber-manual-record"
-                                   size={32}
-                                   disabled={!this.props.BLEConnection.isConnected ||
-                                   this.props.BLEConnection.device.isUploading ||
-                                   this.props.BLEConnection.device.isGoing ||
-                                   this.props.BLEConnection.device.isRecording ||
-                                   this.props.BLEConnection.device.isRunning ||
-                                   this.props.BLEConnection.device.isDownloading}
-                                   onPress={() => {
-                                       this.props.startRecording();
-                                   }}/>
-                    <Appbar.Action icon="fast-forward"
-                                   size={32}
-                                   disabled={!this.props.BLEConnection.isConnected ||
-                                   this.props.BLEConnection.device.isUploading ||
-                                   this.props.BLEConnection.device.isGoing ||
-                                   this.props.BLEConnection.device.isRecording ||
-                                   this.props.BLEConnection.device.isRunning ||
-                                   this.props.BLEConnection.device.isDownloading}
-                                   onPress={() => {
-                                       this.props.goRobot();
-                                   }}/>
-                    <Appbar.Action icon="file-download"
-                                   size={32}
-                                   disabled={!this.props.BLEConnection.isConnected ||
-                                   this.props.BLEConnection.device.isUploading ||
-                                   this.props.BLEConnection.device.isGoing ||
-                                   this.props.BLEConnection.device.isRecording ||
-                                   this.props.BLEConnection.device.isRunning ||
-                                   this.props.BLEConnection.device.isDownloading}
-                                   onPress={() => {
-                                       this.props.download();
-                                       this.navigator && this.navigator.dispatch(NavigationActions.navigate({routeName: 'Stepprogramming'}));
-                                   }}/>
-                    <Appbar.Action icon="file-upload"
-                                   size={32}
-                                   disabled={!this.props.BLEConnection.isConnected ||
-                                   this.props.BLEConnection.device.isUploading ||
-                                   this.props.BLEConnection.device.isGoing ||
-                                   this.props.BLEConnection.device.isRecording ||
-                                   this.props.BLEConnection.device.isRunning ||
-                                   this.props.BLEConnection.device.isDownloading}
-                                   onPress={() => {
-                                       this.props.upload(this.state.currentRoute);
-                                   }}/>
-                    <Appbar.Action icon="save"
-                                   size={32}
-                                   disabled={this.props.BLEConnection.device.isUploading ||
-                                   this.props.BLEConnection.device.isGoing ||
-                                   this.props.BLEConnection.device.isRecording ||
-                                   this.props.BLEConnection.device.isRunning ||
-                                   this.props.BLEConnection.device.isDownloading ||
-                                   this.state.saveButtonDisabled}
-                                   onPress={() => {
-                                       this.save();
-                                   }}/>
-                    <Appbar.Action icon="delete"
-                                   size={32}
-                                   disabled={this.props.BLEConnection.device.isUploading ||
-                                   this.props.BLEConnection.device.isGoing ||
-                                   this.props.BLEConnection.device.isRecording ||
-                                   this.props.BLEConnection.device.isRunning ||
-                                   this.props.BLEConnection.device.isDownloading ||
-                                   this.state.clearButtonDisabled}
-                                   onPress={() => {
-                                       this.clear();
-                                   }}/>
+                    <Appbar.Action
+                        icon={({size, color}) => (
+                            <CustomIcon name="stop" size={size} color={color}/>
+                        )}
+                        size={this.state.iconSize}
+                        disabled={!this.props.BLEConnection.isConnected ||
+                        !(this.props.BLEConnection.device.isUploading ||
+                            this.props.BLEConnection.device.isGoing ||
+                            this.props.BLEConnection.device.isRecording ||
+                            this.props.BLEConnection.device.isRunning ||
+                            this.props.BLEConnection.device.isDownloading)}
+                        onPress={() => {
+                            this.props.stopRobot();
+                        }}/>
+                    <Appbar.Action
+                        icon={({size, color}) => (
+                            <CustomIcon name="play" size={size} color={color}/>
+                        )}
+                        size={this.state.iconSize}
+                        disabled={!this.props.BLEConnection.isConnected ||
+                        this.props.BLEConnection.device.isUploading ||
+                        this.props.BLEConnection.device.isGoing ||
+                        this.props.BLEConnection.device.isRecording ||
+                        this.props.BLEConnection.device.isRunning ||
+                        this.props.BLEConnection.device.isDownloading}
+                        onPress={() => {
+                            this.props.runRobot();
+                        }}/>
+                    <Appbar.Action
+                        icon={({size, color}) => (
+                            <CustomIcon name="record" size={size} color={color}/>
+                        )}
+                        size={this.state.iconSize}
+                        disabled={!this.props.BLEConnection.isConnected ||
+                        this.props.BLEConnection.device.isUploading ||
+                        this.props.BLEConnection.device.isGoing ||
+                        this.props.BLEConnection.device.isRecording ||
+                        this.props.BLEConnection.device.isRunning ||
+                        this.props.BLEConnection.device.isDownloading}
+                        onPress={() => {
+                            this.props.startRecording();
+                        }}/>
+                    <Appbar.Action
+                        icon={({size, color}) => (
+                            <CustomIcon name="playcode" size={size} color={color}/>
+                        )}
+                        size={this.state.iconSize}
+                        disabled={!this.props.BLEConnection.isConnected ||
+                        this.props.BLEConnection.device.isUploading ||
+                        this.props.BLEConnection.device.isGoing ||
+                        this.props.BLEConnection.device.isRecording ||
+                        this.props.BLEConnection.device.isRunning ||
+                        this.props.BLEConnection.device.isDownloading}
+                        onPress={() => {
+                            this.props.goRobot();
+                        }}/>
+                    <Appbar.Action
+                        icon={({size, color}) => (
+                            <CustomIcon name="download" size={size} color={color}/>
+                        )}
+                        size={this.state.iconSize}
+                        disabled={!this.props.BLEConnection.isConnected ||
+                        this.props.BLEConnection.device.isUploading ||
+                        this.props.BLEConnection.device.isGoing ||
+                        this.props.BLEConnection.device.isRecording ||
+                        this.props.BLEConnection.device.isRunning ||
+                        this.props.BLEConnection.device.isDownloading}
+                        onPress={() => {
+                            this.props.download();
+                            this.navigator && this.navigator.dispatch(NavigationActions.navigate({routeName: 'Stepprogramming'}));
+                        }}/>
+                    <Appbar.Action
+                        icon={({size, color}) => (
+                            <CustomIcon name="upload" size={size} color={color}/>
+                        )}
+                        size={this.state.iconSize}
+                        disabled={!this.props.BLEConnection.isConnected ||
+                        this.props.BLEConnection.device.isUploading ||
+                        this.props.BLEConnection.device.isGoing ||
+                        this.props.BLEConnection.device.isRecording ||
+                        this.props.BLEConnection.device.isRunning ||
+                        this.props.BLEConnection.device.isDownloading ||
+                        this.state.uploadButtonDisable && this.props.Overview.selectedProgramIndex < 0}
+                        onPress={() => {
+                            this.props.upload(this.state.currentRoute);
+                        }}/>
+                    <Appbar.Action
+                        icon={({size, color}) => (
+                            <CustomIcon name="save" size={size} color={color}/>
+                        )}
+                        size={this.state.iconSize}
+                        disabled={this.props.BLEConnection.device.isUploading ||
+                        this.props.BLEConnection.device.isGoing ||
+                        this.props.BLEConnection.device.isRecording ||
+                        this.props.BLEConnection.device.isRunning ||
+                        this.props.BLEConnection.device.isDownloading ||
+                        this.state.saveButtonDisabled}
+                        onPress={() => {
+                            this.save();
+                        }}/>
+                    <Appbar.Action
+                        icon={({size, color}) => (
+                            <CustomIcon name="new" size={size} color={color}/>
+                        )}
+                        size={this.state.iconSize}
+                        disabled={this.props.BLEConnection.device.isUploading ||
+                        this.props.BLEConnection.device.isGoing ||
+                        this.props.BLEConnection.device.isRecording ||
+                        this.props.BLEConnection.device.isRunning ||
+                        this.props.BLEConnection.device.isDownloading ||
+                        this.state.clearButtonDisabled}
+                        onPress={() => {
+                            this.clear();
+                        }}/>
                 </Appbar>
             </View>
         );
@@ -273,7 +320,7 @@ const TabNavigator = createMaterialTopTabNavigator({
         swipeEnabled: true,
         navigationOptions: {
             tabBarIcon: ({tintColor}) => (
-                <MaterialCommunityIcon name="page-layout-body" size={24} color={tintColor}/>
+                <CustomIcon name="step1" size={24} color={tintColor}/>
             ),
         },
     },
@@ -281,7 +328,7 @@ const TabNavigator = createMaterialTopTabNavigator({
         screen: BlockProgrammingContainer,
         navigationOptions: {
             tabBarIcon: ({tintColor}) => (
-                <MaterialCommunityIcon name="content-copy" size={24} color={tintColor}/>
+                <CustomIcon name="step2" size={24} color={tintColor}/>
             ),
         },
     },
@@ -289,17 +336,17 @@ const TabNavigator = createMaterialTopTabNavigator({
         screen: OverviewContainer,
         navigationOptions: {
             tabBarIcon: ({tintColor}) => (
-                <MaterialCommunityIcon name="menu" size={24} color={tintColor}/>
+                <CustomIcon name="step3" size={24} color={tintColor}/>
             ),
         },
     },
 }, {
     tabBarOptions: {
-        activeTintColor: '#9c27b0',
+        activeTintColor: '#1E3888',
         inactiveTintColor: 'gray',
         showLabel: false,
         indicatorStyle: {
-            backgroundColor: '#9c27b0',
+            backgroundColor: '#1E3888',
         },
         style: {
             backgroundColor: 'white',
@@ -313,15 +360,13 @@ const TabContainer = createAppContainer(TabNavigator);
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        ...ifIphoneX({
-            paddingTop: getStatusBarHeight() + 10,
-        }, {}),
     },
     bottom: {
         position: 'absolute',
         left: 0,
         right: 0,
         bottom: 0,
+        justifyContent: 'space-evenly',
     },
     col: {
         flex: 1,
@@ -341,6 +386,7 @@ const styles = StyleSheet.create({
         margin: 16,
         right: 0,
         bottom: 0,
+        zIndex: 999,
     },
 });
 

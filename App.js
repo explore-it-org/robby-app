@@ -5,12 +5,12 @@ import ProgrammingContainer from './src/programing/ProgrammingContainer';
 import Settings from './src/settings/SettingsContainer';
 import {View, Text, StyleSheet, Alert, Platform, NativeModules} from 'react-native';
 import {getStatusBarHeight, ifIphoneX} from 'react-native-iphone-x-helper';
-import {grantLocation, setBLEState} from './src/settings/SettingsAction';
+import {grantLocation, setBLEState, setLanguage} from './src/settings/SettingsAction';
 import i18n from './resources/locales/i18n';
 import BleService from './src/ble/BleService';
-import GLOBAL from './src/utillity/Global';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
+import {scanningEnabled} from './src/ble/BleAction';
 
 class App extends Component {
 
@@ -20,23 +20,29 @@ class App extends Component {
             this.props.grantLocation(a);
         });
         BleService.checkBluetoothState(a => this.props.setBLEState(a));
-        if(this.props.Settings.language) {
+        if (this.props.Settings.language) {
             i18n.locale = this.props.Settings.language;
         } else {
-            if(Platform.OS === "ios"){
+            if (Platform.OS === 'ios') {
                 // iOS:
-                i18n.defaultLocale = NativeModules.SettingsManager.settings.AppleLocale.split('_')[0];
-            }else{
+                let locale;
+                try {
+                    locale = NativeModules.SettingsManager.settings.AppleLocale.split('_')[0];
+                } catch (e) {
+                    locale = 'en';
+                }
+                i18n.defaultLocale = locale;
+            } else {
                 // Android:
                 i18n.defaultLocale = NativeModules.I18nManager.localeIdentifier.split('_')[0];
             }
-            i18n.locale =  i18n.defaultLocale;
+            i18n.locale = i18n.defaultLocale;
+            this.props.setLanguage(i18n.locale);
         }
-
     }
 
     render() {
-        return <DrawerContainer/>;
+        return <ProgrammingContainer/>;
     }
 }
 
@@ -50,66 +56,12 @@ const mapDispatchToProps = dispatch =>
         {
             grantLocation,
             setBLEState,
+            scanningEnabled,
+            setLanguage
         }, dispatch);
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
-
-class DrawerContent extends Component {
-
-    render() {
-        return (
-            <View style={styles.container}>
-                <View style={styles.deviceName}>
-                    <Text style={{color: 'white', fontSize: 30}}>
-                        {this.props.BLEConnection.device.name}
-                    </Text>
-                </View>
-                <View style={styles.drawerItems}>
-                    <DrawerNavigatorItems {...this.props} />
-                </View>
-                <View style={styles.footer}>
-                    <Text
-                        style={{
-                            flex: 1,
-                            marginLeft: 15,
-                            color: 'white',
-                            fontWeight: 'bold',
-                        }}>
-                        {GLOBAL.APP_NAME}
-                    </Text>
-                    <Text
-                        style={{
-                            flex: 1,
-                            textAlign: 'right',
-                            marginRight: 15,
-                            color: 'white',
-                            fontWeight: 'bold',
-                        }}>
-                        v{GLOBAL.VERSION}
-                    </Text>
-                </View>
-            </View>
-        );
-    }
-}
-
-
-const ReduxNavigator = connect(mapStateToProps)(DrawerContent);
-
-
-const DrawerNavigator = createDrawerNavigator(
-    {
-        [i18n.t('App.programming')]: {screen: ProgrammingContainer},
-        [i18n.t('App.settings')]: {screen: Settings},
-    },
-    {
-        contentComponent: ReduxNavigator,
-    },
-);
-
-
-const DrawerContainer = createAppContainer(DrawerNavigator);
 
 const styles = StyleSheet.create({
     container: {
@@ -117,27 +69,21 @@ const styles = StyleSheet.create({
     },
     deviceName: {
         flex: 1,
-        backgroundColor: '#9c27b0',
+        backgroundColor: '#2E5266',
         height: 140,
         alignItems: 'center',
         justifyContent: 'center',
-        ...ifIphoneX(
-            {
-                paddingTop: getStatusBarHeight() + 10,
-            },
-            {},
-        ),
     },
     drawerItems: {
         flex: 3,
         flexDirection: 'column',
     },
     footer: {
-        backgroundColor: '#9c27b0',
+        backgroundColor: '#2E5266',
         height: 50,
         alignItems: 'center',
         borderTopWidth: 1,
-        borderTopColor: '#9c27b0',
+        borderTopColor: '#2E5266',
         flexDirection: 'row',
     },
 });

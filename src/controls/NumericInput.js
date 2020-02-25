@@ -1,6 +1,6 @@
-import { Component } from "react";
-import { StyleSheet, View, TextInput } from "react-native";
-import React from "react";
+import {Component} from 'react';
+import {StyleSheet, View, TextInput} from 'react-native';
+import React from 'react';
 
 /**
  * Important: The value of this component is controlled by an higher component.
@@ -24,7 +24,12 @@ export default class NumericInput extends Component {
             this.temp_val = this.props.val;
         }
         return (
-            <View style={{ height: '100%', width: '100%', borderWidth: 1, borderColor: 'grey', backgroundColor: 'white', justifyContent: 'center' }}>
+            <View style={{
+                height: '100%',
+                width: '100%',
+                backgroundColor: 'rgba(52, 52, 52, 0.0)',
+                justifyContent: 'center',
+            }}>
                 <TextInput
                     style={styles.input}
                     keyboardType='numeric'
@@ -32,7 +37,13 @@ export default class NumericInput extends Component {
                     textAlign={'center'}
                     mode="outlined"
                     value={txtValue}
-                    onFocus={() => { this.props.onchange('') }}
+                    onFocus={() => {
+                        
+                        if(this.props.onfocus){
+                            this.props.onfocus();
+                        }
+                        this.props.onchange('');
+                    }}
                     onBlur={() => {
                         this.props.onchange(this.toText(this.temp_val));
                     }}
@@ -44,7 +55,12 @@ export default class NumericInput extends Component {
 
 const styles = StyleSheet.create({
     input: {
+        fontFamily: 'Jost-Book',
         width: '100%',
         height: '100%',
-    }
+        borderRadius: 5,
+        borderWidth: 1,
+        overflow: 'hidden',
+        backgroundColor: 'white',
+    },
 });

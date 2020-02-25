@@ -20,7 +20,11 @@ class BleService {
         if (Platform.OS === 'ios') {
             return true;
         }
-        // we are on android
+        if (Platform.version < 21) {
+            // location permission os not necessary for KitKat
+            return true;
+        }
+        // we are on android (at least API 21, Lollipop)
         try {
             const granted = await PermissionsAndroid.request(
                 PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
@@ -48,7 +52,7 @@ class BleService {
     checkDeviceScanStatus(errorHandler, successHandler) {
         this.manager.startDeviceScan(null, null, ((error, scannedDevice) => {
             if (error) {
-                errorHandler(error);
+                errorHandler(error.message);
             } else {
                 successHandler(true);
             }
@@ -79,7 +83,7 @@ class BleService {
                 // error.errorCode == BleErrorCode.LocationServicesDisabled (601) if location is turned off
                 // Probably other error codes should be supported as well.
                 // Handle error (scanning will be stopped automatically)
-                errorHandler(error);
+                errorHandler(error.message);
                 return;
             }
             // new device detected. check it!
@@ -102,7 +106,7 @@ class BleService {
         this.manager.stopDeviceScan();
     }
 
-    connectToActDevice(responseHandler, connectionHandler, errorHandler) {
+    connectToActDevice(responseHandler, connectionHandler, errorHandler, disconnectHandler) {
         console.log('BleService connecting...');
         this.actDevice
             .connect()
@@ -125,9 +129,7 @@ class BleService {
                     (error, characteristic) => {
                         if (this.c === localc) {
                             if (!error) {
-                                let response = Buffer.from(characteristic.value, 'base64').toString(
-                                    'latin1',
-                                );
+                                let response = Buffer.from(characteristic.value, 'base64');
                                 responseHandler(response);
                             }
 
@@ -135,6 +137,11 @@ class BleService {
                     },
                     transactionId,
                 );
+
+                device.onDisconnected((error, device) => {
+                    disconnectHandler(error);
+                });
+                
                 console.log('BleService connection done - ' + device.name);
                 console.log('transaction id: ' + transactionId);
                 connectionHandler(device);
@@ -155,16 +162,17 @@ class BleService {
     }
 
     sendCommandToActDevice(command): Promise<Characteristic> {
-        console.log('sendCommandToActDevice: ' + command);
-        return this.actDevice.writeCharacteristicWithResponseForService(
-            serviceUUID,
-            characteristicsUUID,
-            Buffer.from(command).toString('base64'),
-            null,
-        ).catch(reason => {
-            console.log(0);
-            throw reason;
-        });
+        if(this.actDevice){
+            console.log('sendCommandToActDevice: ' + command);
+            return this.actDevice.writeCharacteristicWithResponseForService(
+                serviceUUID,
+                characteristicsUUID,
+                Buffer.from(command).toString('base64'),
+                null,
+            ).catch(reason => {
+                throw reason;
+            });
+            }
     }
 
     shutdown() {

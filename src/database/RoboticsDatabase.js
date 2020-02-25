@@ -2,6 +2,7 @@ import Realm from 'realm';
 import {Block, Program} from '../model/DatabaseModels';
 import {ProgramSchema, InstructionSchema, BlockSchema, SCHEMA_VERSION, migration} from './RoboticsSchema';
 import uuidv4 from 'uuid/v4';
+import i18n from '../../resources/locales/i18n';
 
 
 class RoboticsDatabase {
@@ -17,8 +18,7 @@ class RoboticsDatabase {
 
     add(program, operation = 'add', update = false, noNameChange = true): String {
         if (program.name === '') {
-            // TODO replace i18n
-            return {operation: operation, status: 'failure', error: 'Name emtpy'};
+            return {operation: operation, status: i18n.t('RoboticsDatabase.failure'), error: i18n.t('RoboticsDatabase.emptyName')};
         }
         if ((update && noNameChange) || this.nameIsUnused(program.name)) {
 
@@ -26,14 +26,12 @@ class RoboticsDatabase {
                 this.repository.write(() => {
                     this.repository.create('Program', program, update);
                 });
-                return {operation: operation, status: 'success', error: ''};
+                return {operation: operation, status: i18n.t('RoboticsDatabase.success'), error: ''};
             } catch (e) {
-                // TODO replace i18n
-                return {operation: operation, status: 'failure', error: e.message};
+                return {operation: operation, status: i18n.t('RoboticsDatabase.failure'), error: i18n.t('RoboticsDatabase.addFailed') + e.message};
             }
         }
-        // TODO replace i18n
-        return {operation: operation, status: 'failure', error: 'Name is already taken'};
+        return {operation: operation, status: i18n.t('RoboticsDatabase.failure'), error: i18n.t('RoboticsDatabase.nameTaken')};
     }
 
     findAllWhichCanBeAddedTo(program): Program[] {
@@ -67,8 +65,7 @@ class RoboticsDatabase {
             }
             return this.add(cloneProgram, 'duplicate');
         } catch (e) {
-            // TODO replace i18n
-            return {operation: 'duplicate', status: 'failure', error: e};
+            return {operation: 'duplicate', status: i18n.t('RoboticsDatabase.failure'), error: i18n.t('RoboticsDatabase.duplicateFailed') + e};
         }
     }
 
@@ -78,7 +75,6 @@ class RoboticsDatabase {
         if (old === undefined) {
             return this.add(program);
         } else {
-            // TODO replace i18n
             return this.add(program, 'save', true, old.name === program.name);
         }
 
@@ -104,27 +100,13 @@ class RoboticsDatabase {
                 this.repository.write(() => {
                     this.repository.delete(this.repository.objectForPrimaryKey('Program', program_id));
                 });
-                return {operation: 'delete', status: 'success', error: ''};
+                return {operation: 'delete', status: i18n.t('RoboticsDatabase.success'), error: ''};
             } catch (e) {
-                // TODO replace i18n
-                return {operation: 'delete', status: 'failure', error: e};
+                return {operation: 'delete', status: i18n.t('RoboticsDatabase.failure'), error: i18n.t('RoboticsDatabase.deleteFailed') + e};
             }
         }
-        // TODO replace i18n
-        return {operation: 'delete', status: 'failure', error: 'Program is used by another program'};
+        return {operation: 'delete', status: i18n.t('RoboticsDatabase.failure'), error: i18n.t('RoboticsDatabase.programUsed')};
 
-    }
-
-    deleteAll() {
-        try {
-            this.repository.write(() => {
-                this.repository.delete(this.repository.objects('Program'));
-            });
-            return {operation: 'deleteAll', status: 'success', error: ''};
-        } catch (e) {
-            // TODO replace i18n
-            return {operation: 'deleteAll', status: 'failure', error: e};
-        }
     }
 
     // Checks whether the given `program` has a direct reference to the program with the id `program_id`.

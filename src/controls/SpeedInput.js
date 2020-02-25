@@ -1,5 +1,5 @@
 import {Component} from 'react';
-import {StyleSheet, View, Alert} from 'react-native';
+import {StyleSheet, View, Alert, TextComponent, Text} from 'react-native';
 import React from 'react';
 import NumericInput from './NumericInput';
 import i18n from '../../resources/locales/i18n';
@@ -13,7 +13,6 @@ export default class SpeedInput extends Component {
         let numbers = '0123456789';
 
         if (parseInt(text) > 100) {
-            // TODO replace i18n
             Alert.alert(i18n.t('SpeedInput.invalidEntry'), i18n.t('SpeedInput.invalidEntryMessage'));
             newText = '100';
         } else {
@@ -21,7 +20,6 @@ export default class SpeedInput extends Component {
                 if (numbers.indexOf(text[i]) > -1) {
                     newText = newText + text[i];
                 } else {
-                    // TODO replace i18n
                     Alert.alert(i18n.t('SpeedInput.invalidEntry'), i18n.t('SpeedInput.invalidEntryMessage'));
                 }
             }
@@ -29,18 +27,29 @@ export default class SpeedInput extends Component {
         this.props.onchange(newText);
     };
 
+    componentDidMount(): void {
+    }
+
     render() {
         const flexValLeft = isNaN(this.props.val1) ? 0 : this.props.val1;
         const flexValRight = isNaN(this.props.val2) ? 0 : this.props.val2;
+
         return (
             <View style={styles.outer}>
+                <View style={styles.numinput}>
+                    <View style={{flexDirection: 'row'}}>
+                        <View style={!this.props.left ? styles.bigSpace : styles.smallSpace}/>
+                        <View style={!this.props.left ? styles.boxLeft : styles.boxRight}>
+                            <NumericInput onchange={this.onChanged} val={this.props.val}/>
+                        </View>
+                        <View style={this.props.left ? styles.bigSpace : styles.smallSpace}/>
+                    </View>
+                </View>
                 <View style={styles.progressbar}>
                     <View style={{backgroundColor: this.props.col1, flex: flexValLeft}}/>
                     <View style={{backgroundColor: this.props.col2, flex: flexValRight}}/>
                 </View>
-                <View style={styles.numinput}>
-                    <NumericInput onchange={this.onChanged} val={this.props.val}/>
-                </View>
+
             </View>
         );
     }
@@ -49,23 +58,31 @@ export default class SpeedInput extends Component {
 const styles = StyleSheet.create({
     outer: {
         width: '50%',
-        justifyContent: 'center',
-        alignItems: 'center',
     },
     progressbar: {
         position: 'absolute',
         flexDirection: 'row',
         width: '100%',
         height: '100%',
-        zIndex: 0,
+        zIndex: -3,
     },
     numinput: {
-        position: 'absolute',
-        justifyContent: 'center',
         zIndex: 1,
-        flexDirection: 'row',
-        width: '30%',
-        height: '70%',
+
+    },
+
+    bigSpace: {
+        flex: 2.5,
+    },
+    smallSpace: {
+        flex: 1,
+    },
+    boxLeft: {
+        flex: 1.5, alignSelf: 'flex-start', paddingVertical: 10,
+    },
+    boxRight: {
+        flex: 1.5, alignSelf: 'flex-end', paddingVertical: 10,
     },
 
 });
+//

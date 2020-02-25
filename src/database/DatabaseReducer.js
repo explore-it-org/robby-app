@@ -2,7 +2,6 @@ import Database from './RoboticsDatabase';
 import *  as ActionTypes from '../GlobalActionTypes';
 
 
-
 const default_state_Programs = {
     lastUpdate: Date.now(),
     Programs: Database.findAll(),
@@ -36,14 +35,6 @@ export const ProgramsReducer = (state = default_state_Programs, action) => {
                 });
         case ActionTypes.DUPLICATE_PROGRAM:
             change = Database.duplicate(action.program, action.newName);
-            return Object.assign({}, state,
-                {
-                    lastUpdate: Date.now(),
-                    Programs: Database.findAll(),
-                    lastChange: change,
-                });
-        case ActionTypes.DELETE_ALL:
-            change = Database.deleteAll();
             return Object.assign({}, state,
                 {
                     lastUpdate: Date.now(),

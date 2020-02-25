@@ -5,12 +5,11 @@ import {BleConnectionReducer} from '../ble/BleReducer';
 import {SettingsReducer} from '../settings/SettingsReducer';
 import {combineReducers} from 'redux';
 import thunk from 'redux-thunk';
-import * as dbtest from '../database/DatabaseTest';
 import {ActiveBlockReducer} from '../programmingtabs/blockprogramming/ActiveBlockReducer';
 import { persistReducer, persistStore } from 'redux-persist';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import AsyncStorage from '@react-native-community/async-storage';
-
+import {OverviewReducer} from '../programmingtabs/overview/OverviewReducer';
 
 
 const persistConfig = {
@@ -33,13 +32,12 @@ const rootReducer = combineReducers({
     Settings: SettingsReducer,
     ActiveProgram: ActiveInstructionsReducer,
     ActiveBlock: persistReducer(activeBlockPersistConfig, ActiveBlockReducer),
+    Overview: OverviewReducer
 });
 
 const pReducer = persistReducer(persistConfig, rootReducer);
 
 let store = createStore(pReducer, applyMiddleware(thunk));
-let test = new dbtest.DatabaseTest(store);
-test.createDatabaseEntries();
 
 export const persistor = persistStore(store);
 export default store;

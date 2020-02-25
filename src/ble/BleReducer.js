@@ -1,5 +1,6 @@
 import * as ActionType from '../GlobalActionTypes';
 import RobotProxy from './RobotProxy';
+import i18n from '../../resources/locales/i18n';
 
 
 const default_state_ble_connection = {
@@ -11,7 +12,7 @@ const default_state_ble_connection = {
     receivedDownloads: [],
     scannedDevices: [],
     device: {
-        name: 'Unknown',
+        name: '',
         version: 1,
         isRecording: false,
         isRunning: false,
@@ -32,11 +33,14 @@ export const BleConnectionReducer = (state = default_state_ble_connection, actio
             return Object.assign({}, state, {
                 isConnecting: false,
                 isConnected: false,
-                device: {...state.device, name: 'Unknown'},
+
+                device: {...state.device, name: ''},
                 lastUpdate: Date.now(),
             });
+        case ActionType.LOST_CONNECTION:
+            RobotProxy.disconnect();
+            return default_state_ble_connection;
         case ActionType.IS_CONNECTED:
-
             return Object.assign({}, state, {
                 isConnecting: false,
                 isConnected: true,
@@ -49,7 +53,9 @@ export const BleConnectionReducer = (state = default_state_ble_connection, actio
         case ActionType.BLE_RESPONSE:
             return state;
         case ActionType.SUCCESS_SCANNING:
-            return Object.assign({}, state, {scannedDevices: [...state.scannedDevices, action.robot]});
+            return Object.assign({}, state, {scannedDevices: [...state.scannedDevices, action.robot], error: ''});
+        case ActionType.ENABLED_SCANNING:
+            return Object.assign({}, state, {error: action.error});
         case ActionType.FAILURE_SCANNING:
             return Object.assign({}, state, {error: action.error, isScanning: false, scannedDevices: []});
         case ActionType.START_SCANNING:
@@ -97,11 +103,11 @@ export const BleConnectionReducer = (state = default_state_ble_connection, actio
             return Object.assign({}, state, {device: {...state.device, isDownloading: false}});
         case ActionType.FAILURE_DOWNLOADING:
             return Object.assign({}, state, {device: {...state.device, isDownloading: false}});
-        case ActionType.RECEIVED_CHUNK:
+        case ActionType.APPEND_CHUNK:
             return Object.assign({}, state, {
                 receivedDownloads: [
                     ...state.receivedDownloads,
-                    ...action.chunk,
+                    ...action.chunk
                 ],
             });
         default:

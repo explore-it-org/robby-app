@@ -1,196 +1,379 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Text, TextInput, Button, ToastAndroid, Alert} from 'react-native';
+import {
+    Alert,
+    Image,
+    Linking,
+    Picker,
+    SafeAreaView, ScrollView,
+    StyleSheet,
+    TouchableOpacity,
+    View,
+    Platform,
+} from 'react-native';
+import {Text, TextInput} from 'react-native';
 import {Appbar} from 'react-native-paper';
-
-
-//import { Icon } from 'react-native-elements';
-import {getStatusBarHeight, ifIphoneX} from 'react-native-iphone-x-helper';
+import GLOBAL from '../utillity/Global';
 import i18n from '../../resources/locales/i18n';
-import {duration} from '@material-ui/core/styles';
-import { Picker } from 'native-base';
+import Toast from '../controls/Toast';
+import {setDuration, setInterval, toggleSettings} from './SettingsAction';
+import SettingsContainer from './SettingsContainer';
+import NumericInput from '../controls/NumericInput';
+import LanguageInput from '../controls/LanguageInput';
 
 
 class SettingsComponent extends Component {
 
     state = {
         lastUpdate: 0,
+        duration: this.props.Settings.duration.toString(),
+        interval: this.props.Settings.interval.toString(),
     };
+
 
     componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS): void {
         let prev = prevProps.Settings.lastUpdate;
         let now = this.props.Settings.lastUpdate;
         if (prev !== now) {
-            // TODO replace i18n
-            ToastAndroid.show('settings udpated', ToastAndroid.SHORT);
+            Toast.show(i18n.t('Settings.updated'), 2000);
         }
     }
 
-    actuallyChangeInterval(interval) {
-        if (this.state.lastUpdate === interval) {
-            this.props.setIntervalAndSendToRobby(interval.length === 0 ? 0 : parseInt(interval));
+    actuallyChangeInterval() {
+        let newInterval = parseInt(this.state.interval);
+        if (!isNaN(newInterval)) {
+            this.props.setIntervalAndSendToRobby(newInterval);
+        } else {
+            this.setState({interval: this.props.Settings.interval.toString()});
         }
     }
 
     changeInterval(interval) {
-        this.props.setInterval(interval);
-        this.setState({lastUpdate: interval});
-        setTimeout(() => {
-            this.actuallyChangeInterval(interval);
-        }, 400);
-
-
+        let newText = '';
+        let numbers = '0123456789';
+        if (parseInt(interval) > 50) {
+            Alert.alert(i18n.t('Settings.error'), i18n.t('Settings.tooBig'));
+            newText = '50';
+        }else if(parseInt(interval) === 0){
+                newText = '1';
+        } else {
+            for (let i = 0; i < interval.length; i++) {
+                if (numbers.indexOf(interval[i]) > -1) {
+                    newText = newText + interval[i];
+                } else {
+                    Alert.alert(i18n.t('Settings.invalidEntry'), i18n.t('Settings.invalidIntervalMessage'));
+                }
+            }
+        }
+        this.setState({interval: newText});
     }
 
     changeDuration(duration) {
-        this.props.setDuration(duration.length === 0 ? 0 : parseInt(duration));
+        let newText = '';
+        let numbers = '0123456789';
+        if (parseInt(duration) > 80) {
+            Alert.alert(i18n.t('Settings.error'), i18n.t('Settings.tooBig'));
+            newText = '80';
+        }else if(parseInt(duration) === 0){
+            newText = '1';
+        } else {
+            for (let i = 0; i < duration.length; i++) {
+                if (numbers.indexOf(duration[i]) > -1) {
+                    newText = newText + duration[i];
+                } else {
+                    Alert.alert(i18n.t('Settings.invalidEntry'), i18n.t('Settings.invalidDurationMessage'));
+                }
+            }
+        }
+        this.setState({duration: newText});
     }
 
+    actuallyChangeDuration() {
+        let newDuration = parseInt(this.state.duration);
+        if (!isNaN(newDuration)) {
+            this.props.setDuration(newDuration);
+        } else {
+            this.setState({duration: this.props.Settings.duration.toString()});
+        }
+
+    }
+
+    renderPicker = () => {
+        if(Platform.OS === 'ios'){
+            return(
+            <LanguageInput 
+                pickerItems={this.languages}
+                selectedItem={this.props.Settings.language}
+                onValueChange={(itemValue) => {
+                    this.props.setLanguage(itemValue);
+                    i18n.locale = itemValue;
+                    this.props.forceReloadBlocks();
+                }}
+            ></LanguageInput>)
+        }else{
+            return (
+                <Picker
+                    style={styles.input}
+                    selectedValue={this.props.Settings.language}
+                    textAlign={'center'}
+                    onValueChange={(itemValue, itemIndex) => {
+                        this.props.setLanguage(itemValue);
+                        i18n.locale = itemValue;
+                        this.props.forceReloadBlocks();
+                    }}>
+                    {this.items}
+                </Picker>
+            )
+        }
+    }
+    renderIntervalField = () => {
+        if (this.props.BLEConnection.isConnected) {
+            return (
+                <View>
+                    <View style={{
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        marginBottom: 5,
+                    }}>
+                        <View style={{flex: 1}}/>
+                        <View style={{flex: 17, alignSelf: 'center'}}>
+                            <Text style={{
+                                fontSize: 16,
+                                fontWeight: 'bold',
+                            }}>
+                                {i18n.t('Settings.interval')}
+                            </Text>
+                        </View>
+                    </View>
+                    <View style={{
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        marginBottom: 10,
+                    }}>
+                        <View style={{flex: 1}}/>
+                        <View style={{flex: 4, alignSelf: 'center'}}>
+                            <TextInput
+                                style={styles.input}
+                                keyboardType='numeric'
+                                onChangeText={(text) => this.changeInterval(text)}
+                                textAlign={'center'}
+                                value={this.state.interval}
+                                onFocus={() => {
+                                    this.setState({interval: ''});
+                                }}
+                                onBlur={() => {
+                                    this.actuallyChangeInterval();
+                                }}
+                            />
+                        </View>
+                        <View style={{flex: 11, alignSelf: 'center', marginLeft: 5}}>
+                            <Text style={{}}>
+                                {i18n.t('Settings.interval-unit')}
+                            </Text>
+                        </View>
+                        <View style={{flex: 2}}/>
+                    </View>
+                    <View style={{borderBottomColor: 'lightgrey', borderBottomWidth: 1}}/>
+                </View>
+            );
+        }
+    };
 
     render() {
         this.items = Object.assign([], []);
-        this.items = [<Picker.Item key={0} label='Select a language'/>];
+        let hr = <View style={{borderBottomColor: 'lightgrey', borderBottomWidth: 1}}/>;
         Object.values(i18n.translations).forEach(
-            k => this.items.push(<Picker.Item key={k.languageTag} label={k.language} value={k.languageTag} testID={k.language}/>)
-        )
-        //alert(JSON.stringify(i18n));
-        // i18n.translations.forEach((l) => {
-        //     alert(JSON.stringify(l));
-        //     //this.items.push(<Picker.Item key={p.id} label={p.name} value={p.id} testID={p.id}/>);
-        // });
+            k => this.items.push(<Picker.Item key={k.languageTag} label={k.language} value={k.languageTag}
+                                              testID={k.language}/>),
+        );
+        this.languages = Object.assign([], []);
+        Object.values(i18n.translations).forEach(
+            k => this.languages.push({value: k.languageTag, text: k.language}),
+        );
+
+
+        let deviceName = this.props.BLEConnection.isConnected ?
+            <Appbar.Content style={{position: 'absolute', right: 40}}
+                            title={this.props.BLEConnection.device.name.substr(this.props.BLEConnection.device.name.length - 5)}
+                            size={32}/>
+            :
+            <Appbar.Content style={{position: 'absolute', right: 40}}
+                            title={i18n.t('Programming.noConnectedDevice')}
+                            size={32}/>;
 
         return (
-            <View style={[styles.container]}>
-                <Appbar>
-                    <Appbar.Action
-                        icon="menu"
-                        size={32}
-                        onPress={() => this.props.navigation.openDrawer()}
-                    />
-                    <Appbar.Content
-                        style={{position: 'absolute', left: 40}}
-                        title="Explore-it"
-                        size={32}
-                    />
-                    <Appbar.Content
-                        style={{position: 'absolute', right: 0}}
-                        title={this.props.BLEConnection.device.name}
-                        subtitle={i18n.t('Settings.device')}
-                        size={32}
-                    />
-                </Appbar>
+            <SafeAreaView style={{
+                flex: 1,
+                backgroundColor: 'white'
+                //backgroundColor: '#2E5266',
+            }}>
+                <ScrollView style={{
+                    flex: 1,
+                    backgroundColor: 'white',
 
-                <View style={{flex: 1, padding: 40}}>
-                    <Text style={{fontSize: 16, fontWeight: 'bold', paddingBottom: 15}}>
-                        {i18n.t('Settings.settings')}
-                    </Text>
-                    <View style={{flexDirection: 'row', marginBottom: 10}}>
-                        <Text style={{height: 50, width: '20%', marginLeft: 40}}>
-                            {i18n.t('Settings.interval')}
-                        </Text>
-                        <TextInput
-                            style={{
-                                padding: 5,
-                                width: 60,
-                                height: 50,
-                                borderWidth: 1,
-                                borderColor: 'grey',
-                                backgroundColor: 'white',
-                                justifyContent: 'center',
-                            }}
-                            keyboardType="numeric"
-                            textAlign={'center'}
-                            mode="outlined"
-                            editable={this.props.BLEConnection.isConnected}
-                            onChangeText={text => this.changeInterval(text)}
-                            value={this.props.Settings.interval.toString()}
-                        />
-                        <Text style={{height: 50, marginLeft: 20}}>
-                            {i18n.t('Settings.interval-unit')}
-                        </Text>
+                }}>
+                    <View style={[styles.container]}>
+                        <Appbar>
+                            <Appbar.Action
+                                icon="close"
+                                size={26}
+                                onPress={() => this.props.toggleSettings()}
+                                style={{position: 'absolute', right: 0}}
+                            />
+                            <Appbar.Content
+                                style={{position: 'absolute', left: 80}}
+                                title="Robotics"
+                                size={32}
+                            />
+                            <Image style={{width: 80, resizeMode: 'contain', left: 10}} source={require('../../resources/icon/logo.png')}></Image>
+                            {deviceName}
+                        </Appbar>
+
+                        <View style={{flex: 0, padding: 10, marginTop: 10}}>
+
+                            <View>
+                                <View style={{flexDirection: 'column', justifyContent: 'space-between'}}>
+                                    <View>
+                                    {this.renderIntervalField()}
+                                    <View style={{
+                                            flexDirection: 'row',
+                                            justifyContent: 'flex-start',
+                                            marginTop: 10,
+                                            marginBottom: 5
+                                        }}>
+                                            <View style={{flex: 1}}/>
+                                            <View style={{flex: 17, alignSelf: 'center'}}>
+                                                <Text style={{
+                                                    fontSize: 16,
+                                                    fontWeight: 'bold',
+                                                }}>
+                                                    {i18n.t('Settings.duration')}
+                                                </Text>
+                                            </View>
+                                    </View>
+                                        <View style={{
+                                            flexDirection: 'row',
+                                            justifyContent: 'flex-start',
+                                            marginBottom: 10
+                                        }}>
+                                            <View style={{flex: 1}}/> 
+                                            <View style={{flex: 4, alignSelf: 'center'}}>
+                                                <TextInput
+                                                    style={styles.input}
+                                                    keyboardType='numeric'
+                                                    onChangeText={(text) => this.changeDuration(text)}
+                                                    textAlign={'center'}
+                                                    value={this.state.duration}
+                                                    onFocus={() => {
+                                                        this.setState({duration: ''});
+                                                    }}
+                                                    onBlur={() => {
+                                                        this.actuallyChangeDuration();
+                                                    }}
+                                                />
+                                            </View>
+                                            <View style={{flex: 11, alignSelf: 'center', marginLeft: 5}}>
+                                                <Text style={{}}>
+                                                    {i18n.t('Settings.duration-unit')}
+                                                </Text>
+                                            </View>
+                                            <View style={{flex: 2}}/>
+                                        </View>
+                                        {hr}
+
+                                    </View>
+
+                                    <View style={{
+                                        flexDirection: 'row',
+                                        justifyContent: 'flex-start',
+                                        marginVertical: 10,
+                                    }}>
+                                        <View style={{flex: 1}}/>
+                                        <View style={{flex: 5, alignSelf: 'center'}}>
+                                            <Text style={{
+                                                fontSize: 16,
+                                                fontWeight: 'bold',
+                                            }}>
+                                                {i18n.t('Settings.language')}
+                                            </Text>
+                                        </View>
+                                        <View style={{flex: 10, alignSelf: 'center'}}>
+                                            {this.renderPicker()}
+                                        </View>
+                                        <View style={{flex: 2}}/>
+                                    </View>
+                                    {hr}
+
+                                </View>
+
+
+                            </View>
+                        </View>
                     </View>
-
-                    <Text style={{fontSize: 16, fontWeight: 'bold', paddingBottom: 15}}>
-                        {i18n.t('Settings.learn')}
-                    </Text>
-                    <View style={{flexDirection: 'row', marginBottom: 10}}>
-                        <Text style={{height: 50, width: '20%', marginLeft: 40}}>
-                            {i18n.t('Settings.duration')}
-                        </Text>
-                        <TextInput
-                            style={{
-                                padding: 5,
-                                width: 60,
-                                height: 50,
-                                borderWidth: 1,
-                                borderColor: 'grey',
-                                backgroundColor: 'white',
-                                justifyContent: 'center',
-                            }}
-                            keyboardType="numeric"
-                            textAlign={'center'}
-                            mode="outlined"
-                            onChangeText={text => this.changeDuration(text)}
-                            value={this.props.Settings.duration.toString()}
-                        />
-                        <Text style={{height: 50, marginLeft: 20}}>
-                            {i18n.t('Settings.duration-unit')}
-                        </Text>
-                    </View>
-
-                    <Text style={{fontSize: 16, fontWeight: 'bold', paddingBottom: 15}}>
-                        Language:
-                    </Text>
-                    <View style={{flexDirection: 'row', marginBottom: 10}}>
-                        <Picker
-                            style={{
-                                padding: 5,
-                                width: 60,
-                                height: 50,
-                                backgroundColor: 'white',
-                                justifyContent: 'center',
-                            }}
-                            selectedValue={this.props.Settings.language}
-                            textAlign={'center'}
-                            onValueChange={(itemValue, itemIndex) => {
-                                this.props.setLanguage(itemValue);
-                                i18n.locale = itemValue; 
+                </ScrollView>
+                <View style={{flex: 1, justifyContent: 'flex-end'}}>
+                            <TouchableOpacity
+                                onPress={() => Linking.openURL(i18n.t("Settings.websiteURL")).catch((err) => console.error('An error occurred', err))}
+                            >
+                                <View style={{
+                                        justifyContent: 'center',
+                                        flexDirection: 'row'
+                                    }}>
+                                <Image style={{width: 160, resizeMode: 'contain'}} source={require('../../resources/icon/logo.png')}></Image>
+                                </View>
+                                <View
+                                    style={{
+                                        justifyContent: 'center',
+                                        flexDirection: 'row',
+                                        marginTop: 10,
+                                    }}>
+                                    <Text
+                                        style={{fontFamily: 'Jost-Medium', fontSize: 20, color: 'blue'}}>
+                                        www.explore-it.org
+                                    </Text>
+                                </View>
+                            </TouchableOpacity>
+                            <View
+                                style={{
+                                    justifyContent: 'center',
+                                    flexDirection: 'row',
                                 }}>
-                            {this.items}
-                        </Picker>
-                    </View>
-                </View>
-            </View>
-        )
-            ;
+                            </View>
+
+                            <View
+                                style={{
+                                    justifyContent: 'center',
+                                    flexDirection: 'row',
+                                }}>
+                                <Text
+                                    style={{fontFamily: 'Jost-Thin', marginTop: 10, marginBottom: 20}}>v{GLOBAL.VERSION}</Text>
+                            </View>
+                        </View>
+            </SafeAreaView>
+        );
     }
 }
-
-//                    <Text style={{marginTop: 20, fontSize: 16, fontWeight: 'bold'}}>
-//                        {i18n.t('SettingsComponent.calibrate')}
-//                    </Text>
-//                    <View style={{ flex: 1, flexDirection: 'row'}}>
-//                        <CalibrationInput val={5} limit={20} />
-//                        <View style={{ flex: 1, alignItems: 'center', height: 220, justifyContent: 'center'}}>
-//                            <Icon
-//                                reverse
-//                                name='play-arrow'
-//                                color='#9c27b0'
-//                                size={32}
-//                                onPress={() => alert('run')} />
-//                        </View>
-//                        <CalibrationInput val={19} limit={20} />
-//                    </View>
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FAFAFA',
-        ...ifIphoneX(
-            {
-                paddingTop: getStatusBarHeight() + 10,
-            },
-            {},
-        ),
+    },
+    bottomView: {
+        width: '100%',
+        height: 50,
+        backgroundColor: '#EE5407',
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'absolute', //Here is the trick
+        bottom: 0, //Here is the trick
+    },
+    input: {
+        fontFamily: 'Jost-Book',
+        justifyContent: 'center',
+        height: 50,
+        borderRadius: 5,
+        borderWidth: 1,
+        overflow: 'hidden',
+        backgroundColor: 'white',
     },
 });
 

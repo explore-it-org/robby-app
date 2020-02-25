@@ -22,15 +22,19 @@ export const setBLEState = (bleState) => ({
 });
 
 export const setIntervalAndSendToRobby = (inter) => {
-        return (dispatch, getState) => {
-            RobotProxy.setInterval(inter).then(res => {
-            });
-        };
+    return (dispatch, getState) => {
+        RobotProxy.setInterval(inter).then(res => {
+        });
     };
+};
 
 export const setLanguage = (language) => ({
     type: ActionTypes.SET_LANGUAGE,
-    language
+    language,
+});
+
+export const toggleSettings = () => ({
+    type: ActionTypes.TOGGLE_SETTINGS,
 });
 
 

@@ -1,10 +1,14 @@
 import * as ActionTypes from '../GlobalActionTypes';
 import RobotProxy from './RobotProxy';
-import {mainHandler} from './ResponseActionHandler';
 import {} from '../database/DatabaseAction';
-import {receiveDownload} from '../programmingtabs/stepprogramming/ActiveInstructionAction';
+import {
+    clearProgram,
+    emptyInstructionList,
+    receiveDownload,
+} from '../programmingtabs/stepprogramming/ActiveInstructionAction';
 import {Program, ProgramType} from '../model/DatabaseModels';
-
+import {Alert} from 'react-native';
+import { CommunicationManager } from './CommunicationManager';
 
 export const connectToBle = () => ({
     type: ActionTypes.START_CONNECTING,
@@ -16,6 +20,9 @@ export const connectedToBle = (robot) => ({
 export const connectionFailed = (error) => ({
     type: ActionTypes.FAILURE_CONNECTING,
 });
+export const connectionLost = (error) => ({
+    type: ActionTypes.LOST_CONNECTION
+})
 export const disconnect = () => ({
     type: ActionTypes.DISCONNECT,
 });
@@ -37,6 +44,10 @@ export const failedScanning = (error) => ({
 export const succesScanning = (robot) => ({
     type: ActionTypes.SUCCESS_SCANNING,
     robot,
+});
+export const scanningEnabled = (error) => ({
+    type: ActionTypes.ENABLED_SCANNING,
+    error,
 });
 export const stopScanning = () => ({
     type: ActionTypes.STOP_SCANNING,
@@ -111,7 +122,13 @@ export const errorRecording = (error) => ({
 export const startRecording = () => {
     return (dispatch, getState) => {
         let duration = getState().Settings.duration;
+        if (!duration && duration !== 0) {
+            duration = 1;
+        }
         let interval = getState().Settings.interval;
+        if (!interval && interval !== 0) {
+            interval = 1;
+        }
         let version = getState().BLEConnection.device.version;
         RobotProxy.record(duration, interval, version).then(res => {
             dispatch(tryRecording());
@@ -125,22 +142,36 @@ export const scanningForDevices = () => {
         dispatch(startScanning());
         RobotProxy.scanningForRobots((error) => {
             dispatch(failedScanning(error));
+            Alert.alert('ble error', error);
         }, (robot) => {
             dispatch(succesScanning(robot));
         });
     };
 };
 
+export const scanStatus = () => {
+    return (dispatch, getState) => {
+        RobotProxy.testScan((error) => {
+            RobotProxy.stopScanning();
+            dispatch(failedScanning(error));
+        }, (success) => {
+            RobotProxy.stopScanning();
+            dispatch(scanningEnabled());
+        });
+    };
+};
 export const connectToDevice = () => {
     return (dispatch, getState) => {
         dispatch(connectToBle());
         RobotProxy.connect2((response) => {
-            dispatch(mainHandler(response));
+            var handler = new CommunicationManager().getHandler(getState().BLEConnection.device.version);
+            dispatch(handler.handleResponse(response));
         }, (robot) => {
-            console.log(robot.name);
             dispatch(connectedToBle(robot));
         }, (error) => {
             dispatch(connectionFailed(error));
+        }, (error) => {
+            dispatch(connectionLost(error));
         });
     };
 };
@@ -156,18 +187,17 @@ export const failedUplaod = (error) => ({
     type: ActionTypes.FAILURE_UPLOADING,
     error,
 });
-export const uploadToRobot = (ActiveProgram) => {
+
+export const uploadToRobot = (ActiveTab) => {
     return (dispatch, getState) => {
         let a = null;
-        console.log(ActiveProgram);
-        if (ActiveProgram === 'Stepprogramming') {
-            a = getState().ActiveProgram.ActiveProgram.flatten();
-            console.log(a);
-        } else {
-            a = getState().ActiveBlock.Active_Block.flatten();
-            console.log(a);
+        if (ActiveTab === 'Stepprogramming') {
+            a = Program.flatten(getState().ActiveProgram.ActiveProgram);
+        } else if(ActiveTab === 'Blockprogramming') {
+            a = Program.flatten(getState().ActiveBlock.Active_Block);
+        }else {
+            a = Program.flatten(getState().Overview.selectedProgram);
         }
-        console.log(getState().BLEConnection.device.version);
         dispatch(startUpload());
         RobotProxy.upload(a, getState().BLEConnection.device.version).then(res => {
 
@@ -194,19 +224,26 @@ export const finishedDownloading = () => {
         dispatch(receiveDownload(new Program('', ProgramType.STEPS, getState().BLEConnection.receivedDownloads)));
     };
 };
-export const receivedChunck = (chunk) => ({
-    type: ActionTypes.RECEIVED_CHUNK,
-    chunk,
-});
+
+export const appendChunk = (chunk) => ({
+    type: ActionTypes.APPEND_CHUNK,
+    chunk
+})
+
+export const receivedChunk = (chunk, isLastPackage) => {
+    return (dispatch, getState) => {
+        dispatch(appendChunk(chunk))
+        if(isLastPackage){
+            dispatch(finishedDownloading());
+        }
+    };
+};
 
 
 export const downloadToDevice = () => {
     return (dispatch, getState) => {
+        new CommunicationManager().getHandler(getState().BLEConnection.device.version).startDownloading();
         dispatch(startDownloading());
-        RobotProxy.download().then(res => {
-
-        }).catch(error => {
-            dispatch(errorDownloading(error));
-        });
+        dispatch(emptyInstructionList());     
     };
 };

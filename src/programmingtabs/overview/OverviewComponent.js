@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, ScrollView, FlatList, TouchableOpacity, Button} from 'react-native';
-import {Text} from 'react-native-paper';
+import {StyleSheet, View, ScrollView, FlatList, TouchableOpacity} from 'react-native';
+import {IconButton, Text} from 'react-native-paper';
 import {ProgramType} from '../../model/DatabaseModels';
+import i18n from '../../../resources/locales/i18n';
+import CustomIcon from '../../utillity/CustomIcon';
 
 export default class OverviewComponent extends Component {
 
@@ -29,25 +31,66 @@ export default class OverviewComponent extends Component {
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={({item, index}) => (
                             <TouchableOpacity
-                                style={{width: '100%', flexDirection: 'row'}}
+                                style={parseInt(index) === this.props.Overview.selectedProgramIndex ? styles.selected_row : styles.row}
                                 onPress={() => {
-                                    this.load(item);
+                                    this.props.setSelectedIndex(index);
+                                    this.props.setSelectedProgram(item);
                                 }}>
-                                <View style={{padding: 20, width: '100%', flexDirection: 'row'}}>
-                                    <Text style={{flex: 1}}>
-                                        {item.name}
-                                    </Text>
-                                    <View style={{marginRight: 20}}>
-                                        <Button color="#792387" onPress={() => {
-                                            this.props.remove(item.id);
-                                        }} title="Delete"/>
+
+
+                                <View style={{width: '100%', flexDirection: 'row'}}>
+                                    <View style={{
+                                        flex: 6,
+                                        flexDirection: 'column',
+                                        justifyContent: 'center',
+                                        paddingLeft: 10,
+                                    }}>
+                                        <Text
+                                            style={{fontSize: 16}}>
+                                            {item.name}
+                                        </Text>
                                     </View>
-                                    <View style={{marginRight: 20}}>
-                                        <Button color="#792387" title="Duplicate" onPress={() => {
-                                            this.props.duplicate(item);
-                                        }}/>
+
+                                    <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center'}}>
+                                        <IconButton
+                                            size={20}
+                                            color={'gray'}
+                                            icon={({size, color}) => (
+                                                <CustomIcon name="open" size={size} color={color}/>
+                                            )}
+                                            onPress={() => {
+                                                this.load(item);
+                                            }}
+                                        />
+                                    </View>
+
+                                    <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center'}}>
+                                        <IconButton
+                                            size={20}
+                                            color={'gray'}
+                                            icon={({size, color}) => (
+                                                <CustomIcon name="duplicate" size={size} color={color}/>
+                                            )}
+                                            onPress={() => {
+                                                this.props.duplicate(item);
+                                            }}/>
+                                    </View>
+
+
+                                    <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center'}}>
+                                        <IconButton
+                                            size={20}
+                                            color={'gray'}
+                                            icon={({size, color}) => (
+                                                <CustomIcon name="deletedark" size={size} color={color}/>
+                                            )}
+                                            onPress={() => {
+                                                this.props.remove(item.id);
+                                            }}/>
                                     </View>
                                 </View>
+
+
                             </TouchableOpacity>
                         )}
                     />
@@ -113,4 +156,22 @@ const styles = StyleSheet.create({
         width: '30%',
         height: '70%',
     },
+    row: {
+        width: '100%',
+        flexDirection: 'row',
+        borderBottomColor: '#e0e0e0',
+        borderBottomWidth: 1,
+        paddingTop: 5,
+        paddingBottom: 5,
+    },
+    selected_row: {
+        width: '100%',
+        flexDirection: 'row',
+        borderBottomColor: '#d6d6d6',
+        borderBottomWidth: 1,
+        paddingTop: 5,
+        paddingBottom: 5,
+        borderColor: '#d6d6d6',
+        backgroundColor: '#F0F0F0',
+    }
 });

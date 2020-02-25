@@ -1,4 +1,22 @@
 PODS:
+  - appcenter (2.6.1):
+    - AppCenterReactNativeShared
+    - React
+  - appcenter-analytics (2.4.0):
+    - AppCenter/Analytics
+    - AppCenterReactNativeShared
+    - React
+  - appcenter-crashes (2.6.1):
+    - AppCenter/Crashes
+    - AppCenterReactNativeShared
+    - React
+  - AppCenter/Analytics (2.5.3):
+    - AppCenter/Core
+  - AppCenter/Core (2.5.3)
+  - AppCenter/Crashes (2.5.3):
+    - AppCenter/Core
+  - AppCenterReactNativeShared (2.6.1):
+    - AppCenter/Core (= 2.5.3)
   - boost-for-react-native (1.63.0)
   - DoubleConversion (1.1.6)
   - Folly (2018.10.22.00):
@@ -10,6 +28,9 @@ PODS:
     - boost-for-react-native
     - DoubleConversion
     - glog
+  - GCDWebServer (3.5.3):
+    - GCDWebServer/Core (= 3.5.3)
+  - GCDWebServer/Core (3.5.3)
   - glog (0.3.5)
   - React (0.60.5):
     - React-Core (= 0.60.5)
@@ -83,19 +104,27 @@ PODS:
     - React-Core (= 0.60.5)
   - React-RCTWebSocket (0.60.5):
     - React-Core (= 0.60.5)
-  - RNGestureHandler (1.4.1):
+  - RealmJS (3.6.0):
+    - GCDWebServer
     - React
-  - RNLocalize (1.3.0):
+  - RNCAsyncStorage (1.6.3):
     - React
-  - RNReanimated (1.3.0):
+  - RNGestureHandler (1.5.1):
     - React
-  - RNSVG (9.11.1):
+  - RNLocalize (1.3.1):
+    - React
+  - RNReanimated (1.4.0):
+    - React
+  - RNSVG (9.13.3):
     - React
   - RNVectorIcons (6.6.0):
     - React
   - yoga (0.60.5.React)
 
 DEPENDENCIES:
+  - appcenter (from `../node_modules/appcenter/ios`)
+  - appcenter-analytics (from `../node_modules/appcenter-analytics/ios`)
+  - appcenter-crashes (from `../node_modules/appcenter-crashes/ios`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
@@ -118,6 +147,8 @@ DEPENDENCIES:
   - React-RCTText (from `../node_modules/react-native/Libraries/Text`)
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - React-RCTWebSocket (from `../node_modules/react-native/Libraries/WebSocket`)
+  - RealmJS (from `../node_modules/realm`)
+  - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler/RNGestureHandler.podspec`)
   - RNLocalize (from `../node_modules/react-native-localize`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
@@ -127,9 +158,18 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - AppCenter
+    - AppCenterReactNativeShared
     - boost-for-react-native
+    - GCDWebServer
 
 EXTERNAL SOURCES:
+  appcenter:
+    :path: "../node_modules/appcenter/ios"
+  appcenter-analytics:
+    :path: "../node_modules/appcenter-analytics/ios"
+  appcenter-crashes:
+    :path: "../node_modules/appcenter-crashes/ios"
   DoubleConversion:
     :podspec: "../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
   Folly:
@@ -174,6 +214,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/Libraries/Vibration"
   React-RCTWebSocket:
     :path: "../node_modules/react-native/Libraries/WebSocket"
+  RealmJS:
+    :path: "../node_modules/realm"
+  RNCAsyncStorage:
+    :path: "../node_modules/@react-native-community/async-storage"
   RNGestureHandler:
     :podspec: "../node_modules/react-native-gesture-handler/RNGestureHandler.podspec"
   RNLocalize:
@@ -188,9 +232,15 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
+  AppCenter: 765ff38c4d360fc5ec61b61a8be24d74cd6d4d83
+  appcenter: f2e241f931e0865a74b3af3928066a1190814be0
+  appcenter-analytics: 94be52eca805d586207d710aac95e0ddca8b3ddb
+  appcenter-crashes: bfc5c03a6ddcfa158fcf4217d1724fd52f45d12c
+  AppCenterReactNativeShared: d90c7165b03171aff31ecbe1424a04b34f64d609
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
+  GCDWebServer: c0ab22c73e1b84f358d1e2f74bf6afd1c60829f2
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
   React: 53c53c4d99097af47cf60594b8706b4e3321e722
   React-Core: ba421f6b4f4cbe2fb17c0b6fc675f87622e78a64
@@ -211,13 +261,15 @@ SPEC CHECKSUMS:
   React-RCTText: b074d89033583d4f2eb5faf7ea2db3a13c7553a2
   React-RCTVibration: 2105b2e0e2b66a6408fc69a46c8a7fb5b2fdade0
   React-RCTWebSocket: cd932a16b7214898b6b7f788c8bddb3637246ac4
-  RNGestureHandler: 4cb47a93019c1a201df2644413a0a1569a51c8aa
-  RNLocalize: 6e4a6b8582dfbb50b452464d208c30a7a20516f4
-  RNReanimated: 6abbbae2e5e72609d85aabd92a982a94566885f1
-  RNSVG: be27aa7c58819f97399388ae53d7fa0572f32c7f
+  RealmJS: ccaef6c07181c21bbafc227f184bc32065f6b27a
+  RNCAsyncStorage: 6b57de0f6cb0dcfd17521af1681fa39001d3efff
+  RNGestureHandler: 7add966bb5d90ee8cf38d4341f87814474357972
+  RNLocalize: c117094a6c5a955c94e65520ad4c726e3a0f4ed6
+  RNReanimated: b2ab0b693dddd2339bd2f300e770f6302d2e960c
+  RNSVG: f6177f8d7c095fada7cfee2e4bb7388ba426064c
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   yoga: 312528f5bbbba37b4dcea5ef00e8b4033fdd9411
 
-PODFILE CHECKSUM: 06f77e0216d0a9782be4e7f2ffd1c462d3ad23ed
+PODFILE CHECKSUM: 0273795a192ebf699dd6bee97bd197ceef17b2d2
 
-COCOAPODS: 1.8.1
+COCOAPODS: 1.8.4

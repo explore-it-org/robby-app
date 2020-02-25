@@ -8,17 +8,14 @@ const default_state_settings = {
     isGranted: false,
     language: undefined,
     bleState: '',
+    visible: false,
 
 };
 export const SettingsReducer = (state = default_state_settings, action) => {
     switch (action.type) {
         case ActionType.SET_INTERVALL:
-            if (action.interval === '') {
-                action.interval = 1;
-            }
             return Object.assign({}, state, {interval: action.interval, lastUpdate: Date.now()});
         case ActionType.SET_DURATION:
-            console.log(Object.assign({}, state, {duration: action.duration, lastUpdate: Date.now()}));
             return Object.assign({}, state, {duration: action.duration, lastUpdate: Date.now()});
         case ActionType.SET_LANGUAGE:
             return Object.assign({}, state, {language: action.language, lastUpdat: Date.now()});
@@ -26,6 +23,8 @@ export const SettingsReducer = (state = default_state_settings, action) => {
             return Object.assign({}, state, {isGranted: action.isGranted});
         case ActionType.BLE_STATE:
             return Object.assign({}, state, {bleState: action.bleState});
+        case ActionType.TOGGLE_SETTINGS:
+            return Object.assign({}, state, {visible: !state.visible});
         default:
             return state;
     }

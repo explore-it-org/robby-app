@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		00D103D323A3D75000DF5524 /* icomoon.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 00D103D223A3D74F00DF5524 /* icomoon.ttf */; };
+		00D103FC23A8D9AB00DF5524 /* Jost-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 00D103F823A8D9AA00DF5524 /* Jost-Medium.ttf */; };
+		00D103FD23A8D9AB00DF5524 /* Jost-Book.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 00D103F923A8D9AA00DF5524 /* Jost-Book.ttf */; };
+		00D103FE23A8D9AB00DF5524 /* Jost-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 00D103FA23A8D9AB00DF5524 /* Jost-Thin.ttf */; };
+		00D103FF23A8D9AB00DF5524 /* Jost-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 00D103FB23A8D9AB00DF5524 /* Jost-Light.ttf */; };
 		00E356F31AD99517003FC87E /* RoboticsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* RoboticsTests.m */; };
 		00F6BC4C235700CB00815BAA /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F6BC4B235700CB00815BAA /* File.swift */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
@@ -42,6 +47,11 @@
 
 /* Begin PBXFileReference section */
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
+		00D103D223A3D74F00DF5524 /* icomoon.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = icomoon.ttf; sourceTree = "<group>"; };
+		00D103F823A8D9AA00DF5524 /* Jost-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Jost-Medium.ttf"; sourceTree = "<group>"; };
+		00D103F923A8D9AA00DF5524 /* Jost-Book.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Jost-Book.ttf"; sourceTree = "<group>"; };
+		00D103FA23A8D9AB00DF5524 /* Jost-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Jost-Thin.ttf"; sourceTree = "<group>"; };
+		00D103FB23A8D9AB00DF5524 /* Jost-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Jost-Light.ttf"; sourceTree = "<group>"; };
 		00E356EE1AD99517003FC87E /* RoboticsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RoboticsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* RoboticsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RoboticsTests.m; sourceTree = "<group>"; };
@@ -193,6 +203,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				00D103D223A3D74F00DF5524 /* icomoon.ttf */,
 				00F6BC4B235700CB00815BAA /* File.swift */,
 				13B07FAE1A68108700A75B9A /* Robotics */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -222,6 +233,10 @@
 		FF513FE95B4649E68F50ADBC /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				00D103F923A8D9AA00DF5524 /* Jost-Book.ttf */,
+				00D103FB23A8D9AB00DF5524 /* Jost-Light.ttf */,
+				00D103F823A8D9AA00DF5524 /* Jost-Medium.ttf */,
+				00D103FA23A8D9AB00DF5524 /* Jost-Thin.ttf */,
 				EB35A56F77554D39A69AD75F /* AntDesign.ttf */,
 				E947CC2CCD9446D2AED2B285 /* Entypo.ttf */,
 				74631FA8AD724916B4C584ED /* EvilIcons.ttf */,
@@ -335,9 +350,11 @@
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = Y53TJ2KVPD;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
+						DevelopmentTeam = Y53TJ2KVPD;
 						LastSwiftMigration = 1110;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
@@ -385,8 +402,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00D103D323A3D75000DF5524 /* icomoon.ttf in Resources */,
+				00D103FC23A8D9AB00DF5524 /* Jost-Medium.ttf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				00D103FE23A8D9AB00DF5524 /* Jost-Thin.ttf in Resources */,
+				00D103FD23A8D9AB00DF5524 /* Jost-Book.ttf in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				00D103FF23A8D9AB00DF5524 /* Jost-Light.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -420,7 +442,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
 		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -682,6 +704,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = Y53TJ2KVPD;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -707,6 +730,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = Y53TJ2KVPD;
 				INFOPLIST_FILE = RoboticsTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -727,8 +751,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 20;
 				DEAD_CODE_STRIPPING = NO;
+				DEVELOPMENT_TEAM = Y53TJ2KVPD;
 				INFOPLIST_FILE = Robotics/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -736,11 +761,12 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = org.exploreit.robotics2;
 				PRODUCT_NAME = Robotics;
 				SWIFT_OBJC_BRIDGING_HEADER = "Robotics-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -751,7 +777,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 20;
+				DEVELOPMENT_TEAM = Y53TJ2KVPD;
 				INFOPLIST_FILE = Robotics/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -759,10 +786,11 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = org.exploreit.robotics2;
 				PRODUCT_NAME = Robotics;
 				SWIFT_OBJC_BRIDGING_HEADER = "Robotics-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;

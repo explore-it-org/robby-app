@@ -52,7 +52,6 @@ export const ActiveInstructionsReducer = (state = default_state_Active_Instructi
                     state.ActiveProgram.steps[state.selectedIndex + 1],
                     state.ActiveProgram.steps[state.selectedIndex],
                     ...state.ActiveProgram.steps.slice(state.selectedIndex + 2, state.ActiveProgram.steps.length)];
-                console.log(a);
                 return Object.assign({}, state, {
 
                     lastUpdate: Date.now(),
@@ -104,7 +103,6 @@ export const ActiveInstructionsReducer = (state = default_state_Active_Instructi
             });
         case ActionTypes.CHANGE_RIGHT_SPEED:
             let os = state.ActiveProgram.steps[action.index];
-            console.log(os + ' ' + action.index);
             let ns = new Instruction(action.speed, os.left);
             return Object.assign({}, state, {
                 lastUpdate: Date.now(),
@@ -135,6 +133,12 @@ export const ActiveInstructionsReducer = (state = default_state_Active_Instructi
             return Object.assign({}, state, {
                 lastUpdate: Date.now(),
                 ActiveProgram: new Program('', ProgramType.STEPS, [new Instruction(0, 0)]),
+                selectedIndex: -1,
+            });
+        case ActionTypes.EMPTY_INSTRUCTION_LIST:
+            return Object.assign({}, state, {
+                lastUpdate: Date.now(),
+                ActiveProgram: new Program('', ProgramType.STEPS, []),
                 selectedIndex: -1,
             });
         default:
