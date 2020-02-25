@@ -23,16 +23,13 @@ export class CommunicationManager {
     }
 
     getHandler(version){
-        let supportedVersions = Object.keys(this._handlers);
-        if(!supportedVersions.includes(version)){
-            if(version > Math.max(...supportedVersions)){
-                Alert.alert(i18n.t('Programming.unsupportedAppVersionTitle'), i18n.t('Programming.unsupportedAppVersionMessage')); 
-            }else{
-                Alert.alert(i18n.t('Programming.unsupportedRobotVersionTitle'), i18n.t('Programming.unsupportedRobotVersionMessage')); 
-            }
-            RobotProxy.disconnect();
-        }
         return this._handlers[version] || new CommunicationHandlerV1();
+    }
+
+    getSupportedVersions(){
+        return Object.keys(this._handlers).map((key) => {
+            return parseInt(key);
+        });
     }
     
 }
@@ -69,6 +66,38 @@ export class CommunicationHandler{
 
     upload(instructions){}
 
+}
+
+class CommunicationHandlerV1 extends CommunicationHandler{
+    handleResponse(response){
+        response = response.toString(
+            'latin1',
+        );
+        if (response.startsWith('VER')) {
+            let version = parseInt(response.substring(4));
+            
+            let supportedVersions = new CommunicationManager().getSupportedVersions();
+            if(!supportedVersions.includes(version)){
+                if(version > Math.max(...supportedVersions)){
+                    Alert.alert(i18n.t('Programming.unsupportedAppVersionTitle'), i18n.t('Programming.unsupportedAppVersionMessage')); 
+                }else{
+                    Alert.alert(i18n.t('Programming.unsupportedRobotVersionTitle'), i18n.t('Programming.unsupportedRobotVersionMessage')); 
+                }
+                RobotProxy.disconnect();
+                return bleAction.bleResponse('');   
+            }
+            return bleAction.updateDeviceVersion(parseInt(response.substring(4)));
+        }
+        return bleAction.bleResponse('');
+    }
+
+    record(duration, interval){
+        //what to do here?
+    }
+
+    upload(instructions){
+        // and here?
+    }
 }
 
 class CommunicationHandlerV3 extends CommunicationHandler{
@@ -156,27 +185,6 @@ class CommunicationHandlerV3 extends CommunicationHandler{
             speed = '0' + speed;
         }
         return speed;
-    }
-}
-
-
-class CommunicationHandlerV1 extends CommunicationHandler{
-    handleResponse(response){
-        response = response.toString(
-            'latin1',
-        );
-        if (response.startsWith('VER')) {
-            return bleAction.updateDeviceVersion(parseInt(response.substring(4)));
-        }
-        return bleAction.bleResponse('');
-    }
-
-    record(duration, interval){
-        //what to do here?
-    }
-
-    upload(instructions){
-        // and here?
     }
 }
 

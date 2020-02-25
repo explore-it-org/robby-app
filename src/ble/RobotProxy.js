@@ -78,7 +78,6 @@ class RobotProxy {
             },
             (robot) => {
                 this.isConnected = true;
-                this.version = 1; // default version if no version number is published
                 BleService.sendCommandToActDevice('Z') // Version request
                     .then((c) => {
                         connectionHandler(robot); // enables buttons in the GUI
