@@ -20,13 +20,6 @@ class App extends Component {
             this.props.grantLocation(a);
         });
         BleService.checkBluetoothState(a => this.props.setBLEState(a));
-        /*BleService.checkDeviceScanStatus(a => {
-            BleService.stopScanning();
-            this.props.scanningEnabled(a);
-        }, b => {
-            BleService.stopScanning();
-            this.props.scanningEnabled('');
-        });*/
         if (this.props.Settings.language) {
             i18n.locale = this.props.Settings.language;
         } else {

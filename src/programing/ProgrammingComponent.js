@@ -31,7 +31,7 @@ export default class ProgrammingComponent extends Component {
         let now = this.props.Program.lastChange;
         if (prev !== now) {
             if (now.status === i18n.t('RoboticsDatabase.success')) {
-                Toast.show(now.status); // TODO show propper message??
+                Toast.show(now.status, 2000); // TODO show propper message??
             } else {
                 Alert.alert(now.status, now.error);
             }
@@ -40,13 +40,13 @@ export default class ProgrammingComponent extends Component {
         now = this.props.BLEConnection.device;
         if (prev !== now) {
             if (prev.isUploading && !now.isUploading) {
-                Toast.show(i18n.t('Programming.uploadMessage'));
+                Toast.show(i18n.t('Programming.uploadMessage'), 2000);
             } else if (prev.isDownloading && !now.isDownloading) {
-                Toast.show(i18n.t('Programming.downloadMessage'));
+                Toast.show(i18n.t('Programming.downloadMessage'), 2000);
             } else if (prev.isRecording && !now.isRecording) {
-                Toast.show(i18n.t('Programming.recordMessage'));
+                Toast.show(i18n.t('Programming.recordMessage'), 2000);
             } else if (prev.isGoing && !now.isGoing) {
-                Toast.show(i18n.t('Programming.driveMessage'));
+                Toast.show(i18n.t('Programming.driveMessage'), 2000);
             }
         }
 
@@ -77,11 +77,11 @@ export default class ProgrammingComponent extends Component {
         let settingsPage = this.props.Settings.visible ? <Portal><SettingsContainer/></Portal> : undefined;
 
         let deviceName = this.props.BLEConnection.isConnected ?
-            <Appbar.Content style={{position: 'absolute', right: 40}}
-                            title={this.props.BLEConnection.device.name}
+            <Appbar.Content style={{position: 'absolute', right: 80}}
+                            title={this.props.BLEConnection.device.name.substr(this.props.BLEConnection.device.name.length - 5)}
                             size={this.state.iconSize}/>
             :
-            <Appbar.Content style={{position: 'absolute', right: 40}}
+            <Appbar.Content style={{position: 'absolute', right: 80}}
                             title={i18n.t('Programming.noConnectedDevice')}
                             size={this.state.iconSize}/>;
 
@@ -92,8 +92,9 @@ export default class ProgrammingComponent extends Component {
                     title={i18n.t('Programming.chooseDevice')}
                     items={this.props.BLEConnection.scannedDevices.map((row, index) => ({
                         key: index.toString(),
-                        label: row,
+                        label: row.substr(row.length - 5),
                         selected: false,
+                        val: row
                     }))}
                     visible={this.props.BLEConnection.isScanning}
                     onCancel={() => {
@@ -101,9 +102,9 @@ export default class ProgrammingComponent extends Component {
                     }}
                     onOk={
                         result => {
-                            this.props.stopScanning();
-                            if (result.selectedLabel) {
-                                this.props.setActiveDevice(result.selectedLabel);
+                            console.log(result);                            this.props.stopScanning();
+                            if (result.selectedValue) {
+                                this.props.setActiveDevice(result.selectedValue);
                                 this.props.connectToRobot();
                             }
                         }
@@ -113,14 +114,18 @@ export default class ProgrammingComponent extends Component {
 
 
                 <Appbar>
-                    <Appbar.Action
+                    
+                    <Appbar.Content style={{position: 'absolute', left: 88}} title="Robotics"
+                                    size={this.state.iconSize}/>
+                    <Image style={{width: 80, resizeMode: 'contain', left: 10}} source={require('../../resources/icon/logo.png')}></Image>
+                        <Appbar.Action
                         icon={({size, color}) => (
                             <CustomIcon name="gear" size={size} color={color}/>
                         )}
                         size={this.state.iconSize}
+                        style={{position: 'absolute', right: 0}}
                         onPress={() => this.props.toggleSettings()}/>
-                    <Appbar.Content style={{position: 'absolute', left: 40}} title="explore-it"
-                                    size={this.state.iconSize}/>
+                       
                     {deviceName}
                     <Appbar.Action
                         icon={({size, color}) => (
@@ -129,7 +134,7 @@ export default class ProgrammingComponent extends Component {
                                 <CustomIcon name="bluetooth-disabled" size={size} color={color}/>
                         )}
                         //{(this.props.BLEConnection.isConnected) ? 'bluetooth-connected' : 'bluetooth'}
-                        style={{position: 'absolute', right: 0}}
+                        style={{position: 'absolute', right: 40}}
                         size={this.state.iconSize}
                         disabled={this.props.BLEConnection.isConnecting}
                         onPress={() => {

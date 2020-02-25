@@ -78,7 +78,6 @@ class RobotProxy {
             },
             (robot) => {
                 this.isConnected = true;
-                this.version = 1; // default version if no version number is published
                 BleService.sendCommandToActDevice('Z') // Version request
                     .then((c) => {
                         connectionHandler(robot); // enables buttons in the GUI
@@ -138,9 +137,7 @@ class RobotProxy {
 
     // Uploads speed entries from the app to the robot
     upload(instructions, version) {
-        if (this.isConnected) {
-            return new CommunicationManager().getHandler(version).upload(instructions);
-        }
+        return new CommunicationManager().getHandler(version).upload(instructions);
     }
 
     // Downloads speed entries from the robot to the app

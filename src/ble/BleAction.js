@@ -10,7 +10,6 @@ import {Program, ProgramType} from '../model/DatabaseModels';
 import {Alert} from 'react-native';
 import { CommunicationManager } from './CommunicationManager';
 
-
 export const connectToBle = () => ({
     type: ActionTypes.START_CONNECTING,
 });
@@ -168,7 +167,6 @@ export const connectToDevice = () => {
             var handler = new CommunicationManager().getHandler(getState().BLEConnection.device.version);
             dispatch(handler.handleResponse(response));
         }, (robot) => {
-            console.log(robot.name);
             dispatch(connectedToBle(robot));
         }, (error) => {
             dispatch(connectionFailed(error));
@@ -226,16 +224,26 @@ export const finishedDownloading = () => {
         dispatch(receiveDownload(new Program('', ProgramType.STEPS, getState().BLEConnection.receivedDownloads)));
     };
 };
-export const receivedChunck = (chunk) => ({
-    type: ActionTypes.RECEIVED_CHUNK,
-    chunk,
-});
+
+export const appendChunk = (chunk) => ({
+    type: ActionTypes.APPEND_CHUNK,
+    chunk
+})
+
+export const receivedChunk = (chunk, isLastPackage) => {
+    return (dispatch, getState) => {
+        dispatch(appendChunk(chunk))
+        if(isLastPackage){
+            dispatch(finishedDownloading());
+        }
+    };
+};
 
 
 export const downloadToDevice = () => {
     return (dispatch, getState) => {
-        dispatch(startDownloading());
-        dispatch(emptyInstructionList());
         new CommunicationManager().getHandler(getState().BLEConnection.device.version).startDownloading();
+        dispatch(startDownloading());
+        dispatch(emptyInstructionList());     
     };
 };

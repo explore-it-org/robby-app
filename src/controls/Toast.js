@@ -7,11 +7,11 @@ import Animated from 'react-native-reanimated';
 export default class Toast extends Component {
     state = {
         message: '',
-        opacity: new Animated.Value(0.0),
+        opacity: new Animated.Value(0.0)
     };
 
-    static show(message) {
-        Toast.__singletonRef.__show(message);
+    static show(message, duration) {
+        Toast.__singletonRef.__show(message, duration);
     }
 
     constructor(props) {
@@ -19,7 +19,7 @@ export default class Toast extends Component {
         Toast.__singletonRef = this;
     }
 
-    __show = (message) => {
+    __show = (message, duration) => {
         this.setState({message: message});
         Animated.timing(
             this.state.opacity, {
@@ -30,7 +30,7 @@ export default class Toast extends Component {
         ).start(() => {
             Animated.timing(this.state.opacity, {
                 toValue: 1,
-                duration: 1000,
+                duration: duration,
                 easing: Easing.linear,
             }).start(() => {
                 Animated.timing(

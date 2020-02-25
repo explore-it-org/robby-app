@@ -103,11 +103,11 @@ export const BleConnectionReducer = (state = default_state_ble_connection, actio
             return Object.assign({}, state, {device: {...state.device, isDownloading: false}});
         case ActionType.FAILURE_DOWNLOADING:
             return Object.assign({}, state, {device: {...state.device, isDownloading: false}});
-        case ActionType.RECEIVED_CHUNK:
+        case ActionType.APPEND_CHUNK:
             return Object.assign({}, state, {
                 receivedDownloads: [
                     ...state.receivedDownloads,
-                    ...action.chunk,
+                    ...action.chunk
                 ],
             });
         default:
