@@ -66,13 +66,13 @@ export class Program {
 }
 
 export class Instruction {
-    constructor(right, left) {
+    constructor(left, right) {
         this.right = right;
         this.left = left;
     }
 
     static fromDatabase(instruction) {
-        return new Instruction(instruction.right, instruction.left);
+        return new Instruction(instruction.left, instruction.right);
     }
 }
 
