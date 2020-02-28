@@ -25,7 +25,6 @@
 		2DCD954D1E0B4F2C00145EB5 /* RoboticsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* RoboticsTests.m */; };
 		8DBF00F4FB54E856416725BF /* libPods-RoboticsTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 761F9ED7AB372D3BE226FA64 /* libPods-RoboticsTests.a */; };
 		C8ABF315CA74AD43C77D8D73 /* libPods-Robotics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F08BD0D25ED294561EC351F /* libPods-Robotics.a */; };
-		E45293C22409447500732DD0 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 008F07F21AC5B25A0029DE68 /* main.jsbundle */; };
 		F572952BDD664FD7268FC1F9 /* libPods-Robotics-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 77067F483756B9FC7C2C9EDE /* libPods-Robotics-tvOS.a */; };
 /* End PBXBuildFile section */
 
@@ -403,7 +402,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E45293C22409447500732DD0 /* main.jsbundle in Resources */,
 				00D103D323A3D75000DF5524 /* icomoon.ttf in Resources */,
 				00D103FC23A8D9AB00DF5524 /* Jost-Medium.ttf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,

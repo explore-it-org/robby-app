@@ -164,7 +164,7 @@ export const connectToDevice = () => {
     return (dispatch, getState) => {
         dispatch(connectToBle());
         RobotProxy.connect2((response) => {
-            var handler = new CommunicationManager().getBootstrapHandler();
+            var handler = new CommunicationManager().getHandler(getState().BLEConnection.device.version);
             dispatch(handler.handleResponse(response));
         }, (robot) => {
             dispatch(connectedToBle(robot));
