@@ -115,7 +115,7 @@ export default class ProgrammingComponent extends Component {
 
                 <Appbar>
                     
-                    <Appbar.Content style={{position: 'absolute', left: 88}} title="Robotics"
+                    <Appbar.Content style={{position: 'absolute', left: 88}} title="explore-it Robotics"
                                     size={this.state.iconSize}/>
                     <Image style={{width: 80, resizeMode: 'contain', left: 10}} source={require('../../resources/icon/logo.png')}></Image>
                         <Appbar.Action

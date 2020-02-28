@@ -1,6 +1,6 @@
 {
-  "name": "Robotics",
-  "version": "2.1.0",
+  "name": "explore-it Robotics",
+  "version": "2.1.1",
   "private": true,
   "scripts": {
     "start": "react-native start",
