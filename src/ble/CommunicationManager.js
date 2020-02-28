@@ -10,7 +10,7 @@ export class CommunicationManager {
     constructor() {
         if(! CommunicationManager.instance) {
             this._handlers = {
-                1: new CommunicationHandlerV1(),
+                1: new BootstrapHandler(),
                 2: new CommunicationHandlerV3(),
                 3: new CommunicationHandlerV3(),
                 4: new CommunicationHandlerV3(),
@@ -23,12 +23,16 @@ export class CommunicationManager {
     }
 
     getHandler(version){
-        return this._handlers[version] || new CommunicationHandlerV1();
+        return this._handlers[version] || new BootstrapHandler();
+    }
+
+    getBootstrapHandler(){
+        return this._handlers[1];
     }
 
     getSupportedVersions(){
         return Object.keys(this._handlers).map((key) => {
-            // TODO Kommentar wäre hilfreich warum parseint nötig ist. Variante wäre oben statt Ints 1,2,3 Strings "1", "2", "3".
+            // Object.keys gibt ein string array (["1","2","3", ...]) zurück, darum parseInt... 
             return parseInt(key);
         });
     }
@@ -62,10 +66,7 @@ export class CommunicationHandler{
     }
 
     record(duration, interval){
-        // TODO: kann hier nicht auch ein Promise.reject
-        //       return Promise.reject(new Error('This should never happen'));
-        //       zurückgegeben werden?
-        // Variante: Eine Exception werfen.
+        return Promise.reject(new Error('This should never happen'));
     }
 
     handleResponse(response){}
@@ -74,8 +75,7 @@ export class CommunicationHandler{
 
 }
 
-// TODO rename to BootstrapHandler
-class CommunicationHandlerV1 extends CommunicationHandler{
+class BootstrapHandler extends CommunicationHandler{
     handleResponse(response){
         response = response.toString(
             'latin1',
@@ -96,15 +96,6 @@ class CommunicationHandlerV1 extends CommunicationHandler{
             return bleAction.updateDeviceVersion(parseInt(response.substring(4)));
         }
         return bleAction.bleResponse('');
-    }
-
-    record(duration, interval){
-        // TODO kann das weggelassen werden? Dann sollte das record aus der Basisklasse aufgerufen werden.
-        //what to do here?
-    }
-
-    upload(instructions){
-        // and here?
     }
 }
 
@@ -242,23 +233,25 @@ class CommunicationHandlerV6 extends CommunicationHandler{
                 return bleAction.stoppedRobot();
             }
         } else {
+            console.log("line counter: " + this._linecounter);
+            console.log("expected line" + this._expectedLine);
+
             if(this._linecounter === -1) {
                 this._linecounter = Math.ceil((parseInt('0x' + this.toHexString(buffer)) + 1) / 18);
                 this._expectedLine = 0;
                 this._lostLines = [];
                 return bleAction.bleResponse('');
             } else {
-                // TODO rename pointer
-                let pointer = buffer.shift();
-
-                if(this._expectedLine !== pointer){
+                let counter = buffer.shift();
+                console.log("counter (actual line): " + counter);
+                if(this._expectedLine !== counter){
                     // TODO hier werden nicht alle verlorenen Linien aufgenommen.
                     //      es fehlen: expectedLine, expectedLine+1, ..., pointer-1
                     // TODO bei mehr als 256 Paketen (also etwa mehr als 2400 Zeilen) stimmen die Zeilennummern nicht mehr.
-                    this._lostLines.push(pointer - 1);
+                    this._lostLines.push(counter - 1);
                 }
                 // TODO check ob das Modulo richtig ist.
-                this._expectedLine = (pointer+1) % 256;
+                this._expectedLine = (counter+1) % 256;
                 let instructions = [];
                 for(let i = 0; i < (buffer.length / 2); i++){
                     var left = buffer[i*2];
@@ -273,7 +266,7 @@ class CommunicationHandlerV6 extends CommunicationHandler{
                         alert("lost lines: ", lostLines);
                     }
 
-                    // TODO stopDownlaoding()
+                    super.finishedDownloading()
                     return bleAction.receivedChunk(instructions, true);
                 }
                 return bleAction.receivedChunk(instructions, false);

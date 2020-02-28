@@ -129,8 +129,11 @@ class RobotProxy {
         if (this.isConnected) {
             this.isLearning = true;
             return new CommunicationManager().getHandler(version).record(duration, interval);
-        }else{
-            alert("APPARENTLY NOT CONNECTED");
+        } else {
+            return Promise.reject(new Error("Dev-Error - Should never occure unless something is completely messed up")).then(() => {
+                alert("APPARENTLY NOT CONNECTED!");
+            })
+            
         }
     }
 
