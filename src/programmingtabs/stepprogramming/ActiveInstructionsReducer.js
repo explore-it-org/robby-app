@@ -103,13 +103,13 @@ export const ActiveInstructionsReducer = (state = default_state_Active_Instructi
             });
         case ActionTypes.CHANGE_RIGHT_SPEED:
             let os = state.ActiveProgram.steps[action.index];
-            let ns = new Instruction(oldInstruction.left, action.speed);
+            let ns = new Instruction(os.left, action.speed);
             return Object.assign({}, state, {
                 lastUpdate: Date.now(),
                 ActiveProgram: Object.assign(new Program(), state.ActiveProgram,
                     {
                         steps: [...state.ActiveProgram.steps.slice(0, action.index),
-                            newInstruction,
+                            ns,
                             ...state.ActiveProgram.steps.slice(action.index + 1, state.ActiveProgram.steps.length),
                         ],
                     }),
