@@ -1,7 +1,7 @@
 import * as bleAction from './BleAction';
 import * as settingsAction from '../settings/SettingsAction';
 import BleService from './BleService';
-import { Instruction } from '../model/DatabaseModels';
+import { Instruction, Program } from '../model/DatabaseModels';
 import i18n from '../../resources/locales/i18n';
 import RobotProxy from './RobotProxy';
 import { Alert } from 'react-native';

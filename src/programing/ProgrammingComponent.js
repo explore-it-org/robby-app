@@ -13,6 +13,7 @@ import BleService from '../ble/BleService';
 import Toast from '../controls/Toast';
 import SettingsContainer from '../settings/SettingsContainer';
 import CustomIcon from '../utillity/CustomIcon';
+import * as NavigationService from '../utillity/NavigationService';
 
 
 export default class ProgrammingComponent extends Component {
@@ -27,6 +28,7 @@ export default class ProgrammingComponent extends Component {
     };
 
     componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS): void {
+        NavigationService.setNavigator(this.navigator);
         let prev = prevProps.Program.lastChange;
         let now = this.props.Program.lastChange;
         if (prev !== now) {

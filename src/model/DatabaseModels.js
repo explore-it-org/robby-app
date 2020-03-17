@@ -33,6 +33,13 @@ export class Program {
         }
     }
 
+    // calculates the depth / complexity of a program
+    static depth(program) {
+        return program instanceof Program && program.programType == ProgramType.BLOCKS ? 
+          1 + Math.max(...program.blocks.map(block => Database.findOneByPK(block.ref))) :
+          0;
+      }
+
     static delete(program) {
         return Database.delete(program.id);
     }
@@ -73,6 +80,11 @@ export class Instruction {
 
     static fromDatabase(instruction) {
         return new Instruction(instruction.left, instruction.right);
+    }
+
+    // compares two instructions
+    equals(instruction){
+        return instruction.left === this.left && instruction.right === this.right;
     }
 }
 

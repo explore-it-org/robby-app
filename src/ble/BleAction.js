@@ -5,10 +5,15 @@ import {
     clearProgram,
     emptyInstructionList,
     receiveDownload,
+    loadInstruction,
 } from '../programmingtabs/stepprogramming/ActiveInstructionAction';
+
 import {Program, ProgramType} from '../model/DatabaseModels';
 import {Alert} from 'react-native';
 import { CommunicationManager } from './CommunicationManager';
+import { loadBlock } from '../programmingtabs/blockprogramming/ActiveBlockAction';
+import * as NavigationService from '../utillity/NavigationService';
+import Database from '../database/RoboticsDatabase';
 
 export const connectToBle = () => ({
     type: ActionTypes.START_CONNECTING,
@@ -218,12 +223,110 @@ export const successDownloading = () => ({
     type: ActionTypes.SUCCESS_DOWNLOADING,
 });
 
+
+
+/**
+ * When the download finished, it checks for a matching program
+ * If there is a match, the program will be loaded and the view navigates to the corresponding programming view 
+ * otherwise it will try to create a program from the stored programs
+ */
 export const finishedDownloading = () => {
     return (dispatch, getState) => {
         dispatch(successDownloading());
-        dispatch(receiveDownload(new Program('', ProgramType.STEPS, getState().BLEConnection.receivedDownloads)));
+        let receivedInstuctions = getState().BLEConnection.receivedDownloads;
+        let program = recreateProgramFromInstructions(receivedInstuctions);
+        if(program == null){
+            var result = searchStructure(receivedInstuctions, Database.findAll());
+            dispatch(receiveDownload(new Program('', ProgramType.STEPS, getState())));
+        }else{
+            if(program.programType == ProgramType.BLOCKS){
+                dispatch(loadBlock(program.name));
+                NavigationService.navigate('Blockprogramming');
+            }else{
+                dispatch(loadInstruction(program.name));
+                NavigationService.navigate('Stepprogramming');
+            }
+        }
     };
 };
+
+/**
+ * Searches for a list of patterns in a list of instructions
+ * @param {Instruction[]} toSearchIn 
+ * @param {Program[]} patterns 
+ * @returns {Program[]}
+ */
+function searchStructure(toSearchIn, patterns){
+    if(patterns.length == 0 || toSearchIn.length == 0){
+        return new Program('',ProgramType.STEPS,toSearchIn, []);
+    }
+    let foundAt = instructionsContain(toSearchIn, Program.flatten(patterns[0]));
+    if(foundAt == -1){
+        return searchStructure(toSearchIn, patterns.slice(1, patterns.length));
+    }else if(foundAt > 0){    
+        let before = toSearchIn.slice(0, foundAt);
+        let after = toSearchIn.slice(foundAt+patterns[0].length - 1,toSearchIn.length);
+        return [...searchStructure(before, patterns.slice(1, patterns.length)), ...patterns[0], ...searchStructure(after, patterns)];
+    }else{
+        let after = toSearchIn.slice(foundAt+patterns[0].length - 1,toSearchIn.length);
+        return [...patterns[0],...searchStructure(after, patterns)];
+    }
+}
+
+/**
+ * returns the index of a pattern in a instruction collection or -1 if it doesn't contain the pattern
+ * @param {Instruction[]} instructions 
+ * @param {Instruction[]} pattern 
+ */
+function instructionsContain(instructions, pattern){
+    for(let i = 0; i < instructions.length - pattern.length; i++){
+        let found = true;
+        for(let j = 0; found && (j < pattern.length); j++){
+            found = compareInstructions(instructions[i+j], pattern[j]);
+        }
+        if(found){
+            return i;
+        }
+    }
+    return -1;
+}
+
+/**
+ * Goes through all programs and sorts them by complexity. 
+ * After sorting it converts all programs in to instructions and compares them. 
+ * The first match will be returned.
+ * @param {Instruction[]} instructions 
+ */
+function recreateProgramFromInstructions(instructions){
+    const programs = getState().Program.Programs;
+    let sorted = programs.sort((a, b) => Program.depth(a) - Program.depth(b));
+    for(let i = 0; i < sorted.length; i++){
+        let prg = sorted[i];
+        let flat = Program.flatten(prg);
+        if(compareInstructions(flat, instructions)){
+            return prg;
+        }
+    }
+    return null;
+}
+
+/**
+ *  Compares two lists of instructions
+ * Saving some time by first comparing the length of the lists before comparing every single one
+ * @param {Instruction[]} instructions1 
+ * @param {Instruction[]} instructions2 
+ */
+function compareInstructions(instructions1, instructions2){
+    if(instructions1.length != instructions2.length){
+        return false;
+    }
+    for(let i = 0; i < instructions1.length; i++){
+        if(!instructions1[i].equals(instructions2[i])){
+            return false;
+        }
+    }
+    return true;
+}
 
 export const appendChunk = (chunk) => ({
     type: ActionTypes.APPEND_CHUNK,
