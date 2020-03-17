@@ -28,6 +28,13 @@ export const saveProgram = (ActiveProgram) => {
     };
 };
 
+export const saveProgramFormBleAction = (program) => {
+    return (dispatch, getState) => {
+        dispatch(save(program));
+        dispatch(loadChildren());
+    }
+}
+
 export const duplicate = (program, newName = '') => {
     return (dispatch, getState) => {
         dispatch(_duplicate(program, newName));
