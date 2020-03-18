@@ -33,10 +33,14 @@ export class Program {
         }
     }
 
-    // calculates the depth / complexity of a program
+    /**
+     * Calculates the depth of a program
+     * Source: https://stackoverflow.com/questions/55420156/get-arrays-depth-in-javascript
+     * @param {Program} program 
+     */
     static depth(program) {
         return program instanceof Program && program.programType == ProgramType.BLOCKS ? 
-          1 + Math.max(...program.blocks.map(block => Database.findOneByPK(block.ref))) :
+          1 + Math.max(...program.blocks.map(block => Program.depth(Database.findOneByPK(block.ref)))) :
           0;
       }
 

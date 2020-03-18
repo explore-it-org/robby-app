@@ -10,10 +10,11 @@ import {
 import {Program, ProgramType, Block} from '../model/DatabaseModels';
 import {Alert} from 'react-native';
 import { CommunicationManager } from './CommunicationManager';
-import { loadBlock, loadChildren } from '../programmingtabs/blockprogramming/ActiveBlockAction';
+import { loadBlock, loadChildren, forceReloadBlocks } from '../programmingtabs/blockprogramming/ActiveBlockAction';
 import * as NavigationService from '../utillity/NavigationService';
 import Database from '../database/RoboticsDatabase';
 import uuidv4 from 'uuid/v4';
+import { add } from '../database/DatabaseAction';
 
 export const connectToBle = () => ({
     type: ActionTypes.START_CONNECTING,
@@ -226,32 +227,35 @@ export const successDownloading = () => ({
 
 
 /**
- * When the download finished, it checks for a matching program
- * If there is a match, the program will be loaded and the view navigates to the corresponding programming view 
- * otherwise it will try to create a program from the stored programs
+ * When the download finishes, it will create a block program from the downloaded programs
+ * and if the first block contains only a single program with 1 rep, than that program will be loaded instead
  */
 export const finishedDownloading = () => {
     return (dispatch, getState) => {
         dispatch(successDownloading());
         
         let receivedInstuctions = getState().BLEConnection.receivedDownloads;
-        var result = searchStructure(receivedInstuctions, Database.findAll(), 0);
+        let programs = Database.findAll();
+        let filtered = programs.filter((program) => {
+            if(program.programType == ProgramType.BLOCKS)
+                return program.blocks.length > 0;
+            return program.steps.length > 0;
+        });
+        let sorted = filtered.sort((a, b) => Program.depth(b) - Program.depth(a));
+        console.log(sorted);
+        var result = searchStructure(receivedInstuctions, sorted, dispatch);
         
         if(result.length == 1 && result[0].rep == 1){
             program = Database.findOneByPK(result[0].ref);
         }else{
             program = new Program('MasterDownload', ProgramType.BLOCKS, [], result);
-            program = saveProgram(program);
+            program = saveProgram(program, dispatch);
         }
 
-        dispatch(loadChildren());
-        dispatch(loadBlock(program.name));
-        NavigationService.navigate('Blockprogramming');
-
         if(program.programType == ProgramType.BLOCKS){
-            console.log(program);
-            // dispatch(loadBlock(savedProgram.name));
-            // NavigationService.navigate('Blockprogramming');
+            dispatch(loadChildren());
+            dispatch(loadBlock(program.name));
+            NavigationService.navigate('Blockprogramming');
         }else{
             dispatch(loadInstruction(program.name));
             NavigationService.navigate('Stepprogramming');
@@ -265,42 +269,62 @@ export const finishedDownloading = () => {
  * slice includes first and excludes the last
  * @param {Instruction[]} toSearchIn 
  * @param {Program[]} patterns 
+ * @param {Function} dispatch Refference to the redux dispatch function
  * @returns {Block[]}
  */
-function searchStructure(toSearchIn, patterns, n){
-    console.log(n);
-    console.log(toSearchIn," ||||| ", patterns);
+function searchStructure(toSearchIn, patterns, dispatch){
     if(toSearchIn.length == 0){
         return [];
     }
     else if(patterns.length == 0){
-        let id = saveProgram(new Program('Download',ProgramType.STEPS,toSearchIn, [])).id;
+        let id = saveProgram(new Program('Download',ProgramType.STEPS,toSearchIn, []), dispatch).id;
         return [new Block(id,1)];
     }
 
     let pattern = Program.flatten(patterns[0]);
     let foundAt = instructionsContain(toSearchIn, pattern);
-    // console.log(foundAt);
-    // console.log(toSearchIn, " |||||| " ,pattern)
-    // console.log(patterns);
+
     if(foundAt == -1){
-        return searchStructure(toSearchIn, patterns.slice(1, patterns.length), n + 1);
+        return searchStructure(toSearchIn, patterns.slice(1, patterns.length), dispatch);
     }else if(foundAt > 0){    
         let before = toSearchIn.slice(0, foundAt);
+        
         let after = toSearchIn.slice(foundAt+pattern.length,toSearchIn.length);
-        //console.log(after);
-        return [...searchStructure(before, patterns.slice(1, patterns.length), n + 1), new Block(patterns[0].id,1), ...searchStructure(after, patterns, n + 1)];
+        let currentBlock = new Block(patterns[0].id,1);
+        let blocksBefore = searchStructure(before, patterns.slice(1, patterns.length), dispatch);
+        let blocksAfter = searchStructure(after, patterns, dispatch);
+
+        if(blocksBefore && blocksBefore.length  > 0 && blocksBefore[blocksBefore.length - 1].ref == currentBlock.ref){
+            currentBlock.rep += blocksBefore[0].rep;
+            blocksBefore = blocksBefore.slice(0, blocksBefore.length - 1);
+        }
+
+        if(blocksAfter && blocksAfter.length  > 0 && blocksAfter[0].ref == currentBlock.ref){
+            currentBlock.rep += blocksAfter[0].rep;
+            blocksAfter = blocksAfter.slice(1, blocksAfter.length);
+        }
+
+        return [...blocksBefore, currentBlock, ...blocksAfter];
     }else{
+        let currentBlock = new Block(patterns[0].id,1);
         let after = toSearchIn.slice(pattern.length,toSearchIn.length);
-        //console.log(after);
-        return [new Block(patterns[0].id,1),...searchStructure(after, patterns, n + 1)];
+        let blocksAfter = searchStructure(after, patterns, dispatch);
+
+        if(blocksAfter && blocksAfter.length  > 0 && blocksAfter[0].ref == currentBlock.ref){
+            currentBlock.rep += blocksAfter[0].rep;
+            blocksAfter = blocksAfter.slice(1, blocksAfter.length);
+        }
+
+        return [currentBlock,...blocksAfter];
     }
 }
+
 /**
  * Save program and add an incremental number to the end of it if it already exists
  * @param {Program} program 
+ * @param {Function} dispatch Refference to the redux dispatch function
  */
-function saveProgram(program){
+function saveProgram(program, dispatch){
     let i = 1;
     let newName = program.name;
     while (!Database.nameIsUnused(program.name)) {
@@ -308,7 +332,7 @@ function saveProgram(program){
         i++;
     }
     program.id = uuidv4();
-    Database.add(program, 'new');
+    dispatch(add(program));
     return program;
 }
 
