@@ -265,11 +265,12 @@ export const finishedDownloading = () => {
 };
 
 /**
- * Searches for a list of patterns in a list of instructions
- * slice includes first and excludes the last
+ * Searches in the list toSearchIn of instructions 
+ * for one pattern from a given list of patterns 
  * @param {Instruction[]} toSearchIn 
  * @param {Program[]} patterns 
- * @param {Function} dispatch Refference to the redux dispatch function
+ * @param {Function} dispatch reference to the redux dispatch function, 
+ * used in the saveProgram method to dispatch the add(program) redux action
  * @returns {Block[]}
  */
 function searchStructure(toSearchIn, patterns, dispatch){
@@ -289,8 +290,8 @@ function searchStructure(toSearchIn, patterns, dispatch){
     }else if(foundAt > 0){    
         let before = toSearchIn.slice(0, foundAt);
         
-        let after = toSearchIn.slice(foundAt+pattern.length,toSearchIn.length);
-        let currentBlock = new Block(patterns[0].id,1);
+        let after = toSearchIn.slice(foundAt + pattern.length, toSearchIn.length);
+        let currentBlock = new Block(patterns[0].id, 1);
         let blocksBefore = searchStructure(before, patterns.slice(1, patterns.length), dispatch);
         let blocksAfter = searchStructure(after, patterns, dispatch);
 
