@@ -241,10 +241,9 @@ export const finishedDownloading = () => {
                 return program.blocks.length > 0;
             return program.steps.length > 0;
         });
-        let sorted = filtered.sort((a, b) => Program.depth(b) - Program.depth(a));
-        console.log(sorted);
+        let sorted = filtered.sort((a, b) => Program.depth(b) - Program.depth(a)); 
         var result = searchStructure(receivedInstuctions, sorted, dispatch);
-        
+
         if(result.length == 1 && result[0].rep == 1){
             program = Database.findOneByPK(result[0].ref);
         }else{
@@ -265,12 +264,12 @@ export const finishedDownloading = () => {
 };
 
 /**
- * Searches in the list toSearchIn of instructions 
- * for one pattern from a given list of patterns 
+ * Searches in the given list `toSearchIn` of instructions for programs passed with the parameter `patterns` 
+ * and returns a list of blocks which were found. The patterns are searched in the order they appear
+ * in the given list `patterns`. Instructions between two matching patterns are saved to the Database and returned as a Block.
  * @param {Instruction[]} toSearchIn 
  * @param {Program[]} patterns 
- * @param {Function} dispatch reference to the redux dispatch function, 
- * used in the saveProgram method to dispatch the add(program) redux action
+ * @param {Function} dispatch reference to the redux dispatch function, used in the saveProgram method to dispatch the add(program) redux action
  * @returns {Block[]}
  */
 function searchStructure(toSearchIn, patterns, dispatch){
