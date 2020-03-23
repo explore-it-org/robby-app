@@ -200,7 +200,7 @@ export const uploadToRobot = (ActiveTab) => {
         if (ActiveTab === 'Stepprogramming') {
             a = Program.flatten(getState().ActiveProgram.ActiveProgram);
         } else if(ActiveTab === 'Blockprogramming') {
-            a = Program.flatten(getState().ActiveBlock.Active_Block);
+            a = Program.flatten(getState( ).ActiveBlock.Active_Block);
         }else {
             a = Program.flatten(getState().Overview.selectedProgram);
         }
@@ -236,6 +236,7 @@ export const finishedDownloading = () => {
         
         let receivedInstuctions = getState().BLEConnection.receivedDownloads;
         var result = searchStructure(receivedInstuctions, dispatch);
+        //alert(JSON.stringify(result));
         if(result.length == 1 && result[0].rep == 1){
             program = Database.findOneByPK(result[0].ref);
         }else{
@@ -255,14 +256,15 @@ export const finishedDownloading = () => {
 };
 
 /**
- * Searches in the given list `toSearchIn` of instructions for patterns startign with the largest possible pattern having half the length of `toSearchIn`
- * and returns a list of blocks. Patterns are saved to the Database and returned as a Block.
+ * Searches in the given list `toSearchIn` of instructions for programs passed with the parameter `patterns` 
+ * and returns a list of blocks which were found. The patterns are searched in the order they appear
+ * in the given list `patterns`. Instructions between two matching patterns are saved to the Database and returned as a Block.
  * @param {Instruction[]} toSearchIn 
+ * @param {Program[]} patterns 
  * @param {Function} dispatch reference to the redux dispatch function, used in the saveProgram method to dispatch the add(program) redux action
  * @returns {Block[]}
  */
 function searchStructure(toSearchIn, dispatch){
-    let steps = toSearchIn;
     if(toSearchIn.length == 0){
         return [];
     }
@@ -275,13 +277,13 @@ function searchStructure(toSearchIn, dispatch){
     let patlen = toSearchIn.length / 2;
     let blocks = [];
     while(patlen > 1){
-        for(let i = 0; i <= steps.length - 2 * patlen;i++){
+        for(let i = 0; i <= toSearchIn.length - 2 * patlen;i++){
             let pattern = toSearchIn.slice(i, i + patlen);
-            let remainder = toSearchIn.slice(i + patlen, toSearchIn.length);
-            
-            let foundAt = instructionsContain(remainder, pattern);
+            let remainder = toSearchIn.slice(i + patlen);
+            let foundAt = instructionsContain(toSearchIn, pattern);
             if(foundAt > -1){
                 let ref = findProgramByPattern(pattern);
+                
                 if(!ref){
                     let toSave = searchStructure(pattern, dispatch);
                     let prg;
@@ -292,50 +294,46 @@ function searchStructure(toSearchIn, dispatch){
                         ref = saveProgram(prg, dispatch);
                     }
                 }
+            
                 
-                while(toSearchIn.length > 0){
-                    foundAt = instructionsContain(toSearchIn, pattern);
+                while(foundAt != -1){
+                    //alert(foundAt);
+                    alert(JSON.stringify(pattern));
                     if(foundAt > 0){
-                        let before = toSearchIn.slice(0, foundAt);
-                        if(before.length){
-                            let blocksBefore = searchStructure(blocksBefore, dispatch);
-                            blocks.concat(blocksBefore);
-                            toSearchIn = toSearchIn.slice(foundAt);
-                        }
-                    }else if(foundAt == 0){
-                        blocks.push(new Block(ref.id, 1));
-                        toSearchIn = toSearchIn.slice(patlen);
+                        let before = remainder.slice(0, foundAt);
+                        let blocksBefore = searchStructure(before, dispatch);
+                        blocks.concat(blocksBefore);
+                        remainder = remainder.slice(foundAt + pattern.length);
                     }else{
-                        let remainingBlocks = searchStructure(toSearchIn);
-                        blocks.concat(remainingBlocks);
-                        toSearchIn = [];
+                        let blck = new Block(ref.id, 1);
+                        if(blocks.length != 0 && blocks[blocks.length-1].ref == blck.ref){
+                            blocks[blocks.length-1].rep += 1;
+                        }else{
+                            blocks.push(blck);
+                        }
+                        remainder = remainder.slice(pattern.length);
+                        alert(remainder.length);
                     }
+                    foundAt = instructionsContain(remainder, pattern);
+                }
+                if(remainder.length > 0){
+                    let remainingBlocks = searchStructure(remainder);
+                    blocks.concat(remainingBlocks);
                 }
                 return blocks;
             }
         }
         patlen--;
     }
-    if(blocks.length > 0){
-        return blocks;
-    }
-    if(steps.length > 0){
-        let sequenceProgram = new Program("Download", ProgramType.STEPS, steps, []);
-        return [new Block(saveProgram(sequenceProgram, dispatch).id, 1)];
-    } else{
-        return [];
-    }
+    let sequenceProgram = new Program("Download", ProgramType.STEPS, toSearchIn, []);
+    return [new Block(saveProgram(sequenceProgram, dispatch).id, 1)];
 }
 
-/**
- * Returns null or a program from the DB that matches the supplied pattern.
- * @param {Instruction[]} pattern 
- */
 function findProgramByPattern(pattern){
-    let dbPrograms = Database.findAll();
-    for(let i = 0; i < dbPrograms.length; i++){
-        if(compareInstructions(Program.flatten(dbPrograms[i]), pattern)){
-            return dbPrograms[i];
+    let all = Database.findAll();
+    for(let i = 0; i < all.length; i++){
+        if(compareInstructions(Program.flatten(all[i]), pattern)){
+            return all[i];
         }
     }
     return null;
