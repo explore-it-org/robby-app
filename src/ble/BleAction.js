@@ -303,10 +303,14 @@ function searchStructure(toSearchIn, dispatch){
                             toSearchIn = toSearchIn.slice(foundAt);
                         }
                     }else if(foundAt == 0){
-                        blocks.push(new Block(ref.id, 1));
-                        toSearchIn = toSearchIn.slice(patlen);
+                        let rep = 0;
+                        while(instructionsContain(toSearchIn, pattern) == 0){
+                            rep++;
+                            toSearchIn = toSearchIn.slice(patlen);
+                        }
+                        blocks.push(new Block(ref.id, rep));
                     }else{
-                        let remainingBlocks = searchStructure(toSearchIn);
+                        let remainingBlocks = searchStructure(toSearchIn, dispatch);
                         blocks.concat(remainingBlocks);
                         toSearchIn = [];
                     }
