@@ -39,10 +39,10 @@ export class Program {
      * @param {Program} program 
      */
     static depth(program) {
-        return program instanceof Program && program.programType == ProgramType.BLOCKS ? 
-          1 + Math.max(...program.blocks.map(block => Program.depth(Database.findOneByPK(block.ref)))) :
-          0;
-      }
+        return program instanceof Program && program.programType == ProgramType.BLOCKS ?
+            1 + Math.max(...program.blocks.map(block => Program.depth(Database.findOneByPK(block.ref)))) :
+            0;
+    }
 
     static delete(program) {
         return Database.delete(program.id);
@@ -86,8 +86,11 @@ export class Instruction {
         return new Instruction(instruction.left, instruction.right);
     }
 
-    // compares two instructions
-    equals(instruction){
+    /**
+     * Compares the current instruction with a provided instruction
+     * @param {Instruction} instruction 
+     */
+    equals(instruction) {
         return instruction.left === this.left && instruction.right === this.right;
     }
 }

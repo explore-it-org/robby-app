@@ -7,8 +7,8 @@ import {
     loadInstruction,
 } from '../programmingtabs/stepprogramming/ActiveInstructionAction';
 
-import {Program, ProgramType, Block} from '../model/DatabaseModels';
-import {Alert} from 'react-native';
+import { Program, ProgramType, Block } from '../model/DatabaseModels';
+import { Alert } from 'react-native';
 import { CommunicationManager } from './CommunicationManager';
 import { loadBlock, loadChildren, forceReloadBlocks } from '../programmingtabs/blockprogramming/ActiveBlockAction';
 import * as NavigationService from '../utillity/NavigationService';
@@ -199,9 +199,9 @@ export const uploadToRobot = (ActiveTab) => {
         let a = null;
         if (ActiveTab === 'Stepprogramming') {
             a = Program.flatten(getState().ActiveProgram.ActiveProgram);
-        } else if(ActiveTab === 'Blockprogramming') {
+        } else if (ActiveTab === 'Blockprogramming') {
             a = Program.flatten(getState().ActiveBlock.Active_Block);
-        }else {
+        } else {
             a = Program.flatten(getState().Overview.selectedProgram);
         }
         dispatch(startUpload());
@@ -233,33 +233,33 @@ export const successDownloading = () => ({
 export const finishedDownloading = () => {
     return (dispatch, getState) => {
         dispatch(successDownloading());
-        
+
         let receivedInstuctions = getState().BLEConnection.receivedDownloads;
         let programs = Database.findAll();
         let filtered = programs.filter((program) => {
-            if(program.programType == ProgramType.BLOCKS)
+            if (program.programType == ProgramType.BLOCKS)
                 return program.blocks.length > 0;
             return program.steps.length > 0;
         });
-        let sorted = filtered.sort((a, b) => Program.depth(b) - Program.depth(a)); 
+        let sorted = filtered.sort((a, b) => Program.depth(b) - Program.depth(a));
         var result = searchStructure(receivedInstuctions, sorted, dispatch);
 
-        if(result.length == 1 && result[0].rep == 1){
+        if (result.length == 1 && result[0].rep == 1) {
             program = Database.findOneByPK(result[0].ref);
-        }else{
+        } else {
             program = new Program('MasterDownload', ProgramType.BLOCKS, [], result);
             program = saveProgram(program, dispatch);
         }
 
-        if(program.programType == ProgramType.BLOCKS){
+        if (program.programType == ProgramType.BLOCKS) {
             dispatch(loadChildren());
             dispatch(loadBlock(program.name));
             NavigationService.navigate('Blockprogramming');
-        }else{
+        } else {
             dispatch(loadInstruction(program.name));
             NavigationService.navigate('Stepprogramming');
         }
-        
+
     };
 };
 
@@ -272,50 +272,50 @@ export const finishedDownloading = () => {
  * @param {Function} dispatch reference to the redux dispatch function, used in the saveProgram method to dispatch the add(program) redux action
  * @returns {Block[]}
  */
-function searchStructure(toSearchIn, patterns, dispatch){
-    if(toSearchIn.length == 0){
+function searchStructure(toSearchIn, patterns, dispatch) {
+    if (toSearchIn.length == 0) {
         return [];
     }
-    else if(patterns.length == 0){
-        let id = saveProgram(new Program('Download',ProgramType.STEPS,toSearchIn, []), dispatch).id;
-        return [new Block(id,1)];
+    else if (patterns.length == 0) {
+        let id = saveProgram(new Program('Download', ProgramType.STEPS, toSearchIn, []), dispatch).id;
+        return [new Block(id, 1)];
     }
 
     let pattern = Program.flatten(patterns[0]);
     let foundAt = instructionsContain(toSearchIn, pattern);
 
-    if(foundAt == -1){
+    if (foundAt == -1) {
         return searchStructure(toSearchIn, patterns.slice(1, patterns.length), dispatch);
-    }else if(foundAt > 0){    
+    } else if (foundAt > 0) {
         let before = toSearchIn.slice(0, foundAt);
-        
+
         let after = toSearchIn.slice(foundAt + pattern.length, toSearchIn.length);
         let currentBlock = new Block(patterns[0].id, 1);
         let blocksBefore = searchStructure(before, patterns.slice(1, patterns.length), dispatch);
         let blocksAfter = searchStructure(after, patterns, dispatch);
 
-        if(blocksBefore && blocksBefore.length  > 0 && blocksBefore[blocksBefore.length - 1].ref == currentBlock.ref){
+        if (blocksBefore && blocksBefore.length > 0 && blocksBefore[blocksBefore.length - 1].ref == currentBlock.ref) {
             currentBlock.rep += blocksBefore[0].rep;
             blocksBefore = blocksBefore.slice(0, blocksBefore.length - 1);
         }
 
-        if(blocksAfter && blocksAfter.length  > 0 && blocksAfter[0].ref == currentBlock.ref){
+        if (blocksAfter && blocksAfter.length > 0 && blocksAfter[0].ref == currentBlock.ref) {
             currentBlock.rep += blocksAfter[0].rep;
             blocksAfter = blocksAfter.slice(1, blocksAfter.length);
         }
 
         return [...blocksBefore, currentBlock, ...blocksAfter];
-    }else{
-        let currentBlock = new Block(patterns[0].id,1);
-        let after = toSearchIn.slice(pattern.length,toSearchIn.length);
+    } else {
+        let currentBlock = new Block(patterns[0].id, 1);
+        let after = toSearchIn.slice(pattern.length, toSearchIn.length);
         let blocksAfter = searchStructure(after, patterns, dispatch);
 
-        if(blocksAfter && blocksAfter.length  > 0 && blocksAfter[0].ref == currentBlock.ref){
+        if (blocksAfter && blocksAfter.length > 0 && blocksAfter[0].ref == currentBlock.ref) {
             currentBlock.rep += blocksAfter[0].rep;
             blocksAfter = blocksAfter.slice(1, blocksAfter.length);
         }
 
-        return [currentBlock,...blocksAfter];
+        return [currentBlock, ...blocksAfter];
     }
 }
 
@@ -324,7 +324,7 @@ function searchStructure(toSearchIn, patterns, dispatch){
  * @param {Program} program 
  * @param {Function} dispatch Refference to the redux dispatch function
  */
-function saveProgram(program, dispatch){
+function saveProgram(program, dispatch) {
     let i = 1;
     let newName = program.name;
     while (!Database.nameIsUnused(program.name)) {
@@ -337,17 +337,17 @@ function saveProgram(program, dispatch){
 }
 
 /**
- * returns the index of a pattern in a instruction collection or -1 if it doesn't contain the pattern
+ * Returns the index of a pattern in a instructionslist or -1 if it doesn't contain the pattern
  * @param {Instruction[]} instructions 
  * @param {Instruction[]} pattern 
  */
-function instructionsContain(instructions, pattern){
-    for(let i = 0; i <= instructions.length - pattern.length; i++){
+function instructionsContain(instructions, pattern) {
+    for (let i = 0; i <= instructions.length - pattern.length; i++) {
         let found = true;
-        for(let j = 0; found && (j < pattern.length); j++){
-            found = instructions[i+j].equals(pattern[j]);
+        for (let j = 0; found && (j < pattern.length); j++) {
+            found = instructions[i + j].equals(pattern[j]);
         }
-        if(found){
+        if (found) {
             return i;
         }
     }
@@ -355,20 +355,20 @@ function instructionsContain(instructions, pattern){
 }
 
 /**
- * Goes through all programs and sorts them by complexity. 
+ * Goes through all programs in the database and sorts them by complexity. 
  * After sorting it converts all programs in to instructions and compares them. 
  * The first match will be returned.
  * @param {Instruction[]} instructions
  * @param {Program[]} programs
+ * @returns {Program}
  */
-function recreateProgramFromInstructions(instructions){
+function recreateProgramFromInstructions(instructions) {
     const programs = Database.findAll();
     let sorted = programs.sort((a, b) => Program.depth(a) - Program.depth(b));
-    for(let i = 0; i < sorted.length; i++){
-        let prg = sorted[i];
-        let flat = Program.flatten(prg);
-        if(compareInstructions(flat, instructions)){
-            return prg;
+    for (let i = 0; i < sorted.length; i++) {
+        let flat = Program.flatten(sorted[i]);
+        if (compareInstructions(flat, instructions)) {
+            return sorted[i];
         }
     }
     return null;
@@ -380,12 +380,12 @@ function recreateProgramFromInstructions(instructions){
  * @param {Instruction[]} instructions1 
  * @param {Instruction[]} instructions2 
  */
-function compareInstructions(instructions1, instructions2){
-    if(instructions1.length != instructions2.length){
+function compareInstructions(instructions1, instructions2) {
+    if (instructions1.length != instructions2.length) {
         return false;
     }
-    for(let i = 0; i < instructions1.length; i++){
-        if(!instructions1[i].equals(instructions2[i])){
+    for (let i = 0; i < instructions1.length; i++) {
+        if (!instructions1[i].equals(instructions2[i])) {
             return false;
         }
     }
@@ -400,7 +400,7 @@ export const appendChunk = (chunk) => ({
 export const receivedChunk = (chunk, isLastPackage) => {
     return (dispatch, getState) => {
         dispatch(appendChunk(chunk))
-        if(isLastPackage){
+        if (isLastPackage) {
             dispatch(finishedDownloading());
         }
     };
@@ -411,6 +411,6 @@ export const downloadToDevice = () => {
     return (dispatch, getState) => {
         new CommunicationManager().getHandler(getState().BLEConnection.device.version).startDownloading();
         dispatch(startDownloading());
-        dispatch(emptyInstructionList());     
+        dispatch(emptyInstructionList());
     };
 };
