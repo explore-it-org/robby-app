@@ -331,10 +331,10 @@ class SettingsComponent extends Component {
                                                 fontSize: 16,
                                                 fontWeight: 'bold',
                                             }}>
-                                                {i18n.t('Settings.language')}
+                                                {i18n.t('Settings.algorithm')}:
                                             </Text>
                                         </View>
-                                        <View style={{ flex: 10, alignSelf: 'center' }}>
+                                        <View style={{ flex: 12, alignSelf: 'center' }}>
                                             {this.renderAlgorithmPicker()}
                                         </View>
                                         <View style={{ flex: 2 }} />

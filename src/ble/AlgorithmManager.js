@@ -17,6 +17,12 @@ export class AlgorithmManager {
                 4: new AlgorithmHandler4(),
                 5: new AlgorithmHandler5(),
                 6: new AlgorithmHandler6(),
+                7: new AlgorithmHandler7(),
+                8: new AlgorithmHandler8(),
+                9: new AlgorithmHandler9(),
+                10: new AlgorithmHandler10(),
+                11: new AlgorithmHandler11(),
+                12: new AlgorithmHandler12(),
             };
             AlgorithmManager.instance = this;
         }
@@ -51,7 +57,7 @@ export class AlgorithmHandler {
         return this._displayName;
     }
 
-    handle(version, input, dispatch, sortByDepth, sortByLength, inverseSorting) {
+    handle(version, input, dispatch, sortByDepth, sortByLength, inverseSorting, minPatternLength) {
         let programs = Database.findAll().filter(program => {
             return Program.flatten(program).length < input.length;
         });
@@ -73,7 +79,7 @@ export class AlgorithmHandler {
         if (version == AlgorithmVersion.V1) {
             result = this.searchStructureFromDb(input, programs, dispatch);
         } else {
-            result = this.searchStructure(input, programs, dispatch);
+            result = this.searchStructure(input, programs, dispatch, minPatternLength);
         }
 
         if (result.length == 1 && result[0].rep == 1) {
@@ -191,7 +197,7 @@ export class AlgorithmHandler {
 
         let patlen = toSearchIn.length / 2;
         let blocks = [];
-        while (patlen > minPatternLength) {
+        while (patlen >= minPatternLength) {
             for (let i = 0; i <= steps.length - 2 * patlen; i++) {
                 let pattern = toSearchIn.slice(i, i + patlen);
                 let remainder = toSearchIn.slice(i + patlen, toSearchIn.length);
@@ -200,7 +206,7 @@ export class AlgorithmHandler {
                 if (foundAt > -1) {
                     let ref = this.findProgramByPattern(pattern, dbPrograms);
                     if (!ref) {
-                        let toSave = this.searchStructure(pattern, dispatch);
+                        let toSave = this.searchStructure(pattern, dbPrograms, dispatch, minPatternLength);
                         let prg;
                         if (toSave.length == 1 && toSave[0].rep == 1) {
                             ref = Database.findOneByPK(toSave[0].ref);
@@ -215,7 +221,7 @@ export class AlgorithmHandler {
                         if (foundAt > 0) {
                             let before = toSearchIn.slice(0, foundAt);
                             if (before.length) {
-                                let blocksBefore = this.searchStructure(blocksBefore, dispatch);
+                                let blocksBefore = this.searchStructure(blocksBefore, dbPrograms, dispatch, minPatternLength);
                                 blocks.concat(blocksBefore);
                                 toSearchIn = toSearchIn.slice(foundAt);
                             }
@@ -227,7 +233,7 @@ export class AlgorithmHandler {
                             }
                             blocks.push(new Block(ref.id, rep));
                         } else {
-                            let remainingBlocks = this.searchStructure(toSearchIn, dispatch);
+                            let remainingBlocks = this.searchStructure(toSearchIn, dbPrograms, dispatch, minPatternLength);
                             blocks.concat(remainingBlocks);
                             toSearchIn = [];
                         }
@@ -409,7 +415,7 @@ export class AlgorithmHandler3 extends AlgorithmHandler {
 
 export class AlgorithmHandler4 extends AlgorithmHandler {
     constructor() {
-        super('V2 | SortedByDepth');
+        super('V2 | SortedByDepth | 1');
     }
     handleInput(input, dispatch) {
         return super.handle(
@@ -419,13 +425,46 @@ export class AlgorithmHandler4 extends AlgorithmHandler {
             true,
             false,
             false,
+            1
+        );
+    }
+}
+export class AlgorithmHandler5 extends AlgorithmHandler {
+    constructor() {
+        super('V2 | SortedByDepth | 2');
+    }
+    handleInput(input, dispatch) {
+        return super.handle(
+            AlgorithmVersion.V2,
+            input,
+            dispatch,
+            true,
+            false,
+            false,
+            2
+        );
+    }
+}
+export class AlgorithmHandler6 extends AlgorithmHandler {
+    constructor() {
+        super('V2 | SortedByDepth | 3');
+    }
+    handleInput(input, dispatch) {
+        return super.handle(
+            AlgorithmVersion.V2,
+            input,
+            dispatch,
+            true,
+            false,
+            false,
+            3
         );
     }
 }
 
-export class AlgorithmHandler5 extends AlgorithmHandler {
+export class AlgorithmHandler7 extends AlgorithmHandler {
     constructor() {
-        super('V2 | SortedByLength');
+        super('V2 | SortedByLength | 1');
     }
     handleInput(input, dispatch) {
         super.handle(
@@ -435,13 +474,47 @@ export class AlgorithmHandler5 extends AlgorithmHandler {
             false,
             true,
             false,
+            1
         );
     }
 }
 
-export class AlgorithmHandler6 extends AlgorithmHandler {
+export class AlgorithmHandler8 extends AlgorithmHandler {
     constructor() {
-        super('V2 | Not Sorted');
+        super('V2 | SortedByLength | 2');
+    }
+    handleInput(input, dispatch) {
+        super.handle(
+            AlgorithmVersion.V2,
+            input,
+            dispatch,
+            false,
+            true,
+            false,
+            2
+        );
+    }
+}
+export class AlgorithmHandler9 extends AlgorithmHandler {
+    constructor() {
+        super('V2 | SortedByLength | 3');
+    }
+    handleInput(input, dispatch) {
+        super.handle(
+            AlgorithmVersion.V2,
+            input,
+            dispatch,
+            false,
+            true,
+            false,
+            3
+        );
+    }
+}
+
+export class AlgorithmHandler10 extends AlgorithmHandler {
+    constructor() {
+        super('V2 | Not Sorted | 1');
     }
     handleInput(input, dispatch) {
         return super.handle(
@@ -451,6 +524,41 @@ export class AlgorithmHandler6 extends AlgorithmHandler {
             false,
             false,
             false,
+            1
+        );
+    }
+}
+
+export class AlgorithmHandler11 extends AlgorithmHandler {
+    constructor() {
+        super('V2 | NotSorted | 2');
+    }
+    handleInput(input, dispatch) {
+        return super.handle(
+            AlgorithmVersion.V2,
+            input,
+            dispatch,
+            false,
+            false,
+            false,
+            2
+        );
+    }
+}
+
+export class AlgorithmHandler12 extends AlgorithmHandler {
+    constructor() {
+        super('V2 | NotSorted | 3');
+    }
+    handleInput(input, dispatch) {
+        return super.handle(
+            AlgorithmVersion.V2,
+            input,
+            dispatch,
+            false,
+            false,
+            false,
+            3
         );
     }
 }
