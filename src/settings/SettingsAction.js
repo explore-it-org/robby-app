@@ -1,6 +1,6 @@
 import * as ActionTypes from '../GlobalActionTypes';
 import RobotProxy from './../ble/RobotProxy';
-import {failedUplaod, startUpload} from '../ble/BleAction';
+import { failedUplaod, startUpload } from '../ble/BleAction';
 
 export const setDuration = (duration) => ({
     type: ActionTypes.SET_DURATION,
@@ -32,6 +32,11 @@ export const setLanguage = (language) => ({
     type: ActionTypes.SET_LANGUAGE,
     language,
 });
+
+export const setAlgorithm = (algorithm) => ({
+    type: ActionTypes.SET_ALGORITHM,
+    algorithm
+})
 
 export const toggleSettings = () => ({
     type: ActionTypes.TOGGLE_SETTINGS,

@@ -1,9 +1,9 @@
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {setDuration, setInterval, setIntervalAndSendToRobby, setLanguage, toggleSettings} from './SettingsAction';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { setDuration, setInterval, setIntervalAndSendToRobby, setLanguage, toggleSettings, setAlgorithm } from './SettingsAction';
 import BleAction from '../ble/BleAction';
 import SettingsComponent from './SettingsComponent';
-import {forceReloadBlocks} from '../programmingtabs/blockprogramming/ActiveBlockAction';
+import { forceReloadBlocks } from '../programmingtabs/blockprogramming/ActiveBlockAction';
 
 const mapStateToProps = state => ({
     Settings: state.Settings,
@@ -19,6 +19,7 @@ const mapDispatchToProps = dispatch =>
             setLanguage,
             toggleSettings,
             forceReloadBlocks,
+            setAlgorithm
         }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(SettingsComponent);

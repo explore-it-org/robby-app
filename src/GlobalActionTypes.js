@@ -85,6 +85,7 @@ export const GRANT_LOCATION = 'GRANT_LOCATION';
 export const SET_LANGUAGE = 'SET_LANGUAGE';
 export const BLE_STATE = 'BLE_STATE';
 export const TOGGLE_SETTINGS = 'TOGGLE_SETTINGS';
+export const SET_ALGORITHM = 'SET_ALGORITHM';
 
 // Overview Action Types
 export const SET_SELECTED_INDEX = 'SET_SELECTED_INDEX';
