@@ -2,9 +2,6 @@ import { Block, Program, ProgramType } from '../model/DatabaseModels';
 import Database from '../database/RoboticsDatabase';
 import uuidv4 from 'uuid/v4';
 import { add } from '../database/DatabaseAction';
-import { loadChildren, loadBlock } from '../programmingtabs/blockprogramming/ActiveBlockAction';
-import { loadInstruction } from '../programmingtabs/stepprogramming/ActiveInstructionAction';
-import * as NavigationService from '../utillity/NavigationService';
 
 export class AlgorithmManager {
     constructor() {
@@ -89,14 +86,7 @@ export class AlgorithmHandler {
             program = this.saveProgram(program, dispatch);
         }
 
-        if (program.programType == ProgramType.BLOCKS) {
-            dispatch(loadChildren());
-            dispatch(loadBlock(program.name));
-            NavigationService.navigate('Blockprogramming');
-        } else {
-            dispatch(loadInstruction(program.name));
-            NavigationService.navigate('Stepprogramming');
-        }
+        return program;
     }
 
     /**
@@ -467,7 +457,7 @@ export class AlgorithmHandler7 extends AlgorithmHandler {
         super('V2 | SortedByLength | 1');
     }
     handleInput(input, dispatch) {
-        super.handle(
+        return super.handle(
             AlgorithmVersion.V2,
             input,
             dispatch,
@@ -484,7 +474,7 @@ export class AlgorithmHandler8 extends AlgorithmHandler {
         super('V2 | SortedByLength | 2');
     }
     handleInput(input, dispatch) {
-        super.handle(
+        return super.handle(
             AlgorithmVersion.V2,
             input,
             dispatch,
@@ -500,7 +490,7 @@ export class AlgorithmHandler9 extends AlgorithmHandler {
         super('V2 | SortedByLength | 3');
     }
     handleInput(input, dispatch) {
-        super.handle(
+        return super.handle(
             AlgorithmVersion.V2,
             input,
             dispatch,

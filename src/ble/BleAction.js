@@ -1,20 +1,12 @@
 import * as ActionTypes from '../GlobalActionTypes';
 import RobotProxy from './RobotProxy';
-import {
-    clearProgram,
-    emptyInstructionList,
-    receiveDownload,
-    loadInstruction,
-} from '../programmingtabs/stepprogramming/ActiveInstructionAction';
-
-import { Program, ProgramType, Block } from '../model/DatabaseModels';
+import { emptyInstructionList, loadInstruction } from '../programmingtabs/stepprogramming/ActiveInstructionAction';
+import { Program, ProgramType } from '../model/DatabaseModels';
 import { Alert } from 'react-native';
 import { CommunicationManager } from './CommunicationManager';
-import { loadBlock, loadChildren, forceReloadBlocks } from '../programmingtabs/blockprogramming/ActiveBlockAction';
-import Database from '../database/RoboticsDatabase';
-import uuidv4 from 'uuid/v4';
-import { add, removeProgram } from '../database/DatabaseAction';
+import { loadBlock, loadChildren } from '../programmingtabs/blockprogramming/ActiveBlockAction';
 import { AlgorithmManager } from './AlgorithmManager';
+import * as NavigationService from '../utillity/NavigationService';
 
 export const connectToBle = () => ({
     type: ActionTypes.START_CONNECTING,
@@ -235,7 +227,15 @@ export const finishedDownloading = () => {
         dispatch(successDownloading());
         let receivedInstuctions = getState().BLEConnection.receivedDownloads;
         alert(getState().Settings.selectedAlgorithm);
-        new AlgorithmManager().getHandler(getState().Settings.selectedAlgorithm).handleInput(receivedInstuctions, dispatch);
+        let program = new AlgorithmManager().getHandler(getState().Settings.selectedAlgorithm).handleInput(receivedInstuctions, dispatch);
+        if (program.programType == ProgramType.BLOCKS) {
+            dispatch(loadChildren());
+            dispatch(loadBlock(program.name));
+            NavigationService.navigate('Blockprogramming');
+        } else {
+            dispatch(loadInstruction(program.name));
+            NavigationService.navigate('Stepprogramming');
+        }
     };
 };
 
