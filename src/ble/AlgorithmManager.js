@@ -1,5 +1,10 @@
 import { Block, Program, ProgramType } from '../model/DatabaseModels';
 import Database from '../database/RoboticsDatabase';
+import uuidv4 from 'uuid/v4';
+import { add } from '../database/DatabaseAction';
+import { loadChildren, loadBlock } from '../programmingtabs/blockprogramming/ActiveBlockAction';
+import { loadInstruction } from '../programmingtabs/stepprogramming/ActiveInstructionAction';
+import * as NavigationService from '../utillity/NavigationService';
 
 export class AlgorithmManager {
     constructor() {
@@ -48,7 +53,7 @@ export class AlgorithmHandler {
 
     handle(version, input, dispatch, sortByDepth, sortByLength, inverseSorting) {
         let programs = Database.findAll().filter(program => {
-            return Program.flatten(program).length > input.length;
+            return Program.flatten(program).length < input.length;
         });
 
         if (sortByDepth) {
@@ -64,11 +69,27 @@ export class AlgorithmHandler {
         if (inverseSorting) {
             programs.reverse();
         }
-
+        let result;
         if (version == AlgorithmVersion.V1) {
-            return this.searchStructureFromDb(input, programs, dispatch);
+            result = this.searchStructureFromDb(input, programs, dispatch);
         } else {
-            return this.searchStructure(input, programs, dispatch);
+            result = this.searchStructure(input, programs, dispatch);
+        }
+
+        if (result.length == 1 && result[0].rep == 1) {
+            program = Database.findOneByPK(result[0].ref);
+        } else {
+            program = new Program('MasterDownload', ProgramType.BLOCKS, [], result);
+            program = this.saveProgram(program, dispatch);
+        }
+
+        if (program.programType == ProgramType.BLOCKS) {
+            dispatch(loadChildren());
+            dispatch(loadBlock(program.name));
+            NavigationService.navigate('Blockprogramming');
+        } else {
+            dispatch(loadInstruction(program.name));
+            NavigationService.navigate('Stepprogramming');
         }
     }
 
@@ -85,18 +106,18 @@ export class AlgorithmHandler {
         if (toSearchIn.length == 0) {
             return [];
         } else if (patterns.length == 0) {
-            let id = saveProgram(
-                new Program('Download', ProgramType, toSearchIn, []),
+            let id = this.saveProgram(
+                new Program('Download', ProgramType.BLOCKS, toSearchIn, []),
                 dispatch,
             ).id;
             return [new Block(id, 1)];
         }
 
         let pattern = Program.flatten(patterns[0]);
-        let foundAt = instructionsContain(toSearchIn, pattern);
+        let foundAt = this.instructionsContain(toSearchIn, pattern);
 
         if (foundAt == -1) {
-            return searchStructureFromDb(
+            return this.searchStructureFromDb(
                 toSearchIn,
                 patterns.slice(1, patterns.length),
                 dispatch,
@@ -106,12 +127,12 @@ export class AlgorithmHandler {
 
             let after = toSearchIn.slice(foundAt + pattern.length, toSearchIn.length);
             let currentBlock = new Block(patterns[0].id, 1);
-            let blocksBefore = searchStructureFromDb(
+            let blocksBefore = this.searchStructureFromDb(
                 before,
                 patterns.slice(1, patterns.length),
                 dispatch,
             );
-            let blocksAfter = searchStructureFromDb(after, patterns, dispatch);
+            let blocksAfter = this.searchStructureFromDb(after, patterns, dispatch);
 
             if (
                 blocksBefore &&
@@ -135,7 +156,7 @@ export class AlgorithmHandler {
         } else {
             let currentBlock = new Block(patterns[0].id, 1);
             let after = toSearchIn.slice(pattern.length, toSearchIn.length);
-            let blocksAfter = searchStructureFromDb(after, patterns, dispatch);
+            let blocksAfter = this.searchStructureFromDb(after, patterns, dispatch);
 
             if (
                 blocksAfter &&
@@ -157,56 +178,56 @@ export class AlgorithmHandler {
      * @param {Function} dispatch reference to the redux dispatch function, used in the saveProgram method to dispatch the add(program) redux action
      * @returns {Block[]}
      */
-    searchStructure(toSearchIn, dbPrograms, dispatch) {
+    searchStructure(toSearchIn, dbPrograms, dispatch, minPatternLength) {
         let steps = toSearchIn;
         if (toSearchIn.length == 0) {
             return [];
         }
 
-        const dbPrg = findProgramByPattern(toSearchIn, dbPrograms);
+        const dbPrg = this.findProgramByPattern(toSearchIn, dbPrograms);
         if (dbPrg) {
             return [new Block(dbPrg.id, 1)];
         }
 
         let patlen = toSearchIn.length / 2;
         let blocks = [];
-        while (patlen > 1) {
+        while (patlen > minPatternLength) {
             for (let i = 0; i <= steps.length - 2 * patlen; i++) {
                 let pattern = toSearchIn.slice(i, i + patlen);
                 let remainder = toSearchIn.slice(i + patlen, toSearchIn.length);
 
-                let foundAt = instructionsContain(remainder, pattern);
+                let foundAt = this.instructionsContain(remainder, pattern);
                 if (foundAt > -1) {
-                    let ref = findProgramByPattern(pattern, dbPrograms);
+                    let ref = this.findProgramByPattern(pattern, dbPrograms);
                     if (!ref) {
-                        let toSave = searchStructure(pattern, dispatch);
+                        let toSave = this.searchStructure(pattern, dispatch);
                         let prg;
                         if (toSave.length == 1 && toSave[0].rep == 1) {
                             ref = Database.findOneByPK(toSave[0].ref);
                         } else {
                             prg = new Program('Download', ProgramType.BLOCKS, [], toSave);
-                            ref = saveProgram(prg, dispatch);
+                            ref = this.saveProgram(prg, dispatch);
                         }
                     }
 
                     while (toSearchIn.length > 0) {
-                        foundAt = instructionsContain(toSearchIn, pattern);
+                        foundAt = this.instructionsContain(toSearchIn, pattern);
                         if (foundAt > 0) {
                             let before = toSearchIn.slice(0, foundAt);
                             if (before.length) {
-                                let blocksBefore = searchStructure(blocksBefore, dispatch);
+                                let blocksBefore = this.searchStructure(blocksBefore, dispatch);
                                 blocks.concat(blocksBefore);
                                 toSearchIn = toSearchIn.slice(foundAt);
                             }
                         } else if (foundAt == 0) {
                             let rep = 0;
-                            while (instructionsContain(toSearchIn, pattern) == 0) {
+                            while (this.instructionsContain(toSearchIn, pattern) == 0) {
                                 rep++;
                                 toSearchIn = toSearchIn.slice(patlen);
                             }
                             blocks.push(new Block(ref.id, rep));
                         } else {
-                            let remainingBlocks = searchStructure(toSearchIn, dispatch);
+                            let remainingBlocks = this.searchStructure(toSearchIn, dispatch);
                             blocks.concat(remainingBlocks);
                             toSearchIn = [];
                         }
@@ -226,7 +247,7 @@ export class AlgorithmHandler {
                 steps,
                 [],
             );
-            return [new Block(saveProgram(sequenceProgram, dispatch).id, 1)];
+            return [new Block(this.saveProgram(sequenceProgram, dispatch).id, 1)];
         } else {
             return [];
         }
@@ -238,7 +259,7 @@ export class AlgorithmHandler {
      */
     findProgramByPattern(pattern, dbPrograms) {
         for (let i = 0; i < dbPrograms.length; i++) {
-            if (compareInstructions(Program.flatten(dbPrograms[i]), pattern)) {
+            if (this.compareInstructions(Program.flatten(dbPrograms[i]), pattern)) {
                 return dbPrograms[i];
             }
         }
@@ -302,7 +323,7 @@ export class AlgorithmHandler {
         for (let i = 0; i < sorted.length; i++) {
             let prg = sorted[i];
             let flat = Program.flatten(prg);
-            if (compareInstructions(flat, instructions)) {
+            if (this.compareInstructions(flat, instructions)) {
                 return prg;
             }
         }
@@ -407,7 +428,7 @@ export class AlgorithmHandler5 extends AlgorithmHandler {
         super('V2 | SortedByLength');
     }
     handleInput(input, dispatch) {
-        return super.handle(
+        super.handle(
             AlgorithmVersion.V2,
             input,
             dispatch,

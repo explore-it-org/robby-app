@@ -11,7 +11,6 @@ import { Program, ProgramType, Block } from '../model/DatabaseModels';
 import { Alert } from 'react-native';
 import { CommunicationManager } from './CommunicationManager';
 import { loadBlock, loadChildren, forceReloadBlocks } from '../programmingtabs/blockprogramming/ActiveBlockAction';
-import * as NavigationService from '../utillity/NavigationService';
 import Database from '../database/RoboticsDatabase';
 import uuidv4 from 'uuid/v4';
 import { add, removeProgram } from '../database/DatabaseAction';
@@ -234,24 +233,9 @@ export const successDownloading = () => ({
 export const finishedDownloading = () => {
     return (dispatch, getState) => {
         dispatch(successDownloading());
-
         let receivedInstuctions = getState().BLEConnection.receivedDownloads;
-        var result = new AlgorithmManager().getHandler(1).handleInput(receivedInstuctions, dispatch);
-        if (result.length == 1 && result[0].rep == 1) {
-            program = Database.findOneByPK(result[0].ref);
-        } else {
-            program = new Program('MasterDownload', ProgramType.BLOCKS, [], result);
-            program = saveProgram(program, dispatch);
-        }
-
-        if (program.programType == ProgramType.BLOCKS) {
-            dispatch(loadChildren());
-            dispatch(loadBlock(program.name));
-            NavigationService.navigate('Blockprogramming');
-        } else {
-            dispatch(loadInstruction(program.name));
-            NavigationService.navigate('Stepprogramming');
-        }
+        alert(getState().Settings.selectedAlgorithm);
+        new AlgorithmManager().getHandler(getState().Settings.selectedAlgorithm).handleInput(receivedInstuctions, dispatch);
     };
 };
 
