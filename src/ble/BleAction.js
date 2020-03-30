@@ -226,7 +226,6 @@ export const finishedDownloading = () => {
     return (dispatch, getState) => {
         dispatch(successDownloading());
         let receivedInstuctions = getState().BLEConnection.receivedDownloads;
-        alert(getState().Settings.selectedAlgorithm);
         let program = new AlgorithmManager().getHandler(getState().Settings.selectedAlgorithm).handleInput(receivedInstuctions, dispatch);
         if (program.programType == ProgramType.BLOCKS) {
             dispatch(loadChildren());

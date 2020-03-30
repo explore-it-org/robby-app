@@ -56,16 +56,16 @@ export class AlgorithmHandler {
 
     handle(version, input, dispatch, sortByDepth, sortByLength, inverseSorting, minPatternLength) {
         let programs = Database.findAll().filter(program => {
-            return Program.flatten(program).length < input.length;
+            return Program.flatten(program).length <= input.length;
         });
 
         if (sortByDepth) {
             programs.sort((a, b) => {
-                return Program.depth(a) - Program.depth(b);
+                return Program.depth(b) - Program.depth(a);
             });
         } else if (sortByLength) {
             programs.sort((a, b) => {
-                return Program.length(a) - Program.length(b);
+                return Program.length(b) - Program.length(a);
             });
         }
 
@@ -73,10 +73,15 @@ export class AlgorithmHandler {
             programs.reverse();
         }
         let result;
-        if (version == AlgorithmVersion.V1) {
-            result = this.searchStructureFromDb(input, programs, dispatch);
-        } else {
-            result = this.searchStructure(input, programs, dispatch, minPatternLength);
+        switch(version){
+            case AlgorithmVersion.V1:
+                result = this.searchStructureFromDb(input, programs, dispatch);
+                break;
+            case AlgorithmVersion.V2:
+                result = this.searchStructure(input, programs, dispatch, minPatternLength);
+                break;
+            default:
+                alert("Invalid Algorithm Version: " + version);
         }
 
         if (result.length == 1 && result[0].rep == 1) {
@@ -103,7 +108,7 @@ export class AlgorithmHandler {
             return [];
         } else if (patterns.length == 0) {
             let id = this.saveProgram(
-                new Program('Download', ProgramType.BLOCKS, toSearchIn, []),
+                new Program('Download', ProgramType.STEPS, toSearchIn, []),
                 dispatch,
             ).id;
             return [new Block(id, 1)];
@@ -175,7 +180,6 @@ export class AlgorithmHandler {
      * @returns {Block[]}
      */
     searchStructure(toSearchIn, dbPrograms, dispatch, minPatternLength) {
-        let steps = toSearchIn;
         if (toSearchIn.length == 0) {
             return [];
         }
@@ -188,7 +192,7 @@ export class AlgorithmHandler {
         let patlen = toSearchIn.length / 2;
         let blocks = [];
         while (patlen >= minPatternLength) {
-            for (let i = 0; i <= steps.length - 2 * patlen; i++) {
+            for (let i = 0; i <= toSearchIn.length - 2 * patlen; i++) {
                 let pattern = toSearchIn.slice(i, i + patlen);
                 let remainder = toSearchIn.slice(i + patlen, toSearchIn.length);
 
@@ -233,14 +237,11 @@ export class AlgorithmHandler {
             }
             patlen--;
         }
-        if (blocks.length > 0) {
-            return blocks;
-        }
-        if (steps.length > 0) {
+        if (toSearchIn.length > 0) {
             let sequenceProgram = new Program(
                 'Download',
                 ProgramType.STEPS,
-                steps,
+                toSearchIn,
                 [],
             );
             return [new Block(this.saveProgram(sequenceProgram, dispatch).id, 1)];
@@ -307,26 +308,6 @@ export class AlgorithmHandler {
     }
 
     /**
-     * Goes through all programs and sorts them by complexity.
-     * After sorting it converts all programs in to instructions and compares them.
-     * The first match will be returned.
-     * @param {Instruction[]} instructions
-     * @param {Program[]} programs
-     */
-    recreateProgramFromInstructions(instructions) {
-        const programs = Database.findAll();
-        let sorted = programs.sort((a, b) => Program.depth(a) - Program.depth(b));
-        for (let i = 0; i < sorted.length; i++) {
-            let prg = sorted[i];
-            let flat = Program.flatten(prg);
-            if (this.compareInstructions(flat, instructions)) {
-                return prg;
-            }
-        }
-        return null;
-    }
-
-    /**
      * Compares two lists of instructions
      * Saving some time by first comparing the length of the lists before comparing every single one
      * @param {Instruction[]} instructions1
@@ -347,11 +328,12 @@ export class AlgorithmHandler {
 
 export class DefaultAlgorithmHandler extends AlgorithmHandler {
     constructor() {
-        super('Default Handler');
+        super('Do nothing');
     }
 
     handleInput(input, dispatch) {
-        return [];
+        let download = this.saveProgram(new Program("MasterDownload", ProgramType.STEPS, input, []),dispatch);
+        return [new Block(download.id, 1)];
     }
 }
 
@@ -380,8 +362,8 @@ export class AlgorithmHandler2 extends AlgorithmHandler {
             AlgorithmVersion.V1,
             input,
             dispatch,
-            true,
             false,
+            true,
             false,
         );
     }
