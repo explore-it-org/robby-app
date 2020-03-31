@@ -86,7 +86,10 @@ export class Instruction {
         return new Instruction(instruction.left, instruction.right);
     }
 
-    // compares two instructions
+    /**
+     *  compares two instructions
+     * @param {Instruction} instruction 
+     */
     equals(instruction){
         return instruction.left === this.left && instruction.right === this.right;
     }

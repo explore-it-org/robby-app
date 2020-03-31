@@ -222,6 +222,7 @@ export class AlgorithmHandler {
                             toSearchIn = [];
                         }
                     }
+                    
                     return blocks;
                 }
             }
