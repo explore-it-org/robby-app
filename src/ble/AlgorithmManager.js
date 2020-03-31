@@ -116,6 +116,7 @@ export class AlgorithmHandler {
 
         let pattern = Program.flatten(patterns[0]);
         let foundAt = this.instructionsContain(toSearchIn, pattern);
+        let currentBlock = new Block(patterns[0].id, 1);
 
         if (foundAt == -1) {
             return this.searchStructureFromDb(
@@ -127,22 +128,12 @@ export class AlgorithmHandler {
             let before = toSearchIn.slice(0, foundAt);
 
             let after = toSearchIn.slice(foundAt + pattern.length, toSearchIn.length);
-            let currentBlock = new Block(patterns[0].id, 1);
             let blocksBefore = this.searchStructureFromDb(
                 before,
                 patterns.slice(1, patterns.length),
                 dispatch,
             );
             let blocksAfter = this.searchStructureFromDb(after, patterns, dispatch);
-
-            if (
-                blocksBefore &&
-                blocksBefore.length > 0 &&
-                blocksBefore[blocksBefore.length - 1].ref == currentBlock.ref
-            ) {
-                currentBlock.rep += blocksBefore[0].rep;
-                blocksBefore = blocksBefore.slice(0, blocksBefore.length - 1);
-            }
 
             if (
                 blocksAfter &&
@@ -155,7 +146,6 @@ export class AlgorithmHandler {
 
             return [...blocksBefore, currentBlock, ...blocksAfter];
         } else {
-            let currentBlock = new Block(patterns[0].id, 1);
             let after = toSearchIn.slice(pattern.length, toSearchIn.length);
             let blocksAfter = this.searchStructureFromDb(after, patterns, dispatch);
 
