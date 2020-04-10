@@ -204,11 +204,9 @@ export class AlgorithmHandler {
                         foundAt = this.instructionsContain(toSearchIn, pattern);
                         if (foundAt > 0) {
                             let before = toSearchIn.slice(0, foundAt);
-                            if (before.length) {
-                                let blocksBefore = this.searchStructure(blocksBefore, dbPrograms, dispatch, minPatternLength);
-                                blocks.concat(blocksBefore);
+                                let blocksBefore = this.searchStructure(before, dbPrograms, dispatch, minPatternLength);
+                                blocks = blocks.concat(blocksBefore);
                                 toSearchIn = toSearchIn.slice(foundAt);
-                            }
                         } else if (foundAt == 0) {
                             let rep = 0;
                             while (this.instructionsContain(toSearchIn, pattern) == 0) {
