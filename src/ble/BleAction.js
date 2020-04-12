@@ -297,12 +297,10 @@ function searchStructure(toSearchIn, dispatch){
             
                 
                 while(foundAt != -1){
-                    //alert(foundAt);
-                    alert(JSON.stringify(pattern));
                     if(foundAt > 0){
                         let before = remainder.slice(0, foundAt);
                         let blocksBefore = searchStructure(before, dispatch);
-                        blocks.concat(blocksBefore);
+                        blocks = blocks.concat(blocksBefore);
                         remainder = remainder.slice(foundAt + pattern.length);
                     }else{
                         let blck = new Block(ref.id, 1);
@@ -312,13 +310,12 @@ function searchStructure(toSearchIn, dispatch){
                             blocks.push(blck);
                         }
                         remainder = remainder.slice(pattern.length);
-                        alert(remainder.length);
                     }
                     foundAt = instructionsContain(remainder, pattern);
                 }
                 if(remainder.length > 0){
                     let remainingBlocks = searchStructure(remainder);
-                    blocks.concat(remainingBlocks);
+                    blocks = blocks.concat(remainingBlocks);
                 }
                 return blocks;
             }
