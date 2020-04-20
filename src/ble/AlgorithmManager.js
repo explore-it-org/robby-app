@@ -179,7 +179,7 @@ export class AlgorithmHandler {
             return [new Block(dbPrg.id, 1)];
         }
 
-        let patlen = toSearchIn.length / 2;
+        let patlen = Math.floor(toSearchIn.length / 2);
         let blocks = [];
         while (patlen >= minPatternLength) {
             for (let i = 0; i <= toSearchIn.length - 2 * patlen; i++) {
