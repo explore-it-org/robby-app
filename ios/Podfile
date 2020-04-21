@@ -81,7 +81,7 @@ target 'Robotics' do
   pod 'react-native-ble-plx-swift', :path => '../node_modules/react-native-ble-plx'
 
   target 'RoboticsTests' do
-    inherit! :complete
+    inherit! :search_paths
     # Pods for testing
   end
 
