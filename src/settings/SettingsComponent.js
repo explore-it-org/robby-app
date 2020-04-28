@@ -2,14 +2,13 @@ import React, {Component} from 'react';
 import {
     Alert,
     Image,
-    Linking,
-    Picker,
     SafeAreaView, ScrollView,
     StyleSheet,
     TouchableOpacity,
     View,
     Platform,
 } from 'react-native';
+import {Picker} from '@react-native-community/picker';
 import {Text, TextInput} from 'react-native';
 import {Appbar} from 'react-native-paper';
 import GLOBAL from '../utillity/Global';
