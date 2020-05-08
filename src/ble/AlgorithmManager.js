@@ -216,7 +216,7 @@ export class AlgorithmHandler {
                             blocks.push(new Block(ref.id, rep));
                         } else {
                             let remainingBlocks = this.searchStructure(toSearchIn, dbPrograms, dispatch, minPatternLength);
-                            blocks.concat(remainingBlocks);
+                            blocks = blocks.concat(remainingBlocks);
                             toSearchIn = [];
                         }
                     }
