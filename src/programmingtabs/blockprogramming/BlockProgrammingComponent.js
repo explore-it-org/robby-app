@@ -7,9 +7,9 @@ import {
     TouchableOpacity,
     ScrollView,
     FlatList,
-    Picker,
     Button,
 } from 'react-native';
+import {Picker} from '@react-native-community/picker';
 import {FAB} from 'react-native-paper';
 import React from 'react';
 import ProgramInput from '../../controls/ProgramInput';
@@ -91,21 +91,12 @@ export default class BlockProgrammingComponent extends Component {
                     </View>
                     <View style={{flex: 1}}/>
                 </View>
-
-                <ScrollView
-                    style={{backgroundColor: 'white'}}
-                    resetScrollToCoords={{x: 0, y: 0}}
-                    scrollEnabled={true}
-                    ref={ref => this.scrollView = ref}
-                    onContentSizeChange={(contentWidth, contentHeight)=>{        
-                        this.scrollView.scrollToEnd({animated: true});
-                    }}
-                    >
                     <FlatList
                         data={this.props.Block.Active_Block.blocks}
                         keyExtractor={(item, index) => index.toString()}
-                        renderItem={this.renderProgramInput}/>
-                </ScrollView>
+                        renderItem={this.renderProgramInput}
+                        ref={ref => {this.blockList = ref; this.previousContentHeight = 0}}
+                        />
                 <View style={styles.fabLine}>
                     {select_controls}
                     <FAB
@@ -115,6 +106,7 @@ export default class BlockProgrammingComponent extends Component {
                         )}
                         onPress={() => {
                             this.props.addBlock();
+                            //this.blockList.scrollToEnd({animated: true});
                         }}
                     />
 

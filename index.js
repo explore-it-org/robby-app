@@ -64,7 +64,7 @@ const theme = {
 export default function Main() {
     return (
         <ReduxProvider store={store}>
-            <PaperProvider settings={{icon: props => <MyIcon {...props} />}} theme={theme}>
+            <PaperProvider theme={theme}>
                 <PersistGate loading={null} persistor={persistor}>
                     <SafeAreaView style={{flex: 1, backgroundColor: theme.colors.primary}}>
                         <App/>

@@ -122,19 +122,11 @@ export default class StepProgrammingComponent extends Component {
                 {step_content}
 
 
-                <ScrollView
-                    style={{backgroundColor: 'white'}}
-                    resetScrollToCoords={{x: 0, y: 0}}
-                    scrollEnabled={true}
-                    ref={ref => this.scrollView = ref}
-                    onContentSizeChange={(contentWidth, contentHeight)=>{        
-                        this.scrollView.scrollToEnd({animated: true});
-                    }}
-                    >
                     <FlatList
                         data={this.props.Instruction.ActiveProgram.steps}
                         //extraData={this.state}
                         keyExtractor={(item, index) => index.toString()}
+                        ref={ref => {this.blockList = ref; this.previousContentHeight = 0}}
                         renderItem={({item, index}) => (
 
                             <TouchableOpacity
@@ -178,7 +170,6 @@ export default class StepProgrammingComponent extends Component {
                             </TouchableOpacity>
                         )}
                     />
-                </ScrollView>
                 <View style={styles.fabLine}>
                     {select_controls}
                     <FAB
@@ -188,6 +179,7 @@ export default class StepProgrammingComponent extends Component {
                         )}
                         onPress={() => {
                             this.props.addInstruction();
+                            //this.blockList.scrollToEnd({animated: true});
                         }}
                     />
 

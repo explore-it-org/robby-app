@@ -40,10 +40,6 @@ export default class OverviewComponent extends Component {
     render() {
         return (
             <View style={[styles.view, {flex: 1, justifyContent: 'center', alignItems: 'center'}]}>
-                <ScrollView
-                    style={{backgroundColor: 'white', width: '100%'}}
-                    resetScrollToCoords={{x: 0, y: 0}}
-                    scrollEnabled={true}>
                     <FlatList
                         data={this.props.Program.Programs}
                         //extraData={this.state}
@@ -117,7 +113,6 @@ export default class OverviewComponent extends Component {
                             </TouchableOpacity>
                         )}
                     />
-                </ScrollView>
             </View>
         );
     }
