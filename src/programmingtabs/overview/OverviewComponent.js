@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, ScrollView, FlatList, TouchableOpacity} from 'react-native';
-import {IconButton, Text} from 'react-native-paper';
+import {StyleSheet, Image, View, ScrollView, FlatList, TouchableOpacity} from 'react-native';
+import {IconButton, Text, Colors} from 'react-native-paper';
 import {ProgramType} from '../../model/DatabaseModels';
 import i18n from '../../../resources/locales/i18n';
 import CustomIcon from '../../utillity/CustomIcon';
@@ -14,6 +14,26 @@ export default class OverviewComponent extends Component {
         } else {
             this.props.loadBlock(item.name);
             this.props.navigation.navigate('Blockprogramming');
+        }
+    }
+
+    renderItemType(type){
+        if(type === ProgramType.STEPS){
+            return (
+                <View style={{justifyContent: 'flex-start', alignItems: 'center', paddingRight: 10 }}>
+                    <Image source={require('../../../resources/icon/wheeldarkx.png')}
+                        style={{
+                            width: 20, height: 20,
+                            
+                        }} />
+                </View>
+            )
+        } else {
+            return (
+                <View style={{justifyContent: 'flex-start', alignItems: 'center', paddingRight: 10 }}>
+                    <CustomIcon name="step2" size={20} color={Colors.grey700}/>
+                </View>
+            )
         }
     }
 
@@ -41,16 +61,19 @@ export default class OverviewComponent extends Component {
                                 <View style={{width: '100%', flexDirection: 'row'}}>
                                     <View style={{
                                         flex: 6,
-                                        flexDirection: 'column',
-                                        justifyContent: 'center',
+                                        flexDirection: 'row',
+                                        justifyContent: 'flex-start',
+                                        alignItems: "center",
                                         paddingLeft: 10,
                                     }}>
+                                        {this.renderItemType(item.programType)}
                                         <Text
                                             style={{fontSize: 16}}>
                                             {item.name}
                                         </Text>
+                                        
                                     </View>
-
+                                    
                                     <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center'}}>
                                         <IconButton
                                             size={20}
