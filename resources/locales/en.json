@@ -44,7 +44,8 @@
     "websiteURL":"https://www.explore-it.org/en",
     "invalidEntry": "Invalid Entry",
     "invalidDurationMessage": "Please only enter numbers between 1-80.",
-    "invalidIntervalMessage": "Please only enter numbers between 1-50."
+    "invalidIntervalMessage": "Please only enter numbers between 1-50.",
+    "robotVersion": "Robot version"
   },
   "RoboticsDatabase": {
     "success": "Success",

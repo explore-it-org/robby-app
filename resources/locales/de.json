@@ -45,7 +45,8 @@
     "websiteURL":"https://www.explore-it.org/de",
     "invalidEntry": "Ungültige Eingabe",
     "invalidDurationMessage": "Bitte gib nur ganze Zahlen zwischen 1-80 ein.",
-    "invalidIntervalMessage": "Bitte gib nur ganze Zahlen zwischen 1-50 ein."
+    "invalidIntervalMessage": "Bitte gib nur ganze Zahlen zwischen 1-50 ein.",
+    "robotVersion": "Roboter Version"
   },
   "RoboticsDatabase": {
     "success": "Erfolg",
