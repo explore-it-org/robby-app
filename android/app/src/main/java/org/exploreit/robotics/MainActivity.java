@@ -1,4 +1,4 @@
-package org.exploreit.robotics;
+package org.exploreit.roboticsIPA;
 
 import com.facebook.react.ReactActivity;
 
