@@ -45,7 +45,8 @@
     "websiteURL":"https://www.explore-it.org/it",
     "invalidEntry": "Il valore inserito non è valido",
     "invalidDurationMessage": "È possibile inserire solo numeri interi tra 1 e 80.",
-    "invalidIntervalMessage": "È possibile inserire solo numeri interi tra 1 e 50."
+    "invalidIntervalMessage": "È possibile inserire solo numeri interi tra 1 e 50.",
+    "robotVersion": "Versione per robot"
   },
   "RoboticsDatabase": {
     "success": "Riuscito",

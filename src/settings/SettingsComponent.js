@@ -2,14 +2,13 @@ import React, {Component} from 'react';
 import {
     Alert,
     Image,
-    Linking,
-    Picker,
     SafeAreaView, ScrollView,
     StyleSheet,
     TouchableOpacity,
     View,
     Platform,
 } from 'react-native';
+import {Picker} from '@react-native-community/picker';
 import {Text, TextInput} from 'react-native';
 import {Appbar} from 'react-native-paper';
 import GLOBAL from '../utillity/Global';
@@ -178,6 +177,38 @@ class SettingsComponent extends Component {
         }
     };
 
+    renderRobotVersion(){
+        if (this.props.BLEConnection.isConnected) {
+        let hr = <View style={{borderBottomColor: 'lightgrey', borderBottomWidth: 1}}/>;
+        return (
+            <View>
+            <View style={{
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                marginVertical: 10,
+            }}>
+                <View style={{flex: 1}}/>
+                <View style={{flex: 5, alignSelf: 'center'}}>
+                    <Text style={{
+                        fontSize: 16,
+                        fontWeight: 'bold',
+                    }}>
+                        {i18n.t('Settings.robotVersion')}
+                    </Text>
+                </View>
+                <View style={{flex: 10, alignSelf: 'center'}}>
+                    <Text>
+                    VER {this.props.BLEConnection.device.version.toString().padStart(3,'0')}
+                    </Text>
+                </View>
+                <View style={{flex: 2}}/>
+            </View>
+            {hr}
+            </View>
+            )
+        }
+    }
+
     render() {
         this.items = Object.assign([], []);
         let hr = <View style={{borderBottomColor: 'lightgrey', borderBottomWidth: 1}}/>;
@@ -302,10 +333,8 @@ class SettingsComponent extends Component {
                                         <View style={{flex: 2}}/>
                                     </View>
                                     {hr}
-
+                                    {this.renderRobotVersion()}
                                 </View>
-
-
                             </View>
                         </View>
                     </View>
