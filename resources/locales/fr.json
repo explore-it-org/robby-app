@@ -1,0 +1,61 @@
+{
+    "language": "Français",
+    "languageTag": "fr",
+    "MainTab": {
+        "speed": "Vitesse de 0 à 100",
+        "left": "G",
+        "right": "D"
+    },
+    "Programming": {
+        "chooseDevice": "Choisir dispositif",
+        "downloadMessage": "Instructions téléchargées avec succès!",
+        "recordMessage": "Enregistré sur le robot avec succès!",
+        "uploadMessage": "Instructions publiées avec succès",
+        "driveMessage": "Instructions suivies, transmission réussie!",
+        "bluetoothNotTurnedOnTitle": "est désactivé",
+        "bluetoothNotTurnedOnMessage": "Allumer le BluetoothLE",
+        "programName": "Nom du programme",
+        "noConnectedDevice": "_ _ : _ _",
+        "dialogCancelButton": "ANNULER",
+        "unsupportedAppVersionTitle": "Version non supportée",
+        "unsupportedAppVersionMessage": " L'application est probablement trop vieille. Télécharger la dernière version sur l'Appstore / Playstore.",
+        "unsupportedRobotVersionTitle": "Version du robot non supportée",
+        "unsupportedRobotVersionMessage": "La version du robot n'est plus prise en charge. Contacter explore-it pour mettre à jour le robot"
+    },
+    "BlockPrgrogramming": {
+        "programSelectionPrompt": "…",
+        "programSelectionPromptTitle": "Choisis un programme"
+    },
+    "SpeedInput": {
+        "invalidEntry": "Saisie incorrecte",
+        "invalidEntryMessage": "Saisir les nombres entiers compris entre 0 et 100."
+    },
+    "Settings": {
+        "settings": "Paramètres:",
+        "interval": "lntervalle:",
+        "interval-unit": "Par seconde (1..50)",
+        "learn": "Enregistrement:",
+        "duration": "Durée:",
+        "duration-unit": "Secondes (1..80)",
+        "language": "Langage",
+        "updated": "Paramètres mis à jour",
+        "error": "Erreur",
+        "tooBig": " Le numéro saisi est trop grand.",
+        "websiteURL": "https://www.explore-it.org/fr",
+        "invalidEntry": " Saisie incorrecte ",
+        "invalidDurationMessage": " Saisir uniquement des nombres entiers compris entre 1 et 80",
+        "invalidIntervalMessage": " Saisir uniquement des nombres entiers compris entre 1 et 50"
+    },
+    "RoboticsDatabase": {
+        "success": "Succès",
+        "failure": "Echec",
+        "emptyName": "Entrer un nom",
+        "addFiled": "Echec du programme de sauvegarde: ",
+        "nameTaken": "Le nom est déjà pris",
+        "duplicateFailed": "Echec de la duplication du programme: ",
+        "deleteFailed": "Echec de la suppression du programme: ",
+        "programUsed": "Le programme est utilisé par un autre programme ",
+        "programUsedByActiveProgram": "Le programme est utilisé par le programme actuellement ouvert ",
+        "programUsedByActiveProgramTitle": "Le programme ne peut être supprimé"
+    }
+}
