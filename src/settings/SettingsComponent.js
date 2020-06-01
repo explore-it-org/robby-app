@@ -7,6 +7,7 @@ import {
     TouchableOpacity,
     View,
     Platform,
+    Linking,
 } from 'react-native';
 import {Picker} from '@react-native-community/picker';
 import {Text, TextInput} from 'react-native';
@@ -14,9 +15,6 @@ import {Appbar} from 'react-native-paper';
 import GLOBAL from '../utillity/Global';
 import i18n from '../../resources/locales/i18n';
 import Toast from '../controls/Toast';
-import {setDuration, setInterval, toggleSettings} from './SettingsAction';
-import SettingsContainer from './SettingsContainer';
-import NumericInput from '../controls/NumericInput';
 import LanguageInput from '../controls/LanguageInput';
 import CustomIcon from '../utillity/CustomIcon';
 
