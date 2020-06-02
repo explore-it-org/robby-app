@@ -414,15 +414,29 @@ class CommunicationHandlerV10 extends CommunicationHandler{
                 return BleService.sendCommandToActDevice('E');
             })
             .then((c) => {
-                let bytes = new Uint8Array(instructions.length * 2);
-                for (let i = 0; i < instructions.length; i++) {
-                    let item = instructions[i];
-                    let left = item.left !== 0 ? parseInt(item.left * 2.55 + 0.5) : 0;
-                    let right = item.right !== 0 ? parseInt(item.right * 2.55 + 0.5) : 0;
-                    bytes[2 * i] = left;
-                    bytes[2 * i + 1] = right;
+                let numBytes = instructions.length * 2;
+                let numChunks = Math.ceil(numBytes / 512);
+                console.log(numBytes);
+                console.log(numChunks);
+                let promises = [];
+                for(let j = 0; j < numChunks;j++){
+                    let chunkSize = 512;
+                    let numInstructions = chunkSize / 2;
+                    let offset = j * 512; 
+                    if(j == numChunks - 1){
+                        chunkSize = numBytes % 512;
+                    }
+                    let bytes = new Uint8Array(chunkSize);
+                    for (let i = 0; i < numInstructions; i++) {
+                        let item = instructions[offset + i];
+                        let left = item.left !== 0 ? parseInt(item.left * 2.55 + 0.5) : 0;
+                        let right = item.right !== 0 ? parseInt(item.right * 2.55 + 0.5) : 0;
+                        bytes[2 * (offset + i)] = left;
+                        bytes[2 * (offset + i) + 1] = right;
+                    }
+                    promises.push(BleService.sendCommandToActDevice(bytes));
                 }
-                return BleService.sendCommandToActDevice(bytes);
+                return Promise.all(promises);
             });
     }
 }
