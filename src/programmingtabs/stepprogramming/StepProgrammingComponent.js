@@ -2,7 +2,7 @@ import { Component } from 'react';
 import {
     StyleSheet, View, TextInput,
     FlatList, TouchableOpacity,
-    Image, ActivityIndicator, KeyboardAvoidingView,
+    Image, ActivityIndicator, KeyboardAvoidingView, Platform,
 } from 'react-native';
 import { FAB } from 'react-native-paper';
 import React from 'react';
@@ -11,6 +11,7 @@ import i18n from '../../../resources/locales/i18n';
 import CustomIcon from '../../utillity/CustomIcon';
 import { Text } from 'react-native-paper';
 import { ScrollView } from 'react-native-gesture-handler';
+import ProgrammingFlatList from '../../controls/ProgrammingFlatList';
 
 
 export default class StepProgrammingComponent extends Component {
@@ -66,6 +67,7 @@ export default class StepProgrammingComponent extends Component {
 
         return (
             <View style={[styles.view, { flex: 1, justifyContent: 'center', alignItems: 'center' }]}>
+                <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} keyboardVerticalOffset={Platform.OS == "ios" ? 128 : 0}>
                 <View style={{ flexDirection: 'row', paddingVertical: 20 }}>
                     <View style={{ flex: 1 }} />
                     <View style={{ flex: 8, flexDirection: 'row' }}>
@@ -115,10 +117,10 @@ export default class StepProgrammingComponent extends Component {
                 </View>
 
                 {step_content}
-                <ScrollView>
+                
                     {/* This FlatList is Wrapped in a ScrollView to fix an Issue with the Android Keyboard 
                          instantly loosing focus on tapping into a textfield in the lower part of the list */}
-                    <FlatList
+                    <ProgrammingFlatList
                         data={this.props.Instruction.ActiveProgram.steps}
                         //extraData={this.state}
                         keyExtractor={(item, index) => index.toString()}
@@ -166,7 +168,7 @@ export default class StepProgrammingComponent extends Component {
                             </TouchableOpacity>
                         )}
                     />
-                </ScrollView>
+                    </KeyboardAvoidingView>
                 <View style={styles.fabLine}>
                     {select_controls}
                     <FAB
