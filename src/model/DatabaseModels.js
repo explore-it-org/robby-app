@@ -44,11 +44,14 @@ export class Program {
     static flatten(program) {
         var result = [];
         if (program.programType === ProgramType.BLOCKS) {
+
             program.blocks.forEach((block) => {
-                var prg = Database.findOneByPK(block.ref);
-                let prgFlat = Program.flatten(prg);
-                for (let i = 0; i < block.rep; i++) {
-                    result.push(...prgFlat);
+                if (block.ref) {
+                    var prg = Database.findOneByPK(block.ref);
+                    let prgFlat = Program.flatten(prg);
+                    for (let i = 0; i < block.rep; i++) {
+                        result.push(...prgFlat);
+                    }
                 }
             });
         } else {

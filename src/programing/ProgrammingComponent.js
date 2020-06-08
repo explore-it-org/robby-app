@@ -13,6 +13,7 @@ import BleService from '../ble/BleService';
 import Toast from '../controls/Toast';
 import SettingsContainer from '../settings/SettingsContainer';
 import CustomIcon from '../utillity/CustomIcon';
+import { Program } from '../model/DatabaseModels';
 
 
 export default class ProgrammingComponent extends Component {
@@ -277,7 +278,22 @@ export default class ProgrammingComponent extends Component {
                         this.props.BLEConnection.device.isDownloading ||
                         this.state.uploadButtonDisable && this.props.Overview.selectedProgramIndex < 0}
                         onPress={() => {
-                            this.props.upload(this.state.currentRoute);
+                            let instructions = null;
+                            if (this.state.currentRoute === 'Stepprogramming') {
+                                instructions = Program.flatten(this.props.ActiveProgram.ActiveProgram);
+                            } else if (this.state.currentRoute === 'Blockprogramming') {
+                                instructions = Program.flatten(this.props.ActiveBlock.Active_Block);
+                            } else {
+                                instructions = Program.flatten(this.props.Overview.selectedProgram);
+                            }
+
+                            if(instructions.length){
+                                this.props.upload(instructions);
+                            }else{
+                                    Alert.alert(i18n.t("Settings.error"), i18n.t("Programming.emptyProgram"), [{ text: "OK", onPress: () => { } } ])
+                            }
+
+                            
                         }}/>
                     <Appbar.Action
                         icon={({size, color}) => (
