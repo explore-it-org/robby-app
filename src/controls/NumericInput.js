@@ -15,10 +15,7 @@ export default class NumericInput extends Component {
         number = Number(number)
         if (!isNaN(number)) {
                 txtValue = number.toString();
-        }else{
-           alert(number); 
         }
-        
         return txtValue;
     }
 
