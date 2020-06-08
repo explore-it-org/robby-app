@@ -1,15 +1,16 @@
-import {Component} from 'react';
+import { Component } from 'react';
 import {
     StyleSheet, View, TextInput,
     FlatList, TouchableOpacity,
     Image, ActivityIndicator, KeyboardAvoidingView,
 } from 'react-native';
-import {FAB} from 'react-native-paper';
+import { FAB } from 'react-native-paper';
 import React from 'react';
 import SpeedInput from '../../controls/SpeedInput';
 import i18n from '../../../resources/locales/i18n';
 import CustomIcon from '../../utillity/CustomIcon';
-import {Text} from 'react-native-paper';
+import { Text } from 'react-native-paper';
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 export default class StepProgrammingComponent extends Component {
@@ -19,13 +20,13 @@ export default class StepProgrammingComponent extends Component {
         let select_controls;
         if (this.props.Instruction.selectedIndex >= 0) {
             select_controls =
-                <View style={{flexDirection: 'row', marginRight: 20}}>
+                <View style={{ flexDirection: 'row', marginRight: 20 }}>
 
                     <FAB
                         //disabled={this.props.Instruction.selectedIndex === 0} disabling move up and down button produces unexpected behaviour
                         style={styles.fab}
-                        icon={({size, color}) => (
-                            <CustomIcon name="up" size={size} color={color}/>
+                        icon={({ size, color }) => (
+                            <CustomIcon name="up" size={size} color={color} />
                         )}
                         onPress={() => {
                             this.props.moveUp();
@@ -34,8 +35,8 @@ export default class StepProgrammingComponent extends Component {
                     <FAB
                         //disabled={this.props.Instruction.selectedIndex >= this.props.Instruction.ActiveProgram.steps.length - 1}
                         style={styles.fab}
-                        icon={({size, color}) => (
-                            <CustomIcon name="down" size={size} color={color}/>
+                        icon={({ size, color }) => (
+                            <CustomIcon name="down" size={size} color={color} />
                         )}
                         onPress={() => {
                             this.props.moveDown();
@@ -44,8 +45,8 @@ export default class StepProgrammingComponent extends Component {
                     <FAB
                         disabled={this.props.Instruction.ActiveProgram.steps.length <= 1}
                         style={styles.fab}
-                        icon={({size, color}) => (
-                            <CustomIcon name="deletelight" size={size} color={color}/>
+                        icon={({ size, color }) => (
+                            <CustomIcon name="deletelight" size={size} color={color} />
                         )}
                         onPress={() => {
                             this.props.deleteInstruction();
@@ -56,21 +57,18 @@ export default class StepProgrammingComponent extends Component {
         let step_content;
         if (this.props.BLE.device.isDownloading) {
             step_content =
-                <View style={{flexDirection: 'row', flex: 1, justifyContent: 'center'}}>
-                    <ActivityIndicator size="large" color='#2E5266'/>
+                <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'center' }}>
+                    <ActivityIndicator size="large" color='#2E5266' />
                 </View>;
         }
 
         // TODO remove all style
 
         return (
-
-
-            <View style={[styles.view, {flex: 1, justifyContent: 'center', alignItems: 'center'}]}>
-                <KeyboardAvoidingView behavior={'padding'} keyboardVerticalOffset={128}>
-                <View style={{flexDirection: 'row', paddingVertical: 20}}>
-                    <View style={{flex: 1}}/>
-                    <View style={{flex: 8, flexDirection: 'row'}}>
+            <View style={[styles.view, { flex: 1, justifyContent: 'center', alignItems: 'center' }]}>
+                <View style={{ flexDirection: 'row', paddingVertical: 20 }}>
+                    <View style={{ flex: 1 }} />
+                    <View style={{ flex: 8, flexDirection: 'row' }}>
                         <TextInput
                             placeholder={i18n.t('Programming.programName')}
                             maxLength={30}
@@ -84,48 +82,51 @@ export default class StepProgrammingComponent extends Component {
                                 fontFamily: 'Jost-Medium',
                             }}
                             value={this.props.Instruction.ActiveProgram.name} onChangeText={text => {
-                            this.props.setName(text);
-                        }}/>
+                                this.props.setName(text);
+                            }} />
                     </View>
-                    <View style={{flex: 1}}/>
+                    <View style={{ flex: 1 }} />
                 </View>
 
 
-                <View style={{width: '100%', flexDirection: 'row', paddingBottom:30}}>
-                    <View style={{flex: 1}}/>
-                    <View style={{flex: 2, flexDirection: 'row', justifyContent: 'flex-start'}}>
+                <View style={{ width: '100%', flexDirection: 'row', paddingBottom: 30 }}>
+                    <View style={{ flex: 1 }} />
+                    <View style={{ flex: 2, flexDirection: 'row', justifyContent: 'flex-start' }}>
                         <Image source={require('../../../resources/icon/wheeldarkx.png')}
-                               style={{width: 20, height: 20}}/>
-                        <View style={{textAlign: 'center', marginLeft: 5}}>
-                            <Text style={{fontSize: 16}}>{i18n.t('MainTab.left')}</Text>
+                            style={{ width: 20, height: 20 }} />
+                        <View style={{ textAlign: 'center', marginLeft: 5 }}>
+                            <Text style={{ fontSize: 16 }}>{i18n.t('MainTab.left')}</Text>
                         </View>
                     </View>
-                    <View style={{flex: 4, textAlign: 'center'}}>
-                        <Text style={{textAlign: 'center', fontSize: 16}}>{i18n.t('MainTab.speed')}</Text>
+                    <View style={{ flex: 4, textAlign: 'center' }}>
+                        <Text style={{ textAlign: 'center', fontSize: 16 }}>{i18n.t('MainTab.speed')}</Text>
                     </View>
 
 
-                    <View style={{flex: 2, flexDirection: 'row', justifyContent: 'flex-end'}}>
-                        <View style={{marginRight: 5}}>
-                            <Text style={{fontSize: 16}}>{i18n.t('MainTab.right')}</Text>
+                    <View style={{ flex: 2, flexDirection: 'row', justifyContent: 'flex-end' }}>
+                        <View style={{ marginRight: 5 }}>
+                            <Text style={{ fontSize: 16 }}>{i18n.t('MainTab.right')}</Text>
                         </View>
                         <Image source={require('../../../resources/icon/wheeldarkx.png')}
-                               style={{width: 20, height: 20}}/>
+                            style={{ width: 20, height: 20 }} />
                     </View>
-                    <View style={{flex: 1}}/>
+                    <View style={{ flex: 1 }} />
 
                 </View>
 
                 {step_content}
+                <ScrollView>
+                    {/* This FlatList is Wrapped in a ScrollView to fix an Issue with the Android Keyboard 
+                         instantly loosing focus on tapping into a textfield in the lower part of the list */}
                     <FlatList
                         data={this.props.Instruction.ActiveProgram.steps}
                         //extraData={this.state}
                         keyExtractor={(item, index) => index.toString()}
-                        ref={ref => {this.blockList = ref; this.previousContentHeight = 0}}
-                        renderItem={({item, index}) => (
+                        ref={ref => { this.blockList = ref; this.previousContentHeight = 0 }}
+                        renderItem={({ item, index }) => (
 
                             <TouchableOpacity
-                                style={{flex: 1}}
+                                style={{ flex: 1 }}
                                 onPress={() => {
                                     if (this.props.Instruction.selectedIndex === parseInt(index)) {
                                         this.props.setActiveIndex(-1);
@@ -134,9 +135,9 @@ export default class StepProgrammingComponent extends Component {
                                     }
                                 }}>
                                 <View key={index}
-                                      style={parseInt(index) === this.props.Instruction.selectedIndex ? styles.selected_row : styles.row}>
+                                    style={parseInt(index) === this.props.Instruction.selectedIndex ? styles.selected_row : styles.row}>
                                     <SpeedInput
-                                        style={{flex: 1}}
+                                        style={{ flex: 1 }}
                                         onchange={(text) => {
                                             this.props.setActiveIndex(-1);
                                             this.props.changeLeftSpeed(parseInt(text), parseInt(index));
@@ -149,7 +150,7 @@ export default class StepProgrammingComponent extends Component {
                                         left={true}
                                     />
                                     <SpeedInput
-                                        style={{flex: 1}}
+                                        style={{ flex: 1 }}
                                         onchange={(text) => {
                                             this.props.setActiveIndex(-1);
                                             this.props.changeRightSpeed(parseInt(text), parseInt(index));
@@ -165,13 +166,13 @@ export default class StepProgrammingComponent extends Component {
                             </TouchableOpacity>
                         )}
                     />
-                    </KeyboardAvoidingView>
+                </ScrollView>
                 <View style={styles.fabLine}>
                     {select_controls}
                     <FAB
                         style={styles.fab}
-                        icon={({size, color}) => (
-                            <CustomIcon name="plus" size={size} color={color}/>
+                        icon={({ size, color }) => (
+                            <CustomIcon name="plus" size={size} color={color} />
                         )}
                         onPress={() => {
                             this.props.addInstruction();
