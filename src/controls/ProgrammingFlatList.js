@@ -15,6 +15,8 @@ export default class ProgrammingFlatList extends Component {
     renderAndroidFlatList() {
         return (
             <ScrollView>
+                {/* This FlatList is Wrapped in a ScrollView to fix an Issue with the Android Keyboard 
+                    apprearing and instantly disappearing on tapping into a textfield in the lower part of the list */}
                 {this.renderFlatList()}
             </ScrollView>
         )
