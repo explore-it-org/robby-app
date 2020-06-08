@@ -2,12 +2,10 @@ import {Component} from 'react';
 import {
     StyleSheet,
     View,
-    Text,
     TextInput,
     TouchableOpacity,
-    ScrollView,
     FlatList,
-    Button,
+    KeyboardAvoidingView,
 } from 'react-native';
 import {Picker} from '@react-native-community/picker';
 import {FAB} from 'react-native-paper';
@@ -68,7 +66,7 @@ export default class BlockProgrammingComponent extends Component {
         return (
             <View
                 style={[styles.view, {flex: 1, justifyContent: 'center', alignItems: 'center'}]}>
-
+                <KeyboardAvoidingView behavior={'padding'} keyboardVerticalOffset={128}>
                 <View style={{flexDirection: 'row', paddingVertical: 20}}>
                     <View style={{flex: 1}}/>
                     <View style={{flex: 8, flexDirection: 'row'}}>
@@ -97,6 +95,7 @@ export default class BlockProgrammingComponent extends Component {
                         renderItem={this.renderProgramInput}
                         ref={ref => {this.blockList = ref; this.previousContentHeight = 0}}
                         />
+                </KeyboardAvoidingView>
                 <View style={styles.fabLine}>
                     {select_controls}
                     <FAB

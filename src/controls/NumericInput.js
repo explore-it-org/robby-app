@@ -12,9 +12,13 @@ export default class NumericInput extends Component {
     // check and convert number to text
     toText(number) {
         let txtValue = '';
+        number = Number(number)
         if (!isNaN(number)) {
-            txtValue = number.toString();
+                txtValue = number.toString();
+        }else{
+           alert(number); 
         }
+        
         return txtValue;
     }
 

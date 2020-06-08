@@ -1,18 +1,15 @@
 import {Component} from 'react';
 import {
     StyleSheet, View, TextInput,
-    FlatList,
-    TouchableOpacity,
-    Platform,
-    ScrollView, Alert, Image, ProgressViewIOSComponent, ProgressBarAndroidComponent, ActivityIndicator,
+    FlatList, TouchableOpacity,
+    Image, ActivityIndicator, KeyboardAvoidingView,
 } from 'react-native';
 import {FAB} from 'react-native-paper';
 import React from 'react';
 import SpeedInput from '../../controls/SpeedInput';
 import i18n from '../../../resources/locales/i18n';
 import CustomIcon from '../../utillity/CustomIcon';
-import {JostText} from '../../controls/JostText';
-import {Text, ProgressBar, Colors} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 
 
 export default class StepProgrammingComponent extends Component {
@@ -70,7 +67,7 @@ export default class StepProgrammingComponent extends Component {
 
 
             <View style={[styles.view, {flex: 1, justifyContent: 'center', alignItems: 'center'}]}>
-
+                <KeyboardAvoidingView behavior={'padding'} keyboardVerticalOffset={128}>
                 <View style={{flexDirection: 'row', paddingVertical: 20}}>
                     <View style={{flex: 1}}/>
                     <View style={{flex: 8, flexDirection: 'row'}}>
@@ -120,8 +117,6 @@ export default class StepProgrammingComponent extends Component {
                 </View>
 
                 {step_content}
-
-
                     <FlatList
                         data={this.props.Instruction.ActiveProgram.steps}
                         //extraData={this.state}
@@ -170,6 +165,7 @@ export default class StepProgrammingComponent extends Component {
                             </TouchableOpacity>
                         )}
                     />
+                    </KeyboardAvoidingView>
                 <View style={styles.fabLine}>
                     {select_controls}
                     <FAB
