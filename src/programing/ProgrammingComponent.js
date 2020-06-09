@@ -287,13 +287,15 @@ export default class ProgrammingComponent extends Component {
                                 instructions = Program.flatten(this.props.Overview.selectedProgram);
                             }
 
-                            if(instructions.length){
+                            if (instructions.length == 0) {
+                                Alert.alert(i18n.t("Settings.error"), i18n.t("Programming.emptyProgram"), [{ text: "OK", onPress: () => { } } ]);
+                                
+                            } else if (instructions.length > 4096) {
+                                Alert.alert(i18n.t("Settings.error"), i18n.format(i18n.t("Programming.programTooLong"), instructions.length), [{ text: "OK", onPress: () => { } } ])
+                            } else {
                                 this.props.upload(instructions);
-                            }else{
-                                    Alert.alert(i18n.t("Settings.error"), i18n.t("Programming.emptyProgram"), [{ text: "OK", onPress: () => { } } ])
                             }
 
-                            
                         }}/>
                     <Appbar.Action
                         icon={({size, color}) => (

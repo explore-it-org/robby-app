@@ -22,7 +22,8 @@
     "unsupportedAppVersionMessage": "La versione dell'applicazione potrebbe essere obsoleta. Si prega di scaricare l'ultima versione dall'appstore / playstore.",
     "unsupportedRobotVersionTitle": "Versione non supportata",
     "unsupportedRobotVersionMessage": "La versione del firmware del robot non è più supportata. Si prega di contattare explore-it per ottenere il vostro robot aggiornato.",
-    "emptyProgram": "Il programma che state cercando di caricare è vuoto."
+    "emptyProgram": "Il programma che state cercando di caricare è vuoto.",
+    "programTooLong":"Il programma che si sta tentando di caricare non deve contenere più di 4096 istruzioni. Il vostro programma contiene {0} istruzioni."
   },
   "BlockProgramming": {
     "programSelectionPrompt": "...",

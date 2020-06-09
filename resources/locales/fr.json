@@ -21,7 +21,8 @@
         "unsupportedAppVersionMessage": " L'application est probablement trop vieille. Télécharger la dernière version sur l'Appstore / Playstore.",
         "unsupportedRobotVersionTitle": "Version du robot non supportée",
         "unsupportedRobotVersionMessage": "La version du robot n'est plus prise en charge. Contacter explore-it pour mettre à jour le robot",
-        "emptyProgram": "Le programme que vous essayez de télécharger est vide."
+        "emptyProgram": "Le programme que vous essayez de télécharger est vide.",
+        "programTooLong": "Le programme que vous essayez de télécharger ne doit pas contenir plus de 4096 instructions. Votre programme contient {0} instructions."
     },
     "BlockPrgrogramming": {
         "programSelectionPrompt": "…",
