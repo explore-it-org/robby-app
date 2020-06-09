@@ -7,6 +7,7 @@ import {
     TouchableOpacity,
     View,
     Platform,
+    Linking,
 } from 'react-native';
 import {Picker} from '@react-native-community/picker';
 import {Text, TextInput} from 'react-native';
@@ -14,10 +15,8 @@ import {Appbar} from 'react-native-paper';
 import GLOBAL from '../utillity/Global';
 import i18n from '../../resources/locales/i18n';
 import Toast from '../controls/Toast';
-import {setDuration, setInterval, toggleSettings} from './SettingsAction';
-import SettingsContainer from './SettingsContainer';
-import NumericInput from '../controls/NumericInput';
 import LanguageInput from '../controls/LanguageInput';
+import CustomIcon from '../utillity/CustomIcon';
 
 
 class SettingsComponent extends Component {
@@ -223,11 +222,11 @@ class SettingsComponent extends Component {
 
 
         let deviceName = this.props.BLEConnection.isConnected ?
-            <Appbar.Content style={{position: 'absolute', right: 40}}
+            <Appbar.Content style={{position: 'absolute', right: 80}}
                             title={this.props.BLEConnection.device.name.substr(this.props.BLEConnection.device.name.length - 5)}
                             size={32}/>
             :
-            <Appbar.Content style={{position: 'absolute', right: 40}}
+            <Appbar.Content style={{position: 'absolute', right: 80}}
                             title={i18n.t('Programming.noConnectedDevice')}
                             size={32}/>;
 
@@ -244,6 +243,18 @@ class SettingsComponent extends Component {
                 }}>
                     <View style={[styles.container]}>
                         <Appbar>
+                        <Appbar.Action
+                        icon={({size, color}) => (
+                            (this.props.BLEConnection.isConnected) ?
+                                <CustomIcon name="bluetooth" size={size} color={color}/> :
+                                <CustomIcon name="bluetooth-disabled" size={size} color={color}/>
+                        )}
+                        //{(this.props.BLEConnection.isConnected) ? 'bluetooth-connected' : 'bluetooth'}
+                        style={{position: 'absolute', right: 40}}
+                        size={26}
+                        disabled={true}
+                        onPress={() => {
+                        }}/>
                             <Appbar.Action
                                 icon="close"
                                 size={26}
