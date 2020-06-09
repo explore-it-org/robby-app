@@ -24,8 +24,8 @@
         "emptyProgram": "Le programme que vous essayez de télécharger est vide.",
         "programTooLong": "Le programme que vous essayez de télécharger ne doit pas contenir plus de 4096 instructions. Votre programme contient {0} instructions."
     },
-    "BlockPrgrogramming": {
-        "programSelectionPrompt": "…",
+    "BlockProgramming": {
+        "programSelectionPrompt": "...",
         "programSelectionPromptTitle": "Choisis un programme"
     },
     "SpeedInput": {
