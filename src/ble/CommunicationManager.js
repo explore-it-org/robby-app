@@ -436,7 +436,7 @@ class CommunicationHandlerV10 extends CommunicationHandler{
             });
     }
 
-    uploadChunks(chunks, i){
+    uploadChunks(chunks){
         let chunk = chunks.shift();
         if(chunks.length == 0){
             return BleService.sendCommandToActDevice(chunk);
