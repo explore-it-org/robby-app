@@ -316,6 +316,7 @@ class CommunicationHandlerV10 extends CommunicationHandler{
         this._expectedLine = 0;
         this._lostLines = [];
         this._linecounter = -1;
+        this.uploadChunks = this.uploadChunks.bind(this);
     }
 
     toHexString(byteArray){
@@ -402,6 +403,9 @@ class CommunicationHandlerV10 extends CommunicationHandler{
     }
 
     upload(instructions){
+        if(instructions.length == 0 || instructions.length > 4096){
+            throw Error("More than 0 and less than 4096 instructions allowed.");
+        }
         return BleService.sendCommandToActDevice('F')
             .then((c) => {
                 var hex = Number(instructions.length * 2 - 1).toString(16).toUpperCase();
@@ -414,29 +418,32 @@ class CommunicationHandlerV10 extends CommunicationHandler{
                 return BleService.sendCommandToActDevice('E');
             })
             .then((c) => {
-                let numBytes = instructions.length * 2;
-                let numChunks = Math.ceil(numBytes / 512);
-                console.log(numBytes);
-                console.log(numChunks);
-                let promises = [];
-                for(let j = 0; j < numChunks;j++){
-                    let chunkSize = 512;
-                    let numInstructions = chunkSize / 2;
-                    let offset = j * 512; 
-                    if(j == numChunks - 1){
-                        chunkSize = numBytes % 512;
-                    }
-                    let bytes = new Uint8Array(chunkSize);
-                    for (let i = 0; i < numInstructions; i++) {
+                let numInstructions = instructions.length;
+                let offset = 0;
+                let chunks = [];
+                while(numInstructions > 0){
+                    let chunkSize = Math.min(numInstructions, 256);
+                    let bytes = new Uint8Array(chunkSize * 2);
+                    for (let i = 0; i < chunkSize; i++) {
                         let item = instructions[offset + i];
-                        let left = item.left !== 0 ? parseInt(item.left * 2.55 + 0.5) : 0;
-                        let right = item.right !== 0 ? parseInt(item.right * 2.55 + 0.5) : 0;
-                        bytes[2 * (offset + i)] = left;
-                        bytes[2 * (offset + i) + 1] = right;
+                        bytes[2 * i] = Math.floor(item.left * 2.55 + 0.5);
+                        bytes[2 * i + 1] = Math.floor(item.right * 2.55 + 0.5);
                     }
-                    promises.push(BleService.sendCommandToActDevice(bytes));
+                    chunks.push(bytes);
+                    offset = offset + chunkSize;
+                    numInstructions = numInstructions - chunkSize;
                 }
-                return Promise.all(promises);
+                return this.uploadChunks(chunks);
             });
+    }
+
+    uploadChunks(chunks){
+        let chunk = chunks.shift();
+        if(chunks.length == 0){
+            return BleService.sendCommandToActDevice(chunk);
+        }
+        return BleService.sendCommandToActDevice(chunk).then(() => {
+            return this.uploadChunks(chunks);
+        })
     }
 }
