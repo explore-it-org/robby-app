@@ -403,6 +403,9 @@ class CommunicationHandlerV10 extends CommunicationHandler{
     }
 
     upload(instructions){
+        if(instructions.length == 0 || instructions.length > 4096){
+            throw Error("More than 0 and less than 4096 instructions allowed.");
+        }
         return BleService.sendCommandToActDevice('F')
             .then((c) => {
                 var hex = Number(instructions.length * 2 - 1).toString(16).toUpperCase();
@@ -423,10 +426,8 @@ class CommunicationHandlerV10 extends CommunicationHandler{
                     let bytes = new Uint8Array(chunkSize * 2);
                     for (let i = 0; i < chunkSize; i++) {
                         let item = instructions[offset + i];
-                        let left = item.left !== 0 ? Math.floor(item.left * 2.55 + 0.5) : 0;
-                        let right = item.right !== 0 ? Math.floor(item.right * 2.55 + 0.5) : 0;
-                        bytes[2 * i] = left;
-                        bytes[2 * i + 1] = right;
+                        bytes[2 * i] = Math.floor(item.left * 2.55 + 0.5);
+                        bytes[2 * i + 1] = Math.floor(item.right * 2.55 + 0.5);
                     }
                     chunks.push(bytes);
                     offset = offset + chunkSize;
