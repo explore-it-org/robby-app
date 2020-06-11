@@ -27,8 +27,8 @@ export default class ProgrammingFlatList extends Component {
             <FlatList
                 data={this.props.data}
                 keyExtractor={this.props.keyExtractor}
-                ref={this.props.ref}
                 renderItem={this.props.renderItem}
+                ref={ref=> this.props.bindRef(ref)}
             />
         )
     }

@@ -15,8 +15,10 @@ import ProgrammingFlatList from '../../controls/ProgrammingFlatList';
 
 
 export default class StepProgrammingComponent extends Component {
-
-
+    initList(ref){
+        this.blockList = ref;
+        this.previousContentHeight = 0; 
+    }
     render() {
         let select_controls;
         if (this.props.Instruction.selectedIndex >= 0) {
@@ -124,7 +126,7 @@ export default class StepProgrammingComponent extends Component {
                         data={this.props.Instruction.ActiveProgram.steps}
                         //extraData={this.state}
                         keyExtractor={(item, index) => index.toString()}
-                        ref={ref => { this.blockList = ref; this.previousContentHeight = 0 }}
+                        bindRef={this.initList.bind(this)}
                         renderItem={({ item, index }) => (
 
                             <TouchableOpacity

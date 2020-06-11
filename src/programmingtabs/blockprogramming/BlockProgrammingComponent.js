@@ -17,7 +17,10 @@ import ProgrammingFlatList from '../../controls/ProgrammingFlatList';
 
 
 export default class BlockProgrammingComponent extends Component {
-
+    initList(ref){
+        this.blockList = ref;
+        this.previousContentHeight = 0; 
+    }
     render() {
         this.items = Object.assign([], []);
         this.items = [<Picker.Item key={0} label={i18n.t('BlockProgramming.programSelectionPrompt')} />];
@@ -94,7 +97,7 @@ export default class BlockProgrammingComponent extends Component {
                         data={this.props.Block.Active_Block.blocks}
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={this.renderProgramInput}
-                        ref={ref => { this.blockList = ref; this.previousContentHeight = 0 }}
+                        bindRef={this.initList.bind(this)}
                     />
                 </KeyboardAvoidingView>
                 <View style={styles.fabLine}>
