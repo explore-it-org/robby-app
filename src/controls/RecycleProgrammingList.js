@@ -55,14 +55,14 @@ export default class RecycleTestComponent extends React.Component {
       })
     }
   }
-}
 
-render() {
-  return (
-    <RecyclerListView
-      layoutProvider={this._layoutProvider}
-      dataProvider={this.state.dataProvider}
-      rowRenderer={this.props.renderItem}
-    />
-  );
+  render() {
+    return (
+      <RecyclerListView
+        layoutProvider={this._layoutProvider}
+        dataProvider={this.state.dataProvider}
+        rowRenderer={this.props.renderItem}
+      />
+    );
+  }
 }
