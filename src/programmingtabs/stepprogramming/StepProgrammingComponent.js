@@ -16,8 +16,7 @@ import i18n from '../../../resources/locales/i18n';
 import CustomIcon from '../../utillity/CustomIcon';
 import { Text } from 'react-native-paper';
 import { ScrollView } from 'react-native-gesture-handler';
-import ProgrammingFlatList from '../../controls/ProgrammingFlatList';
-import RecycleTestComponent from '../../controls/RecycleProgrammingList';
+import RecycleProgrammingList from '../../controls/RecycleProgrammingList';
 
 export default class StepProgrammingComponent extends Component {
 
@@ -26,7 +25,7 @@ export default class StepProgrammingComponent extends Component {
     this.previousContentHeight = 0;
   }
 
-  renderItem = (type, item) => {
+  renderItem = (type, data) => {
     const styles = StyleSheet.create({
       col: {
         flex: 1,
@@ -49,60 +48,60 @@ export default class StepProgrammingComponent extends Component {
         borderWidth: 1.0,
       },
     });
-    return(
-    <TouchableOpacity
-      style={{ flex: 1 }}
-      onPress={() => {
-        if (
-          this.props.Instruction.selectedIndex ===
-          parseInt(item.index)
-        ) {
-          this.props.setActiveIndex(-1);
-        } else {
-          this.props.setActiveIndex(parseInt(item.index));
-        }
-      }}>
-      <View
-        style={
-          parseInt(item.index) ===
-            this.props.Instruction.selectedIndex
-            ? styles.selected_row
-            : styles.row
-        }>
-        <SpeedInput
-          style={{ flex: 1 }}
-          onchange={text => {
+    return (
+      <TouchableOpacity
+        style={{ flex: 1 }}
+        onPress={() => {
+          if (
+            this.props.Instruction.selectedIndex ===
+            parseInt(data.index)
+          ) {
             this.props.setActiveIndex(-1);
-            this.props.changeLeftSpeed(
-              parseInt(text),
-              parseInt(item.index),
-            );
-          }}
-          val={item.instruction.left}
-          val1={100 - item.instruction.left}
-          col1={'#FFFFFF'}
-          val2={item.instruction.left}
-          col2={'#D6F5EE'}
-          left={true}
-        />
-        <SpeedInput
-          style={{ flex: 1 }}
-          onchange={text => {
-            this.props.setActiveIndex(-1);
-            this.props.changeRightSpeed(
-              parseInt(text),
-              parseInt(item.index),
-            );
-          }}
-          val={item.instruction.right}
-          val1={item.instruction.right}
-          col1={'#CEE0F4'}
-          val2={100 - item.instruction.right}
-          col2={'#FFFFFF'}
-          left={false}
-        />
-      </View>
-    </TouchableOpacity>
+          } else {
+            this.props.setActiveIndex(parseInt(data.index));
+          }
+        }}>
+        <View
+          style={
+            parseInt(data.index) ===
+              this.props.Instruction.selectedIndex
+              ? styles.selected_row
+              : styles.row
+          }>
+          <SpeedInput
+            style={{ flex: 1 }}
+            onchange={text => {
+              this.props.setActiveIndex(-1);
+              this.props.changeLeftSpeed(
+                parseInt(text),
+                parseInt(data.index),
+              );
+            }}
+            val={data.item.left}
+            val1={100 - data.item.left}
+            col1={'#FFFFFF'}
+            val2={data.item.left}
+            col2={'#D6F5EE'}
+            left={true}
+          />
+          <SpeedInput
+            style={{ flex: 1 }}
+            onchange={text => {
+              this.props.setActiveIndex(-1);
+              this.props.changeRightSpeed(
+                parseInt(text),
+                parseInt(data.index),
+              );
+            }}
+            val={data.item.right}
+            val1={data.item.right}
+            col1={'#CEE0F4'}
+            val2={100 - data.item.right}
+            col2={'#FFFFFF'}
+            left={false}
+          />
+        </View>
+      </TouchableOpacity>
     )
   };
 
@@ -154,8 +153,6 @@ export default class StepProgrammingComponent extends Component {
     }
 
     // TODO remove all style
-
-    let steps = [];
 
     return (
       <View
@@ -234,11 +231,15 @@ export default class StepProgrammingComponent extends Component {
 
           {/* This FlatList is Wrapped in a ScrollView to fix an Issue with the Android Keyboard 
                          instantly loosing focus on tapping into a textfield in the lower part of the list */}
-          <RecycleTestComponent
-            data={this.props.Instruction.ActiveProgram.steps}
-            renderItem={this.renderItem}
-            selectedIndex={this.props.Instruction.selectedIndex}
-          />
+          <View style={{ flex: 1, minHeight: 1, minWidth: 1 }}>
+            <RecycleProgrammingList
+              style={{ flex: 1 }}
+              data={this.props.Instruction.ActiveProgram.steps}
+              renderItem={this.renderItem}
+              selectedIndex={this.props.Instruction.selectedIndex}
+            />
+          </View>
+
         </KeyboardAvoidingView>
         <View style={styles.fabLine}>
           {select_controls}

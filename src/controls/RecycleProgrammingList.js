@@ -10,7 +10,7 @@ import equal from 'fast-deep-equal'
 /***
  * To test out just copy this component and render in you root component
  */
-export default class RecycleTestComponent extends React.Component {
+export default class RecycleProgrammingList extends React.Component {
   constructor(args) {
     super(args);
 
@@ -31,10 +31,10 @@ export default class RecycleTestComponent extends React.Component {
     );
 
     this.state = {
-      dataProvider: dataProvider.cloneWithRows(this.props.data.map(instruction => {
+      dataProvider: dataProvider.cloneWithRows(this.props.data.map(item => {
         return {
-          instruction,
-          index: this.props.data.indexOf(instruction),
+          item,
+          index: this.props.data.indexOf(item),
         };
       })),
     };
@@ -46,10 +46,10 @@ export default class RecycleTestComponent extends React.Component {
         return r1 !== r2;
       });
       this.setState({
-        dataProvider: dataProvider.cloneWithRows(this.props.data.map(instruction => {
+        dataProvider: dataProvider.cloneWithRows(this.props.data.map(item => {
           return {
-            instruction,
-            index: this.props.data.indexOf(instruction),
+            item,
+            index: this.props.data.indexOf(item),
           };
         })),
       })
