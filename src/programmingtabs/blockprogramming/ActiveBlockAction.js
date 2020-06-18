@@ -22,9 +22,11 @@ export const moveDownBlock = () => ({
 export const deleteBlock = () => ({
     type: DELETE_BLOCK_INDEX,
 });
+
 export const addBlock = () => ({
     type: ADD_NEW_BLOCK,
 });
+
 export const setActiveBlockIndex = (index) => ({
     type: SET_ACTIVE_BLOCK,
     index,

@@ -17,13 +17,13 @@ import RecycleProgrammingList from '../../controls/RecycleProgrammingList';
 
 
 export default class BlockProgrammingComponent extends Component {
-    initList(ref) {
-        this.blockList = ref;
-        this.previousContentHeight = 0;
+    componentDidUpdate(prevProps){
+        if(this.props.Block.Active_Block.blocks.length - prevProps.Block.Active_Block.blocks.length === 1){ 
+            this.recycleProgrammingList.scrollToIndex();
+        }
     }
-
+    
     renderProgramInput = (type, data) => {
-        console.log(this.props.Block);
         return (
             <TouchableOpacity
                 style={
@@ -73,6 +73,7 @@ export default class BlockProgrammingComponent extends Component {
                         )}
                         onPress={() => {
                             this.props.moveUpBlock();
+                            this.recycleProgrammingList.scrollToIndex(this.props.Block.selectedBlockIndex  - 1);
                         }}
                     />
                     <FAB
@@ -83,6 +84,7 @@ export default class BlockProgrammingComponent extends Component {
                         )}
                         onPress={() => {
                             this.props.moveDownBlock();
+                            this.recycleProgrammingList.scrollToIndex(this.props.Block.selectedBlockIndex + 1);
                         }}
                     />
                     <FAB
@@ -93,6 +95,7 @@ export default class BlockProgrammingComponent extends Component {
                         )}
                         onPress={() => {
                             this.props.deleteBlock();
+                            this.recycleProgrammingList.scrollToIndex(this.props.Block.selectedBlockIndex);
                         }}
                     />
                 </View>;
@@ -129,6 +132,7 @@ export default class BlockProgrammingComponent extends Component {
 
                     <View style={{ flex: 1, minWidth: '100%' }}>
                         <RecycleProgrammingList
+                            ref={ref => this.recycleProgrammingList = ref}
                             data={this.props.Block.Active_Block.blocks}
                             renderItem={this.renderProgramInput}
                             selectedIndex={this.props.Block.selectedBlockIndex}
@@ -145,7 +149,6 @@ export default class BlockProgrammingComponent extends Component {
                         )}
                         onPress={() => {
                             this.props.addBlock();
-                            //this.blockList.scrollToEnd({animated: true});
                         }}
                     />
 

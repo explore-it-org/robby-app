@@ -143,9 +143,9 @@ export default class StepProgrammingComponent extends Component {
         </View>
       );
     }
-    let step_content;
+    let loadingIndicator;
     if (this.props.BLE.device.isDownloading) {
-      step_content = (
+      loadingIndicator = (
         <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'center' }}>
           <ActivityIndicator size="large" color="#2E5266" />
         </View>
@@ -160,9 +160,8 @@ export default class StepProgrammingComponent extends Component {
           styles.view,
           { flex: 1, justifyContent: 'center', alignItems: 'center' },
         ]}>
-        <KeyboardAvoidingView
-          behavior="padding"
-          keyboardVerticalOffset={Platform.OS == 'ios' ? 128 : 0}>
+
+        <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={Platform.OS == 'ios' ? 128 : 0}>
           <View style={{ flexDirection: 'row', paddingVertical: 20 }}>
             <View style={{ flex: 1 }} />
             <View style={{ flex: 8, flexDirection: 'row' }}>
@@ -227,7 +226,7 @@ export default class StepProgrammingComponent extends Component {
             <View style={{ flex: 1 }} />
           </View>
 
-          {step_content}
+          {loadingIndicator}
 
           {/* This FlatList is Wrapped in a ScrollView to fix an Issue with the Android Keyboard 
                          instantly loosing focus on tapping into a textfield in the lower part of the list */}

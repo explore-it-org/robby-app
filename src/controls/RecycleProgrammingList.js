@@ -11,6 +11,8 @@ import equal from 'fast-deep-equal'
  * To test out just copy this component and render in you root component
  */
 export default class RecycleProgrammingList extends React.Component {
+  ref = null;
+
   constructor(args) {
     super(args);
 
@@ -41,28 +43,60 @@ export default class RecycleProgrammingList extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (!equal(this.props.data, prevProps.data) || !equal(this.props.selectedIndex, prevProps.selectedIndex)) {
-      let dataProvider = new DataProvider((r1, r2) => {
-        return r1 !== r2;
+    if (!equal(this.props.data, prevProps.data)) {
+
+      this.updateDataState(() => {
+        if (this.props.selectedIndex  >= 0) {
+          console.log(this.props.selectedIndex);
+          this.scrollToIndex(this.props.selectedIndex);
+        } else {
+          this.scrollToIndex(this.props.data.length - 1 // TODO: BROKEN, SCROLLS NOT FAR ENOUGH
+        }
       });
-      this.setState({
-        dataProvider: dataProvider.cloneWithRows(this.props.data.map(item => {
-          return {
-            item,
-            index: this.props.data.indexOf(item),
-          };
-        })),
-      })
+    } else if (!equal(this.props.selectedIndex, prevProps.selectedIndex)) {
+      this.updateDataState(() => { })
     }
+  }
+
+  updateDataState(callback) {
+    let dataProvider = new DataProvider((r1, r2) => {
+      return r1 !== r2;
+    });
+    this.setState({
+      dataProvider: dataProvider.cloneWithRows(this.props.data.map(item => {
+        return {
+          item,
+          index: this.props.data.indexOf(item),
+        };
+      })),
+    }, callback);
   }
 
   render() {
     return (
       <RecyclerListView
+        ref={ref => {
+          this.ref = ref;
+        }}
         layoutProvider={this._layoutProvider}
         dataProvider={this.state.dataProvider}
         rowRenderer={this.props.renderItem}
+        on
       />
     );
+  }
+
+  scrollToIndex(index) {
+    if(index > 0){
+      this.ref.scrollToIndex(index, true);
+    }
+  }
+
+  scrollToTop() {
+    this.ref.scrollToTop(true);
+  }
+
+  scrollToEnd() {
+    this.ref.scrollToEnd(true);
   }
 }

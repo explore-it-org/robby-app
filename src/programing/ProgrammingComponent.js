@@ -102,8 +102,8 @@ export default class ProgrammingComponent extends Component {
                         this.props.stopScanning();
                     }}
                     onOk={
-                        result => {
-                            console.log(result);                            this.props.stopScanning();
+                        result => {                         
+                            this.props.stopScanning();
                             if (result.selectedValue) {
                                 this.props.setActiveDevice(result.selectedValue);
                                 this.props.connectToRobot();
