@@ -81,7 +81,6 @@ export default class RecycleProgrammingList extends React.Component {
         layoutProvider={this._layoutProvider}
         dataProvider={this.state.dataProvider}
         rowRenderer={this.props.renderItem}
-        on
       />
     );
   }
