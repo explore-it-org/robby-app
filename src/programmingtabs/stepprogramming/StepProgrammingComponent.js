@@ -15,9 +15,9 @@ import ProgrammingFlatList from '../../controls/ProgrammingFlatList';
 
 
 export default class StepProgrammingComponent extends Component {
-    initList(ref){
+    initList(ref) {
         this.blockList = ref;
-        this.previousContentHeight = 0; 
+        this.previousContentHeight = 0;
     }
     render() {
         let select_controls;
@@ -93,7 +93,7 @@ export default class StepProgrammingComponent extends Component {
                     </View>
 
 
-                    <View style={{ width: '100%', flexDirection: 'row', paddingBottom: 30 }}>
+                    <View style={{ width: '100%', flexDirection: 'row', paddingBottom: 15 }}>
                         <View style={{ flex: 1 }} />
                         <View style={{ flex: 2, flexDirection: 'row', justifyContent: 'flex-start' }}>
                             <Image source={require('../../../resources/icon/wheeldarkx.png')}
@@ -115,7 +115,9 @@ export default class StepProgrammingComponent extends Component {
                                 style={{ width: 20, height: 20 }} />
                         </View>
                         <View style={{ flex: 1 }} />
-
+                    </View>
+                    <View style={{ flexDirection: 'row', justifyContent: "center", paddingBottom: 5 }}>
+                        <Text>{i18n.t('Programming.length')} {this.props.Instruction.ActiveProgram.steps.length}</Text>
                     </View>
 
                     {step_content}

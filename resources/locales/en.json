@@ -15,6 +15,7 @@
     "bluetoothNotTurnedOnTitle": "Bluetooth is powered off",
     "bluetoothNotTurnedOnMessage": "Please turn on Bluetooth",
     "programName": "Program name",
+    "length": "Length:",
     "noConnectedDevice": "_ _ : _ _",
     "dialogCancelButton": "CANCEL",
     "unsupportedAppVersionTitle": "Version not supported",

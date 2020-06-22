@@ -58,8 +58,15 @@ export default class ProgramInput extends Component {
                 </View>
 
 
-                <View style={{flex: 5, flexDirection: 'column', justifyContent: 'center'}}>
-                    <Text style={{fontSize: 16}}>{selectedText}</Text>
+                <View style={{ flex: 5, flexDirection: 'column', justifyContent: 'center', alignContent: 'flex-start' }}>
+                    <View style={{ flexDirection: 'row', }}>
+                        <View style={{ flexDirection: 'column', justifyContent: 'center', alignContent: 'flex-start', alignItems:'center' }}>
+                            {selectItem ? this.renderItemType(selectItem.programType) : <View />}
+                        </View>
+                        <View style={{ flexDirection: 'column', justifyContent: 'center', alignContent: 'flex-start', alignItems:'center' }}>
+                            <Text style={{ fontSize: 16 }}>{selectedText}</Text>
+                        </View>
+                    </View>
                 </View>
 
                 <View style={{flex: 1, justifyContent: 'center'}}>

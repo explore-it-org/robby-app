@@ -15,6 +15,7 @@
         "bluetoothNotTurnedOnTitle": "est désactivé",
         "bluetoothNotTurnedOnMessage": "Allumer le BluetoothLE",
         "programName": "Nom du programme",
+        "length": "Longueur:",
         "noConnectedDevice": "_ _ : _ _",
         "dialogCancelButton": "ANNULER",
         "unsupportedAppVersionTitle": "Version non supportée",
