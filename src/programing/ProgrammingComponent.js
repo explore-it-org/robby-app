@@ -179,6 +179,7 @@ export default class ProgrammingComponent extends Component {
                                 this.clear = () => {
                                     this.props.clearBlock();
                                 };
+                                this.props.loadChildren();
                                 break;
                             default:
                                 this.clear = () => {

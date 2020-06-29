@@ -12,6 +12,7 @@ import {
 import {clearBlock} from '../programmingtabs/blockprogramming/ActiveBlockAction';
 import {clearProgram} from '../programmingtabs/stepprogramming/ActiveInstructionAction';
 import {saveProgram} from '../database/DatabaseAction';
+import {loadChildren} from '../programmingtabs/blockprogramming/ActiveBlockAction';
 
 import ProgrammingComponent from './ProgrammingComponent';
 import RobotProxy from '../ble/RobotProxy';
@@ -46,6 +47,7 @@ const mapDispatchToProps = dispatch =>
             grantLocation: grantLocation,
             toggleSettings: toggleSettings,
             scanningEnabled: scanningEnabled,
+            loadChildren
         }, dispatch);
 
 

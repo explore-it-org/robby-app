@@ -60,6 +60,22 @@ export class Program {
         return result;
     }
 
+    static flattenSimpleBlocks(program) {
+        var result = [];
+        if (program.programType === ProgramType.BLOCKS) {
+            program.blocks.forEach((block) => {
+                if (block.ref) {
+                    var prg = Database.findOneByPK(block.ref);
+                    let prgFlat = Program.flatten(prg);
+                    result.push(...prgFlat);
+                }
+            });
+        } else {
+            result.push(new Block(program.id, 1));
+        }
+        return result;
+    }
+
     static fromDatabase(program) {
         if (program === undefined) {
             return undefined;
