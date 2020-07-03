@@ -66,7 +66,7 @@ export class Program {
             program.blocks.forEach((block) => {
                 if (block.ref) {
                     var prg = Database.findOneByPK(block.ref);
-                    let prgFlat = Program.flatten(prg);
+                    let prgFlat = Program.flattenSimpleBlocks(prg);
                     result.push(...prgFlat);
                 }
             });

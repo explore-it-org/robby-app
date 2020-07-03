@@ -118,6 +118,8 @@ class RoboticsDatabase {
     // Checks whether the given `program` has an indirect reference to the program with the id `program_id`.
     // TODO reduce to list of programs which us certain programs
     isUsedRecursive(program, program_id): boolean {
+        let listOfUsedBlocks = Program.flattenSimpleBlocks(program);
+        return listOfUsedBlocks.map(block => block.ref).includes(program_id);
         return program_id === program.id || this.isUsed(program, program_id) || program.blocks.reduce((acc, p) => acc || this.isUsedRecursive(this.findOneByPK(Block.fromDatabase(p).ref), program_id), false);
     }
 
@@ -130,3 +132,4 @@ class RoboticsDatabase {
 
 let Database = new RoboticsDatabase();
 export default Database;
+
