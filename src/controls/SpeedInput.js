@@ -13,14 +13,14 @@ export default class SpeedInput extends Component {
         let numbers = '0123456789';
 
         if (parseInt(text) > 100) {
-            Alert.alert(i18n.t('SpeedInput.invalidEntry'), i18n.t('SpeedInput.invalidEntryMessage'));
+            Alert.alert(i18n.t('SpeedInput.invalidEntryTitle'), i18n.t('SpeedInput.invalidEntryMessage'));
             newText = '100';
         } else {
             for (let i = 0; i < text.length; i++) {
                 if (numbers.indexOf(text[i]) > -1) {
                     newText = newText + text[i];
                 } else {
-                    Alert.alert(i18n.t('SpeedInput.invalidEntry'), i18n.t('SpeedInput.invalidEntryMessage'));
+                    Alert.alert(i18n.t('SpeedInput.invalidEntryTitle'), i18n.t('SpeedInput.invalidEntryMessage'));
                 }
             }
         }
