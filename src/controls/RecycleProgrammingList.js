@@ -50,7 +50,7 @@ export default class RecycleProgrammingList extends React.Component {
           console.log(this.props.selectedIndex);
           this.scrollToIndex(this.props.selectedIndex);
         } else {
-          this.scrollToIndex(this.props.data.length - 1 // TODO: BROKEN, SCROLLS NOT FAR ENOUGH
+          this.scrollToIndex(this.props.data.length - 1);
         }
       });
     } else if (!equal(this.props.selectedIndex, prevProps.selectedIndex)) {

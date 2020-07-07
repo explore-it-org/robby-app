@@ -17,15 +17,14 @@ import RecycleProgrammingList from '../../controls/RecycleProgrammingList';
 
 
 export default class BlockProgrammingComponent extends Component {
-<<<<<<< HEAD
     componentDidUpdate(prevProps){
         if(this.props.Block.Active_Block.blocks.length - prevProps.Block.Active_Block.blocks.length === 1){ 
             this.recycleProgrammingList.scrollToIndex();
         }
-=======
+    }
+    
     initList(ref) {
         this.blockList = ref;
->>>>>>> develop
     }
     
     renderProgramInput = (type, data) => {
