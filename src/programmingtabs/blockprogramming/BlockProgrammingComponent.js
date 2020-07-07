@@ -14,6 +14,7 @@ import ProgramInput from '../../controls/ProgramInput';
 import i18n from '../../../resources/locales/i18n';
 import CustomIcon from '../../utillity/CustomIcon';
 import ProgrammingFlatList from '../../controls/ProgrammingFlatList';
+import { Text } from 'react-native-elements';
 
 
 export default class BlockProgrammingComponent extends Component {
@@ -87,6 +88,9 @@ export default class BlockProgrammingComponent extends Component {
                                 }} />
                         </View>
                         <View style={{ flex: 1 }} />
+                    </View>
+                    <View style={{ flexDirection: 'row', justifyContent: "center", paddingBottom: 15 }}>
+                        <Text>{i18n.t('Programming.length')} {this.props.Block.Active_Block.blocks.length}</Text>
                     </View>
                     <ProgrammingFlatList
                         data={this.props.Block.Active_Block.blocks}

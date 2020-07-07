@@ -11,6 +11,7 @@
         "noConnectedDevice": "_ _ : _ _",
         "chooseDevice": "Choisir dispositif",
         "dialogCancelButton": "ANNULER",
+        "length": "Longueur:",
         "downloadMessage": "Instructions téléchargées avec succès!",
         "recordMessage": "Enregistré sur le robot avec succès!",
         "uploadMessage": "Instructions publiées avec succès",
