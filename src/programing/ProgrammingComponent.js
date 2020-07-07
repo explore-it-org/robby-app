@@ -178,6 +178,7 @@ export default class ProgrammingComponent extends Component {
                                 this.setState({uploadButtonDisable: false});
                                 this.clear = () => {
                                     this.props.clearBlock();
+                                    this.props.loadChildren();
                                 };
                                 this.props.loadChildren();
                                 break;
