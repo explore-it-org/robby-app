@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {StyleSheet, Image, View, ScrollView, FlatList, TouchableOpacity} from 'react-native';
 import {IconButton, Text, Colors} from 'react-native-paper';
 import {ProgramType} from '../../model/DatabaseModels';
-import i18n from '../../../resources/locales/i18n';
 import CustomIcon from '../../utillity/CustomIcon';
 
 export default class OverviewComponent extends Component {

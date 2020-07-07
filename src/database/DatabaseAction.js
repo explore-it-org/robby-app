@@ -24,14 +24,12 @@ export const saveProgram = (ActiveProgram) => {
             program = Object.assign(new Program(), a, {blocks: a.blocks.filter(b => b.ref !== '' && b.ref !== 0)});
         }
         dispatch(save(program));
-        dispatch(loadChildren());
     };
 };
 
 export const duplicate = (program, newName = '') => {
     return (dispatch, getState) => {
         dispatch(_duplicate(program, newName));
-        dispatch(loadChildren());
     };
 };
 
@@ -50,10 +48,9 @@ export const removeProgram = (program_id) => {
     return (dispatch, getState) => {
         let program = getState().ActiveBlock.Active_Block;
         if (Database.isUsed(program, program_id)) {
-            Alert.alert(i18n.t('RoboticsDatabase.programUsedByActiveProgramTitle'), i18n.t('RoboticsDatabase.programUsedByActiveProgram'));
+            Alert.alert(i18n.t('RoboticsDatabase.programUsedByActiveProgramTitle'), i18n.t('RoboticsDatabase.programUsedByActiveProgramMessage'));
         } else {
             dispatch(remove(program_id));
-            dispatch(loadChildren());
         }
     };
 };
