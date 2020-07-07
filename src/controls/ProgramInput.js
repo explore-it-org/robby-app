@@ -63,7 +63,7 @@ export default class ProgramInput extends Component {
                 <View style={{ flex: 5, flexDirection: 'column', justifyContent: 'center', alignContent: 'flex-start' }}>
                     <View style={{ flexDirection: 'row', }}>
                         <View style={{ flexDirection: 'column', justifyContent: 'center', alignContent: 'flex-start', alignItems:'center' }}>
-                            {this.renderItemType(selectItem.programType)}
+                            {this.renderItemType(selectItem)}
                         </View>
                         <View style={{ flexDirection: 'column', justifyContent: 'center', alignContent: 'flex-start', alignItems:'center' }}>
                             <Text style={{ fontSize: 16 }}>{selectedText}</Text>
@@ -111,8 +111,13 @@ export default class ProgramInput extends Component {
             </View>
         );
     }
-    renderItemType = (type) => {
-        if (type === ProgramType.STEPS) {
+    renderItemType = (program) => {
+        if(!program){
+             // program = undefined
+             return (
+                <View></View>
+            )
+        } else if (program.programType === ProgramType.STEPS) {
             return (
                 <View style={{ justifyContent: 'flex-start', alignItems: 'center', paddingRight: 10 }}>
                     <Image source={require('../../resources/icon/wheeldarkx.png')}
@@ -122,16 +127,11 @@ export default class ProgramInput extends Component {
                         }} />
                 </View>
             )
-        } else if (type === ProgramType.BLOCKS) {
+        } else {
             return (
                 <View style={{ justifyContent: 'flex-start', alignItems: 'center', paddingRight: 10 }}>
                     <CustomIcon name="step2" size={20} color={Colors.grey700} />
                 </View>
-            )
-        } else {
-            // type = undefined
-            return (
-                <View></View>
             )
         }
     }
