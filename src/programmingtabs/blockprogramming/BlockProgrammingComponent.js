@@ -19,7 +19,6 @@ import RecycleProgrammingList from '../../controls/RecycleProgrammingList';
 export default class BlockProgrammingComponent extends Component {
     initList(ref) {
         this.blockList = ref;
-        this.previousContentHeight = 0;
     }
 
     renderProgramInput = (type, data) => {
@@ -54,12 +53,6 @@ export default class BlockProgrammingComponent extends Component {
     }
 
     render() {
-        this.items = Object.assign([], []);
-        this.items = [<Picker.Item key={0} label={i18n.t('BlockProgramming.programSelectionPrompt')} />];
-
-        this.props.Block.possibleChildren.forEach((p) => {
-            this.items.push(<Picker.Item key={p.id} label={p.name} value={p.id} testID={p.id} />);
-        });
         let select_controls;
         if (this.props.Block.selectedBlockIndex >= 0) {
             select_controls =
@@ -201,4 +194,39 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-end',
     },
+
+
+
+
+    container: {
+        borderColor: 'grey',
+        borderWidth: 1,
+        padding: 15
+      },
+      innerContainer: {
+        flexDirection: 'row',
+        alignItems: 'stretch'
+      },
+      text: {
+        fontSize: 18
+      },
+      headerFooterContainer: {
+        padding: 10,
+        alignItems: 'center'
+      },
+      clearButton: { backgroundColor: 'grey', borderRadius: 5, marginRight: 10, padding: 5 },
+      optionContainer: {
+        padding: 10,
+        borderBottomColor: 'grey',
+        borderBottomWidth: 1
+      },
+      optionInnerContainer: {
+        flex: 1,
+        flexDirection: 'row'
+      },
+      box: {
+        width: 20,
+        height: 20,
+        marginRight: 10
+      }
 });

@@ -142,7 +142,11 @@ export const scanningForDevices = () => {
         dispatch(startScanning());
         RobotProxy.scanningForRobots((error) => {
             dispatch(failedScanning(error));
-            Alert.alert('ble error', error);
+            if(error == "Location services are disabled"){
+                Alert.alert(i18n.t("locationServiceDisabledTitle"), i18n.t("locationServiceDisabledMessage")); 
+            } else {
+                Alert.alert('Ble error', error);
+            }
         }, (robot) => {
             dispatch(succesScanning(robot));
         });

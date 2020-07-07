@@ -22,7 +22,6 @@ export default class StepProgrammingComponent extends Component {
 
   initList(ref) {
     this.blockList = ref;
-    this.previousContentHeight = 0;
   }
 
   renderItem = (type, data) => {

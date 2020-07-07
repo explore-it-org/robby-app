@@ -18,7 +18,7 @@ class RoboticsDatabase {
 
     add(program, operation = 'add', update = false, noNameChange = true): String {
         if (program.name === '') {
-            return {operation: operation, status: i18n.t('RoboticsDatabase.failure'), error: i18n.t('RoboticsDatabase.emptyName')};
+            return {operation: operation, status: "failure", error: i18n.t('RoboticsDatabase.emptyNameMessage')};
         }
         if ((update && noNameChange) || this.nameIsUnused(program.name)) {
 
@@ -26,12 +26,12 @@ class RoboticsDatabase {
                 this.repository.write(() => {
                     this.repository.create('Program', program, update);
                 });
-                return {operation: operation, status: i18n.t('RoboticsDatabase.success'), error: ''};
+                return {operation: operation, status: "success", error: '', message: i18n.t('RoboticsDatabase.saveSuccessMessage')};
             } catch (e) {
-                return {operation: operation, status: i18n.t('RoboticsDatabase.failure'), error: i18n.t('RoboticsDatabase.addFailed') + e.message};
+                return {operation: operation, status: "failure", error: i18n.t('RoboticsDatabase.addFailedMessage')};
             }
         }
-        return {operation: operation, status: i18n.t('RoboticsDatabase.failure'), error: i18n.t('RoboticsDatabase.nameTaken')};
+        return {operation: operation, status: "failure", error: i18n.t('RoboticsDatabase.nameTakenMessage')};
     }
 
     findAllWhichCanBeAddedTo(program): Program[] {
@@ -63,9 +63,14 @@ class RoboticsDatabase {
                 cloneProgram.name = newName + '(' + i + ')';
                 i++;
             }
-            return this.add(cloneProgram, 'duplicate');
+            let res = this.add(cloneProgram, 'duplicate');
+            if(res.error){
+                return res;
+            } else {
+                return {operation: 'duplicate', status: "success", error: i18n.t('RoboticsDatabase.duplicateSuccessMessage')};
+            }
         } catch (e) {
-            return {operation: 'duplicate', status: i18n.t('RoboticsDatabase.failure'), error: i18n.t('RoboticsDatabase.duplicateFailed') + e};
+            return {operation: 'duplicate', status: "failure", error: i18n.t('RoboticsDatabase.duplicateFailedMessage')};
         }
     }
 
@@ -77,17 +82,6 @@ class RoboticsDatabase {
         } else {
             return this.add(program, 'save', true, old.name === program.name);
         }
-
-        /*
-                try {
-                    this.repository.write(() => {
-                        this.repository.create('Program', program, true);
-                    });
-                    return {operation: 'save', status: 'success', error: ''};
-                } catch (e) {
-                    return {operation: 'save', status: 'failure', error: e};
-                }
-        */
     }
 
     canBeDeleted(program_id): Boolean {
@@ -100,12 +94,12 @@ class RoboticsDatabase {
                 this.repository.write(() => {
                     this.repository.delete(this.repository.objectForPrimaryKey('Program', program_id));
                 });
-                return {operation: 'delete', status: i18n.t('RoboticsDatabase.success'), error: ''};
+                return {operation: 'delete', status: "success", error: '', message: i18n.t('RoboticsDatabase.deleteSuccessMessage')};
             } catch (e) {
-                return {operation: 'delete', status: i18n.t('RoboticsDatabase.failure'), error: i18n.t('RoboticsDatabase.deleteFailed') + e};
+                return {operation: 'delete', status: "failure", error: i18n.t('RoboticsDatabase.deleteFailedMessage')};
             }
         }
-        return {operation: 'delete', status: i18n.t('RoboticsDatabase.failure'), error: i18n.t('RoboticsDatabase.programUsed')};
+        return {operation: 'delete', status: "failure", error: i18n.t('RoboticsDatabase.programUsedMessage')};
 
     }
 
