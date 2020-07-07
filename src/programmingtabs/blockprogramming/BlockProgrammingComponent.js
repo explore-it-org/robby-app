@@ -13,14 +13,43 @@ import React from 'react';
 import ProgramInput from '../../controls/ProgramInput';
 import i18n from '../../../resources/locales/i18n';
 import CustomIcon from '../../utillity/CustomIcon';
-import ProgrammingFlatList from '../../controls/ProgrammingFlatList';
-import { Text } from 'react-native-elements';
+import RecycleProgrammingList from '../../controls/RecycleProgrammingList';
 
 
 export default class BlockProgrammingComponent extends Component {
     initList(ref) {
         this.blockList = ref;
-        this.previousContentHeight = 0;
+    }
+
+    renderProgramInput = (type, data) => {
+        console.log(this.props.Block);
+        return (
+            <TouchableOpacity
+                style={
+                    data.index ===
+                        this.props.Block.selectedBlockIndex
+                        ? styles.selected_row
+                        : styles.row
+                }
+                onPress={() => {
+                    this.props.setActiveBlockIndex(data.index);
+                }}>
+
+                <ProgramInput
+                    selected={this.props.Block.selectedBlockIndex}
+                    pickerItems={this.props.Block.possibleChildren}
+                    selectedProgram={this.props.Block.Active_Block.blocks[data.index].ref}
+                    onRepeatValueChange={(value) => {
+                        this.props.setActiveBlockIndex(-1);
+                        this.props.changeReps(parseInt(value), data.index);
+                    }}
+                    onProgramSelectionChange={(value) => {
+                        this.props.setActiveBlockIndex(-1);
+                        this.props.changeSelectedID(value, data.index);
+                    }}
+                    val={this.props.Block.Active_Block.blocks[data.index].rep} />
+            </TouchableOpacity>
+        )
     }
 
     render() {
@@ -66,7 +95,8 @@ export default class BlockProgrammingComponent extends Component {
         return (
             <View
                 style={[styles.view, { flex: 1, justifyContent: 'center', alignItems: 'center' }]}>
-                <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={128}>
+
+                <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={0}>
                     <View style={{ flexDirection: 'row', paddingVertical: 20 }}>
                         <View style={{ flex: 1 }} />
                         <View style={{ flex: 8, flexDirection: 'row' }}>
@@ -89,15 +119,15 @@ export default class BlockProgrammingComponent extends Component {
                         </View>
                         <View style={{ flex: 1 }} />
                     </View>
-                    <View style={{ flexDirection: 'row', justifyContent: "center", paddingBottom: 15 }}>
-                        <Text>{i18n.t('Programming.length')} {this.props.Block.Active_Block.blocks.length}</Text>
+
+                    <View style={{ flex: 1, minWidth: '100%' }}>
+                        <RecycleProgrammingList
+                            data={this.props.Block.Active_Block.blocks}
+                            renderItem={this.renderProgramInput}
+                            selectedIndex={this.props.Block.selectedBlockIndex}
+                        />
                     </View>
-                    <ProgrammingFlatList
-                        data={this.props.Block.Active_Block.blocks}
-                        keyExtractor={(item, index) => index.toString()}
-                        renderItem={this.renderProgramInput}
-                        bindRef={this.initList.bind(this)}
-                    />
+
                 </KeyboardAvoidingView>
                 <View style={styles.fabLine}>
                     {select_controls}
@@ -117,29 +147,6 @@ export default class BlockProgrammingComponent extends Component {
             </View>
         );
     }
-
-    renderProgramInput = ({ item, index }) => (
-        <TouchableOpacity index={index}
-            style={parseInt(index) === this.props.Block.selectedBlockIndex ? styles.selected_row : styles.row}
-            onPress={() => {
-                this.props.setActiveBlockIndex(index);
-            }}>
-            <ProgramInput index={index}
-                selected={this.props.Block.Active_Block.selectedBlockIndex}
-                pickerItems={this.props.Block.possibleChildren}
-                selectedProgram={this.props.Block.Active_Block.blocks[index].ref}
-                onRepeatValueChange={(value) => {
-                    this.props.setActiveBlockIndex(-1);
-                    this.props.changeReps(parseInt(value), index);
-                }}
-                onProgramSelectionChange={(value) => {
-                    this.props.setActiveBlockIndex(-1);
-                    this.props.changeSelectedID(value, index);
-                }}
-                val={this.props.Block.Active_Block.blocks[index].rep} />
-        </TouchableOpacity>
-    );
-
 }
 
 
@@ -167,6 +174,7 @@ const styles = StyleSheet.create({
     view: {
         marginBottom: 55,
         backgroundColor: 'white',
+        width: '100%'
     },
     fab: {
         margin: 7,
