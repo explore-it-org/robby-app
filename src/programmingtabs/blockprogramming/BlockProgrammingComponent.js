@@ -22,7 +22,7 @@ export default class BlockProgrammingComponent extends Component {
             this.recycleProgrammingList.scrollToIndex();
         }
     }
-    
+
     initList(ref) {
         this.blockList = ref;
     }
@@ -129,12 +129,12 @@ export default class BlockProgrammingComponent extends Component {
                     </View>
 
                     <View style={{ flex: 1, minWidth: '100%' }}>
-                        <RecycleProgrammingList
+                        {this.props.Block.Active_Block.blocks.length > 0 ? <RecycleProgrammingList
                             ref={ref => this.recycleProgrammingList = ref}
                             data={this.props.Block.Active_Block.blocks}
                             renderItem={this.renderProgramInput}
                             selectedIndex={this.props.Block.selectedBlockIndex}
-                        />
+                        /> : <View />}
                     </View>
 
                 </KeyboardAvoidingView>

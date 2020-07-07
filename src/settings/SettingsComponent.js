@@ -239,7 +239,6 @@ class SettingsComponent extends Component {
                 <ScrollView style={{
                     flex: 1,
                     backgroundColor: 'white',
-
                 }}>
                     <View style={[styles.container]}>
                         <Appbar>

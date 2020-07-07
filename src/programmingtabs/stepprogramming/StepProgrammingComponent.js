@@ -227,15 +227,13 @@ export default class StepProgrammingComponent extends Component {
 
           {loadingIndicator}
 
-          {/* This FlatList is Wrapped in a ScrollView to fix an Issue with the Android Keyboard 
-                         instantly loosing focus on tapping into a textfield in the lower part of the list */}
           <View style={{ flex: 1, minHeight: 1, minWidth: 1 }}>
-            <RecycleProgrammingList
+            {this.props.Instruction.ActiveProgram.steps.length > 0 ? <RecycleProgrammingList
               style={{ flex: 1 }}
               data={this.props.Instruction.ActiveProgram.steps}
               renderItem={this.renderItem}
               selectedIndex={this.props.Instruction.selectedIndex}
-            />
+            /> : <View />}
           </View>
 
         </KeyboardAvoidingView>
