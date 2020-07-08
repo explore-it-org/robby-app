@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, Image, View, ScrollView, FlatList, TouchableOpacity} from 'react-native';
+import {StyleSheet, Image, View, FlatList, TouchableOpacity} from 'react-native';
 import {IconButton, Text, Colors} from 'react-native-paper';
 import {ProgramType} from '../../model/DatabaseModels';
 import CustomIcon from '../../utillity/CustomIcon';

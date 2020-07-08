@@ -15,7 +15,6 @@ import SpeedInput from '../../controls/SpeedInput';
 import i18n from '../../../resources/locales/i18n';
 import CustomIcon from '../../utillity/CustomIcon';
 import { Text } from 'react-native-paper';
-import { ScrollView } from 'react-native-gesture-handler';
 import RecycleProgrammingList from '../../controls/RecycleProgrammingList';
 
 export default class StepProgrammingComponent extends Component {
