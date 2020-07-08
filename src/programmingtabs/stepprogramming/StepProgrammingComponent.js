@@ -3,7 +3,6 @@ import {
   StyleSheet,
   View,
   TextInput,
-  FlatList,
   TouchableOpacity,
   Image,
   ActivityIndicator,
@@ -185,7 +184,7 @@ export default class StepProgrammingComponent extends Component {
           </View>
 
           <View
-            style={{ width: '100%', flexDirection: 'row', paddingBottom: 30 }}>
+            style={{ width: '100%', flexDirection: 'row', paddingBottom: 15 }}>
             <View style={{ flex: 1 }} />
             <View
               style={{
@@ -224,6 +223,10 @@ export default class StepProgrammingComponent extends Component {
             <View style={{ flex: 1 }} />
           </View>
 
+          <View style={{ flexDirection: 'row', justifyContent: "center", paddingBottom: 15 }}>
+            <Text style={styles.text}>{i18n.t('Programming.length')} {this.props.Instruction.ActiveProgram.steps.length}</Text>
+          </View>
+
           {loadingIndicator}
 
           <View style={{ flex: 1, minHeight: 1, minWidth: 1 }}>
@@ -255,6 +258,9 @@ export default class StepProgrammingComponent extends Component {
 }
 
 const styles = StyleSheet.create({
+  text: {
+    fontSize: 15
+  },
   col: {
     flex: 1,
     alignItems: 'center',
@@ -293,4 +299,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-end',
   },
+  
 });

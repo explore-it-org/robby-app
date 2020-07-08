@@ -4,21 +4,20 @@ import {
     View,
     TextInput,
     TouchableOpacity,
-    FlatList,
     KeyboardAvoidingView,
 } from 'react-native';
-import { Picker } from '@react-native-community/picker';
 import { FAB } from 'react-native-paper';
 import React from 'react';
 import ProgramInput from '../../controls/ProgramInput';
 import i18n from '../../../resources/locales/i18n';
 import CustomIcon from '../../utillity/CustomIcon';
 import RecycleProgrammingList from '../../controls/RecycleProgrammingList';
-
+import { Text } from 'react-native-elements';
+import { Program } from '../../model/DatabaseModels';
 
 export default class BlockProgrammingComponent extends Component {
-    componentDidUpdate(prevProps){
-        if(this.props.Block.Active_Block.blocks.length - prevProps.Block.Active_Block.blocks.length === 1){ 
+    componentDidUpdate(prevProps) {
+        if (this.props.Block.Active_Block.blocks.length - prevProps.Block.Active_Block.blocks.length === 1) {
             this.recycleProgrammingList.scrollToIndex();
         }
     }
@@ -26,7 +25,7 @@ export default class BlockProgrammingComponent extends Component {
     initList(ref) {
         this.blockList = ref;
     }
-    
+
     renderProgramInput = (type, data) => {
         return (
             <TouchableOpacity
@@ -71,7 +70,7 @@ export default class BlockProgrammingComponent extends Component {
                         )}
                         onPress={() => {
                             this.props.moveUpBlock();
-                            this.recycleProgrammingList.scrollToIndex(this.props.Block.selectedBlockIndex  - 1);
+                            this.recycleProgrammingList.scrollToIndex(this.props.Block.selectedBlockIndex - 1);
                         }}
                     />
                     <FAB
@@ -127,7 +126,9 @@ export default class BlockProgrammingComponent extends Component {
                         </View>
                         <View style={{ flex: 1 }} />
                     </View>
-
+                    <View style={{ flexDirection: 'row', justifyContent: "center", paddingBottom: 15 }}>
+                        <Text>{i18n.t('Programming.length')} {Program.flatten(this.props.Block.Active_Block).length}</Text>
+                    </View>
                     <View style={{ flex: 1, minWidth: '100%' }}>
                         {this.props.Block.Active_Block.blocks.length > 0 ? <RecycleProgrammingList
                             ref={ref => this.recycleProgrammingList = ref}
@@ -210,31 +211,31 @@ const styles = StyleSheet.create({
         borderColor: 'grey',
         borderWidth: 1,
         padding: 15
-      },
-      innerContainer: {
+    },
+    innerContainer: {
         flexDirection: 'row',
         alignItems: 'stretch'
-      },
-      text: {
+    },
+    text: {
         fontSize: 18
-      },
-      headerFooterContainer: {
+    },
+    headerFooterContainer: {
         padding: 10,
         alignItems: 'center'
-      },
-      clearButton: { backgroundColor: 'grey', borderRadius: 5, marginRight: 10, padding: 5 },
-      optionContainer: {
+    },
+    clearButton: { backgroundColor: 'grey', borderRadius: 5, marginRight: 10, padding: 5 },
+    optionContainer: {
         padding: 10,
         borderBottomColor: 'grey',
         borderBottomWidth: 1
-      },
-      optionInnerContainer: {
+    },
+    optionInnerContainer: {
         flex: 1,
         flexDirection: 'row'
-      },
-      box: {
+    },
+    box: {
         width: 20,
         height: 20,
         marginRight: 10
-      }
+    }
 });
