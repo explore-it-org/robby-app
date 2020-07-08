@@ -31,10 +31,10 @@ export default class ProgrammingComponent extends Component {
         let prev = prevProps.Program.lastChange;
         let now = this.props.Program.lastChange;
         if (prev !== now) {
-            if (now.status === i18n.t('RoboticsDatabase.success')) {
-                Toast.show(now.status, 2000); // TODO show propper message??
+            if (now.status === "success") {
+                Toast.show(now.message, 2000);
             } else {
-                Alert.alert(now.status, now.error);
+                Alert.alert(i18n.t("RoboticsDatabase.failureTitle"), now.error);
             }
         }
         prev = prevProps.BLEConnection.device;
@@ -102,8 +102,8 @@ export default class ProgrammingComponent extends Component {
                         this.props.stopScanning();
                     }}
                     onOk={
-                        result => {
-                            console.log(result);                            this.props.stopScanning();
+                        result => {                         
+                            this.props.stopScanning();
                             if (result.selectedValue) {
                                 this.props.setActiveDevice(result.selectedValue);
                                 this.props.connectToRobot();
@@ -178,7 +178,9 @@ export default class ProgrammingComponent extends Component {
                                 this.setState({uploadButtonDisable: false});
                                 this.clear = () => {
                                     this.props.clearBlock();
+                                    this.props.loadChildren();
                                 };
+                                this.props.loadChildren();
                                 break;
                             default:
                                 this.clear = () => {
@@ -288,10 +290,10 @@ export default class ProgrammingComponent extends Component {
                             }
 
                             if (instructions.length == 0) {
-                                Alert.alert(i18n.t("Settings.error"), i18n.t("Programming.emptyProgram"), [{ text: "OK", onPress: () => { } } ]);
+                                Alert.alert(i18n.t("Programming.emptyProgramTitle"), i18n.t("Programming.emptyProgramMessage"), [{ text: "OK", onPress: () => { } } ]);
                                 
                             } else if (instructions.length > 4096) {
-                                Alert.alert(i18n.t("Settings.error"), i18n.format(i18n.t("Programming.programTooLong"), instructions.length), [{ text: "OK", onPress: () => { } } ])
+                                Alert.alert(i18n.t("Programming.programTooLongTitle"), i18n.format(i18n.t("Programming.programTooLongMessage"), instructions.length), [{ text: "OK", onPress: () => { } } ])
                             } else {
                                 this.props.upload(instructions);
                             }

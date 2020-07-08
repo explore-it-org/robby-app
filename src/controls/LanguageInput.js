@@ -64,7 +64,6 @@ export default class LanguageInput extends Component {
                     onOk={
                         result => {
                             this.setState({pickerOpen: false});
-                            console.log('okeay');
                             if (result.selectedLabel) {
                                 this.props.onValueChange(this.props.pickerItems.find(v => v.text === result.selectedLabel).value);
                             }

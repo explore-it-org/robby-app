@@ -4,30 +4,59 @@ import {
     View,
     TextInput,
     TouchableOpacity,
-    FlatList,
     KeyboardAvoidingView,
 } from 'react-native';
-import { Picker } from '@react-native-community/picker';
 import { FAB } from 'react-native-paper';
 import React from 'react';
 import ProgramInput from '../../controls/ProgramInput';
 import i18n from '../../../resources/locales/i18n';
 import CustomIcon from '../../utillity/CustomIcon';
-import ProgrammingFlatList from '../../controls/ProgrammingFlatList';
-
+import RecycleProgrammingList from '../../controls/RecycleProgrammingList';
+import { Text } from 'react-native-elements';
+import { Program } from '../../model/DatabaseModels';
 
 export default class BlockProgrammingComponent extends Component {
-    initList(ref){
-        this.blockList = ref;
-        this.previousContentHeight = 0; 
+    componentDidUpdate(prevProps) {
+        if (this.props.Block.Active_Block.blocks.length - prevProps.Block.Active_Block.blocks.length === 1) {
+            this.recycleProgrammingList.scrollToIndex();
+        }
     }
-    render() {
-        this.items = Object.assign([], []);
-        this.items = [<Picker.Item key={0} label={i18n.t('BlockProgramming.programSelectionPrompt')} />];
 
-        this.props.Block.possibleChildren.forEach((p) => {
-            this.items.push(<Picker.Item key={p.id} label={p.name} value={p.id} testID={p.id} />);
-        });
+    initList(ref) {
+        this.blockList = ref;
+    }
+
+    renderProgramInput = (type, data) => {
+        return (
+            <TouchableOpacity
+                style={
+                    data.index ===
+                        this.props.Block.selectedBlockIndex
+                        ? styles.selected_row
+                        : styles.row
+                }
+                onPress={() => {
+                    this.props.setActiveBlockIndex(data.index);
+                }}>
+
+                <ProgramInput
+                    selected={this.props.Block.selectedBlockIndex}
+                    pickerItems={this.props.Block.possibleChildren}
+                    selectedProgram={this.props.Block.Active_Block.blocks[data.index].ref}
+                    onRepeatValueChange={(value) => {
+                        this.props.setActiveBlockIndex(-1);
+                        this.props.changeReps(parseInt(value), data.index);
+                    }}
+                    onProgramSelectionChange={(value) => {
+                        this.props.setActiveBlockIndex(-1);
+                        this.props.changeSelectedID(value, data.index);
+                    }}
+                    val={this.props.Block.Active_Block.blocks[data.index].rep} />
+            </TouchableOpacity>
+        )
+    }
+
+    render() {
         let select_controls;
         if (this.props.Block.selectedBlockIndex >= 0) {
             select_controls =
@@ -41,6 +70,7 @@ export default class BlockProgrammingComponent extends Component {
                         )}
                         onPress={() => {
                             this.props.moveUpBlock();
+                            this.recycleProgrammingList.scrollToIndex(this.props.Block.selectedBlockIndex - 1);
                         }}
                     />
                     <FAB
@@ -51,6 +81,7 @@ export default class BlockProgrammingComponent extends Component {
                         )}
                         onPress={() => {
                             this.props.moveDownBlock();
+                            this.recycleProgrammingList.scrollToIndex(this.props.Block.selectedBlockIndex + 1);
                         }}
                     />
                     <FAB
@@ -61,6 +92,7 @@ export default class BlockProgrammingComponent extends Component {
                         )}
                         onPress={() => {
                             this.props.deleteBlock();
+                            this.recycleProgrammingList.scrollToIndex(this.props.Block.selectedBlockIndex);
                         }}
                     />
                 </View>;
@@ -70,7 +102,8 @@ export default class BlockProgrammingComponent extends Component {
         return (
             <View
                 style={[styles.view, { flex: 1, justifyContent: 'center', alignItems: 'center' }]}>
-                <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={128}>
+
+                <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={0}>
                     <View style={{ flexDirection: 'row', paddingVertical: 20 }}>
                         <View style={{ flex: 1 }} />
                         <View style={{ flex: 8, flexDirection: 'row' }}>
@@ -93,12 +126,18 @@ export default class BlockProgrammingComponent extends Component {
                         </View>
                         <View style={{ flex: 1 }} />
                     </View>
-                    <ProgrammingFlatList
-                        data={this.props.Block.Active_Block.blocks}
-                        keyExtractor={(item, index) => index.toString()}
-                        renderItem={this.renderProgramInput}
-                        bindRef={this.initList.bind(this)}
-                    />
+                    <View style={{ flexDirection: 'row', justifyContent: "center", paddingBottom: 15 }}>
+                        <Text>{i18n.t('Programming.length')} {Program.flatten(this.props.Block.Active_Block).length}</Text>
+                    </View>
+                    <View style={{ flex: 1, minWidth: '100%' }}>
+                        {this.props.Block.Active_Block.blocks.length > 0 ? <RecycleProgrammingList
+                            ref={ref => this.recycleProgrammingList = ref}
+                            data={this.props.Block.Active_Block.blocks}
+                            renderItem={this.renderProgramInput}
+                            selectedIndex={this.props.Block.selectedBlockIndex}
+                        /> : <View />}
+                    </View>
+
                 </KeyboardAvoidingView>
                 <View style={styles.fabLine}>
                     {select_controls}
@@ -109,7 +148,6 @@ export default class BlockProgrammingComponent extends Component {
                         )}
                         onPress={() => {
                             this.props.addBlock();
-                            //this.blockList.scrollToEnd({animated: true});
                         }}
                     />
 
@@ -118,29 +156,6 @@ export default class BlockProgrammingComponent extends Component {
             </View>
         );
     }
-
-    renderProgramInput = ({ item, index }) => (
-        <TouchableOpacity index={index}
-            style={parseInt(index) === this.props.Block.selectedBlockIndex ? styles.selected_row : styles.row}
-            onPress={() => {
-                this.props.setActiveBlockIndex(index);
-            }}>
-            <ProgramInput index={index}
-                selected={this.props.Block.Active_Block.selectedBlockIndex}
-                pickerItems={this.props.Block.possibleChildren}
-                selectedProgram={this.props.Block.Active_Block.blocks[index].ref}
-                onRepeatValueChange={(value) => {
-                    this.props.setActiveBlockIndex(-1);
-                    this.props.changeReps(parseInt(value), index);
-                }}
-                onProgramSelectionChange={(value) => {
-                    this.props.setActiveBlockIndex(-1);
-                    this.props.changeSelectedID(value, index);
-                }}
-                val={this.props.Block.Active_Block.blocks[index].rep} />
-        </TouchableOpacity>
-    );
-
 }
 
 
@@ -168,6 +183,7 @@ const styles = StyleSheet.create({
     view: {
         marginBottom: 55,
         backgroundColor: 'white',
+        width: '100%'
     },
     fab: {
         margin: 7,
@@ -187,4 +203,39 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-end',
     },
+
+
+
+
+    container: {
+        borderColor: 'grey',
+        borderWidth: 1,
+        padding: 15
+    },
+    innerContainer: {
+        flexDirection: 'row',
+        alignItems: 'stretch'
+    },
+    text: {
+        fontSize: 18
+    },
+    headerFooterContainer: {
+        padding: 10,
+        alignItems: 'center'
+    },
+    clearButton: { backgroundColor: 'grey', borderRadius: 5, marginRight: 10, padding: 5 },
+    optionContainer: {
+        padding: 10,
+        borderBottomColor: 'grey',
+        borderBottomWidth: 1
+    },
+    optionInnerContainer: {
+        flex: 1,
+        flexDirection: 'row'
+    },
+    box: {
+        width: 20,
+        height: 20,
+        marginRight: 10
+    }
 });

@@ -32,7 +32,7 @@ class SettingsComponent extends Component {
         let prev = prevProps.Settings.lastUpdate;
         let now = this.props.Settings.lastUpdate;
         if (prev !== now) {
-            Toast.show(i18n.t('Settings.updated'), 2000);
+            Toast.show(i18n.t('Settings.updatedMessage'), 2000);
         }
     }
 
@@ -49,7 +49,7 @@ class SettingsComponent extends Component {
         let newText = '';
         let numbers = '0123456789';
         if (parseInt(interval) > 50) {
-            Alert.alert(i18n.t('Settings.error'), i18n.t('Settings.tooBig'));
+            Alert.alert(i18n.t('Settings.enteredIntervalTooBigTitle'), i18n.t('Settings.enteredIntervalTooBigMessage'));
             newText = '50';
         }else if(parseInt(interval) === 0){
                 newText = '1';
@@ -58,7 +58,7 @@ class SettingsComponent extends Component {
                 if (numbers.indexOf(interval[i]) > -1) {
                     newText = newText + interval[i];
                 } else {
-                    Alert.alert(i18n.t('Settings.invalidEntry'), i18n.t('Settings.invalidIntervalMessage'));
+                    Alert.alert(i18n.t('Settings.invalidIntervalTitle'), i18n.t('Settings.invalidIntervalMessage'));
                 }
             }
         }
@@ -69,7 +69,7 @@ class SettingsComponent extends Component {
         let newText = '';
         let numbers = '0123456789';
         if (parseInt(duration) > 80) {
-            Alert.alert(i18n.t('Settings.error'), i18n.t('Settings.tooBig'));
+            Alert.alert(i18n.t('Settings.enteredDurationTooBigTitle'), i18n.t('Settings.enteredDurationTooBigMessage'));
             newText = '80';
         }else if(parseInt(duration) === 0){
             newText = '1';
@@ -78,7 +78,7 @@ class SettingsComponent extends Component {
                 if (numbers.indexOf(duration[i]) > -1) {
                     newText = newText + duration[i];
                 } else {
-                    Alert.alert(i18n.t('Settings.invalidEntry'), i18n.t('Settings.invalidDurationMessage'));
+                    Alert.alert(i18n.t('Settings.invalidDurationMessage'), i18n.t('Settings.invalidDurationMessage'));
                 }
             }
         }
@@ -239,7 +239,6 @@ class SettingsComponent extends Component {
                 <ScrollView style={{
                     flex: 1,
                     backgroundColor: 'white',
-
                 }}>
                     <View style={[styles.container]}>
                         <Appbar>
