@@ -67,7 +67,7 @@ class RoboticsDatabase {
             if(res.error){
                 return res;
             } else {
-                return {operation: 'duplicate', status: "success", error: i18n.t('RoboticsDatabase.duplicateSuccessMessage')};
+                return {operation: 'duplicate', status: "success", message: i18n.t('RoboticsDatabase.duplicateSuccessMessage')};
             }
         } catch (e) {
             return {operation: 'duplicate', status: "failure", error: i18n.t('RoboticsDatabase.duplicateFailedMessage')};
