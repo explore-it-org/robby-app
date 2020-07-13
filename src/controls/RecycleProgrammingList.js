@@ -19,7 +19,7 @@ export default class RecycleProgrammingList extends React.Component {
     let { width } = Dimensions.get('window');
 
     let dataProvider = new DataProvider((r1, r2) => {
-      return r1 !== r2;
+      return !equal(r1, r2);
     });
 
     this._layoutProvider = new LayoutProvider(
@@ -44,10 +44,8 @@ export default class RecycleProgrammingList extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (!equal(this.props.data, prevProps.data)) {
-
       this.updateDataState(() => {
         if (this.props.selectedIndex  >= 0) {
-          console.log(this.props.selectedIndex);
           this.scrollToIndex(this.props.selectedIndex);
         } else {
           this.scrollToIndex(this.props.data.length - 1);
@@ -60,7 +58,7 @@ export default class RecycleProgrammingList extends React.Component {
 
   updateDataState(callback) {
     let dataProvider = new DataProvider((r1, r2) => {
-      return r1 !== r2;
+      return !equal(r1,  r2);
     });
     this.setState({
       dataProvider: dataProvider.cloneWithRows(this.props.data.map(item => {
@@ -73,6 +71,7 @@ export default class RecycleProgrammingList extends React.Component {
   }
 
   render() {
+    // NOTE: extendedState is necessary for the recyclerlist to re-render its children
     return (
       <RecyclerListView
         ref={ref => {
@@ -81,6 +80,7 @@ export default class RecycleProgrammingList extends React.Component {
         layoutProvider={this._layoutProvider}
         dataProvider={this.state.dataProvider}
         rowRenderer={this.props.renderItem}
+        extendedState={this.props.extendedState}
       />
     );
   }

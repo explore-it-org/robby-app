@@ -78,7 +78,10 @@ export default class ProgramInput extends Component {
                         )}
                         size={20}
                         color={'gray'}
-                        onPress={() => this.setState({ pickerOpen: true })}
+                        onPress={() => {
+                            this.setState({ pickerOpen: true });
+                    }}
+
                     />
                 </View>
 
@@ -97,6 +100,7 @@ export default class ProgramInput extends Component {
                     onCancel={() => {
                         this.setState({ pickerOpen: false });
                     }}
+                    extraData={this.props.pickerItems}
                     onOk={
                         result => {
                             this.setState({ pickerOpen: false });

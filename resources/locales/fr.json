@@ -9,9 +9,9 @@
     "Programming": {
         "programName": "Nom du programme",
         "noConnectedDevice": "_ _ : _ _",
+        "length": "Longueur:",
         "chooseDevice": "Choisir dispositif",
         "dialogCancelButton": "ANNULER",
-        "length": "Longueur:",
         "downloadMessage": "Instructions téléchargées avec succès!",
         "recordMessage": "Enregistré sur le robot avec succès!",
         "uploadMessage": "Instructions publiées avec succès",
