@@ -235,7 +235,7 @@ export default class StepProgrammingComponent extends Component {
               data={this.props.Instruction.ActiveProgram.steps}
               renderItem={this.renderItem}
               selectedIndex={this.props.Instruction.selectedIndex}
-              extendedState={this.props.Instruction.selectedIndex}
+              extendedState={{selectedIndex: this.props.Instruction.selectedIndex}}
             /> : <View />}
           </View>
 
