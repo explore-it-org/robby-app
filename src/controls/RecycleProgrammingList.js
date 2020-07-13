@@ -56,20 +56,6 @@ export default class RecycleProgrammingList extends React.Component {
     }
   }
 
-  reload(){
-    let dataProvider = new DataProvider((r1, r2) => {
-      return true;
-    });
-    this.state = {
-      dataProvider: dataProvider.cloneWithRows(this.props.data.map(item => {
-        return {
-          item,
-          index: this.props.data.indexOf(item),
-        };
-      })),
-    };
-  }
-
   updateDataState(callback) {
     let dataProvider = new DataProvider((r1, r2) => {
       return !equal(r1,  r2);
@@ -85,6 +71,7 @@ export default class RecycleProgrammingList extends React.Component {
   }
 
   render() {
+    // NOTE: extendedState is necessary for the recyclerlist to re-render its children
     return (
       <RecyclerListView
         ref={ref => {
