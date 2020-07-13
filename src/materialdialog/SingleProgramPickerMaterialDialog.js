@@ -125,6 +125,7 @@ export default class SingleProgramPickerMaterialDialog extends PureComponent {
                 <FlatList
                     data={rows}
                     renderItem={this.renderItem}
+                    extraData={this.state.visible}
                 />
             </MaterialDialog>
         );
