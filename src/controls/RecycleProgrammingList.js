@@ -1,15 +1,8 @@
-/***
- Use this component inside your React Native Application.
- A scrollable list with different item type
- */
-import React, { Component } from 'react';
-import { View, Text, Dimensions } from 'react-native';
+import React from 'react';
+import { Dimensions } from 'react-native';
 import { RecyclerListView, DataProvider, LayoutProvider } from 'recyclerlistview';
 import equal from 'fast-deep-equal'
 
-/***
- * To test out just copy this component and render in you root component
- */
 export default class RecycleProgrammingList extends React.Component {
   ref = null;
 
