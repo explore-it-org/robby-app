@@ -108,7 +108,7 @@ export default class StepProgrammingComponent extends Component {
       select_controls = (
         <View style={{ flexDirection: 'row', marginRight: 20 }}>
           <FAB
-            //disabled={this.props.Instruction.selectedIndex === 0} disabling move up and down button produces unexpected behaviour
+            disabled={this.props.Instruction.selectedIndex === 0}
             style={styles.fab}
             icon={({ size, color }) => (
               <CustomIcon name="up" size={size} color={color} />
@@ -118,7 +118,7 @@ export default class StepProgrammingComponent extends Component {
             }}
           />
           <FAB
-            //disabled={this.props.Instruction.selectedIndex >= this.props.Instruction.ActiveProgram.steps.length - 1}
+            disabled={this.props.Instruction.selectedIndex >= this.props.Instruction.ActiveProgram.steps.length - 1}
             style={styles.fab}
             icon={({ size, color }) => (
               <CustomIcon name="down" size={size} color={color} />
