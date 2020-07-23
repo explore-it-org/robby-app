@@ -27,7 +27,7 @@ export default class BlockProgrammingComponent extends Component {
     }
 
     renderProgramInput = (type, data, index, extendedState) => {
-        return (
+        return ( 
             <TouchableOpacity
                 style={
                     data.index ===
@@ -42,7 +42,7 @@ export default class BlockProgrammingComponent extends Component {
                 <ProgramInput
                     selected={this.props.Block.selectedBlockIndex}
                     pickerItems={extendedState.possibleChildren}
-                    selectedProgram={this.props.Block.Active_Block.blocks[data.index].ref || -1}
+                    selectedProgram={data.item.ref || -1}
                     onRepeatValueChange={(value) => {
                         this.props.setActiveBlockIndex(-1);
                         this.props.changeReps(parseInt(value), data.index);
@@ -51,7 +51,7 @@ export default class BlockProgrammingComponent extends Component {
                         this.props.setActiveBlockIndex(-1);
                         this.props.changeSelectedID(value, data.index);
                     }}
-                    val={this.props.Block.Active_Block.blocks[data.index].rep || 1}
+                    val={data.item.rep}
                     />
             </TouchableOpacity>
         )
