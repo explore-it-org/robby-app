@@ -27,7 +27,7 @@ export default class BlockProgrammingComponent extends Component {
     }
 
     renderProgramInput = (type, data, index, extendedState) => {
-        return (
+        return ( 
             <TouchableOpacity
                 style={
                     data.index ===
@@ -42,7 +42,7 @@ export default class BlockProgrammingComponent extends Component {
                 <ProgramInput
                     selected={this.props.Block.selectedBlockIndex}
                     pickerItems={extendedState.possibleChildren}
-                    selectedProgram={this.props.Block.Active_Block.blocks[data.index].ref || -1}
+                    selectedProgram={data.item.ref || -1}
                     onRepeatValueChange={(value) => {
                         this.props.setActiveBlockIndex(-1);
                         this.props.changeReps(parseInt(value), data.index);
@@ -51,7 +51,7 @@ export default class BlockProgrammingComponent extends Component {
                         this.props.setActiveBlockIndex(-1);
                         this.props.changeSelectedID(value, data.index);
                     }}
-                    val={this.props.Block.Active_Block.blocks[data.index].rep || 1}
+                    val={data.item.rep}
                     />
             </TouchableOpacity>
         )
@@ -64,7 +64,7 @@ export default class BlockProgrammingComponent extends Component {
                 <View style={{ flexDirection: 'row', marginRight: 20 }}>
 
                     <FAB
-                        //disabled={this.props.Instruction.selectedIndex === 0} disabling move up and down button produces unexpected behaviour
+                        disabled={this.props.Block.selectedBlockIndex === 0} 
                         style={styles.fab}
                         icon={({ size, color }) => (
                             <CustomIcon name="up" size={size} color={color} />
@@ -75,7 +75,7 @@ export default class BlockProgrammingComponent extends Component {
                         }}
                     />
                     <FAB
-                        //disabled={this.props.Instruction.selectedIndex >= this.props.Instruction.ActiveProgram.steps.length - 1}
+                        disabled={this.props.Block.selectedBlockIndex >= this.props.Block.Active_Block.blocks.length - 1}
                         style={styles.fab}
                         icon={({ size, color }) => (
                             <CustomIcon name="down" size={size} color={color} />
@@ -86,7 +86,7 @@ export default class BlockProgrammingComponent extends Component {
                         }}
                     />
                     <FAB
-                        //disabled={this.props.Instruction.ActiveProgram.steps.length <= 1}
+                        disabled={this.props.Block.Active_Block.blocks.length <= 1}
                         style={styles.fab}
                         icon={({ size, color }) => (
                             <CustomIcon name="deletelight" size={size} color={color} />

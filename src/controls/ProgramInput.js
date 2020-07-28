@@ -20,10 +20,6 @@ export default class ProgramInput extends Component {
     onChanged = (text) => {
         let newText = '';
         let numbers = '0123456789';
-        if (parseInt(text) > 100) {
-            Alert.alert(i18n.t('SpeedInput.invalidEntryTitle'), i18n.t('SpeedInput.invalidEntryMessage'));
-            newText = '100';
-        } else {
             for (let i = 0; i < text.length; i++) {
                 if (numbers.indexOf(text[i]) > -1) {
                     newText = newText + text[i];
@@ -31,7 +27,6 @@ export default class ProgramInput extends Component {
                     Alert.alert(i18n.t('SpeedInput.invalidEntryTitle'), i18n.t('SpeedInput.invalidEntryMessage'));
                 }
             }
-        }
         this.props.onRepeatValueChange(parseInt(newText));
     };
 
@@ -51,7 +46,7 @@ export default class ProgramInput extends Component {
 
                 <View style={{ flex: 1 }}>
                     <NumericInput
-                        onchange={this.props.onRepeatValueChange}
+                        onchange={this.onChanged}
                         val={this.props.val === null ? 0 : this.props.val} />
                 </View>
 
