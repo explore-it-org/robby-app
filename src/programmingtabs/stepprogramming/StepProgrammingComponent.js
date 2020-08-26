@@ -202,7 +202,7 @@ export default class StepProgrammingComponent extends Component {
             </View>
             <View style={{ flex: 4, textAlign: 'center' }}>
               <Text style={{ textAlign: 'center', fontSize: 16 }}>
-                {i18n.t('MainTab.speed')}
+                {i18n.t('MainTab.speed')} , {i18n.t('Programming.length')} {this.props.Instruction.ActiveProgram.steps.length}
               </Text>
             </View>
 
@@ -221,10 +221,6 @@ export default class StepProgrammingComponent extends Component {
               />
             </View>
             <View style={{ flex: 1 }} />
-          </View>
-
-          <View style={{ flexDirection: 'row', justifyContent: "center", paddingBottom: 15 }}>
-            <Text style={styles.text}>{i18n.t('Programming.length')} {this.props.Instruction.ActiveProgram.steps.length}</Text>
           </View>
 
           {loadingIndicator}
