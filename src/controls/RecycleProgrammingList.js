@@ -38,11 +38,6 @@ export default class RecycleProgrammingList extends React.Component {
   componentDidUpdate(prevProps) {
     if (!equal(this.props.data, prevProps.data)) {
       this.updateDataState(() => {
-        if (this.props.selectedIndex  >= 0) {
-          this.scrollToIndex(this.props.selectedIndex);
-        } else {
-          this.scrollToIndex(this.props.data.length - 1);
-        }
       });
     } else if (!equal(this.props.selectedIndex, prevProps.selectedIndex)) {
       this.updateDataState(() => { })
