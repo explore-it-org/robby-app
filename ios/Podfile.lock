@@ -2,7 +2,7 @@ PODS:
   - appcenter (2.6.1):
     - AppCenterReactNativeShared
     - React
-  - appcenter-analytics (3.0.3):
+  - appcenter-analytics (3.0.2):
     - AppCenter/Analytics
     - AppCenterReactNativeShared
     - React
@@ -317,20 +317,20 @@ PODS:
     - React-cxxreact (= 0.62.2)
     - React-jsi (= 0.62.2)
     - ReactCommon/callinvoker (= 0.62.2)
-  - RealmJS (3.6.0):
+  - RealmJS (10.2.0):
     - GCDWebServer
     - React
-  - RNCAsyncStorage (1.11.0):
+  - RNCAsyncStorage (1.9.0):
     - React
-  - RNCPicker (1.6.1):
+  - RNCPicker (1.3.0):
     - React
   - RNGestureHandler (1.6.1):
     - React
   - RNLocalize (1.4.0):
     - React
-  - RNReanimated (1.9.0):
+  - RNReanimated (1.8.0):
     - React
-  - RNScreens (2.8.0):
+  - RNScreens (2.7.0):
     - React
   - RNSVG (9.13.6):
     - React
@@ -504,7 +504,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AppCenter: ca66175050d538b157959382dd43f1ab96cdab84
   appcenter: f2e241f931e0865a74b3af3928066a1190814be0
-  appcenter-analytics: 4fdc885acb8a3bfac835515a8b9610d054ba8b9f
+  appcenter-analytics: f819aa9bd41c43b8b9ae53aa5dfd862b48a65f50
   appcenter-crashes: bfc5c03a6ddcfa158fcf4217d1724fd52f45d12c
   AppCenterReactNativeShared: d1218878427a69d4b76f73883256455ed20f12b3
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
@@ -545,13 +545,13 @@ SPEC CHECKSUMS:
   React-RCTText: fae545b10cfdb3d247c36c56f61a94cfd6dba41d
   React-RCTVibration: 4356114dbcba4ce66991096e51a66e61eda51256
   ReactCommon: ed4e11d27609d571e7eee8b65548efc191116eb3
-  RealmJS: ccaef6c07181c21bbafc227f184bc32065f6b27a
-  RNCAsyncStorage: d059c3ee71738c39834a627476322a5a8cd5bf36
-  RNCPicker: b8c53479842804a3e7b721e01def0ce2c89ddc69
+  RealmJS: 5195064e9aeccf94ae3756bd9d0f2301b9074b07
+  RNCAsyncStorage: b16697280b08bab4b5f2f67f752d93d13a52e9ed
+  RNCPicker: 7d06ee91dff65b0bcd400ca00039051d5ddcb938
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
-  RNLocalize: b6df30cc25ae736d37874f9bce13351db2f56796
-  RNReanimated: b5ccb50650ba06f6e749c7c329a1bc3ae0c88b43
-  RNScreens: 62211832af51e0aebcf6e8c36bcf7dd65592f244
+  RNLocalize: fc27ee5878ce5a3af73873fb2d8e866e0d1e6d84
+  RNReanimated: 955cf4068714003d2f1a6e2bae3fb1118f359aff
+  RNScreens: cf198f915f8a2bf163de94ca9f5bfc8d326c3706
   RNSVG: 8ba35cbeb385a52fd960fd28db9d7d18b4c2974f
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   Yoga: 3ebccbdd559724312790e7742142d062476b698e
@@ -559,4 +559,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 1c082f9eb1908c9a078a543f4bc85df3d198bb19
 
-COCOAPODS: 1.9.1
+COCOAPODS: 1.10.1
