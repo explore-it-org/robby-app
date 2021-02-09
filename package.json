@@ -1,13 +1,13 @@
 {
   "name": "explore-it",
-  "version": "2.3.2",
+  "version": "2.3.4",
   "private": true,
   "scripts": {
     "start": "react-native start",
     "version": "react-native-version",
     "test": "jest",
     "lint": "eslint .",
-    "postinstall": "npx jetify"
+    "postinstall": "npx jetify && patch-package"
   },
   "dependencies": {
     "@material-ui/core": "^4.9.12",
@@ -21,6 +21,7 @@
     "i18n-js": "^3.5.1",
     "jetifier": "^1.6.5",
     "native-base": "^2.13.12",
+    "patch-package": "^6.2.2",
     "prop-types": "^15.7.2",
     "react": "16.11.0",
     "react-art": "^16.13.1",
@@ -44,7 +45,7 @@
     "react-navigation-drawer": "^2.4.12",
     "react-navigation-tabs": "^2.8.12",
     "react-redux": "^7.2.0",
-    "realm": "3.6.0",
+    "realm": "^10.2.0",
     "recyclerlistview": "^3.0.0",
     "redux": "^4.0.5",
     "redux-persist": "^6.0.0",

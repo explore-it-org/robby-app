@@ -132,8 +132,8 @@ android {
         applicationId "org.exploreit.robotics"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 30
-        versionName "2.3.2"
+        versionCode 32
+        versionName "2.3.4"
         multiDexEnabled true
     }
     splits {

@@ -2,7 +2,7 @@
     "language": "Français",
     "languageTag": "fr",
     "MainTab": {
-        "speed": "Vitesse de 0 à 100, ",
+        "speed": "Vitesse de 0 - 100, ",
         "left": "G",
         "right": "D"
     },
