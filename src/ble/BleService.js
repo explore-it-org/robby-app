@@ -27,7 +27,7 @@ class BleService {
         // we are on android (at least API 21, Lollipop)
         try {
             const granted = await PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
+                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
             );
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
                 console.log('Location permission granted');
