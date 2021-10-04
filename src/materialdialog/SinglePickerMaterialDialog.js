@@ -2,7 +2,7 @@ import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {StyleSheet, Text, TouchableOpacity, View, FlatList} from 'react-native';
 import {material} from 'react-native-typography';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 import MaterialDialog from './MaterialDialog';
 
 import colors from './colors';
