@@ -3,7 +3,7 @@ import * as ActionType from '../GlobalActionTypes';
 
 const default_state_settings = {
     lastUpdate: Date.now(),
-    duration: 1,
+    duration: 5,
     interval: 0,
     isGranted: false,
     language: undefined,
