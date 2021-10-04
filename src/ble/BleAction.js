@@ -1,5 +1,6 @@
 import * as ActionTypes from '../GlobalActionTypes';
 import RobotProxy from './RobotProxy';
+import i18n from '../../resources/locales/i18n';
 import {} from '../database/DatabaseAction';
 import {
     clearProgram,
@@ -143,7 +144,7 @@ export const scanningForDevices = () => {
         RobotProxy.scanningForRobots((error) => {
             dispatch(failedScanning(error));
             if(error == "Location services are disabled"){
-                Alert.alert(i18n.t("locationServiceDisabledTitle"), i18n.t("locationServiceDisabledMessage")); 
+                Alert.alert(i18n.t("Programming.locationServiceDisabledTitle"), i18n.t("Programming.locationServiceDisabledMessage"));
             } else {
                 Alert.alert('Ble error', error);
             }
