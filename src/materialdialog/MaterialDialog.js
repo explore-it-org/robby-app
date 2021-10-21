@@ -30,21 +30,22 @@ const ActionButton = ({testID, onPress, colorAccent, label}) => (
         <Text style={[material.button, {color: colorAccent}]}>{label}</Text>
     </TouchableHighlight>
 );
-function MaterialDialog({
-    visible,
-    scrolled,
-    title,
-    titleColor,
-    colorAccent,
-    backgroundColor,
-    addPadding,
-    onOk,
-    onCancel,
-    okLabel,
-    cancelLabel,
-    children,
-}) {
-    return (<Modal
+
+const MaterialDialog = ({
+                            visible,
+                            scrolled,
+                            title,
+                            titleColor,
+                            colorAccent,
+                            backgroundColor,
+                            addPadding,
+                            onOk,
+                            onCancel,
+                            okLabel,
+                            cancelLabel,
+                            children,
+                        }) => (
+    <Modal
         animationType={'fade'}
         transparent
         hardwareAccelerated
