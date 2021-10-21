@@ -4,9 +4,7 @@ import {
     StyleSheet,
     Modal,
     Text,
-    Platform,
     TouchableHighlight,
-    KeyboardAvoidingView,
     TouchableWithoutFeedback,
     View,
     ScrollView,
@@ -61,18 +59,18 @@ const MaterialDialog = ({
                     style={[
                         styles.modalContainer,
                         (title != null || (addPadding && title == null)) && styles.modalContainerPadding,
-                        {backgroundColor},
+                        { backgroundColor },
                     ]}
                 >
                     <TouchableWithoutFeedback>
                         <View>
                             {title != null ? (
                                 <View style={scrolled ? styles.titleContainerScrolled : styles.titleContainer}>
-                                    <Text style={[material.title, {color: titleColor}]}>{title}</Text>
+                                    <Text style={[material.title, { color: titleColor }]}>{title}</Text>
                                 </View>
                             ) : null}
                             <ScrollView
-                                resetScrollToCoords={{x: 0, y: 0}}
+                                resetScrollToCoords={{ x: 0, y: 0 }}
                                 scrollEnabled={true}
                             >
                                 <View
@@ -114,7 +112,8 @@ const MaterialDialog = ({
             </View>
         </TouchableWithoutFeedback>
     </Modal>
-);
+    );
+}
 
 const styles = StyleSheet.create({
     backgroundOverlay: {
