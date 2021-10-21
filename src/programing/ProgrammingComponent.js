@@ -1,9 +1,6 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Alert, ToastAndroid, Image, SafeAreaViewComponent} from 'react-native';
-import {Appbar, Button, IconButton, Modal, Portal} from 'react-native-paper';
-import {createAppContainer, NavigationActions} from 'react-navigation';
-import {createMaterialTopTabNavigator} from 'react-navigation-tabs';
-import {getStatusBarHeight, ifIphoneX} from 'react-native-iphone-x-helper';
+import {StyleSheet, View, Alert, Image} from 'react-native';
+import {Appbar, Portal} from 'react-native-paper';
 import SinglePickerMaterialDialog from '../materialdialog/SinglePickerMaterialDialog';
 import i18n from '../../resources/locales/i18n';
 import OverviewContainer from '../programmingtabs/overview/OverviewContainer';
@@ -14,6 +11,8 @@ import Toast from '../controls/Toast';
 import SettingsContainer from '../settings/SettingsContainer';
 import CustomIcon from '../utillity/CustomIcon';
 import { Program } from '../model/DatabaseModels';
+import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
+import { createAppContainer } from 'react-navigation';
 
 
 export default class ProgrammingComponent extends Component {

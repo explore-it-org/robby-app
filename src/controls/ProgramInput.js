@@ -1,6 +1,5 @@
-import { Component } from 'react';
+import React, { Component }  from 'react';
 import { StyleSheet, View, Alert, TextComponent } from 'react-native';
-import React from 'react';
 import NumericInput from './NumericInput';
 import i18n from '../../resources/locales/i18n';
 import SingleProgramPickerMaterialDialog from '../materialdialog/SingleProgramPickerMaterialDialog';

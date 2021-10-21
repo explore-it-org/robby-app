@@ -4,9 +4,7 @@ import {
     StyleSheet,
     Modal,
     Text,
-    Platform,
     TouchableHighlight,
-    KeyboardAvoidingView,
     TouchableWithoutFeedback,
     View,
     ScrollView,
@@ -32,22 +30,21 @@ const ActionButton = ({testID, onPress, colorAccent, label}) => (
         <Text style={[material.button, {color: colorAccent}]}>{label}</Text>
     </TouchableHighlight>
 );
-
-const MaterialDialog = ({
-                            visible,
-                            scrolled,
-                            title,
-                            titleColor,
-                            colorAccent,
-                            backgroundColor,
-                            addPadding,
-                            onOk,
-                            onCancel,
-                            okLabel,
-                            cancelLabel,
-                            children,
-                        }) => (
-    <Modal
+function MaterialDialog({
+    visible,
+    scrolled,
+    title,
+    titleColor,
+    colorAccent,
+    backgroundColor,
+    addPadding,
+    onOk,
+    onCancel,
+    okLabel,
+    cancelLabel,
+    children,
+}) {
+    return (<Modal
         animationType={'fade'}
         transparent
         hardwareAccelerated
@@ -61,18 +58,18 @@ const MaterialDialog = ({
                     style={[
                         styles.modalContainer,
                         (title != null || (addPadding && title == null)) && styles.modalContainerPadding,
-                        {backgroundColor},
+                        { backgroundColor },
                     ]}
                 >
                     <TouchableWithoutFeedback>
                         <View>
                             {title != null ? (
                                 <View style={scrolled ? styles.titleContainerScrolled : styles.titleContainer}>
-                                    <Text style={[material.title, {color: titleColor}]}>{title}</Text>
+                                    <Text style={[material.title, { color: titleColor }]}>{title}</Text>
                                 </View>
                             ) : null}
                             <ScrollView
-                                resetScrollToCoords={{x: 0, y: 0}}
+                                resetScrollToCoords={{ x: 0, y: 0 }}
                                 scrollEnabled={true}
                             >
                                 <View
@@ -114,7 +111,8 @@ const MaterialDialog = ({
             </View>
         </TouchableWithoutFeedback>
     </Modal>
-);
+    );
+}
 
 const styles = StyleSheet.create({
     backgroundOverlay: {
