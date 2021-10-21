@@ -113,7 +113,6 @@ const MaterialDialog = ({
         </TouchableWithoutFeedback>
     </Modal>
     );
-}
 
 const styles = StyleSheet.create({
     backgroundOverlay: {
