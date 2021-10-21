@@ -19,7 +19,7 @@ export default class SpeedInput extends Component {
             for (let i = 0; i < text.length; i++) {
                 if (numbers.indexOf(text[i]) > -1) {
                     newText = newText + text[i];
-                } else {
+               } else {
                     Alert.alert(i18n.t('SpeedInput.invalidEntryTitle'), i18n.t('SpeedInput.invalidEntryMessage'));
                 }
             }
@@ -27,7 +27,7 @@ export default class SpeedInput extends Component {
         this.props.onchange(newText);
     };
 
-    componentDidMount(): void {
+    componentDidMount() {
     }
 
     render() {
