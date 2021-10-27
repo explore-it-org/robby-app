@@ -68,7 +68,8 @@ export default class BlockProgrammingComponent extends Component {
                         style={styles.fab}
                         icon={({ size, color }) => (
                             <CustomIcon name="up" size={size} color={color} />
-                        )}
+                    )}
+                        animated={false}
                         onPress={() => {
                             this.props.moveUpBlock();
                             this.recycleProgrammingList.scrollToIndex(this.props.Block.selectedBlockIndex - 1);
@@ -79,7 +80,8 @@ export default class BlockProgrammingComponent extends Component {
                         style={styles.fab}
                         icon={({ size, color }) => (
                             <CustomIcon name="down" size={size} color={color} />
-                        )}
+                    )}
+                        animated={false}
                         onPress={() => {
                             this.props.moveDownBlock();
                             this.recycleProgrammingList.scrollToIndex(this.props.Block.selectedBlockIndex + 1);
@@ -90,7 +92,8 @@ export default class BlockProgrammingComponent extends Component {
                         style={styles.fab}
                         icon={({ size, color }) => (
                             <CustomIcon name="deletelight" size={size} color={color} />
-                        )}
+                    )}
+                        animated={false}
                         onPress={() => {
                             this.props.deleteBlock();
                             this.recycleProgrammingList.scrollToIndex(this.props.Block.selectedBlockIndex);
@@ -145,10 +148,9 @@ export default class BlockProgrammingComponent extends Component {
                     {select_controls}
                     <FAB
                         style={styles.fab}
-                        icon={'plus'} // custom icon kept re-rendering and therefore spinning
-                        // icon={({ size, color }) => (
-                        //     <CustomIcon name="plus" size={size} color={color} />
-                        // )}
+                        icon={({ size, color }) => (
+                            <CustomIcon name="plus" size={size} color={color} />
+                        )}
                         animated={false}
                         onPress={() => {
                             this.props.addBlock();
