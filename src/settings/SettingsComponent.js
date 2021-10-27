@@ -252,13 +252,15 @@ class SettingsComponent extends Component {
                         style={{position: 'absolute', right: 40}}
                         size={26}
                         disabled={true}
+                        animated={false}
                         onPress={() => {
                         }}/>
                             <Appbar.Action
                                 icon="close"
                                 size={26}
                                 onPress={() => this.props.toggleSettings()}
-                                style={{position: 'absolute', right: 0}}
+                                style={{ position: 'absolute', right: 0 }}
+                                animated={false}
                             />
                             <Appbar.Content
                                 style={{position: 'absolute', left: 80}}
