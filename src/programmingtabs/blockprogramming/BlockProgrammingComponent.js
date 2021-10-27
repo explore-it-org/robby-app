@@ -145,7 +145,7 @@ export default class BlockProgrammingComponent extends Component {
                     {select_controls}
                     <FAB
                         style={styles.fab}
-                        icon={'plus'} // custom icon kept rerendering and therfor spinning
+                        icon={'plus'} // custom icon kept rerendering and therefore spinning
                         // icon={({ size, color }) => (
                         //     <CustomIcon name="plus" size={size} color={color} />
                         // )}
