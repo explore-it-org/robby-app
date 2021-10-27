@@ -145,9 +145,11 @@ export default class BlockProgrammingComponent extends Component {
                     {select_controls}
                     <FAB
                         style={styles.fab}
-                        icon={({ size, color }) => (
-                            <CustomIcon name="plus" size={size} color={color} />
-                        )}
+                        icon={'plus'} // custom icon kept rerendering and therfor spinning
+                        // icon={({ size, color }) => (
+                        //     <CustomIcon name="plus" size={size} color={color} />
+                        // )}
+                        animated={false}
                         onPress={() => {
                             this.props.addBlock();
                         }}
