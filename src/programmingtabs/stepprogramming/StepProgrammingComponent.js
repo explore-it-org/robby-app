@@ -113,6 +113,7 @@ export default class StepProgrammingComponent extends Component {
             icon={({ size, color }) => (
               <CustomIcon name="up" size={size} color={color} />
             )}
+            animated={false}
             onPress={() => {
               this.props.moveUp();
             }}
@@ -123,6 +124,7 @@ export default class StepProgrammingComponent extends Component {
             icon={({ size, color }) => (
               <CustomIcon name="down" size={size} color={color} />
             )}
+            animated={false}
             onPress={() => {
               this.props.moveDown();
             }}
@@ -133,6 +135,7 @@ export default class StepProgrammingComponent extends Component {
             icon={({ size, color }) => (
               <CustomIcon name="deletelight" size={size} color={color} />
             )}
+            animated={false}
             onPress={() => {
               this.props.deleteInstruction();
             }}
@@ -243,6 +246,7 @@ export default class StepProgrammingComponent extends Component {
             icon={({ size, color }) => (
               <CustomIcon name="plus" size={size} color={color} />
             )}
+            animated={false}
             onPress={() => {
               this.props.addInstruction();
               //this.blockList.scrollToEnd({animated: true});
