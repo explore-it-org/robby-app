@@ -1,6 +1,6 @@
 {
   "name": "explore-it",
-  "version": "2.3.7",
+  "version": "2.3.8",
   "private": true,
   "scripts": {
     "start": "react-native start",
@@ -33,7 +33,7 @@
     "react-native-gesture-handler": "^1.6.1",
     "react-native-iphone-x-helper": "^1.2.1",
     "react-native-localize": "^1.4.0",
-    "react-native-paper": "^3.8.0",
+    "react-native-paper": "^4.9.2",
     "react-native-reanimated": "^1.8.0",
     "react-native-screens": "^2.7.0",
     "react-native-svg": "^9.13.6",

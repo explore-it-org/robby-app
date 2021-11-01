@@ -12,7 +12,7 @@ import SettingsContainer from '../settings/SettingsContainer';
 import CustomIcon from '../utillity/CustomIcon';
 import { Program } from '../model/DatabaseModels';
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
-import { createAppContainer } from 'react-navigation';
+import { createAppContainer, NavigationActions } from 'react-navigation';
 
 
 export default class ProgrammingComponent extends Component {
@@ -124,7 +124,9 @@ export default class ProgrammingComponent extends Component {
                         )}
                         size={this.state.iconSize}
                         style={{position: 'absolute', right: 0}}
-                        onPress={() => this.props.toggleSettings()}/>
+                        animated={false}
+                        onPress={() => this.props.toggleSettings()}
+                        />
                        
                     {deviceName}
                     <Appbar.Action
@@ -137,6 +139,7 @@ export default class ProgrammingComponent extends Component {
                         style={{position: 'absolute', right: 40}}
                         size={this.state.iconSize}
                         disabled={this.props.BLEConnection.isConnecting}
+                        animated={false}
                         onPress={() => {
                             //  this.props.scanStatus(); this will break a lot of things
                             if (!this.props.Settings.isGranted) {
@@ -205,7 +208,8 @@ export default class ProgrammingComponent extends Component {
                             this.props.BLEConnection.device.isGoing ||
                             this.props.BLEConnection.device.isRecording ||
                             this.props.BLEConnection.device.isRunning ||
-                            this.props.BLEConnection.device.isDownloading)}
+                                this.props.BLEConnection.device.isDownloading)}
+                        animated={false}
                         onPress={() => {
                             this.props.stopRobot();
                         }}/>
@@ -219,7 +223,8 @@ export default class ProgrammingComponent extends Component {
                         this.props.BLEConnection.device.isGoing ||
                         this.props.BLEConnection.device.isRecording ||
                         this.props.BLEConnection.device.isRunning ||
-                        this.props.BLEConnection.device.isDownloading}
+                            this.props.BLEConnection.device.isDownloading}
+                        animated={false}
                         onPress={() => {
                             this.props.runRobot();
                         }}/>
@@ -233,7 +238,8 @@ export default class ProgrammingComponent extends Component {
                         this.props.BLEConnection.device.isGoing ||
                         this.props.BLEConnection.device.isRecording ||
                         this.props.BLEConnection.device.isRunning ||
-                        this.props.BLEConnection.device.isDownloading}
+                            this.props.BLEConnection.device.isDownloading}
+                        animated={false}
                         onPress={() => {
                             this.props.startRecording();
                         }}/>
@@ -247,7 +253,8 @@ export default class ProgrammingComponent extends Component {
                         this.props.BLEConnection.device.isGoing ||
                         this.props.BLEConnection.device.isRecording ||
                         this.props.BLEConnection.device.isRunning ||
-                        this.props.BLEConnection.device.isDownloading}
+                            this.props.BLEConnection.device.isDownloading}
+                        animated={false}
                         onPress={() => {
                             this.props.goRobot();
                         }}/>
@@ -261,7 +268,8 @@ export default class ProgrammingComponent extends Component {
                         this.props.BLEConnection.device.isGoing ||
                         this.props.BLEConnection.device.isRecording ||
                         this.props.BLEConnection.device.isRunning ||
-                        this.props.BLEConnection.device.isDownloading}
+                            this.props.BLEConnection.device.isDownloading}
+                        animated={false}
                         onPress={() => {
                             this.props.download();
                             this.navigator && this.navigator.dispatch(NavigationActions.navigate({routeName: 'Stepprogramming'}));
@@ -278,6 +286,7 @@ export default class ProgrammingComponent extends Component {
                         this.props.BLEConnection.device.isRunning ||
                         this.props.BLEConnection.device.isDownloading ||
                         this.state.uploadButtonDisable && this.props.Overview.selectedProgramIndex < 0}
+                        animated={false}
                         onPress={() => {
                             let instructions = null;
                             if (this.state.currentRoute === 'Stepprogramming') {
@@ -309,6 +318,7 @@ export default class ProgrammingComponent extends Component {
                         this.props.BLEConnection.device.isRunning ||
                         this.props.BLEConnection.device.isDownloading ||
                         this.state.saveButtonDisabled}
+                        animated={false}
                         onPress={() => {
                             this.save();
                         }}/>
@@ -323,6 +333,7 @@ export default class ProgrammingComponent extends Component {
                         this.props.BLEConnection.device.isRunning ||
                         this.props.BLEConnection.device.isDownloading ||
                         this.state.clearButtonDisabled}
+                        animated={false}
                         onPress={() => {
                             this.clear();
                         }}/>
