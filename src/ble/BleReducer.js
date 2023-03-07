@@ -1,7 +1,5 @@
 import * as ActionType from '../GlobalActionTypes';
 import RobotProxy from './RobotProxy';
-import i18n from '../../resources/locales/i18n';
-
 
 const default_state_ble_connection = {
     active_device: '',
@@ -23,6 +21,7 @@ const default_state_ble_connection = {
     response: [],
     error: '',
 };
+
 export const BleConnectionReducer = (state = default_state_ble_connection, action) => {
     switch (action.type) {
         case ActionType.START_CONNECTING:
@@ -115,5 +114,3 @@ export const BleConnectionReducer = (state = default_state_ble_connection, actio
 
     }
 };
-
-
