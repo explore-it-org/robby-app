@@ -8,13 +8,13 @@
 
 ## Development:
 
-This app is based on React Native 0.60.5. 
+This app is based on React Native 0.63
 
 ### Requirements:
 
 * Node.js  >= 10.0 && < 11.0
 * Npm >= 6.0.0
-* React Native CLI == 0.60.5
+* React Native CLI == 0.63
 
 ### Install:
 
