@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Alert, Image} from 'react-native';
+import {StyleSheet, View, Alert, Image, Platform, PermissionsAndroid} from 'react-native';
 import {Appbar, Portal} from 'react-native-paper';
 import SinglePickerMaterialDialog from '../materialdialog/SinglePickerMaterialDialog';
 import i18n from '../../resources/locales/i18n';
@@ -141,7 +141,6 @@ export default class ProgrammingComponent extends Component {
                         disabled={this.props.BLEConnection.isConnecting}
                         animated={false}
                         onPress={() => {
-                            //  this.props.scanStatus(); this will break a lot of things
                             if (!this.props.Settings.isGranted) {
                                 BleService.requestLocationPermission().then(a => {
                                     this.props.grantLocation(a);
@@ -151,7 +150,26 @@ export default class ProgrammingComponent extends Component {
                             } else if (this.props.BLEConnection.isConnected) {
                                 this.props.disconnect();
                             } else {
-                                this.props.scanForRobot();
+                                if (Platform.OS === 'android' && Platform.Version >= 32) {
+                                    console.log('Permission', PermissionsAndroid.PERMISSIONS);
+                                    PermissionsAndroid.request('android.permission.BLUETOOTH_SCAN', {
+                                        title: 'Berechtigung für Bluetooth-Scan',
+                                        message:
+                                          'explore-it Robotics benötigt ihre Zustimmung um Bluetooth-Geräte in der Nähe zu finden.',
+                                        buttonNeutral: 'Später Fragen',
+                                        buttonNegative: 'Abbrechen',
+                                        buttonPositive: 'Zustimmen',
+                                    }).then(result => {
+                                        if (result === PermissionsAndroid.RESULTS.GRANTED) {
+                                            console.info("Bluetooth-Scan permission granted");
+                                            this.props.scanForRobot();
+                                        } else {
+                                            console.warn("Bluetooth-Scan permission denied");
+                                        }
+                                    });
+                                }
+
+                                
                             }
                         }}/>
                 </Appbar>

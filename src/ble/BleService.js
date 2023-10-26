@@ -84,6 +84,7 @@ class BleService {
                 // error.errorCode == BleErrorCode.LocationServicesDisabled (601) if location is turned off
                 // Probably other error codes should be supported as well.
                 // Handle error (scanning will be stopped automatically)
+                console.error('Error starting device scan:', JSON.stringify(error));
                 errorHandler(error.message);
                 return;
             }
