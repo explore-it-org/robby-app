@@ -26,7 +26,7 @@ export default class ProgrammingComponent extends Component {
         iconSize: 26,
     };
 
-    componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS): void {
+    componentDidUpdate(prevProps, prevState, snapshot) {
         let prev = prevProps.Program.lastChange;
         let now = this.props.Program.lastChange;
         if (prev !== now) {
@@ -150,26 +150,9 @@ export default class ProgrammingComponent extends Component {
                             } else if (this.props.BLEConnection.isConnected) {
                                 this.props.disconnect();
                             } else {
-                                if (Platform.OS === 'android' && Platform.Version >= 32) {
-                                    console.log('Permission', PermissionsAndroid.PERMISSIONS);
-                                    PermissionsAndroid.request('android.permission.BLUETOOTH_SCAN', {
-                                        title: 'Berechtigung für Bluetooth-Scan',
-                                        message:
-                                          'explore-it Robotics benötigt ihre Zustimmung um Bluetooth-Geräte in der Nähe zu finden.',
-                                        buttonNeutral: 'Später Fragen',
-                                        buttonNegative: 'Abbrechen',
-                                        buttonPositive: 'Zustimmen',
-                                    }).then(result => {
-                                        if (result === PermissionsAndroid.RESULTS.GRANTED) {
-                                            console.info("Bluetooth-Scan permission granted");
-                                            this.props.scanForRobot();
-                                        } else {
-                                            console.warn("Bluetooth-Scan permission denied");
-                                        }
-                                    });
-                                }
-
-                                
+                                withBlePermissions(() => {
+                                    this.props.scanForRobot();
+                                });
                             }
                         }}/>
                 </Appbar>
@@ -361,6 +344,47 @@ export default class ProgrammingComponent extends Component {
     }
 }
 
+function withBlePermissions(action) {
+    if (Platform.OS !== 'android' || Platform.Version < 32) {
+        action();
+        return;
+    }
+
+    console.info("Requesting bluetooth permissions");
+
+    console.info("Requesting permission android.permission.BLUETOOTH_SCAN");
+    PermissionsAndroid.request('android.permission.BLUETOOTH_SCAN', {
+        title: 'Berechtigung für Bluetooth-Scan',
+        message:
+          'explore-it Robotics benötigt ihre Zustimmung um Bluetooth-Geräte in der Nähe zu finden.',
+        buttonNeutral: 'Später Fragen',
+        buttonNegative: 'Abbrechen',
+        buttonPositive: 'Zustimmen',
+    }).then(result => {
+        if (result === PermissionsAndroid.RESULTS.GRANTED) {
+            console.info("Bluetooth-Scan permission granted");
+            
+            console.info("Requesting permission android.permission.BLUETOOTH_CONNECT");
+            PermissionsAndroid.request('android.permission.BLUETOOTH_CONNECT', {
+                title: 'Berechtigung für Bluetooth-Verbindung',
+                message:
+                  'explore-it Robotics benötigt ihre Zustimmung um sich zu Bluetooth-Geräten zu verbinden.',
+                buttonNeutral: 'Später Fragen',
+                buttonNegative: 'Abbrechen',
+                buttonPositive: 'Zustimmen',
+            }).then(result => {
+                if (result === PermissionsAndroid.RESULTS.GRANTED) {
+                    console.info("Bluetooth-Connect permission granted");
+                    action();
+                } else {
+                    console.warn("Bluetooth-Connect permission denied");
+                }
+            });
+        } else {
+            console.warn("Bluetooth-Scan permission denied");
+        }
+    });
+}
 
 const TabNavigator = createMaterialTopTabNavigator({
     Stepprogramming: {

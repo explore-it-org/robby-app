@@ -56,9 +56,25 @@ $ git push origin v1.0.0
 
 Follow the instructions [Building Projects with Native Code](https://facebook.github.io/react-native/docs/getting-started) provided by the React Native team to setup the development environment for both android and ios. You'll need [Node](https://nodejs.org/en/download/), the [React Native CLI](https://facebook.github.io/react-native/docs/getting-started#the-react-native-cli), [Xcode](https://itunes.apple.com/us/app/xcode/id497799835?mt=12) and a Text Editor like [Visual Studio Code](https://code.visualstudio.com/). That's all!  
 
+It seems like Node 16 or lower is required. Make sure you have the default node version set to 16, if you use nvs/nvm, as expo will start in a different shell.
+
 ## Run App on Android
 
-**NOTE**: You must use [Java 8](https://facebook.github.io/react-native/docs/getting-started#java-development-kit).
+**NOTE**: You must use [Java 8](https://facebook.github.io/react-native/docs/getting-started#java-development-kit). You may have to switch your JRE:
+
+```sh
+export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
+```
+
+Note2: It seems like 1.8 doesn't work either, but 11 seems to be ok. TODO: Fix that whole mess.
+
+See [here](https://medium.com/@devkosal/switching-java-jdk-versions-on-macos-80bc868e686a) for more details.
+
+To run on a device you need to also make sure adb is in your path, e.g.
+
+```sh
+export PATH="$PATH:$HOME/Library/Android/sdk/platform-tools"
+```
 
 Have an Android emulator running (quickest way to get started), or a device connected
 
@@ -66,14 +82,14 @@ Have an Android emulator running (quickest way to get started), or a device conn
 $ emulator -list-avds
 Nexus_6_API_25
 $ emulator @Nexus_6_API_25
-$ react-native run-android
+$ yarn react-native run-android
 ...
-$ react-native log-android
+$ yarn react-native log-android
 ```
 
 ## Run App on iOS
 
-Only works on MacOs. 
+Only works on MacOs.
 
 Do not run app with react native cli!
 

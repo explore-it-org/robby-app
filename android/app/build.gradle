@@ -132,7 +132,7 @@ android {
         applicationId "org.exploreit.robotics"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1698654746
+        versionCode 1699883282
         versionName "2.3.10"
         multiDexEnabled true
     }
