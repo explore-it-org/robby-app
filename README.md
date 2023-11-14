@@ -56,17 +56,20 @@ $ git push origin v1.0.0
 
 Follow the instructions [Building Projects with Native Code](https://facebook.github.io/react-native/docs/getting-started) provided by the React Native team to setup the development environment for both android and ios. You'll need [Node](https://nodejs.org/en/download/), the [React Native CLI](https://facebook.github.io/react-native/docs/getting-started#the-react-native-cli), [Xcode](https://itunes.apple.com/us/app/xcode/id497799835?mt=12) and a Text Editor like [Visual Studio Code](https://code.visualstudio.com/). That's all!  
 
-It seems like Node 16 or lower is required. Make sure you have the default node version set to 16, if you use nvs/nvm, as expo will start in a different shell.
+It seems like Node 16 or lower is required. Make sure you have the default node version set to 16, if you use nvs/nvm, as expo will start in a different shell. For higher node versions you will get
+an error like this:
+
+```plain
+Failed to construct transformer:  Error: error:0308010C:digital envelope routines::unsupported
+```
 
 ## Run App on Android
 
-**NOTE**: You must use [Java 8](https://facebook.github.io/react-native/docs/getting-started#java-development-kit). You may have to switch your JRE:
+**NOTE**: You must use [Java 8](https://facebook.github.io/react-native/docs/getting-started#java-development-kit) (It seems like 1.8 doesn't work either, but 11 seems to be ok. TODO: Fix that whole mess). You may have to switch your JRE:
 
 ```sh
-export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
+export JAVA_HOME=`/usr/libexec/java_home -v 11`
 ```
-
-Note2: It seems like 1.8 doesn't work either, but 11 seems to be ok. TODO: Fix that whole mess.
 
 See [here](https://medium.com/@devkosal/switching-java-jdk-versions-on-macos-80bc868e686a) for more details.
 
@@ -154,3 +157,18 @@ characteristic uuid: 0000ffe1-0000-1000-8000-00805f9b34fb
 # Adding AppCenter
 
 To distribute the App during the development cycle the Cloud Service [AppCenter](https://visualstudio.microsoft.com/de/app-center/) will be used.
+
+## AppCenter not working correctly
+
+Currently AppCenter seems to have a problem releasing the app. To manually create a release:
+
+* Update version numbers in android/app/build.gradle, ios/Robotics.xcodeproj/project.pbxproj, src/utillity/Global.js and package.json
+* Optionally update version numbers in ios/Robotics-tvOSTests/Info.plist and ios/RoboticsTests/Info.plist but I don't think it's needed really
+* Commit and push
+* For Android
+  * Make sure you run Node 16 (`nvs use 16`, if using nvs)
+  * Go to android folder, and run `./gradlew bundleRelease`
+  * Copy Bundle: `cp app/build/outputs/bundle/release/app.aab ~/Desktop/Robo.aab`
+  * Upload manually to play store
+* For iOS
+  * TBD

@@ -163,7 +163,7 @@ class BleService {
         return this.actDevice;
     }
 
-    sendCommandToActDevice(command): Promise<Characteristic> {
+    sendCommandToActDevice(command) {
         if(this.actDevice){
             console.log('sendCommandToActDevice: ' + command);
             return this.actDevice.writeCharacteristicWithResponseForService(
