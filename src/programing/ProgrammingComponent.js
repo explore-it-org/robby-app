@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
-import {StyleSheet, View, Alert, Image, Platform, PermissionsAndroid} from 'react-native';
-import {Appbar, Portal} from 'react-native-paper';
+import React, { Component } from 'react';
+import { StyleSheet, View, Alert, Image, Platform, PermissionsAndroid } from 'react-native';
+import { Appbar, Portal } from 'react-native-paper';
 import SinglePickerMaterialDialog from '../materialdialog/SinglePickerMaterialDialog';
 import i18n from '../../resources/locales/i18n';
 import OverviewContainer from '../programmingtabs/overview/OverviewContainer';
@@ -74,16 +74,16 @@ export default class ProgrammingComponent extends Component {
     };
 
     render() {
-        let settingsPage = this.props.Settings.visible ? <Portal><SettingsContainer/></Portal> : undefined;
+        let settingsPage = this.props.Settings.visible ? <Portal><SettingsContainer /></Portal> : undefined;
 
         let deviceName = this.props.BLEConnection.isConnected ?
-            <Appbar.Content style={{position: 'absolute', right: 80}}
-                            title={this.props.BLEConnection.device.name.substr(this.props.BLEConnection.device.name.length - 5)}
-                            size={this.state.iconSize}/>
+            <Appbar.Content style={{ position: 'absolute', right: 80 }}
+                title={this.props.BLEConnection.device.name.substr(this.props.BLEConnection.device.name.length - 5)}
+                size={this.state.iconSize} />
             :
-            <Appbar.Content style={{position: 'absolute', right: 80}}
-                            title={i18n.t('Programming.noConnectedDevice')}
-                            size={this.state.iconSize}/>;
+            <Appbar.Content style={{ position: 'absolute', right: 80 }}
+                title={i18n.t('Programming.noConnectedDevice')}
+                size={this.state.iconSize} />;
 
         return (
             <View style={[styles.container]}>
@@ -101,7 +101,7 @@ export default class ProgrammingComponent extends Component {
                         this.props.stopScanning();
                     }}
                     onOk={
-                        result => {                         
+                        result => {
                             this.props.stopScanning();
                             if (result.selectedValue) {
                                 this.props.setActiveDevice(result.selectedValue);
@@ -114,29 +114,29 @@ export default class ProgrammingComponent extends Component {
 
 
                 <Appbar>
-                    
-                    <Appbar.Content style={{position: 'absolute', left: 88}} title="Robotics"
-                                    size={this.state.iconSize}/>
-                    <Image style={{width: 80, resizeMode: 'contain', left: 10}} source={require('../../resources/icon/logo.png')}></Image>
-                        <Appbar.Action
-                        icon={({size, color}) => (
-                            <CustomIcon name="gear" size={size} color={color}/>
+
+                    <Appbar.Content style={{ position: 'absolute', left: 88 }} title="Robotics"
+                        size={this.state.iconSize} />
+                    <Image style={{ width: 80, resizeMode: 'contain', left: 10 }} source={require('../../resources/icon/logo.png')}></Image>
+                    <Appbar.Action
+                        icon={({ size, color }) => (
+                            <CustomIcon name="gear" size={size} color={color} />
                         )}
                         size={this.state.iconSize}
-                        style={{position: 'absolute', right: 0}}
+                        style={{ position: 'absolute', right: 0 }}
                         animated={false}
                         onPress={() => this.props.toggleSettings()}
-                        />
-                       
+                    />
+
                     {deviceName}
                     <Appbar.Action
-                        icon={({size, color}) => (
+                        icon={({ size, color }) => (
                             (this.props.BLEConnection.isConnected) ?
-                                <CustomIcon name="bluetooth" size={size} color={color}/> :
-                                <CustomIcon name="bluetooth-disabled" size={size} color={color}/>
+                                <CustomIcon name="bluetooth" size={size} color={color} /> :
+                                <CustomIcon name="bluetooth-disabled" size={size} color={color} />
                         )}
                         //{(this.props.BLEConnection.isConnected) ? 'bluetooth-connected' : 'bluetooth'}
-                        style={{position: 'absolute', right: 40}}
+                        style={{ position: 'absolute', right: 40 }}
                         size={this.state.iconSize}
                         disabled={this.props.BLEConnection.isConnecting}
                         animated={false}
@@ -154,7 +154,7 @@ export default class ProgrammingComponent extends Component {
                                     this.props.scanForRobot();
                                 });
                             }
-                        }}/>
+                        }} />
                 </Appbar>
 
                 <TabContainer
@@ -165,20 +165,20 @@ export default class ProgrammingComponent extends Component {
                         this.save = () => {
                             this.props.saveProgram(currentScreen);
                         };
-                        this.setState({currentRoute: currentScreen});
+                        this.setState({ currentRoute: currentScreen });
                         switch (currentScreen) {
                             case 'Stepprogramming':
-                                this.setState({clearButtonDisabled: false});
-                                this.setState({saveButtonDisabled: false});
-                                this.setState({uploadButtonDisable: false});
+                                this.setState({ clearButtonDisabled: false });
+                                this.setState({ saveButtonDisabled: false });
+                                this.setState({ uploadButtonDisable: false });
                                 this.clear = () => {
                                     this.props.clearProgram();
                                 };
                                 break;
                             case 'Blockprogramming':
-                                this.setState({clearButtonDisabled: false});
-                                this.setState({saveButtonDisabled: false});
-                                this.setState({uploadButtonDisable: false});
+                                this.setState({ clearButtonDisabled: false });
+                                this.setState({ saveButtonDisabled: false });
+                                this.setState({ uploadButtonDisable: false });
                                 this.clear = () => {
                                     this.props.clearBlock();
                                     this.props.loadChildren();
@@ -190,9 +190,9 @@ export default class ProgrammingComponent extends Component {
                                 };
                                 this.save = () => {
                                 };
-                                this.setState({clearButtonDisabled: true});
-                                this.setState({saveButtonDisabled: true});
-                                this.setState({uploadButtonDisable: true});
+                                this.setState({ clearButtonDisabled: true });
+                                this.setState({ saveButtonDisabled: true });
+                                this.setState({ uploadButtonDisable: true });
                                 break;
                         }
                     }}
@@ -200,93 +200,93 @@ export default class ProgrammingComponent extends Component {
 
                 <Appbar style={styles.bottom}>
                     <Appbar.Action
-                        icon={({size, color}) => (
-                            <CustomIcon name="stop" size={size} color={color}/>
+                        icon={({ size, color }) => (
+                            <CustomIcon name="stop" size={size} color={color} />
                         )}
                         size={this.state.iconSize}
                         disabled={!this.props.BLEConnection.isConnected ||
-                        !(this.props.BLEConnection.device.isUploading ||
-                            this.props.BLEConnection.device.isGoing ||
-                            this.props.BLEConnection.device.isRecording ||
-                            this.props.BLEConnection.device.isRunning ||
+                            !(this.props.BLEConnection.device.isUploading ||
+                                this.props.BLEConnection.device.isGoing ||
+                                this.props.BLEConnection.device.isRecording ||
+                                this.props.BLEConnection.device.isRunning ||
                                 this.props.BLEConnection.device.isDownloading)}
                         animated={false}
                         onPress={() => {
                             this.props.stopRobot();
-                        }}/>
+                        }} />
                     <Appbar.Action
-                        icon={({size, color}) => (
-                            <CustomIcon name="play" size={size} color={color}/>
+                        icon={({ size, color }) => (
+                            <CustomIcon name="play" size={size} color={color} />
                         )}
                         size={this.state.iconSize}
                         disabled={!this.props.BLEConnection.isConnected ||
-                        this.props.BLEConnection.device.isUploading ||
-                        this.props.BLEConnection.device.isGoing ||
-                        this.props.BLEConnection.device.isRecording ||
-                        this.props.BLEConnection.device.isRunning ||
+                            this.props.BLEConnection.device.isUploading ||
+                            this.props.BLEConnection.device.isGoing ||
+                            this.props.BLEConnection.device.isRecording ||
+                            this.props.BLEConnection.device.isRunning ||
                             this.props.BLEConnection.device.isDownloading}
                         animated={false}
                         onPress={() => {
                             this.props.runRobot();
-                        }}/>
+                        }} />
                     <Appbar.Action
-                        icon={({size, color}) => (
-                            <CustomIcon name="record" size={size} color={color}/>
+                        icon={({ size, color }) => (
+                            <CustomIcon name="record" size={size} color={color} />
                         )}
                         size={this.state.iconSize}
                         disabled={!this.props.BLEConnection.isConnected ||
-                        this.props.BLEConnection.device.isUploading ||
-                        this.props.BLEConnection.device.isGoing ||
-                        this.props.BLEConnection.device.isRecording ||
-                        this.props.BLEConnection.device.isRunning ||
+                            this.props.BLEConnection.device.isUploading ||
+                            this.props.BLEConnection.device.isGoing ||
+                            this.props.BLEConnection.device.isRecording ||
+                            this.props.BLEConnection.device.isRunning ||
                             this.props.BLEConnection.device.isDownloading}
                         animated={false}
                         onPress={() => {
                             this.props.startRecording();
-                        }}/>
+                        }} />
                     <Appbar.Action
-                        icon={({size, color}) => (
-                            <CustomIcon name="playcode" size={size} color={color}/>
+                        icon={({ size, color }) => (
+                            <CustomIcon name="playcode" size={size} color={color} />
                         )}
                         size={this.state.iconSize}
                         disabled={!this.props.BLEConnection.isConnected ||
-                        this.props.BLEConnection.device.isUploading ||
-                        this.props.BLEConnection.device.isGoing ||
-                        this.props.BLEConnection.device.isRecording ||
-                        this.props.BLEConnection.device.isRunning ||
+                            this.props.BLEConnection.device.isUploading ||
+                            this.props.BLEConnection.device.isGoing ||
+                            this.props.BLEConnection.device.isRecording ||
+                            this.props.BLEConnection.device.isRunning ||
                             this.props.BLEConnection.device.isDownloading}
                         animated={false}
                         onPress={() => {
                             this.props.goRobot();
-                        }}/>
+                        }} />
                     <Appbar.Action
-                        icon={({size, color}) => (
-                            <CustomIcon name="download" size={size} color={color}/>
+                        icon={({ size, color }) => (
+                            <CustomIcon name="download" size={size} color={color} />
                         )}
                         size={this.state.iconSize}
                         disabled={!this.props.BLEConnection.isConnected ||
-                        this.props.BLEConnection.device.isUploading ||
-                        this.props.BLEConnection.device.isGoing ||
-                        this.props.BLEConnection.device.isRecording ||
-                        this.props.BLEConnection.device.isRunning ||
+                            this.props.BLEConnection.device.isUploading ||
+                            this.props.BLEConnection.device.isGoing ||
+                            this.props.BLEConnection.device.isRecording ||
+                            this.props.BLEConnection.device.isRunning ||
                             this.props.BLEConnection.device.isDownloading}
                         animated={false}
                         onPress={() => {
                             this.props.download();
-                            this.navigator && this.navigator.dispatch(NavigationActions.navigate({routeName: 'Stepprogramming'}));
-                        }}/>
+                            this.navigator && this.navigator.dispatch(NavigationActions.navigate({ routeName: 'Stepprogramming' }));
+                        }} />
                     <Appbar.Action
-                        icon={({size, color}) => (
-                            <CustomIcon name="upload" size={size} color={color}/>
+                        icon={({ size, color }) => (
+                            <CustomIcon name="upload" size={size} color={color} />
                         )}
                         size={this.state.iconSize}
                         disabled={!this.props.BLEConnection.isConnected ||
-                        this.props.BLEConnection.device.isUploading ||
-                        this.props.BLEConnection.device.isGoing ||
-                        this.props.BLEConnection.device.isRecording ||
-                        this.props.BLEConnection.device.isRunning ||
-                        this.props.BLEConnection.device.isDownloading ||
-                        this.state.uploadButtonDisable && this.props.Overview.selectedProgramIndex < 0}
+                            this.props.BLEConnection.device.isUploading ||
+                            this.props.BLEConnection.device.isGoing ||
+                            this.props.BLEConnection.device.isRecording ||
+                            this.props.BLEConnection.device.isRunning ||
+                            this.props.BLEConnection.device.isDownloading ||
+                            this.state.uploadButtonDisable && this.props.Overview.selectedProgramIndex < 0}
                         animated={false}
                         onPress={() => {
                             let instructions = null;
@@ -299,45 +299,45 @@ export default class ProgrammingComponent extends Component {
                             }
 
                             if (instructions.length == 0) {
-                                Alert.alert(i18n.t("Programming.emptyProgramTitle"), i18n.t("Programming.emptyProgramMessage"), [{ text: "OK", onPress: () => { } } ]);
-                                
+                                Alert.alert(i18n.t("Programming.emptyProgramTitle"), i18n.t("Programming.emptyProgramMessage"), [{ text: "OK", onPress: () => { } }]);
+
                             } else if (instructions.length > 4096) {
-                                Alert.alert(i18n.t("Programming.programTooLongTitle"), i18n.format(i18n.t("Programming.programTooLongMessage"), instructions.length), [{ text: "OK", onPress: () => { } } ])
+                                Alert.alert(i18n.t("Programming.programTooLongTitle"), i18n.format(i18n.t("Programming.programTooLongMessage"), instructions.length), [{ text: "OK", onPress: () => { } }])
                             } else {
                                 this.props.upload(instructions);
                             }
 
-                        }}/>
+                        }} />
                     <Appbar.Action
-                        icon={({size, color}) => (
-                            <CustomIcon name="save" size={size} color={color}/>
+                        icon={({ size, color }) => (
+                            <CustomIcon name="save" size={size} color={color} />
                         )}
                         size={this.state.iconSize}
                         disabled={this.props.BLEConnection.device.isUploading ||
-                        this.props.BLEConnection.device.isGoing ||
-                        this.props.BLEConnection.device.isRecording ||
-                        this.props.BLEConnection.device.isRunning ||
-                        this.props.BLEConnection.device.isDownloading ||
-                        this.state.saveButtonDisabled}
+                            this.props.BLEConnection.device.isGoing ||
+                            this.props.BLEConnection.device.isRecording ||
+                            this.props.BLEConnection.device.isRunning ||
+                            this.props.BLEConnection.device.isDownloading ||
+                            this.state.saveButtonDisabled}
                         animated={false}
                         onPress={() => {
                             this.save();
-                        }}/>
+                        }} />
                     <Appbar.Action
-                        icon={({size, color}) => (
-                            <CustomIcon name="new" size={size} color={color}/>
+                        icon={({ size, color }) => (
+                            <CustomIcon name="new" size={size} color={color} />
                         )}
                         size={this.state.iconSize}
                         disabled={this.props.BLEConnection.device.isUploading ||
-                        this.props.BLEConnection.device.isGoing ||
-                        this.props.BLEConnection.device.isRecording ||
-                        this.props.BLEConnection.device.isRunning ||
-                        this.props.BLEConnection.device.isDownloading ||
-                        this.state.clearButtonDisabled}
+                            this.props.BLEConnection.device.isGoing ||
+                            this.props.BLEConnection.device.isRecording ||
+                            this.props.BLEConnection.device.isRunning ||
+                            this.props.BLEConnection.device.isDownloading ||
+                            this.state.clearButtonDisabled}
                         animated={false}
                         onPress={() => {
                             this.clear();
-                        }}/>
+                        }} />
                 </Appbar>
             </View>
         );
@@ -356,32 +356,48 @@ function withBlePermissions(action) {
     PermissionsAndroid.request('android.permission.BLUETOOTH_SCAN', {
         title: 'Berechtigung für Bluetooth-Scan',
         message:
-          'explore-it Robotics benötigt ihre Zustimmung um Bluetooth-Geräte in der Nähe zu finden.',
+            'explore-it Robotics benötigt ihre Zustimmung um Bluetooth-Geräte in der Nähe zu finden.',
         buttonNeutral: 'Später Fragen',
         buttonNegative: 'Abbrechen',
         buttonPositive: 'Zustimmen',
     }).then(result => {
         if (result === PermissionsAndroid.RESULTS.GRANTED) {
-            console.info("Bluetooth-Scan permission granted");
-            
+            console.info("BLUETOOTH_SCAN permission granted");
+
             console.info("Requesting permission android.permission.BLUETOOTH_CONNECT");
             PermissionsAndroid.request('android.permission.BLUETOOTH_CONNECT', {
                 title: 'Berechtigung für Bluetooth-Verbindung',
                 message:
-                  'explore-it Robotics benötigt ihre Zustimmung um sich zu Bluetooth-Geräten zu verbinden.',
+                    'explore-it Robotics benötigt ihre Zustimmung um sich zu Bluetooth-Geräten zu verbinden.',
                 buttonNeutral: 'Später Fragen',
                 buttonNegative: 'Abbrechen',
                 buttonPositive: 'Zustimmen',
             }).then(result => {
                 if (result === PermissionsAndroid.RESULTS.GRANTED) {
-                    console.info("Bluetooth-Connect permission granted");
-                    action();
+                    console.info("BLUETOOTH_CONNECT permission granted");
+
+                    console.info("Requesting permission android.permission.NEARBY_WIFI_DEVICES");
+                    PermissionsAndroid.request('android.permission.NEARBY_WIFI_DEVICES', {
+                        title: 'Berechtigung für Geräte in der Nähe',
+                        message:
+                            'explore-it Robotics benötigt ihre Zustimmung um sich zu Bluetooth-Geräten in ihrer Nähe zu verbinden.',
+                        buttonNeutral: 'Später Fragen',
+                        buttonNegative: 'Abbrechen',
+                        buttonPositive: 'Zustimmen',
+                    }).then(result => {
+                        if (result === PermissionsAndroid.RESULTS.GRANTED) {
+                            console.info("NEARBY_WIFI_DEVICES permission granted");
+                            action();
+                        } else {
+                            console.warn("NEARBY_WIFI_DEVICES permission denied");
+                        }
+                    });
                 } else {
-                    console.warn("Bluetooth-Connect permission denied");
+                    console.warn("BLUETOOTH_CONNECT permission denied");
                 }
             });
         } else {
-            console.warn("Bluetooth-Scan permission denied");
+            console.warn("BLUETOOTH_SCAN permission denied");
         }
     });
 }
@@ -391,24 +407,24 @@ const TabNavigator = createMaterialTopTabNavigator({
         screen: StepProgrammingContainer,
         swipeEnabled: true,
         navigationOptions: {
-            tabBarIcon: ({tintColor}) => (
-                <CustomIcon name="step1" size={24} color={tintColor}/>
+            tabBarIcon: ({ tintColor }) => (
+                <CustomIcon name="step1" size={24} color={tintColor} />
             ),
         },
     },
     Blockprogramming: {
         screen: BlockProgrammingContainer,
         navigationOptions: {
-            tabBarIcon: ({tintColor}) => (
-                <CustomIcon name="step2" size={24} color={tintColor}/>
+            tabBarIcon: ({ tintColor }) => (
+                <CustomIcon name="step2" size={24} color={tintColor} />
             ),
         },
     },
     Overview: {
         screen: OverviewContainer,
         navigationOptions: {
-            tabBarIcon: ({tintColor}) => (
-                <CustomIcon name="step3" size={24} color={tintColor}/>
+            tabBarIcon: ({ tintColor }) => (
+                <CustomIcon name="step3" size={24} color={tintColor} />
             ),
         },
     },

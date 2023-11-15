@@ -81,7 +81,7 @@ export PATH="$PATH:$HOME/Library/Android/sdk/platform-tools"
 
 Have an Android emulator running (quickest way to get started), or a device connected
 
-```
+```sh
 $ emulator -list-avds
 Nexus_6_API_25
 $ emulator @Nexus_6_API_25
