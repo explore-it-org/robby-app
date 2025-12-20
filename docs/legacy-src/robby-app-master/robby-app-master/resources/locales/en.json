@@ -1,0 +1,74 @@
+{
+  "language": "English", 
+  "languageTag": "en", 
+  "MainTab": {
+  "speed": "Speed from 0 – 100, ", 
+  "left": "L",
+  "right": "R"
+  },
+  "Programming": {
+    "programName": "Program name", 
+    "noConnectedDevice": "_ _ : _ _",
+    "length": "Lines:",
+    "chooseDevice": "Choose a Device", 
+    "dialogCancelButton": "Cancel",
+    "downloadMessage": "Instructions successfully downloaded!",
+    "recordMessage": "Successfully recorded and saved on the robot!",
+    "uploadMessage": "Instructions successfully uploaded on the robot!",
+    "driveMessage": "Instructions followed, terminated drive successfully!",
+    "bluetoothNotTurnedOnTitle": "Bluetooth is powered off",
+    "bluetoothNotTurnedOnMessage": "Please turn on Bluetooth",
+    "locationServiceDisabledTitle": "Location service is disabled",
+    "locationServiceDisabledMessage": "Please enable the location service.",
+    "unsupportedAppVersionTitle": "Version not supported",
+    "unsupportedAppVersionMessage": "App version possibly outdated. Please download the latest version from the appstore / playstore.",
+    "unsupportedRobotVersionTitle": "Version not supported",
+    "unsupportedRobotVersionMessage": "The robot firmware version is no longer supported. Please contact explore-it to get your robot up-to-date.",
+    "emptyProgramTitle": "",
+    "emptyProgramMessage": "The program you are trying to upload is empty.",
+    "programTooLongTitle" : "",
+    "programTooLongMessage" : "The program you are trying to upload may not contain more than 4096 instructions. Your program contains {0} instructions."
+  },
+  "BlockProgramming": {
+    "programSelectionPrompt": "...",
+    "programSelectionPromptTitle": "Select a program"
+  },
+  "SpeedInput": {
+    "invalidEntryTitle": "",
+    "invalidEntryMessage": "Please only enter numbers between 0 - 100."
+  },
+  "Settings": { 
+    "interval": "Interval:",
+    "interval-unit": "Program lines per second (1..50)",
+    "learn": "Record:",
+    "duration": "Duration of recording:",
+    "duration-unit": "Seconds (1..80)", 
+    "language": "Language:", 
+    "robotVersion": "Robot version:",
+    "websiteURL":"https://www.explore-it.org/en",
+    "enteredDurationTooBigTitle": "",
+    "enteredDurationTooBigMessage": "The entered number is too large.",
+    "enteredIntervalTooBigTitle": "",
+    "enteredIntervalTooBigMessage": "The entered number is too large.",
+    "invalidDurationTitle": "",
+    "invalidDurationMessage": "Please only enter numbers between 1-80.",
+    "invalidIntervalTitle": "",
+    "invalidIntervalMessage": "Please only enter numbers between 1-50.",
+    "updatedMessage": "Settings updated"
+  },
+  "RoboticsDatabase": { 
+    "failureTitle": "",
+    "emptyNameMessage": "Please enter a name", 
+    "addFailedMessage": "Failed to save program: ", 
+    "nameTakenMessage": "Name is already taken", 
+    "duplicateFailedMessage": "Failed to duplicate program: ",
+    "deleteFailedMessage": "Failed to delete program: ",
+    "programUsedMessage": "Program is used by another program",
+    "programUsedByActiveProgramTitle": "Program cannot be deleted",
+    "programUsedByActiveProgramMessage": "Program is used by the currently opened program",
+    "deleteSuccessMessage": "Program deleted",
+    "saveSuccessMessage": "Program saved",
+    "duplicateSuccessMessage": "Program duplicated"
+  }
+}
+  

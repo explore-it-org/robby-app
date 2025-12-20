@@ -1,0 +1,275 @@
+{
+  "app": {
+    "name": "explore-it Robotics"
+  },
+  "tabs": {
+    "robot": "Robot",
+    "programs": "Programs"
+  },
+  "robot": {
+    "title": "Robot Management",
+    "subtitle": "Connect to your EXPLORE-IT robot via Bluetooth",
+    "discovery": {
+      "startScan": "Start Scanning",
+      "stopScan": "Stop Scanning",
+      "scanning": "Scanning for robots...",
+      "idle": "Ready to scan",
+      "stopped": "Scan stopped",
+      "error": "Error scanning",
+      "noRobots": "No robots found yet",
+      "robotsFound_one": "{{count}} robot found",
+      "robotsFound_other": "{{count}} robots found",
+      "mode": "Discovery Mode:",
+      "modeMock": "Mock (Demo)",
+      "modeBle": "Bluetooth (BLE)",
+      "modeAuto": "Auto",
+      "bleAvailable": "BLE is available, using real Bluetooth",
+      "bleNotAvailable": "Running in Expo Go - using demo robots",
+      "signalStrength": "Signal: {{rssi}} dBm"
+    },
+    "signalStrength": {
+      "excellent": "Excellent Signal",
+      "good": "Good Signal",
+      "fair": "Fair Signal",
+      "weak": "Weak Signal"
+    },
+    "selectedRobot": {
+      "noRobotSelected": "No robot selected",
+      "selectRobot": "Select a Robot",
+      "changeRobot": "Change Robot",
+      "clearRobot": "Clear robot",
+      "clearRobotHint": "Removes the selected robot",
+      "selected": "Selected Robot"
+    },
+    "overview": {
+      "title": "Robots",
+      "connectedRobot": "Connected Robot",
+      "noRobotConnected": "No robot connected",
+      "knownRobots": "Known Robots",
+      "noOtherRobots": "Tap the Bluetooth button to add another robot",
+      "emptyState": {
+        "message": "You don't have any robots added yet.",
+        "instructions": "Tap the Bluetooth button below to find and connect to a robot."
+      },
+      "deleteConfirm": {
+        "title": "Delete Robot",
+        "message": "Are you sure you want to delete {{name}}? This will disconnect and remove it from your list."
+      }
+    }
+  },
+  "robotScanner": {
+    "title": "Select a Robot",
+    "noRobotsFound": "No robots found yet",
+    "waitingForRobots": "Keep your robot nearby and turned on"
+  },
+  "programs": {
+    "title": "Programs",
+    "noPrograms": "No Programs",
+    "noProgramsMessage": "Start by creating a new program",
+    "noProgramSelected": "No program selected",
+    "selectProgram": "Select a program from the list to view its details here",
+    "newProgram": "New Program {{number}}",
+    "updated": "Updated",
+    "instruction_one": "{{count}} instruction",
+    "instruction_other": "{{count}} instructions",
+    "lastModified": "Last modified: {{time}}"
+  },
+  "programDetail": {
+    "notFound": "Program Not Found",
+    "notFoundMessage": "The requested program could not be found"
+  },
+  "controlBar": {
+    "debug": "🐛 Debug",
+    "connectRobot": "Connect Robot",
+    "uploadAndRun": "Upload & Run",
+    "run": "Run",
+    "upload": "Upload",
+    "stop": "Stop",
+    "noRobotConnected": "No robot connected",
+    "connect": "Connect"
+  },
+  "instructionPicker": {
+    "title": "Add Instruction",
+    "addMove": "Add Move",
+    "move": {
+      "title": "Move",
+      "description": "Control left and right motor speeds"
+    },
+    "comment": {
+      "title": "Comment",
+      "description": "Add notes and documentation",
+      "placeholder": "Add a note about this step..."
+    },
+    "subroutine": {
+      "title": "Subroutine",
+      "description": "Call another program"
+    },
+    "repetition": {
+      "title": "Repetition",
+      "description": "Repeat a sequence of instructions",
+      "maxNesting": "Maximum nesting depth (3) reached"
+    },
+    "cancel": "Cancel"
+  },
+  "alerts": {
+    "debug": {
+      "title": "Debug",
+      "message": "Debug feature coming soon"
+    },
+    "connectRobot": {
+      "title": "Connect Robot",
+      "message": "Please use the robot tab to connect your robot"
+    },
+    "uploadAndRun": {
+      "title": "Upload & Run",
+      "message": "Uploading program and running..."
+    },
+    "run": {
+      "title": "Run",
+      "message": "Running program on robot..."
+    },
+    "upload": {
+      "title": "Upload",
+      "message": "Uploading program to robot..."
+    },
+    "stop": {
+      "title": "Stop",
+      "message": "Stopping program execution..."
+    },
+    "deleteProgram": {
+      "title": "Delete Program",
+      "message": "Are you sure you want to delete \"{{name}}\"? This action cannot be undone.",
+      "messageWithReferences": "Are you sure you want to delete \"{{name}}\"?\n\n⚠️ Warning: This program is used in {{count}} other program(s):\n{{programs}}\n\nDeleting it will create broken references in these programs.",
+      "confirm": "Delete"
+    },
+    "deleteInstruction": {
+      "title": "Delete Instruction",
+      "message": "Are you sure you want to delete this instruction?",
+      "confirm": "Delete"
+    },
+    "programComplete": {
+      "title": "Program Complete",
+      "message": "The program has finished executing."
+    },
+    "help": {
+      "title": "Help",
+      "message": "Debug view help coming soon"
+    },
+    "debugMenu": {
+      "title": "Debug Menu",
+      "message": "Menu options coming soon"
+    },
+    "error": {
+      "title": "Error",
+      "deleteFailed": "Failed to delete program. Please try again.",
+      "saveRobotFailed": "Failed to save selected robot",
+      "clearRobotFailed": "Failed to clear selected robot"
+    }
+  },
+  "actionSheet": {
+    "cancel": "Cancel",
+    "resetSimulation": "Reset Simulation",
+    "helpTutorial": "Help / Tutorial"
+  },
+  "debug": {
+    "title": "Debugging: {{programName}}",
+    "speed": "Speed: {{duration}}s",
+    "stepDuration": "Step Duration"
+  },
+  "compilationErrors": {
+    "error_one": "Error",
+    "error_other": "Errors",
+    "found": "Found",
+    "errorsFound_one": "{{count}} error found",
+    "errorsFound_other": "{{count}} errors found",
+    "helpText": "Fix these errors to enable debugging and robot execution.",
+    "cyclicDependency": "Cyclic dependency detected:",
+    "cyclicDependencyExplanation": "These programs would never stop calling each other, creating an infinitely large program.",
+    "instructionLimitExplanation": "The robots have limited storage capacity which your program would exceed."
+  },
+  "instructionOptionsMenu": {
+    "title": "Instruction Options",
+    "addBefore": "Add instruction before",
+    "addAfter": "Add instruction after",
+    "moveUp": "Move up",
+    "moveDown": "Move down",
+    "delete": "Delete"
+  },
+  "programOptionsMenu": {
+    "title": "Program Options",
+    "rename": "Rename Program",
+    "delete": "Delete Program"
+  },
+  "programPicker": {
+    "title": "Select Program",
+    "noPrograms": "No programs available",
+    "searchPlaceholder": "Search programs...",
+    "noResults": "No programs match your search"
+  },
+  "instruction": {
+    "move": {
+      "leftWheel": "Left Wheel",
+      "rightWheel": "Right Wheel"
+    }
+  },
+  "instructionCard": {
+    "collapse": "Collapse ▲"
+  },
+  "subroutineCard": {
+    "title": "Subroutine",
+    "selectProgram": "Select Program:",
+    "openProgram": "Open Program"
+  },
+  "common": {
+    "cancel": "Cancel",
+    "save": "Save",
+    "close": "Close",
+    "characters": "{{count}}/{{max}} characters"
+  },
+  "virtualRobot": {
+    "title": "Virtual Robot",
+    "addButton": "Add Virtual Robot",
+    "addTitle": "Add Virtual Robot",
+    "configureTitle": "Configure Virtual Robot",
+    "name": "Robot Name",
+    "wheelSpacing": "Wheel Spacing",
+    "motorSpeed": "Motor Speed",
+    "configuration": "Configuration",
+    "deleteConfirm": "Delete this virtual robot?",
+    "deleteMessage": "This will remove the virtual robot. Programs uploaded to it will be lost.",
+    "ready": "Ready",
+    "connectedTo": "Connected to {{name}}",
+    "executionView": "{{name}}: {{program}}",
+    "configureRobot": "Configure Robot",
+    "defaultName": "Virtual Robot {{number}}",
+    "wheelSpacingUnit": "mm",
+    "motorSpeedUnit": "cm/s",
+    "speedSlow": "🐢 Slow",
+    "speedFast": "🚀 Fast",
+    "virtualBadge": "Virtual",
+    "physicalRobots": "Physical Robots",
+    "virtualRobots": "Virtual Robots",
+    "delete": "Delete",
+    "configure": "Configure",
+    "connect": "Connect",
+    "errors": {
+      "nameRequired": "Robot name cannot be empty",
+      "saveFailed": "Failed to save virtual robot",
+      "deleteFailed": "Failed to delete virtual robot",
+      "wheelSpacingOutOfRange": "Wheel spacing must be between {{min}} and {{max}} mm",
+      "motorSpeedOutOfRange": "Motor speed must be between {{min}} and {{max}} cm/s"
+    }
+  },
+  "robotOptionsMenu": {
+    "title": "Robot Options",
+    "rename": "Rename",
+    "disconnect": "Disconnect",
+    "delete": "Delete"
+  },
+  "robotRenameModal": {
+    "title": "Rename Robot",
+    "description": "Enter a new name for the robot",
+    "placeholder": "Robot name",
+    "rename": "Rename"
+  }
+}

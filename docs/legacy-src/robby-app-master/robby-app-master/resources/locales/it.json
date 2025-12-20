@@ -1,0 +1,73 @@
+{
+  "language":"Italiano",
+  "languageTag":"it",
+  "MainTab": {
+    "speed": "Velocità da 0 - 100, ",
+    "left": "SX",
+    "right": "DX"
+  },
+  "Programming": {
+    "programName": "Nome del programma",
+    "noConnectedDevice": "_ _ : _ _",
+    "length": "Righe:",
+    "chooseDevice": "Selezionare il dispositivo",
+    "dialogCancelButton": "Annulla",
+    "downloadMessage": "Il robot ha scaricato le istruzioni con successo!",
+    "recordMessage": "La registrazione e il salvataggio sul robot sono stati completati con successo!",
+    "uploadMessage": "Le istruzioni sono state caricate sul robot con successo!",
+    "driveMessage": "Le istruzioni sono state processate correttamente, la corsa è stata conclusa con successo!",
+    "bluetoothNotTurnedOnTitle": "Il Bluetooth è disattivato.",
+    "bluetoothNotTurnedOnMessage": "Per favore, accendi il Bluetooth.",
+    "locationServiceDisabledTitle": "Il servizio di geolocalizzazione è disattivato.",
+    "locationServiceDisabledMessage": "Per favore, attiva il servizio di geolocalizzazione.",
+    "unsupportedAppVersionTitle": "Versione non supportata",
+    "unsupportedAppVersionMessage": "È possibile che tu non stia utilizzando l’ultima versione dell’app. Scarica la versione più recente dall’App Store / Playstore.",
+    "unsupportedRobotVersionTitle": "Versione non supportata",
+    "unsupportedRobotVersionMessage": "Questa versione del robot non è più supportata. Ti preghiamo di rivolgerti a explore-it per aggiornare il robot all’ultima versione.",
+    "emptyProgramTitle": "",
+    "emptyProgramMessage": "Il programma che stai cercando di caricare è vuoto.",
+    "programTooLongTitle": "",
+    "programTooLongMessage" : "Il programma che stai cercando di caricare non può contenere più di 4096 istruzioni. Il tuo programma contiene {0} istruzioni."
+  },
+  "BlockProgramming": {
+    "programSelectionPrompt": "...",
+    "programSelectionPromptTitle": "Seleziona un programma"
+  },
+  "SpeedInput": {
+    "invalidEntryTitle": "",
+    "invalidEntryMessage": "Per favore, inserisci un numero intero compreso tra 0 e 100."
+  },
+  "Settings": {
+    "interval": "Intervallo:",
+    "interval-unit": "Righe di programma al secondo (1..50)",
+    "learn": "Apprendimento:",
+    "duration": "Durata della registrazione:",
+    "duration-unit": "Secondi (1..80)",
+    "language": "Lingua:",
+    "robotVersion": "Versione del robot:",
+    "websiteURL":"https://www.explore-it.org/it",
+    "enteredDurationTooBigTitle": "",
+    "enteredDurationTooBigMessage": "Il numero inserito è troppo grande.",
+    "enteredIntervalTooBigTitle": "",
+    "enteredIntervalTooBigMessage": "Il numero inserito è troppo grande.",
+    "invalidDurationTitle": "",
+    "invalidDurationMessage": "Per favore, inserisci un numero intero compreso tra 1 e 80.",
+    "invalidIntervalTitle": "",
+    "invalidIntervalMessage": "Per favore, inserisci un numero intero compreso tra 1 e 50.",
+    "updatedMessage": "Le impostazioni sono aggiornate"
+  },
+  "RoboticsDatabase": {
+    "failureTitle": "",
+    "emptyNameMessage": "Per favore, inserisci un nome.",
+    "addFailedMessage": "Si è verificato un errore. Non è stato possibile salvare il programma.",
+    "nameTakenMessage": "Questo nome esiste già",
+    "duplicateFailedMessage": "Si è verificato un errore. Non è stato possibile duplicare il programma.",
+    "deleteFailedMessage": "Si è verificato un errore. Non è stato possibile cancellare il programma.",
+    "programUsedMessage": "Questo programma è attualmente in uso da parte di un altro programma.",
+    "programUsedByActiveProgramTitle": "Impossibile cancellare il programma.",
+    "programUsedByActiveProgramMessage": "Questo programma è in uso da parte del programma attualmente aperto.",
+    "deleteSuccessMessage": "Programma cancellato",
+    "saveSuccessMessage": "Programma salvato",
+    "duplicateSuccessMessage": "Programma duplicato"
+  }
+}

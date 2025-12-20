@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 61 (89581) - https://sketch.com -->
+    <title>down</title>
+    <desc>Created with Sketch.</desc>
+    <g id="down" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group-2-Copy-3" fill-rule="nonzero">
+            <rect id="Rectangle-Copy-20" x="0" y="0" width="24" height="24"></rect>
+            <polyline id="Path-4" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" points="18.4670279 15.0329721 12.5 21 6.53297206 15.0329721"></polyline>
+            <line x1="12.5" y1="3" x2="12.5" y2="21" id="Line-5" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></line>
+        </g>
+    </g>
+</svg>
