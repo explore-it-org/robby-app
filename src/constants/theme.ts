@@ -6,7 +6,7 @@
 
 import { Platform } from 'react-native';
 
-// Primary brand color - Teal/Dark Blue from legacy app
+// Primary brand color - Dark Teal for navigation bars and primary UI
 const primaryTeal = '#2E5266';
 
 // Secondary and accent colors

@@ -5,6 +5,7 @@ import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { Colors } from '@/constants/theme';
+import { COLORS } from '@/constants/colors';
 import { RobotManagerProvider } from '@/services/robot-manager-factory';
 import '@/i18n';
 
@@ -15,13 +16,22 @@ export const unstable_settings = {
 export default function RootLayout() {
   const colorScheme = useColorScheme();
 
+  const customTheme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      primary: Colors.light.primary,
+      card: Colors.light.primary,
+    },
+  };
+
   return (
     <RobotManagerProvider>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <ThemeProvider value={customTheme}>
         <Stack
           screenOptions={{
             headerStyle: {
-              backgroundColor: Colors[colorScheme ?? 'light'].primary,
+              backgroundColor: Colors.light.primary,
             },
             headerTintColor: '#FFFFFF',
             headerTitleStyle: {

@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { HapticTab } from '@/components/haptic-tab';
 import { GearIcon } from '@/components/icons/GearIcon';
 import { ProgramIcon } from '@/components/icons/ProgramIcon';
+import { COLORS } from '@/constants/colors';
 import { Colors } from '@/constants/theme';
 
 export default function TabLayout() {
@@ -13,8 +14,8 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors.light.tint,
-        tabBarInactiveTintColor: Colors.light.tabIconDefault,
+        tabBarActiveTintColor: Colors.light.primary,
+        tabBarInactiveTintColor: '#CCCCCC',
         tabBarStyle: {
           backgroundColor: '#FFFFFF',
         },
