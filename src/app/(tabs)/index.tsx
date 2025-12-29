@@ -1,316 +1,255 @@
+/**
+ * Robot Screen - Simplified
+ *
+ * Displays robot connection interface with three states:
+ * 1. Empty (no robot connected): Shows title and "Scan for Robots" button
+ * 2. Scanning: Shows title, "Cancel Scanning" button, and list of discovered robots
+ * 3. Connected: Shows title, connected robot widget, and "Scan for Robots" button
+ *
+ * Only one robot can be connected at a time. No robot history is stored.
+ */
+
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { RobotScannerModal } from '@/components/robot-scanner-modal';
-import { RobotMenuModal } from '@/components/robot-menu-modal';
-import { RobotRenameModal } from '@/components/robot-rename-modal';
-import { FloatingActionButton } from '@/components/ui/floating-action-button';
-import { RobotCard } from '@/components/robot-card';
+import { ConnectedRobotDisplay } from '@/components/connected-robot-display';
 import { WheelIcon } from '@/components/icons/WheelIcon';
-import { BluetoothIcon } from '@/components/icons/BluetoothIcon';
-import { DiscoveredRobot } from '@/types/robot-discovery';
-import {
-  loadKnownRobots,
-  addKnownRobot,
-  removeKnownRobot,
-  renameKnownRobot,
-  StoredRobot,
-} from '@/services/known-robots-storage';
-import {
-  isRobotConnected,
-  setRobotConnected,
-  setRobotDisconnected,
-  updateConnectedRobotName,
-} from '@/services/robot-connection-state';
-import { useEffect, useState } from 'react';
+import { useRobotManager } from '@/services/robot-manager-factory';
+import { DiscoveredRobot, DiscoveryStatus } from '@/types/robot-discovery';
+import { IRobot } from '@/types/robot';
+import { StoredRobot } from '@/services/known-robots-storage';
+import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert, ScrollView, StyleSheet, View } from 'react-native';
+import { Alert, FlatList, Pressable, StyleSheet, View, ActivityIndicator } from 'react-native';
+import { COLORS } from '@/constants/colors';
 
 export default function RobotScreen() {
   const { t } = useTranslation();
-  const [knownRobots, setKnownRobots] = useState<StoredRobot[]>([]);
-  const [showScannerModal, setShowScannerModal] = useState(false);
-  const [showRobotMenu, setShowRobotMenu] = useState(false);
-  const [showRenameModal, setShowRenameModal] = useState(false);
-  const [selectedRobotForMenu, setSelectedRobotForMenu] = useState<StoredRobot | null>(null);
-  const [, forceUpdate] = useState(0); // Used to trigger re-renders when connection state changes
+  const { getRobotManager } = useRobotManager();
+  const [discoveredRobots, setDiscoveredRobots] = useState<DiscoveredRobot[]>([]);
+  const [connectedRobot, setConnectedRobot] = useState<IRobot | null>(null);
+  const [connectedRobotDisplay, setConnectedRobotDisplay] = useState<StoredRobot | null>(null);
+  const [status, setStatus] = useState<DiscoveryStatus>('idle');
 
-  // Load known robots on mount
+  const robotManager = getRobotManager();
+
+  // Cleanup on unmount
   useEffect(() => {
-    const loadRobots = async () => {
-      const robots = await loadKnownRobots();
-      setKnownRobots(robots);
+    return () => {
+      if (connectedRobot) {
+        connectedRobot.disconnect().catch(console.error);
+      }
+      if (status === 'scanning') {
+        robotManager.stopDiscovery().catch(console.error);
+      }
     };
-    loadRobots();
   }, []);
 
-  const handleSelectRobot = async (robot: DiscoveredRobot) => {
+  const handleStartScan = async () => {
     try {
-      const wasAdded = await addKnownRobot(robot);
-      if (wasAdded) {
-        // Disconnect any previously connected robot
-        const connectedRobotIds = knownRobots
-          .map(r => r.robotId)
-          .filter(id => isRobotConnected(id));
-
-        connectedRobotIds.forEach(id => setRobotDisconnected(id));
-
-        // Reload the list to get the newly added robot with full data
-        const robots = await loadKnownRobots();
-        setKnownRobots(robots);
-
-        // Find the newly added robot and connect it with full data
-        const addedRobot = robots.find(r => r.robotId === robot.id);
-        if (addedRobot) {
-          setRobotConnected(robot.id, addedRobot);
+      setDiscoveredRobots([]);
+      await robotManager.startDiscovery(
+        (robot) => {
+          // Robot discovered callback
+          setDiscoveredRobots((prev) => {
+            // Avoid duplicates
+            if (prev.some((r) => r.id === robot.id)) {
+              return prev;
+            }
+            return [...prev, robot];
+          });
+        },
+        (newStatus, error) => {
+          // Status change callback
+          setStatus(newStatus);
+          if (error) {
+            Alert.alert(
+              t('alerts.error.title'),
+              error.message || 'Scanning error'
+            );
+          }
         }
+      );
+    } catch (error) {
+      Alert.alert(
+        t('alerts.error.title'),
+        error instanceof Error ? error.message : 'Failed to start scanning'
+      );
+    }
+  };
 
-        forceUpdate((n) => n + 1); // Trigger re-render
-      } else {
-        Alert.alert(
-          t('alerts.info.title') || 'Info',
-          'This robot has already been added to your list.'
-        );
+  const handleStopScan = async () => {
+    try {
+      await robotManager.stopDiscovery();
+      setStatus('idle');
+    } catch (error) {
+      Alert.alert(
+        t('alerts.error.title'),
+        error instanceof Error ? error.message : 'Failed to stop scanning'
+      );
+    }
+  };
+
+  const handleSelectRobot = async (discoveredRobot: DiscoveredRobot) => {
+    try {
+      // Disconnect current robot if any
+      if (connectedRobot) {
+        await connectedRobot.disconnect();
+        setConnectedRobot(null);
+        setConnectedRobotDisplay(null);
       }
+
+      // Stop scanning
+      if (status === 'scanning') {
+        await robotManager.stopDiscovery();
+        setStatus('idle');
+      }
+
+      // Create and connect to the robot
+      const robot = await robotManager.createRobot(discoveredRobot.id);
+      await robot.connect();
+
+      // Create a stored robot object for display
+      const robotDisplay: StoredRobot = {
+        robotId: robot.id,
+        robotName: robot.name || discoveredRobot.name || robot.id,
+        dateAdded: new Date().toISOString(),
+        lastConnected: new Date().toISOString(),
+        isVirtual: discoveredRobot.isVirtual || false,
+      };
+
+      setConnectedRobot(robot);
+      setConnectedRobotDisplay(robotDisplay);
+      setDiscoveredRobots([]);
     } catch (error) {
       Alert.alert(
         t('alerts.error.title'),
-        error instanceof Error ? error.message : t('alerts.error.saveRobotFailed')
+        error instanceof Error ? error.message : 'Failed to connect to robot'
       );
     }
   };
 
-  const handleRemoveRobot = async (robotId: string) => {
-    try {
-      await removeKnownRobot(robotId);
-      // Reload the list
-      const robots = await loadKnownRobots();
-      setKnownRobots(robots);
-    } catch (error) {
-      Alert.alert(
-        t('alerts.error.title'),
-        error instanceof Error ? error.message : 'Failed to remove robot'
-      );
-    }
+  const handleScanWhileConnected = () => {
+    // Don't disconnect, just start scanning
+    handleStartScan();
   };
 
-  // Robot menu handlers
-  const handleOpenRobotMenu = (robot: StoredRobot) => {
-    setSelectedRobotForMenu(robot);
-    setShowRobotMenu(true);
+  const handleUploadAndRun = () => {
+    // TODO: Implement upload and run
+    Alert.alert('Upload & Run', 'This feature will upload and run the program on the robot');
   };
 
-  const handleConnect = (robot: StoredRobot) => {
-    // TODO: Implement actual BLE connection logic
-    // Disconnect any previously connected robot
-    const connectedRobotIds = knownRobots
-      .map(r => r.robotId)
-      .filter(id => isRobotConnected(id));
-
-    connectedRobotIds.forEach(id => setRobotDisconnected(id));
-
-    // Connect the new robot with full data
-    setRobotConnected(robot.robotId, robot);
-    forceUpdate((n) => n + 1); // Trigger re-render
-  };
-
-  const handleRename = () => {
-    setShowRenameModal(true);
-  };
-
-  const handleRenameConfirm = async (newName: string) => {
-    if (selectedRobotForMenu) {
+  const handleStop = async () => {
+    if (connectedRobot) {
       try {
-        await renameKnownRobot(selectedRobotForMenu.robotId, newName);
-
-        // Update the connected robot name if this robot is connected
-        if (isRobotConnected(selectedRobotForMenu.robotId)) {
-          updateConnectedRobotName(selectedRobotForMenu.robotId, newName);
-        }
-
-        // Reload the list
-        const robots = await loadKnownRobots();
-        setKnownRobots(robots);
-        forceUpdate((n) => n + 1); // Trigger re-render
+        await connectedRobot.stop();
       } catch (error) {
         Alert.alert(
-          'Error',
-          error instanceof Error ? error.message : 'Failed to rename robot'
+          t('alerts.error.title'),
+          error instanceof Error ? error.message : 'Failed to stop robot'
         );
       }
     }
   };
 
-  const handleDisconnect = () => {
-    if (selectedRobotForMenu) {
-      setRobotDisconnected(selectedRobotForMenu.robotId);
-      forceUpdate((n) => n + 1); // Trigger re-render
-    }
+  const handleUpload = () => {
+    // TODO: Implement upload
+    Alert.alert('Upload', 'This feature will upload the program to the robot');
   };
 
-  const handleDelete = () => {
-    if (selectedRobotForMenu) {
-      Alert.alert(
-        t('robot.overview.deleteConfirm.title'),
-        t('robot.overview.deleteConfirm.message', { name: selectedRobotForMenu.robotName }),
-        [
-          {
-            text: t('common.cancel'),
-            style: 'cancel',
-          },
-          {
-            text: t('alerts.deleteProgram.confirm'),
-            style: 'destructive',
-            onPress: () => {
-              setRobotDisconnected(selectedRobotForMenu.robotId);
-              handleRemoveRobot(selectedRobotForMenu.robotId);
-            },
-          },
-        ]
-      );
-    }
-  };
+  const renderRobotItem = ({ item }: { item: DiscoveredRobot }) => (
+    <Pressable
+      style={({ pressed }) => [styles.robotItem, pressed && styles.robotItemPressed]}
+      onPress={() => handleSelectRobot(item)}
+    >
+      <View style={styles.robotItemIcon}>
+        <WheelIcon size={32} color={COLORS.PRIMARY} />
+      </View>
+      <View style={styles.robotItemInfo}>
+        <ThemedText style={styles.robotItemName}>{item.name || item.id}</ThemedText>
+        <ThemedText style={styles.robotItemId}>ID: {item.id}</ThemedText>
+      </View>
+    </Pressable>
+  );
 
-
-  // Find connected robot
-  const connectedRobot = knownRobots.find((robot) => isRobotConnected(robot.robotId));
+  const isScanning = status === 'scanning';
+  const isConnected = connectedRobot !== null && connectedRobot.isConnected;
 
   return (
     <ThemedView style={styles.container}>
-      {knownRobots.length > 0 ? (
-        <ScrollView contentContainerStyle={styles.scrollContent}>
-          {/* Connected Robot Section */}
-          <View style={styles.section}>
-            <ThemedText type="subtitle" style={styles.sectionTitle}>
-              {t('robot.overview.connectedRobot')}
-            </ThemedText>
-            {connectedRobot ? (
-              <RobotCard
-                robot={connectedRobot}
-                isConnected={true}
-                onMenuPress={() => handleOpenRobotMenu(connectedRobot)}
-                onConnect={() => handleConnect(connectedRobot)}
-                onPlay={() => {
-                  // TODO: Implement play logic
-                  Alert.alert('Play', `Playing program on ${connectedRobot.robotName}`);
-                }}
-                onStop={() => {
-                  // TODO: Implement stop logic
-                  Alert.alert('Stop', `Stopping ${connectedRobot.robotName}`);
-                }}
-                onRecord={() => {
-                  // TODO: Implement record logic
-                  Alert.alert('Record', `Recording from ${connectedRobot.robotName}`);
-                }}
-                onDownload={() => {
-                  // TODO: Implement download logic
-                  Alert.alert('Download', `Downloading from ${connectedRobot.robotName}`);
-                }}
-              />
+      {/* Title */}
+      <View style={styles.titleContainer}>
+        <ThemedText type="title" style={styles.title}>
+          {t('robot.overview.title')}
+        </ThemedText>
+      </View>
+
+      {/* Content */}
+      <View style={styles.content}>
+        {isConnected && !isScanning && connectedRobotDisplay ? (
+          /* Connected State */
+          <View style={styles.connectedContainer}>
+            <ConnectedRobotDisplay
+              robot={connectedRobotDisplay}
+              onUploadAndRun={handleUploadAndRun}
+              onStop={handleStop}
+              onUpload={handleUpload}
+            />
+          </View>
+        ) : null}
+
+        {isScanning ? (
+          /* Scanning State */
+          <View style={styles.scanningContainer}>
+            <View style={styles.scanningHeader}>
+              <ActivityIndicator size="small" color={COLORS.PRIMARY} />
+              <ThemedText style={styles.scanningText}>
+                {t('robot.overview.scanning')}
+              </ThemedText>
+            </View>
+
+            {discoveredRobots.length > 0 ? (
+              <>
+                <ThemedText style={styles.selectRobotText}>
+                  {t('robot.overview.selectRobotToConnect')}
+                </ThemedText>
+                <FlatList
+                  data={discoveredRobots}
+                  renderItem={renderRobotItem}
+                  keyExtractor={(item) => item.id}
+                  style={styles.robotList}
+                  contentContainerStyle={styles.robotListContent}
+                />
+              </>
             ) : (
-              <View style={styles.placeholderCard}>
-                <WheelIcon size={48} color="#9370DB" />
-                <ThemedText style={styles.placeholderText}>
-                  {t('robot.overview.noRobotConnected')}
+              <View style={styles.noRobotsContainer}>
+                <ThemedText style={styles.noRobotsText}>
+                  {t('robotScanner.noRobotsFound')}
+                </ThemedText>
+                <ThemedText style={styles.waitingText}>
+                  {t('robotScanner.waitingForRobots')}
                 </ThemedText>
               </View>
             )}
           </View>
+        ) : null}
+      </View>
 
-          {/* Known Robots Section */}
-          <View style={styles.section}>
-            <ThemedText type="subtitle" style={styles.sectionTitle}>
-              {t('robot.overview.knownRobots')}
-            </ThemedText>
-            {knownRobots.filter((item) => !isRobotConnected(item.robotId)).length === 0 ? (
-              <View style={styles.placeholderCard}>
-                <ThemedText style={styles.placeholderText}>
-                  {t('robot.overview.noOtherRobots')}
-                </ThemedText>
-              </View>
-            ) : (
-              knownRobots
-                .filter((item) => !isRobotConnected(item.robotId))
-                .map((item) => (
-                  <RobotCard
-                    key={item.robotId}
-                    robot={item}
-                    isConnected={false}
-                    onMenuPress={() => handleOpenRobotMenu(item)}
-                    onConnect={() => handleConnect(item)}
-                    onPlay={() => {
-                      // TODO: Implement play logic
-                      Alert.alert('Play', `Playing program on ${item.robotName}`);
-                    }}
-                    onStop={() => {
-                      // TODO: Implement stop logic
-                      Alert.alert('Stop', `Stopping ${item.robotName}`);
-                    }}
-                    onRecord={() => {
-                      // TODO: Implement record logic
-                      Alert.alert('Record', `Recording from ${item.robotName}`);
-                    }}
-                    onDownload={() => {
-                      // TODO: Implement download logic
-                      Alert.alert('Download', `Downloading from ${item.robotName}`);
-                    }}
-                  />
-                ))
-            )}
-          </View>
-        </ScrollView>
-      ) : (
-        <View style={styles.emptyStateContainer}>
-          <View style={styles.emptyStateContent}>
-            <ThemedText type="title" style={styles.emptyStateTitle}>
-              {t('robot.overview.title')}
-            </ThemedText>
-            <ThemedText style={styles.emptyStateMessage}>
-              {t('robot.overview.emptyState.message')}
-            </ThemedText>
-            <ThemedText style={styles.emptyStateInstructions}>
-              {t('robot.overview.emptyState.instructions')}
-            </ThemedText>
-          </View>
-        </View>
-      )}
-
-      {/* Floating Action Button */}
-      <FloatingActionButton
-        customIcon={<BluetoothIcon size={24} color="#FFFFFF" />}
-        onPress={() => setShowScannerModal(true)}
-        backgroundColor="#9370DB"
-      />
-
-      {/* Robot Scanner Modal */}
-      <RobotScannerModal
-        visible={showScannerModal}
-        onClose={() => setShowScannerModal(false)}
-        onSelectRobot={handleSelectRobot}
-        knownRobotIds={knownRobots.map(robot => robot.robotId)}
-      />
-
-      {/* Robot Menu Modal */}
-      {selectedRobotForMenu && (
-        <RobotMenuModal
-          visible={showRobotMenu}
-          robotName={selectedRobotForMenu.robotName}
-          isConnected={isRobotConnected(selectedRobotForMenu.robotId)}
-          onClose={() => setShowRobotMenu(false)}
-          onRename={handleRename}
-          onDisconnect={handleDisconnect}
-          onDelete={handleDelete}
-        />
-      )}
-
-      {/* Robot Rename Modal */}
-      {selectedRobotForMenu && (
-        <RobotRenameModal
-          visible={showRenameModal}
-          robotName={selectedRobotForMenu.robotName}
-          onClose={() => setShowRenameModal(false)}
-          onRename={handleRenameConfirm}
-        />
-      )}
+      {/* Action Button */}
+      <View style={styles.buttonContainer}>
+        <Pressable
+          style={({ pressed }) => [
+            styles.scanButton,
+            pressed && styles.scanButtonPressed,
+          ]}
+          onPress={isScanning ? handleStopScan : (isConnected ? handleScanWhileConnected : handleStartScan)}
+        >
+          <ThemedText style={styles.scanButtonText}>
+            {isScanning
+              ? t('robot.overview.cancelScanning')
+              : t('robot.overview.scanForRobots')}
+          </ThemedText>
+        </Pressable>
+      </View>
     </ThemedView>
   );
 }
@@ -319,57 +258,112 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  scrollContent: {
-    padding: 20,
-    paddingBottom: 100,
+  titleContainer: {
+    paddingHorizontal: 20,
+    paddingTop: 60,
+    paddingBottom: 20,
   },
-  section: {
-    marginBottom: 32,
+  title: {
+    fontSize: 48,
+    fontWeight: '700',
   },
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: '600',
+  content: {
+    flex: 1,
+    paddingHorizontal: 20,
+  },
+  connectedContainer: {
+    marginBottom: 20,
+  },
+  scanningContainer: {
+    flex: 1,
+  },
+  scanningHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    marginBottom: 16,
+  },
+  scanningText: {
+    fontSize: 16,
+    opacity: 0.7,
+  },
+  selectRobotText: {
+    fontSize: 14,
+    opacity: 0.6,
     marginBottom: 12,
   },
-  placeholderCard: {
-    backgroundColor: '#F3F4F6',
-    borderRadius: 12,
-    padding: 40,
+  robotList: {
+    flex: 1,
+  },
+  robotListContent: {
+    gap: 8,
+  },
+  robotItem: {
+    flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: COLORS.SURFACE,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: COLORS.BORDER,
+    padding: 16,
+    gap: 16,
+  },
+  robotItemPressed: {
+    opacity: 0.7,
+    backgroundColor: COLORS.SELECTED_ITEM_BACKGROUND,
+  },
+  robotItemIcon: {
+    width: 48,
+    height: 48,
     justifyContent: 'center',
-    minHeight: 120,
+    alignItems: 'center',
   },
-  placeholderText: {
-    fontSize: 16,
-    opacity: 0.5,
+  robotItemInfo: {
+    flex: 1,
   },
-  emptyStateContainer: {
+  robotItemName: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 4,
+  },
+  robotItemId: {
+    fontSize: 14,
+    opacity: 0.6,
+  },
+  noRobotsContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 40,
   },
-  emptyStateContent: {
-    alignItems: 'center',
-    gap: 16,
-    maxWidth: 400,
-  },
-  emptyStateTitle: {
-    fontSize: 48,
-    fontWeight: '700',
-    marginBottom: 8,
-    lineHeight: 60,
-    paddingVertical: 8,
-  },
-  emptyStateMessage: {
-    fontSize: 18,
-    opacity: 0.7,
-    textAlign: 'center',
-  },
-  emptyStateInstructions: {
+  noRobotsText: {
     fontSize: 16,
-    opacity: 0.5,
+    opacity: 0.6,
+    marginBottom: 8,
     textAlign: 'center',
-    marginTop: 8,
+  },
+  waitingText: {
+    fontSize: 14,
+    opacity: 0.4,
+    textAlign: 'center',
+  },
+  buttonContainer: {
+    padding: 20,
+    paddingBottom: 40,
+  },
+  scanButton: {
+    backgroundColor: COLORS.PRIMARY,
+    borderRadius: 12,
+    padding: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  scanButtonPressed: {
+    opacity: 0.7,
+  },
+  scanButtonText: {
+    color: COLORS.WHITE,
+    fontSize: 18,
+    fontWeight: '600',
   },
 });

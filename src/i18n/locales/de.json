@@ -43,18 +43,10 @@
     },
     "overview": {
       "title": "Roboter",
-      "connectedRobot": "Verbundener Roboter",
-      "noRobotConnected": "Kein Roboter verbunden",
-      "knownRobots": "Bekannte Roboter",
-      "noOtherRobots": "Tippe auf die Bluetooth-Schaltfläche, um einen weiteren Roboter hinzuzufügen",
-      "emptyState": {
-        "message": "Du hast noch keine Roboter hinzugefügt.",
-        "instructions": "Tippe auf die Bluetooth-Schaltfläche unten, um einen Roboter zu finden und zu verbinden."
-      },
-      "deleteConfirm": {
-        "title": "Roboter löschen",
-        "message": "Möchtest du {{name}} wirklich löschen? Dies wird ihn trennen und aus deiner Liste entfernen."
-      }
+      "scanForRobots": "Nach Robotern suchen",
+      "cancelScanning": "Suche abbrechen",
+      "scanning": "Suche nach Robotern...",
+      "selectRobotToConnect": "Roboter zum Verbinden auswählen"
     }
   },
   "robotScanner": {

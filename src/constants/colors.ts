@@ -9,8 +9,10 @@
  * Brand Colors
  */
 export const BRAND_COLORS = {
-  /** Primary brand color - explore-it Red */
-  PRIMARY_RED: '#E63946',
+  /** Primary brand color - Teal/Dark Blue from legacy app */
+  PRIMARY: '#2E5266',
+  /** Legacy primary red - kept for backwards compatibility */
+  PRIMARY_RED: '#2E5266',
   /** Soft beige background */
   BEIGE_SOFT: '#FAF7F0',
 } as const;

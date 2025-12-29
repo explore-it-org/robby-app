@@ -8,6 +8,7 @@ import { IHardwareLayer } from '@/types/hardware';
 import { IRobot } from '@/types/robot';
 import { createProtocolHandler } from '../protocol/protocol-factory';
 import { Robot } from './robot';
+import { uint8ArrayToLatin1 } from '@/utils/buffer-utils';
 
 /**
  * Create a robot instance after version detection
@@ -42,7 +43,7 @@ async function detectFirmwareVersion(hardware: IHardwareLayer): Promise<number> 
 
     // Set up notification handler
     const cleanup = hardware.onNotification((data) => {
-      const response = Buffer.from(data).toString('latin1');
+      const response = uint8ArrayToLatin1(data);
 
       if (response.startsWith('VER')) {
         clearTimeout(timeout);

@@ -11,6 +11,7 @@ import { IHardwareLayer } from '@/types/hardware';
 import { IProtocolHandler, ProtocolVersion } from '@/types/protocol';
 import { RobotProgram, RobotInstruction } from '@/types/robot';
 import { encodeSpeed, decodeSpeed, calculateDataLength } from './protocol-utils';
+import { uint8ArrayToLatin1 } from '@/utils/buffer-utils';
 
 export class V3ProtocolHandler implements IProtocolHandler {
   readonly version: ProtocolVersion = 'V3';
@@ -26,7 +27,7 @@ export class V3ProtocolHandler implements IProtocolHandler {
 
     // Set up notification handler
     this.cleanupNotification = this.hardware.onNotification((data) => {
-      const text = Buffer.from(data).toString('latin1');
+      const text = uint8ArrayToLatin1(data);
       this.handleResponse(text);
     });
   }

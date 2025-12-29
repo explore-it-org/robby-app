@@ -2,7 +2,7 @@
   "expo": {
     "name": "explore-it-robotics",
     "slug": "explore-it-robotics",
-    "version": "1.0.0",
+    "version": "2.3.9",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "exploreitrobotics",
@@ -20,10 +20,8 @@
     "android": {
       "package": "com.exploreitrobotics.app",
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/images/android-icon-foreground.png",
-        "backgroundImage": "./assets/images/android-icon-background.png",
-        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+        "backgroundColor": "#FFFFFF",
+        "foregroundImage": "./assets/images/android-icon-foreground.png"
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,

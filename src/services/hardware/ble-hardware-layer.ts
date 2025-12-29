@@ -7,6 +7,7 @@
 
 import { BleManager, Device } from 'react-native-ble-plx';
 import { DiscoveredDevice, HardwareState, IHardwareLayer } from '@/types/hardware';
+import { base64ToUint8Array, uint8ArrayToBase64, latin1ToUint8Array } from '@/utils/buffer-utils';
 
 // BLE Service and Characteristic UUIDs for EXPLORE-IT robots
 const BLE_SERVICE_UUID = '0000ffe0-0000-1000-8000-00805f9b34fb';
@@ -100,9 +101,9 @@ export class BLEHardwareLayer implements IHardwareLayer {
 
           if (characteristic?.value) {
             // Convert base64 to Uint8Array
-            const data = Buffer.from(characteristic.value, 'base64');
+            const data = base64ToUint8Array(characteristic.value);
             // Notify all registered callbacks
-            this.notificationCallbacks.forEach((callback) => callback(new Uint8Array(data)));
+            this.notificationCallbacks.forEach((callback) => callback(data));
           }
         },
         TRANSACTION_ID
@@ -138,8 +139,8 @@ export class BLEHardwareLayer implements IHardwareLayer {
     }
 
     // Convert to base64 for BLE
-    const buffer = typeof data === 'string' ? Buffer.from(data, 'latin1') : Buffer.from(data);
-    const base64 = buffer.toString('base64');
+    const uint8Array = typeof data === 'string' ? latin1ToUint8Array(data) : data;
+    const base64 = uint8ArrayToBase64(uint8Array);
 
     await this.connectedDevice.writeCharacteristicWithResponseForService(
       BLE_SERVICE_UUID,

@@ -2,218 +2,198 @@
 
 ## Overview
 
-The Robot Management screen is one of the two main tabs on the Home Screen, dedicated to discovering, connecting, and managing Bluetooth connections with EXPLORE-IT robots. This screen handles all robot-related operations including scanning for available devices, establishing BLE connections, displaying connection status, and providing disconnect capabilities. It serves as the device management hub, separating robot connectivity concerns from program management.
+The Robot Management screen is one of the two main tabs on the Home Screen, dedicated to discovering and connecting to EXPLORE-IT robots via Bluetooth. This screen provides a simplified interface for scanning, connecting, and managing a single robot connection at a time. No robot history or previously connected robots are stored - the focus is on current connection status only.
 
 ## Goals
 
 - Enable quick and reliable discovery of EXPLORE-IT robots via Bluetooth Low Energy
-- Provide clear visual feedback on connection states (disconnected, scanning, connecting, connected, error)
-- Display helpful information to aid robot selection (device name, signal strength, firmware version)
-- Support easy switching between robots without navigating away from the screen
+- Provide clear visual feedback on connection states (idle, scanning, connected)
+- Support easy robot selection from scanned devices
 - Handle Bluetooth permission requests and error states gracefully
+- Maintain simplicity by managing only one robot connection at a time
 
 ## Screen States
 
-The Robot Management screen has four primary states based on connection status:
+The Robot Management screen has three primary states:
 
-### Disconnected State
+### Empty State (No Robot Connected)
+
+When no robot is connected and not scanning:
 
 ```txt
 ┌─────────────────────────────────────┐
-│  Robot Connection                   │
+│  Robot                              │
 │                                     │
-│  ┌────────────────────────────┐    │
-│  │                            │    │
-│  │    [Bluetooth Icon]        │    │
-│  │                            │    │
-│  │    No Robot Connected      │    │
-│  │                            │    │
-│  │  [ Scan for Robots ]       │    │
-│  │                            │    │
-│  └────────────────────────────┘    │
 │                                     │
-│  • Make sure your robot is         │
-│    powered on and nearby            │
+│                                     │
+│                                     │
+│                                     │
+│                                     │
+│  ┌───────────────────────────────┐ │
+│  │   Scan for Robots             │ │
+│  └───────────────────────────────┘ │
 │                                     │
 └─────────────────────────────────────┘
 ```
+
+**Display:**
+- Title: "Robot"
+- Large button: "Scan for Robots"
+- No additional instructions or empty state messages
 
 ### Scanning State
 
+When actively scanning for robots:
+
 ```txt
 ┌─────────────────────────────────────┐
-│  Scanning for robots...             │
+│  Robot                              │
+│                                     │
+│  ⊙ Scanning for robots...           │
+│                                     │
+│  Select a robot to connect          │
 │                                     │
 │  ┌────────────────────────────┐    │
-│  │ EXPLORE-IT #12345          ⋮  │
-│  │ AA:BB:CC:DD:EE:FF          │    │
-│  │ ▂▃▅▇ Excellent Signal      │    │
+│  │ [Robot Icon]               │    │
+│  │ EXPLORE-IT #12345          │    │
+│  │ ID: AA:BB:CC:DD:EE:FF      │    │
 │  └────────────────────────────┘    │
 │                                     │
 │  ┌────────────────────────────┐    │
-│  │ EXPLORE-IT #67890          ⋮  │
-│  │ 11:22:33:44:55:66          │    │
-│  │ ▂▃▅▁ Good Signal           │    │
+│  │ [Robot Icon]               │    │
+│  │ EXPLORE-IT #67890          │    │
+│  │ ID: 11:22:33:44:55:66      │    │
 │  └────────────────────────────┘    │
 │                                     │
-│  ┌────────────────────────────┐    │
-│  │ EXPLORE-IT #24680          ⋮  │
-│  │ FF:EE:DD:CC:BB:AA          │    │
-│  │ ▂▃▁▁ Fair Signal           │    │
-│  └────────────────────────────┘    │
-│                                     │
-│         [ Stop Scan ]               │
+│  ┌───────────────────────────────┐ │
+│  │   Cancel Scanning             │ │
+│  └───────────────────────────────┘ │
 │                                     │
 └─────────────────────────────────────┘
 ```
 
-Each robot card displays:
-- **Robot Name:** The device name of the robot
-- **Bluetooth Address:** The Bluetooth MAC address or device identifier
-- **Signal Strength:** Visual indicator using bars (▂▃▅▇) with text label (Excellent/Good/Fair/Weak)
-- **Menu Button (⋮):** Three-dot vertical menu button on the right side
+**Display:**
+- Title: "Robot"
+- Loading indicator with text: "Scanning for robots..."
+- Help text: "Select a robot to connect"
+- List of discovered robots (if any)
+- Large button: "Cancel Scanning"
 
-The menu button opens a popup menu with the following options:
-- **Edit:** Opens dialog to edit robot settings (currently a placeholder)
-- **Delete:** Removes the robot from the list (currently a placeholder)
+**Robot List Items:**
+Each robot in the list displays:
+- Robot icon (gear/wheel)
+- Robot name (e.g., "EXPLORE-IT #12345" or the device ID)
+- Robot ID: Bluetooth device ID
+- Entire card is tappable to connect
 
-Note: For physical robots, no additional identifier is shown beyond the robot name and Bluetooth address, as physical devices don't have application-specific IDs.
-
-### Connecting State
-
-```txt
-┌─────────────────────────────────────┐
-│  Connecting...                      │
-│                                     │
-│  ┌────────────────────────────┐    │
-│  │                            │    │
-│  │    [Spinner Animation]     │    │
-│  │                            │    │
-│  │  Connecting to             │    │
-│  │  EXPLORE-IT #12345         │    │
-│  │                            │    │
-│  └────────────────────────────┘    │
-│                                     │
-│                                     │
-│         [ Cancel ]                  │
-│                                     │
-└─────────────────────────────────────┘
-```
+**No Robots Found:**
+If no robots are discovered after scanning starts:
+- Shows "No robots found yet"
+- Shows "Keep your robot nearby and turned on"
+- Scan continues until user cancels
 
 ### Connected State
 
+When a robot is connected:
+
 ```txt
 ┌─────────────────────────────────────┐
-│  Connected Robot                    │
+│  Robot                              │
 │                                     │
 │  ┌────────────────────────────┐    │
-│  │                            │    │
-│  │  [Checkmark Icon]          │    │
-│  │                            │    │
-│  │  EXPLORE-IT #12345         │    │
-│  │                            │    │
-│  │  • Firmware: v10           │    │
-│  │  • Signal: Strong          │    │
-│  │  • Battery: 85%            │    │
-│  │                            │    │
-│  │  [ Disconnect ]            │    │
-│  │                            │    │
-│  │  [ Switch Robot ]          │    │
-│  │                            │    │
+│  │ [Robot Icon] EXPLORE-IT... │    │
+│  │ [Play] [Stop] [Upload]     │    │
 │  └────────────────────────────┘    │
+│                                     │
+│                                     │
+│  ┌───────────────────────────────┐ │
+│  │   Scan for Robots             │ │
+│  └───────────────────────────────┘ │
 │                                     │
 └─────────────────────────────────────┘
 ```
 
-### Error State
-
-```txt
-┌─────────────────────────────────────┐
-│  Connection Error                   │
-│                                     │
-│  ┌────────────────────────────┐    │
-│  │                            │    │
-│  │    [Error Icon]            │    │
-│  │                            │    │
-│  │  Connection Failed         │    │
-│  │                            │    │
-│  │  Could not connect to      │    │
-│  │  EXPLORE-IT #12345         │    │
-│  │                            │    │
-│  │  • Check robot is on       │    │
-│  │  • Move closer to robot    │    │
-│  │  • Try again               │    │
-│  │                            │    │
-│  │  [ Try Again ]             │    │
-│  │  [ Scan for Other Robots ] │    │
-│  │                            │    │
-│  └────────────────────────────┘    │
-│                                     │
-└─────────────────────────────────────┘
-```
+**Display:**
+- Title: "Robot"
+- Connected robot widget showing:
+  - Robot icon
+  - Robot name
+  - Action buttons: Play, Stop, Upload
+- Large button: "Scan for Robots"
 
 ## User Interactions
 
-### Robot Selection Flow
+### Initial Connection Flow
 
-1. User opens app or navigates to Robot tab → Shows Disconnected State
+1. User opens Robot tab → Shows Empty State
 2. User taps "Scan for Robots" → Transitions to Scanning State
-3. App scans for BLE devices matching EXPLORE-IT pattern → Displays found robots in list
-4. User taps a robot from the list → Transitions to Connecting State
-5. Connection established → Transitions to Connected State
-6. Connection fails → Transitions to Error State with retry options
+3. App discovers robots → Displays robots in scrollable list
+4. User taps a robot from the list → Connects to robot
+5. Connection established → Transitions to Connected State, shows robot widget
 
-### Automatic Behaviors
+### Scanning While Connected
 
-**Auto-scan on First Launch:**
+1. User has a robot connected → Shows Connected State
+2. User taps "Scan for Robots" → Transitions to Scanning State
+3. Connected robot widget is hidden but robot remains connected
+4. User taps a different robot → Disconnects current robot, connects to new robot
+5. User taps "Cancel Scanning" → Returns to Connected State with previous robot
 
-- On first app launch, automatically start scanning for robots
-- Helps new users discover their robot without explicit action
+### Changing Robots
 
-**Auto-reconnect on App Resume:**
+1. User is connected to Robot A → Shows Connected State
+2. User taps "Scan for Robots" → Transitions to Scanning State (Robot A still connected)
+3. User selects Robot B from list → Disconnects Robot A automatically, connects to Robot B
+4. Connection to Robot B established → Shows Connected State with Robot B
 
-- When app resumes from background, attempt to reconnect to last connected robot
-- If reconnection fails after 10 seconds, show Disconnected State
-- User preference can disable auto-reconnect if manually disconnected
+### Canceling Scan
 
-**Connection Timeout:**
+**From Empty State:**
+1. User in Empty State → Taps "Scan for Robots"
+2. Scanning State shown → User taps "Cancel Scanning"
+3. Returns to Empty State
 
-- Connection attempts timeout after 10 seconds
-- Show Error State with helpful troubleshooting tips
+**From Connected State:**
+1. User in Connected State → Taps "Scan for Robots"
+2. Scanning State shown (robot still connected) → User taps "Cancel Scanning"
+3. Returns to Connected State with same robot
 
-### Robot List Details
+## Key Behaviors
 
-Each robot item in the scanning list displays:
+### No Robot History
 
-- **Device Name:** The robot's device name (e.g., "EXPLORE-IT #12345")
-- **Bluetooth Address:** The Bluetooth MAC address or device identifier
-- **Signal Strength:** Visual indicator using bars (▂▃▅▇) with descriptive label:
-  - Excellent Signal: All 4 bars (▂▃▅▇) - RSSI ≥ -50 dBm
-  - Good Signal: 3 bars (▂▃▅▁) - RSSI ≥ -70 dBm
-  - Fair Signal: 2 bars (▂▃▁▁) - RSSI ≥ -85 dBm
-  - Weak Signal: 1 bar (▂▁▁▁) - RSSI < -85 dBm
-- **Menu Button (⋮):** Three vertical dots on the right side for accessing robot options
-- **Tap Target:** Entire card is tappable for connection
+- The app does NOT store previously connected robots
+- No "known robots" list or saved robots
+- Each session starts fresh - user must scan to find robots
+- Robot connection state is only maintained while the app is active
 
-**Robot Options Menu:**
+### Single Robot Connection
 
-When the menu button (⋮) is tapped, a popup menu appears with:
-- **Edit:** Opens dialog to edit robot configuration (future feature, currently shows alert placeholder)
-- **Delete:** Removes robot from the discovered list (future feature, currently shows alert placeholder)
+- Only one robot can be connected at a time
+- Selecting a new robot automatically disconnects the current robot
+- No need for explicit "disconnect" button - just scan and select a different robot
 
-Both menu options are localized and currently implemented as dummy actions that display alerts.
+### Persistent Scanning
 
-**Sorting:**
+- When scanning starts, discovered robots appear in a list
+- List grows as more robots are discovered
+- Tapping any robot in the list connects to it
+- Scanning can be canceled at any time
 
-Robots ordered by signal strength (strongest first)
+### Connection Behavior
 
-### Permission Handling
+- Connecting to a robot automatically stops scanning
+- When connected, the robot widget appears
+- Robot widget reuses the existing ConnectedRobotDisplay component
+- Shows robot name and action buttons (Play, Stop, Upload)
+
+## Permission Handling
 
 **Bluetooth Permission Required:**
 
 - If Bluetooth permission not granted, show permission request dialog
 - Explain why permission is needed: "Required to discover and connect to robots"
-- Provide "Open Settings" button if permission permanently denied
+- Handle permission denial gracefully with clear error message
 
 **Location Permission (Android):**
 
@@ -224,77 +204,75 @@ Robots ordered by signal strength (strongest first)
 **Bluetooth Disabled:**
 
 - Detect when device Bluetooth is off
-- Show alert: "Bluetooth is disabled. Please enable Bluetooth in device settings."
-- Provide "Open Settings" button to deep-link to Bluetooth settings
+- Show error alert: "Bluetooth is not powered on"
+- Provide guidance to enable Bluetooth in device settings
 
-## Connection Status Indicators
+## Error Handling
 
-### Visual Status Indicators
+### Connection Failures
 
-- **Disconnected:** Gray Bluetooth icon with slash
-- **Scanning:** Animated blue Bluetooth icon (pulsing)
-- **Connecting:** Blue Bluetooth icon with spinner
-- **Connected:** Green Bluetooth icon with checkmark
-- **Error:** Red Bluetooth icon with exclamation mark
-
-### Connection Information Display
-
-When connected, display:
-
-- Robot device name (full name or last 5 digits)
-- Firmware version number
-- Signal strength indicator (real-time updates)
-- Battery level (if supported by firmware version)
-- Connection duration timer (optional)
-
-## Edge Cases
-
-### No Robots Found
-
-```txt
-┌─────────────────────────────────────┐
-│  No Robots Found                    │
-│                                     │
-│  ┌────────────────────────────┐     │
-│  │                            │     │
-│  │    [Search Icon]           │     │
-│  │                            │     │
-│  │  No robots detected        │     │
-│  │                            │     │
-│  │  • Make sure robot is on   │     │
-│  │  • Check robot is nearby   │     │
-│  │  • Try scanning again      │     │
-│  │                            │     │
-│  │  [ Scan Again ]            │     │
-│  │  [ Troubleshooting Guide ] │     │
-│  │                            │     │
-│  └────────────────────────────┘     │
-│                                     │
-└─────────────────────────────────────┘
-```
+If connection fails:
+- Show alert with error message
+- Return to previous state (Empty or Connected)
+- User can try again by scanning
 
 ### Unexpected Disconnection
 
-- Show toast notification: "Robot disconnected"
-- Automatically transition to Disconnected State
-- Offer "Reconnect" quick action in toast
-- Do NOT auto-reconnect (may be intentional)
+If robot disconnects unexpectedly:
+- App should detect disconnection
+- Transition back to Empty State
+- No automatic reconnection attempts
 
-### Multiple Robots with Same Name
+### Scan Failures
 
-- Display full device ID/MAC address (last 8 characters) to differentiate
-- Highlight previously connected robot with "Last connected" badge
+If scanning fails to start:
+- Show alert with error message
+- Remain in current state
+- User can try again
 
-### Connection During Program Execution
+## Translation Support
 
-- If user disconnects while program is running on robot, show warning
-- "Robot is currently running a program. Disconnect anyway?"
-- Confirm before disconnecting
+All text on this screen is translated using the i18n system:
 
-## Settings Integration
+- `robot.overview.title` - "Robot"
+- `robot.overview.scanForRobots` - "Scan for Robots"
+- `robot.overview.cancelScanning` - "Cancel Scanning"
+- `robot.overview.scanning` - "Scanning for robots..."
+- `robot.overview.selectRobotToConnect` - "Select a robot to connect"
+- `robotScanner.noRobotsFound` - "No robots found yet"
+- `robotScanner.waitingForRobots` - "Keep your robot nearby and turned on"
 
-From this screen, users can access:
+Supported languages: English, German, French, Italian
 
-- Bluetooth troubleshooting guide (info icon in app bar)
-- Connection preferences (auto-reconnect toggle)
-- Robot firmware update instructions (from Connected State)
+## Technical Implementation
+
+### State Management
+
+- Uses local component state (useState) for:
+  - `discoveredRobots` - List of robots found during scanning
+  - `connectedRobot` - Currently connected robot (null if none)
+  - `status` - Robot manager status (idle, scanning, connected)
+
+### Robot Manager Integration
+
+- Uses `useRobotManager` hook to access robot manager
+- Subscribes to robot manager events:
+  - `onStatusChange` - Updates UI when status changes
+  - `onRobotDiscovered` - Adds robots to list as they're discovered
+
+### BLE Implementation
+
+- Uses `react-native-ble-plx` for Bluetooth Low Energy communication
+- Scans for devices with name pattern "EXPLORE-IT"
+- Automatically falls back to mock robots in development (Expo Go)
+
+## Future Enhancements
+
+Potential future improvements (not currently implemented):
+
+- Display signal strength indicators for discovered robots
+- Show connection status indicator in tab bar
+- Add firmware version display when connected
+- Support for multiple simultaneous robot connections (advanced mode)
+- Robot naming/renaming capabilities
+- Favorite/starred robots for quick access

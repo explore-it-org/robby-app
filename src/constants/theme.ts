@@ -6,8 +6,8 @@
 
 import { Platform } from 'react-native';
 
-// Primary brand color - explore-it Red
-const primaryRed = '#E63946';
+// Primary brand color - Teal/Dark Blue from legacy app
+const primaryTeal = '#2E5266';
 
 // Secondary and accent colors
 const curiousBlue = '#457B9D';
@@ -30,7 +30,7 @@ const textSecondary = '#666666';
 export const Colors = {
   light: {
     // Primary
-    primary: primaryRed,
+    primary: primaryTeal,
 
     // Secondary/Accent
     secondary: curiousBlue,
@@ -53,17 +53,17 @@ export const Colors = {
     surfaceVariant: surfaceVariant,
 
     // UI elements
-    tint: primaryRed,
+    tint: primaryTeal,
     icon: textPrimary,
     tabIconDefault: curiousBlue,
-    tabIconSelected: primaryRed,
+    tabIconSelected: primaryTeal,
 
     // Borders
     border: '#E0E0E0',
   },
   // Dark mode disabled - app uses light mode only
   dark: {
-    primary: primaryRed,
+    primary: primaryTeal,
     secondary: curiousBlue,
     accent: creativeOrange,
     accentPurple: playfulPurple,
@@ -76,10 +76,10 @@ export const Colors = {
     background: softBeige,
     surface: white,
     surfaceVariant: surfaceVariant,
-    tint: primaryRed,
+    tint: primaryTeal,
     icon: textPrimary,
     tabIconDefault: curiousBlue,
-    tabIconSelected: primaryRed,
+    tabIconSelected: primaryTeal,
     border: '#E0E0E0',
   },
 };

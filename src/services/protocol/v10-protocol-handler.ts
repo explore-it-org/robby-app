@@ -11,6 +11,7 @@ import { IHardwareLayer } from '@/types/hardware';
 import { IProtocolHandler, ProtocolVersion } from '@/types/protocol';
 import { RobotProgram, RobotInstruction } from '@/types/robot';
 import { encodeSpeed, decodeSpeed, calculateDataLength } from './protocol-utils';
+import { uint8ArrayToLatin1 } from '@/utils/buffer-utils';
 
 const CHUNK_SIZE = 256; // instructions per chunk
 
@@ -210,7 +211,7 @@ export class V10ProtocolHandler implements IProtocolHandler {
 
   private async waitForTextResponse(expected?: string): Promise<string> {
     const data = await this.waitForBinaryResponse();
-    const text = Buffer.from(data).toString('latin1');
+    const text = uint8ArrayToLatin1(data);
 
     if (expected && !text.includes(expected)) {
       throw new Error(`Expected '${expected}' but got '${text}'`);
