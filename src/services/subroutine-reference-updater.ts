@@ -1,163 +1,93 @@
 /**
  * Subroutine Reference Updater Service
  *
- * Handles updating cached program names in subroutine instructions
+ * Handles updating program name references in subroutine statements
  * when referenced programs are renamed.
+ * 
+ * MIGRATED to work with new ProgramSource format (name-based references).
  */
 
-import { Instruction, RepetitionInstruction, SubroutineInstruction } from '@/types/instruction';
-import { Program } from '@/types/program';
-import { loadAllPrograms, saveProgram } from './program-storage';
+import { loadProgramSource, saveProgramSource, ProgramSource } from '@/programs/source';
+import { loadAllPrograms } from './program-storage';
 
 /**
- * Recursively finds all subroutine instructions that reference a specific program ID
+ * Finds all subroutine statements that reference a specific program name
  */
-function findSubroutineReferences(
-  instructions: Instruction[],
-  targetProgramId: string
-): SubroutineInstruction[] {
-  const references: SubroutineInstruction[] = [];
-
-  function processInstructions(instrs: Instruction[]): void {
-    for (const instruction of instrs) {
-      if (instruction.type === 'subroutine' && instruction.programId === targetProgramId) {
-        references.push(instruction);
-      } else if (instruction.type === 'repetition') {
-        processInstructions(instruction.instructions);
-      }
-    }
-  }
-
-  processInstructions(instructions);
-  return references;
+function hasSubroutineReference(source: ProgramSource, targetProgramName: string): boolean {
+  return source.statements.some(
+    (statement) =>
+      statement.type === 'subroutine' && statement.programReference === targetProgramName
+  );
 }
 
 /**
- * Updates cached program names in subroutine instructions
+ * Updates program name references in subroutine statements
  */
-function updateSubroutineNames(
-  instructions: Instruction[],
-  targetProgramId: string,
+function updateSubroutineReferences_internal(
+  source: ProgramSource,
+  oldProgramName: string,
   newProgramName: string
-): { instructions: Instruction[]; updated: boolean } {
-  let hasChanges = false;
-
-  function processInstructions(instrs: Instruction[]): Instruction[] {
-    return instrs.map((instruction) => {
-      if (instruction.type === 'subroutine' && instruction.programId === targetProgramId) {
-        // Only update if the name is different
-        if (instruction.programName !== newProgramName) {
-          hasChanges = true;
-          return {
-            ...instruction,
-            programName: newProgramName,
-          };
-        }
-      } else if (instruction.type === 'repetition') {
-        const result = processInstructions(instruction.instructions);
-        if (hasChanges) {
-          return {
-            ...instruction,
-            instructions: result,
-          } as RepetitionInstruction;
-        }
-      }
-      return instruction;
-    });
-  }
-
-  const updatedInstructions = processInstructions(instructions);
-  return { instructions: updatedInstructions, updated: hasChanges };
-}
-
-/**
- * Syncs all cached program names in subroutine instructions with current program names
- * This function ensures that all subroutine references display the latest program names
- *
- * @param instructions - The instructions to sync
- * @param programMap - Map of program ID to program for looking up current names
- * @returns Updated instructions with synced names, or original if no changes needed
- */
-export function syncSubroutineNames(
-  instructions: Instruction[],
-  programMap: Map<string, Program>
-): Instruction[] {
-  function processInstructions(instrs: Instruction[]): Instruction[] {
-    return instrs.map((instruction) => {
-      if (instruction.type === 'subroutine') {
-        const referencedProgram = programMap.get(instruction.programId);
-        if (referencedProgram && instruction.programName !== referencedProgram.name) {
-          // Update cached name to match current program name
-          return {
-            ...instruction,
-            programName: referencedProgram.name,
-          };
-        }
-      } else if (instruction.type === 'repetition') {
-        const updatedNested = processInstructions(instruction.instructions);
+): ProgramSource {
+  return {
+    ...source,
+    statements: source.statements.map((statement) => {
+      if (statement.type === 'subroutine' && statement.programReference === oldProgramName) {
         return {
-          ...instruction,
-          instructions: updatedNested,
-        } as RepetitionInstruction;
+          ...statement,
+          programReference: newProgramName,
+        };
       }
-      return instruction;
-    });
-  }
-
-  return processInstructions(instructions);
+      return statement;
+    }),
+  };
 }
 
 /**
  * Updates all programs that reference the renamed program
- * This function finds all programs containing subroutine instructions
- * that reference the given program ID and updates their cached names
+ * This function finds all programs containing subroutine statements
+ * that reference the given program name and updates their references
  *
- * @param renamedProgramId - The ID of the program that was renamed
+ * @param oldProgramName - The old name of the program that was renamed
  * @param newProgramName - The new name of the program
  * @returns Promise that resolves to the number of programs updated
  */
 export async function updateSubroutineReferences(
-  renamedProgramId: string,
+  oldProgramName: string,
   newProgramName: string
 ): Promise<number> {
   try {
-    // Load all programs
+    // Load all program metadata (lightweight)
     const allPrograms = await loadAllPrograms();
 
-    // Find programs that reference the renamed program
-    const programsToUpdate: Program[] = [];
+    // Track programs to update
+    let updatedCount = 0;
 
     for (const program of allPrograms) {
       // Skip the renamed program itself
-      if (program.id === renamedProgramId) {
+      if (program.name === oldProgramName || program.name === newProgramName) {
+        continue;
+      }
+
+      // Load full program source
+      const source = await loadProgramSource(program.name);
+      if (!source) {
         continue;
       }
 
       // Check if this program has subroutines referencing the renamed program
-      const references = findSubroutineReferences(program.instructions, renamedProgramId);
-      if (references.length > 0) {
-        programsToUpdate.push(program);
-      }
-    }
+      if (hasSubroutineReference(source, oldProgramName)) {
+        // Update references
+        const updatedSource = updateSubroutineReferences_internal(
+          source,
+          oldProgramName,
+          newProgramName
+        );
 
-    // Update each program's subroutine references
-    let updatedCount = 0;
-    for (const program of programsToUpdate) {
-      const { instructions, updated } = updateSubroutineNames(
-        program.instructions,
-        renamedProgramId,
-        newProgramName
-      );
-
-      if (updated) {
-        const updatedProgram: Program = {
-          ...program,
-          instructions,
-          lastModified: new Date(),
-        };
-
-        await saveProgram(updatedProgram);
-        updatedCount++;
+        // Save updated program
+        const success = await saveProgramSource(updatedSource);
+        if (success) {
+          updatedCount++;
+        }
       }
     }
 
@@ -167,3 +97,4 @@ export async function updateSubroutineReferences(
     throw error;
   }
 }
+
