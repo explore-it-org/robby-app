@@ -1,0 +1,55 @@
+name: Copilot coding agent setup
+on:
+  workflow_call:
+
+jobs:
+  copilot-setup-steps:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    env:
+      EXPO_NO_TELEMETRY: 1
+      CI: true
+    
+    steps:
+      - id: checkout
+        name: Checkout repository
+        uses: actions/checkout@v5
+
+      - id: volta
+        name: Install node using Volta
+        uses: volta-cli/action@v4
+
+      - id: cache-npm
+        name: Cache npm cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+
+      - id: install-deps
+        name: Install dependencies (npm ci)
+        continue-on-error: true
+        run: |
+          npm ci
+
+      - id: typecheck
+        name: TypeScript check
+        continue-on-error: true
+        run: |
+          npx tsc --noEmit
+
+      - id: format-check
+        name: Format check
+        continue-on-error: true
+        run: |
+          npm run format:check
+
+      - id: lint
+        name: Lint full source
+        continue-on-error: true
+        run: |
+          npx eslint .
