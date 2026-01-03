@@ -3,6 +3,8 @@
  *
  * Reusable content component for program details.
  * Can be embedded in tablet layout or used in full-screen navigation.
+ * 
+ * MIGRATED to use new ProgramSource format with flat Statement arrays.
  */
 
 import { ThemedText } from '@/components/themed-text';
@@ -10,9 +12,9 @@ import { ThemedView } from '@/components/themed-view';
 import { useProgram } from '@/hooks/use-program';
 import { useProgramPicker } from '@/hooks/use-program-picker';
 import { useProgramDeletion } from '@/hooks/use-program-deletion';
-import { useInstructionOperations } from '@/hooks/use-instruction-operations';
+import { useStatementOperations } from '@/hooks/use-instruction-operations';
 import { useRobotConnection } from '@/hooks/use-robot-connection';
-import { Program } from '@/types/program';
+import { ProgramSource } from '@/programs/source';
 import type { Locale } from 'date-fns';
 import { formatDistanceToNow } from 'date-fns';
 import { de, enUS, fr, it } from 'date-fns/locale';
@@ -30,97 +32,95 @@ import { ProgramHeaderOptionsMenu } from './program-detail/program-header-option
 import { ProgramPicker } from './program-detail/program-picker';
 
 interface ProgramDetailContentProps {
-  programId: string | null;
+  programName: string | null; // Changed from programId to programName
   isEmbedded?: boolean;
-  onProgramChanged?: (program: Program) => void;
-  onProgramDeleted?: (programId: string) => void;
+  onProgramChanged?: (source: ProgramSource) => void;
+  onProgramDeleted?: (programName: string) => void;
 }
 
 export function ProgramDetailContent({
-  programId,
+  programName,
   isEmbedded = false,
   onProgramChanged,
   onProgramDeleted,
 }: ProgramDetailContentProps) {
   const { t, i18n } = useTranslation();
   const router = useRouter();
-  const { program, compiledProgram, editor, reload } = useProgram({
-    programId: programId || undefined,
+  const { source, compiledProgram, editor, reload } = useProgram({
+    programName: programName || undefined,
     compile: true,
   });
   const { connectedRobot, isConnected } = useRobotConnection();
   const [showOptionsMenu, setShowOptionsMenu] = useState(false);
-  const [selectedInstructionIndex, setSelectedInstructionIndex] = useState<number>(0);
+  const [selectedStatementIndex, setSelectedStatementIndex] = useState<number>(0); // Changed from Instruction to Statement
   const [showProgramHeaderMenu, setShowProgramHeaderMenu] = useState(false);
   const programHeaderRef = useRef<ProgramHeaderRef>(null);
 
   // Track the previous program to detect changes
-  const prevProgramRef = useRef<Program | null>(null);
+  const prevSourceRef = useRef<ProgramSource | null>(null);
 
   // Reload program data when screen comes into focus (e.g., when navigating back from a subroutine)
   useFocusEffect(
     useCallback(() => {
-      // Only reload if we have a programId
-      if (programId) {
+      // Only reload if we have a programName
+      if (programName) {
         reload().catch((error) => {
           // Silently handle errors - the useProgram hook already logs them
           console.debug('Failed to reload program on focus:', error);
         });
       }
-    }, [programId, reload])
+    }, [programName, reload])
   );
 
   // Use custom hooks for program picker and deletion
-  const { availablePrograms } = useProgramPicker({ currentProgramId: program?.id });
+  const { availablePrograms } = useProgramPicker({ currentProgramName: source?.name });
   const { confirmAndDelete } = useProgramDeletion({
-    onDeleteSuccess: (programIdToDelete) => {
+    onDeleteSuccess: (deletedProgramName) => {
       if (isEmbedded && onProgramDeleted) {
-        onProgramDeleted(programIdToDelete);
+        onProgramDeleted(deletedProgramName);
       } else {
         router.back();
       }
     },
   });
 
-  // Use custom hook for instruction operations
+  // Use custom hook for statement operations (renamed from instruction operations)
   const {
-    showInstructionPicker,
-    expandedInstructionId,
+    showStatementPicker,
+    expandedStatementIndex,
     showProgramPicker,
-    programPickerInstructionIndex,
-    closeInstructionPicker,
+    programPickerStatementIndex,
+    closeStatementPicker,
     closeProgramPicker,
-    handleAddInstruction,
+    handleAddStatement,
     handleAddMove,
-    handleSelectInstructionType,
-    handleUpdateInstruction,
-    handleDeleteInstruction,
+    handleSelectStatementType,
+    handleUpdateStatement,
+    handleDeleteStatement,
     showDeleteConfirmation,
-    handleMoveInstruction,
+    handleMoveStatement,
     handleToggleExpand,
     handleSelectSubroutineProgram,
-    handleSelectSubroutineProgramById,
     handleProgramSelected,
-  } = useInstructionOperations({ program, editor });
+  } = useStatementOperations({ source, editor });
 
   // Notify parent when program changes
   useEffect(() => {
-    if (program && onProgramChanged) {
-      const prev = prevProgramRef.current;
+    if (source && onProgramChanged) {
+      const prev = prevSourceRef.current;
 
-      // Check if program has changed (name, instruction count, or lastModified)
+      // Check if program has changed (name or statements length)
       if (
         !prev ||
-        prev.name !== program.name ||
-        prev.instructionCount !== program.instructionCount ||
-        prev.lastModified.getTime() !== program.lastModified.getTime()
+        prev.name !== source.name ||
+        prev.statements.length !== source.statements.length
       ) {
-        onProgramChanged(program);
+        onProgramChanged(source);
       }
 
-      prevProgramRef.current = program;
+      prevSourceRef.current = source;
     }
-  }, [program, onProgramChanged]);
+  }, [source, onProgramChanged]);
 
   // Helper function for alerts (mobile-only now)
   const showAlert = (
@@ -136,7 +136,7 @@ export function ProgramDetailContent({
   };
 
   // Empty state when no program is selected
-  if (!program) {
+  if (!source) {
     return (
       <ThemedView style={[styles.container, isEmbedded && styles.embedded]}>
         <ThemedView style={styles.emptyState}>
@@ -192,70 +192,47 @@ export function ProgramDetailContent({
   };
 
   const handleDeleteProgram = async () => {
-    if (!program) return;
-    await confirmAndDelete(program);
+    if (!source) return;
+    // Pass the program name for deletion
+    await confirmAndDelete(source.name);
   };
 
-  // Instruction handlers for options menu
-  const handleAddInstructionBefore = () => {
-    handleAddInstruction(selectedInstructionIndex);
+  // Statement handlers for options menu (renamed from Instruction)
+  const handleAddStatementBefore = () => {
+    handleAddStatement(selectedStatementIndex);
   };
 
-  const handleAddInstructionAfter = () => {
-    handleAddInstruction(selectedInstructionIndex + 1);
+  const handleAddStatementAfter = () => {
+    handleAddStatement(selectedStatementIndex + 1);
   };
 
-  const handleMoveInstructionUp = () => {
-    if (selectedInstructionIndex > 0) {
-      handleMoveInstruction(selectedInstructionIndex, selectedInstructionIndex - 1);
+  const handleMoveStatementUp = () => {
+    if (selectedStatementIndex > 0) {
+      handleMoveStatement(selectedStatementIndex, selectedStatementIndex - 1);
     }
   };
 
-  const handleMoveInstructionDown = () => {
-    if (program && selectedInstructionIndex < program.instructions.length - 1) {
-      handleMoveInstruction(selectedInstructionIndex, selectedInstructionIndex + 1);
+  const handleMoveStatementDown = () => {
+    if (source && selectedStatementIndex < source.statements.length - 1) {
+      handleMoveStatement(selectedStatementIndex, selectedStatementIndex + 1);
     }
   };
 
   const handleDeleteFromMenu = () => {
-    handleDeleteInstruction(selectedInstructionIndex);
+    handleDeleteStatement(selectedStatementIndex);
   };
 
-  const handleInstructionOptions = (index: number) => {
-    setSelectedInstructionIndex(index);
+  const handleStatementOptions = (index: number) => {
+    setSelectedStatementIndex(index);
     setShowOptionsMenu(true);
   };
 
   const handlePreviewSubroutineProgram = (index: number) => {
-    const instruction = program?.instructions[index];
-    if (instruction?.type === 'subroutine' && instruction.programId) {
+    const statement = source?.statements[index];
+    if (statement?.type === 'subroutine' && statement.programReference) {
       try {
-        router.push(`/program-detail?id=${instruction.programId}`);
-      } catch (error) {
-        console.warn('Navigation to program preview failed:', error);
-      }
-    }
-  };
-
-  const handlePreviewSubroutineProgramById = (instructionId: string) => {
-    if (!program) return;
-
-    // Recursively find the instruction by ID
-    const findInstruction = (instructions: Instruction[]): Instruction | null => {
-      for (const instr of instructions) {
-        if (instr.id === instructionId) return instr;
-        if (instr.type === 'repetition') {
-          const found = findInstruction(instr.instructions);
-          if (found) return found;
-        }
-      }
-      return null;
-    };
-
-    const instruction = findInstruction(program.instructions);
-    if (instruction?.type === 'subroutine' && instruction.programId) {
-      try {
-        router.push(`/program-detail?id=${instruction.programId}`);
+        // Navigate using program name instead of ID
+        router.push(`/program-detail?name=${encodeURIComponent(statement.programReference)}`);
       } catch (error) {
         console.warn('Navigation to program preview failed:', error);
       }
@@ -305,10 +282,8 @@ export function ProgramDetailContent({
         >
           {/* Program Header */}
           <ProgramHeader
-            programName={program.name}
-            programId={program.id}
-            instructionCount={program.instructions.length}
-            lastModified={getRelativeTime(program.lastModified)}
+            programName={source.name}
+            statementCount={source.statements.length} // Changed from instructionCount
             onNameChange={handleNameChange}
             onMenuPress={handleMenuPress}
             autoFocusName={false}
@@ -316,48 +291,46 @@ export function ProgramDetailContent({
           />
 
           {/* Compilation Errors */}
-          {compiledProgram && !compiledProgram.isValid && compiledProgram.errors && (
+          {compiledProgram && compiledProgram.type === 'faulty' && (
             <CompilationErrorsView errors={compiledProgram.errors} />
           )}
 
-          {/* Instruction List */}
+          {/* Statement List (renamed from Instruction List) */}
           <InstructionList
-            instructions={program.instructions}
-            onAddInstruction={handleAddInstruction}
+            statements={source.statements}
+            onAddStatement={handleAddStatement}
             onAddMove={handleAddMove}
-            onUpdateInstruction={handleUpdateInstruction}
-            onDeleteInstruction={handleDeleteInstruction}
-            onMoveInstruction={handleMoveInstruction}
-            onInstructionOptions={handleInstructionOptions}
-            expandedInstructionId={expandedInstructionId}
+            onUpdateStatement={handleUpdateStatement}
+            onDeleteStatement={handleDeleteStatement}
+            onMoveStatement={handleMoveStatement}
+            onStatementOptions={handleStatementOptions}
+            expandedStatementIndex={expandedStatementIndex}
             onToggleExpand={handleToggleExpand}
             showDeleteConfirmation={showDeleteConfirmation}
-            errors={compiledProgram?.errors}
+            errors={compiledProgram?.type === 'faulty' ? compiledProgram.errors : undefined}
             onSelectSubroutineProgram={handleSelectSubroutineProgram}
-            onSelectSubroutineProgramById={handleSelectSubroutineProgramById}
             onPreviewSubroutineProgram={handlePreviewSubroutineProgram}
-            onPreviewSubroutineProgramById={handlePreviewSubroutineProgramById}
           />
         </ScrollView>
 
-        {/* Instruction Type Picker Modal */}
+        {/* Statement Type Picker Modal (renamed from Instruction) */}
         <InstructionTypePicker
-          visible={showInstructionPicker}
-          onClose={closeInstructionPicker}
-          onSelectType={handleSelectInstructionType}
+          visible={showStatementPicker}
+          onClose={closeStatementPicker}
+          onSelectType={handleSelectStatementType}
         />
 
-        {/* Instruction Options Menu Modal */}
+        {/* Statement Options Menu Modal (renamed from Instruction) */}
         <InstructionOptionsMenu
           visible={showOptionsMenu}
           onClose={() => setShowOptionsMenu(false)}
-          onAddBefore={handleAddInstructionBefore}
-          onAddAfter={handleAddInstructionAfter}
-          onMoveUp={handleMoveInstructionUp}
-          onMoveDown={handleMoveInstructionDown}
+          onAddBefore={handleAddStatementBefore}
+          onAddAfter={handleAddStatementAfter}
+          onMoveUp={handleMoveStatementUp}
+          onMoveDown={handleMoveStatementDown}
           onDelete={handleDeleteFromMenu}
-          canMoveUp={selectedInstructionIndex > 0}
-          canMoveDown={program ? selectedInstructionIndex < program.instructions.length - 1 : false}
+          canMoveUp={selectedStatementIndex > 0}
+          canMoveDown={source ? selectedStatementIndex < source.statements.length - 1 : false}
         />
 
         {/* Program Header Options Menu Modal */}
@@ -374,11 +347,11 @@ export function ProgramDetailContent({
           onClose={closeProgramPicker}
           onSelectProgram={handleProgramSelected}
           availablePrograms={availablePrograms}
-          selectedProgramId={
-            programPickerInstructionIndex >= 0 && program
+          selectedProgramName={
+            programPickerStatementIndex >= 0 && source
               ? (() => {
-                  const instr = program.instructions[programPickerInstructionIndex];
-                  return instr?.type === 'subroutine' ? instr.programId : undefined;
+                  const stmt = source.statements[programPickerStatementIndex];
+                  return stmt?.type === 'subroutine' ? stmt.programReference : undefined;
                 })()
               : undefined
           }
