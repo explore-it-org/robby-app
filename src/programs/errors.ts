@@ -1,23 +1,49 @@
-export type ProgramError = ComplexityError | MissingReferenceError;
+/**
+ * Program Error Type Definitions
+ *
+ * Represents different types of errors that can occur during program compilation.
+ */
 
-// The program exceeds the maximum allowed instruction count (maybe because of subroutine calls and repetitions)
+/**
+ * Complexity error - program exceeds the maximum allowed instruction count
+ * (may be caused by subroutine calls and repetitions)
+ */
 export interface ComplexityError {
   type: 'complexity';
-  statementIndex: number;
   maxInstructions: number;
-  actualInstructions: number | null;
 }
 
-// The referred program does not exist
+/**
+ * Missing reference error - the referred program does not exist
+ */
 export interface MissingReferenceError {
   type: 'missing-reference';
   statementIndex: number;
   programReference: string;
 }
 
-// The referred program exists but does not compile
+/**
+ * Faulty reference error - the referred program exists but does not compile
+ */
 export interface FaultyReferenceError {
   type: 'faulty-reference';
   statementIndex: number;
   programReference: string;
 }
+
+/** Cyclic reference error - the referred program creates a circular reference
+ */
+export interface CyclicReferenceError {
+  type: 'cyclic-reference';
+  statementIndex: number;
+  programReference: string;
+}
+
+/**
+ * Union type for all program error types
+ */
+export type ProgramError =
+  | ComplexityError
+  | MissingReferenceError
+  | FaultyReferenceError
+  | CyclicReferenceError;
