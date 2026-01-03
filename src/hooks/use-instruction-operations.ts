@@ -1,133 +1,95 @@
 /**
- * Custom hook for managing instruction CRUD operations
+ * Custom hook for managing statement CRUD operations (NEW FORMAT)
  * Extracted from program-detail-content.tsx to reduce complexity
+ * 
+ * MIGRATED to work with flat Statement arrays (no nesting, no IDs)
  */
 
-import { Instruction, SubroutineInstruction } from '@/types/instruction';
-import { Program } from '@/types/program';
+import { Statement, MoveStatement, SubroutineStatement } from '@/programs/statements';
+import { ProgramSource } from '@/programs/source';
 import { ProgramEditor } from '@/hooks/use-program';
 import { useState, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert } from 'react-native';
 
-interface UseInstructionOperationsProps {
-  program: Program | null;
+interface UseStatementOperationsProps {
+  source: ProgramSource | null;
   editor: ProgramEditor;
 }
 
 /**
- * Helper function to recursively update a nested instruction by ID
+ * Hook for managing statement operations in the new flat format
  */
-function updateInstructionById(
-  instructions: Instruction[],
-  targetId: string,
-  updater: (instruction: Instruction) => Instruction
-): Instruction[] {
-  return instructions.map((instruction) => {
-    if (instruction.id === targetId) {
-      return updater(instruction);
-    }
-    if (instruction.type === 'repetition') {
-      return {
-        ...instruction,
-        instructions: updateInstructionById(instruction.instructions, targetId, updater),
-      };
-    }
-    return instruction;
-  });
-}
-
-export function useInstructionOperations({ program, editor }: UseInstructionOperationsProps) {
+export function useStatementOperations({ source, editor }: UseStatementOperationsProps) {
   const { t } = useTranslation();
 
-  const [showInstructionPicker, setShowInstructionPicker] = useState(false);
+  const [showStatementPicker, setShowStatementPicker] = useState(false);
   const insertPositionRef = useRef(0);
-  const [expandedInstructionId, setExpandedInstructionId] = useState<string | null>(null);
+  const [expandedStatementIndex, setExpandedStatementIndex] = useState<number | null>(null);
   const [showProgramPicker, setShowProgramPicker] = useState(false);
-  const [programPickerInstructionIndex, setProgramPickerInstructionIndex] = useState<number>(-1);
-  const [programPickerInstructionId, setProgramPickerInstructionId] = useState<string | null>(null);
+  const [programPickerStatementIndex, setProgramPickerStatementIndex] = useState<number>(-1);
 
   // Track pending subroutine creation (waiting for program selection)
   const [pendingSubroutine, setPendingSubroutine] = useState<{
-    id: string;
     position: number;
   } | null>(null);
 
-  const handleAddInstruction = useCallback((position: number) => {
+  const handleAddStatement = useCallback((position: number) => {
     insertPositionRef.current = position;
-    setShowInstructionPicker(true);
+    setShowStatementPicker(true);
   }, []);
 
   const handleAddMove = useCallback(
     (position: number) => {
-      if (!program) return;
+      if (!source) return;
 
-      const newId = `${program.id}-${Date.now()}`;
-      const newInstruction: Instruction = {
-        id: newId,
+      const newStatement: MoveStatement = {
         type: 'move',
         leftMotorSpeed: 50,
         rightMotorSpeed: 50,
+        repetitions: 1, // Fixed at 1 for initial migration
       };
 
-      editor.addInstruction(newInstruction, position);
-      setExpandedInstructionId(newId); // Auto-expand the new instruction
+      editor.addStatement(newStatement, position);
+      setExpandedStatementIndex(position); // Auto-expand the new statement
     },
-    [program, editor]
+    [source, editor]
   );
 
-  const handleSelectInstructionType = useCallback(
-    (type: 'move' | 'comment' | 'subroutine' | 'repetition') => {
-      if (!program) return;
+  const handleSelectStatementType = useCallback(
+    (type: 'move' | 'subroutine') => {
+  const handleSelectStatementType = useCallback(
+    (type: 'move' | 'subroutine') => {
+      if (!source) return;
 
       const position = insertPositionRef.current;
-      const newId = `${program.id}-${Date.now()}`;
 
       // For subroutine, show program picker first
       if (type === 'subroutine') {
-        setPendingSubroutine({ id: newId, position });
-        setProgramPickerInstructionIndex(-1); // -1 indicates new instruction
+        setPendingSubroutine({ position });
+        setProgramPickerStatementIndex(-1); // -1 indicates new statement
         setShowProgramPicker(true);
         return;
       }
 
-      let newInstruction: Instruction;
-
-      switch (type) {
-        case 'move':
-          newInstruction = {
-            id: newId,
-            type: 'move',
-            leftMotorSpeed: 50,
-            rightMotorSpeed: 50,
-          };
-          break;
-        case 'comment':
-          newInstruction = {
-            id: newId,
-            type: 'comment',
-            text: '',
-          };
-          break;
-        case 'repetition':
-          newInstruction = {
-            id: newId,
-            type: 'repetition',
-            count: 2,
-            instructions: [],
-          };
-          break;
+      // For move, create statement directly
+      if (type === 'move') {
+        const newStatement: MoveStatement = {
+          type: 'move',
+          leftMotorSpeed: 50,
+          rightMotorSpeed: 50,
+          repetitions: 1, // Fixed at 1 for initial migration
+        };
+        editor.addStatement(newStatement, position);
+        setExpandedStatementIndex(position); // Auto-expand the new statement
       }
-
-      editor.addInstruction(newInstruction, position);
-      setExpandedInstructionId(newId); // Auto-expand the new instruction
     },
-    [program, editor]
+    [source, editor]
   );
 
-  const handleUpdateInstruction = useCallback(
-    (index: number, updated: Instruction) => {
-      editor.updateInstruction(index, updated);
+  const handleUpdateStatement = useCallback(
+    (index: number, updated: Statement) => {
+      editor.updateStatement(index, updated);
     },
     [editor]
   );
@@ -146,128 +108,93 @@ export function useInstructionOperations({ program, editor }: UseInstructionOper
     [t]
   );
 
-  const handleDeleteInstruction = useCallback(
+  const handleDeleteStatement = useCallback(
     (index: number) => {
       showDeleteConfirmation(() => {
-        editor.deleteInstruction(index);
+        editor.deleteStatement(index);
       });
     },
     [showDeleteConfirmation, editor]
   );
 
-  const handleMoveInstruction = useCallback(
+  const handleMoveStatement = useCallback(
     (fromIndex: number, toIndex: number) => {
       if (fromIndex === toIndex) return;
 
       try {
-        editor.moveInstruction(fromIndex, toIndex);
+        editor.moveStatement(fromIndex, toIndex);
       } catch (err) {
-        console.warn('Failed to move instruction:', err);
+        console.warn('Failed to move statement:', err);
       }
     },
     [editor]
   );
 
-  const handleToggleExpand = useCallback((instructionId: string) => {
-    setExpandedInstructionId((prev) => (prev === instructionId ? null : instructionId));
+  const handleToggleExpand = useCallback((statementIndex: number) => {
+    setExpandedStatementIndex((prev) => (prev === statementIndex ? null : statementIndex));
   }, []);
 
   const handleSelectSubroutineProgram = useCallback((index: number) => {
-    setProgramPickerInstructionIndex(index);
-    setProgramPickerInstructionId(null); // Clear ID when using index
-    setShowProgramPicker(true);
-  }, []);
-
-  const handleSelectSubroutineProgramById = useCallback((instructionId: string) => {
-    setProgramPickerInstructionId(instructionId);
-    setProgramPickerInstructionIndex(-1); // Clear index when using ID
+    setProgramPickerStatementIndex(index);
     setShowProgramPicker(true);
   }, []);
 
   const handleProgramSelected = useCallback(
-    (selectedProgram: Program) => {
-      // Case 1: Creating a new subroutine instruction
+    (selectedProgramName: string) => {
+      // Case 1: Creating a new subroutine statement
       if (pendingSubroutine) {
-        const newInstruction: SubroutineInstruction = {
-          id: pendingSubroutine.id,
+        const newStatement: SubroutineStatement = {
           type: 'subroutine',
-          programId: selectedProgram.id,
-          programName: selectedProgram.name,
+          programReference: selectedProgramName, // Name-based reference
+          repetitions: 1, // Fixed at 1 for initial migration
         };
-        editor.addInstruction(newInstruction, pendingSubroutine.position);
-        setExpandedInstructionId(pendingSubroutine.id);
+        editor.addStatement(newStatement, pendingSubroutine.position);
+        setExpandedStatementIndex(pendingSubroutine.position);
         setPendingSubroutine(null);
         setShowProgramPicker(false);
         return;
       }
 
-      // Case 2: Updating by ID (nested instruction)
-      if (programPickerInstructionId && program) {
-        const updatedInstructions = updateInstructionById(
-          program.instructions,
-          programPickerInstructionId,
-          (instruction) => {
-            if (instruction.type === 'subroutine') {
-              return {
-                ...instruction,
-                programId: selectedProgram.id,
-                programName: selectedProgram.name,
-              };
-            }
-            return instruction;
-          }
-        );
-        // Update the entire program with the modified instructions
-        for (let i = 0; i < updatedInstructions.length; i++) {
-          editor.updateInstruction(i, updatedInstructions[i]);
-        }
-        setShowProgramPicker(false);
-        setProgramPickerInstructionId(null);
-        return;
-      }
-
-      // Case 3: Updating by index (top-level instruction)
-      if (programPickerInstructionIndex >= 0 && program) {
-        const instruction = program.instructions[programPickerInstructionIndex];
-        if (instruction?.type === 'subroutine') {
-          const updatedInstruction: SubroutineInstruction = {
-            ...instruction,
-            programId: selectedProgram.id,
-            programName: selectedProgram.name,
+      // Case 2: Updating an existing statement by index
+      if (programPickerStatementIndex >= 0 && source) {
+        const statement = source.statements[programPickerStatementIndex];
+        if (statement?.type === 'subroutine') {
+          const updatedStatement: SubroutineStatement = {
+            ...statement,
+            programReference: selectedProgramName, // Update to new name
           };
-          editor.updateInstruction(programPickerInstructionIndex, updatedInstruction);
+          editor.updateStatement(programPickerStatementIndex, updatedStatement);
           setShowProgramPicker(false);
         }
       }
     },
-    [pendingSubroutine, programPickerInstructionId, programPickerInstructionIndex, program, editor]
+    [pendingSubroutine, programPickerStatementIndex, source, editor]
   );
 
   return {
     // State (read-only)
-    showInstructionPicker,
-    expandedInstructionId,
+    showStatementPicker,
+    expandedStatementIndex,
     showProgramPicker,
-    programPickerInstructionIndex,
+    programPickerStatementIndex,
 
     // Handlers for internal state management
-    closeInstructionPicker: () => setShowInstructionPicker(false),
+    closeStatementPicker: () => setShowStatementPicker(false),
     closeProgramPicker: () => {
       setShowProgramPicker(false);
       setPendingSubroutine(null);
     },
 
     // Main handlers
-    handleAddInstruction,
+    handleAddStatement,
     handleAddMove,
-    handleSelectInstructionType,
-    handleUpdateInstruction,
-    handleDeleteInstruction,
+    handleSelectStatementType,
+    handleUpdateStatement,
+    handleDeleteStatement,
     showDeleteConfirmation,
-    handleMoveInstruction,
+    handleMoveStatement,
     handleToggleExpand,
     handleSelectSubroutineProgram,
-    handleSelectSubroutineProgramById,
     handleProgramSelected,
   };
 }
