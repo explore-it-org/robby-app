@@ -2,54 +2,65 @@
  * Program References Service
  *
  * Utilities for finding and managing program references (subroutines).
+ * 
+ * MIGRATED to work with new ProgramSource format and name-based references.
  */
 
-import { Instruction } from '@/types/instruction';
-import { Program } from '@/types/program';
+import { ProgramSource } from '@/programs/source';
+import { Statement } from '@/programs/statements';
+import { loadProgramSource } from '@/programs/source';
+import { loadAllPrograms, Program } from '@/services/program-storage';
 
 /**
- * Extracts all referenced program IDs from instructions recursively
+ * Extracts all referenced program names from statements (flat array, no recursion needed)
  */
-export function extractReferencedProgramIds(instructions: Instruction[]): Set<string> {
-  const ids = new Set<string>();
+export function extractReferencedProgramNames(statements: Statement[]): Set<string> {
+  const names = new Set<string>();
 
-  function processInstructions(instrs: Instruction[]): void {
-    for (const instruction of instrs) {
-      if (instruction.type === 'subroutine' && instruction.programId) {
-        ids.add(instruction.programId);
-      } else if (instruction.type === 'repetition') {
-        processInstructions(instruction.instructions);
-      }
+  for (const statement of statements) {
+    if (statement.type === 'subroutine' && statement.programReference) {
+      names.add(statement.programReference);
     }
   }
 
-  processInstructions(instructions);
-  return ids;
+  return names;
 }
 
 /**
- * Finds all programs that reference the given program ID
+ * Finds all programs that reference the given program name
  *
- * @param programId - The ID of the program to find references to
- * @param allPrograms - All available programs to search through
- * @returns Array of programs that reference the given program
+ * @param programName - The name of the program to find references to
+ * @returns Array of program metadata that reference the given program
  */
-export function findProgramsReferencingProgram(
-  programId: string,
-  allPrograms: Program[]
-): Program[] {
+export async function findProgramsReferencingProgram(
+  programName: string
+): Promise<Program[]> {
   const referencingPrograms: Program[] = [];
 
-  for (const program of allPrograms) {
-    // Skip the program itself
-    if (program.id === programId) {
-      continue;
-    }
+  try {
+    // Load all program metadata
+    const allPrograms = await loadAllPrograms();
 
-    const referencedIds = extractReferencedProgramIds(program.instructions);
-    if (referencedIds.has(programId)) {
-      referencingPrograms.push(program);
+    // Check each program's statements for references
+    for (const program of allPrograms) {
+      // Skip the program itself
+      if (program.name === programName) {
+        continue;
+      }
+
+      // Load the full program source
+      const source = await loadProgramSource(program.name);
+      if (!source) {
+        continue;
+      }
+
+      const referencedNames = extractReferencedProgramNames(source.statements);
+      if (referencedNames.has(programName)) {
+        referencingPrograms.push(program);
+      }
     }
+  } catch (error) {
+    console.error('Error finding program references:', error);
   }
 
   return referencingPrograms;
