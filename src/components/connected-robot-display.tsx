@@ -42,28 +42,19 @@ export function ConnectedRobotDisplay({
       <View style={styles.actionRow}>
         <Pressable
           onPress={onUploadAndRun}
-          style={({ pressed }) => [
-            styles.actionButton,
-            pressed && styles.actionButtonPressed,
-          ]}
+          style={({ pressed }) => [styles.actionButton, pressed && styles.actionButtonPressed]}
         >
           <PlayCodeIcon size={24} color="#FFFFFF" />
         </Pressable>
         <Pressable
           onPress={onStop}
-          style={({ pressed }) => [
-            styles.actionButton,
-            pressed && styles.actionButtonPressed,
-          ]}
+          style={({ pressed }) => [styles.actionButton, pressed && styles.actionButtonPressed]}
         >
           <StopIcon size={24} color="#FFFFFF" />
         </Pressable>
         <Pressable
           onPress={onUpload}
-          style={({ pressed }) => [
-            styles.actionButton,
-            pressed && styles.actionButtonPressed,
-          ]}
+          style={({ pressed }) => [styles.actionButton, pressed && styles.actionButtonPressed]}
         >
           <UploadIcon size={24} color="#FFFFFF" />
         </Pressable>

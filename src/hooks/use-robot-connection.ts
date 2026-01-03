@@ -25,8 +25,8 @@ interface UseRobotConnectionReturn {
  * Hook to access and manage robot connection state
  */
 export function useRobotConnection(): UseRobotConnectionReturn {
-  const [connectedRobot, setConnectedRobotState] = useState<StoredRobot | null>(
-    () => getConnectedRobot()
+  const [connectedRobot, setConnectedRobotState] = useState<StoredRobot | null>(() =>
+    getConnectedRobot()
   );
 
   useEffect(() => {

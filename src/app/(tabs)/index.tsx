@@ -62,10 +62,7 @@ export default function RobotScreen() {
           // Status change callback
           setStatus(newStatus);
           if (error) {
-            Alert.alert(
-              t('alerts.error.title'),
-              error.message || 'Scanning error'
-            );
+            Alert.alert(t('alerts.error.title'), error.message || 'Scanning error');
           }
         }
       );
@@ -202,9 +199,7 @@ export default function RobotScreen() {
           <View style={styles.scanningContainer}>
             <View style={styles.scanningHeader}>
               <ActivityIndicator size="small" color={COLORS.PRIMARY} />
-              <ThemedText style={styles.scanningText}>
-                {t('robot.overview.scanning')}
-              </ThemedText>
+              <ThemedText style={styles.scanningText}>{t('robot.overview.scanning')}</ThemedText>
             </View>
 
             {discoveredRobots.length > 0 ? (
@@ -237,16 +232,13 @@ export default function RobotScreen() {
       {/* Action Button */}
       <View style={styles.buttonContainer}>
         <Pressable
-          style={({ pressed }) => [
-            styles.scanButton,
-            pressed && styles.scanButtonPressed,
-          ]}
-          onPress={isScanning ? handleStopScan : (isConnected ? handleScanWhileConnected : handleStartScan)}
+          style={({ pressed }) => [styles.scanButton, pressed && styles.scanButtonPressed]}
+          onPress={
+            isScanning ? handleStopScan : isConnected ? handleScanWhileConnected : handleStartScan
+          }
         >
           <ThemedText style={styles.scanButtonText}>
-            {isScanning
-              ? t('robot.overview.cancelScanning')
-              : t('robot.overview.scanForRobots')}
+            {isScanning ? t('robot.overview.cancelScanning') : t('robot.overview.scanForRobots')}
           </ThemedText>
         </Pressable>
       </View>

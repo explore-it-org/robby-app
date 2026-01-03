@@ -30,41 +30,17 @@ export function MotorStrengthIndicator({
       {/* Left bar - grows from center to left */}
       <View style={styles.leftContainer}>
         {/* Filled portion */}
-        <View
-          style={[
-            styles.bar,
-            styles.leftBarFilled,
-            { width: `${leftPercent}%` },
-          ]}
-        />
+        <View style={[styles.bar, styles.leftBarFilled, { width: `${leftPercent}%` }]} />
         {/* Outlined portion */}
-        <View
-          style={[
-            styles.bar,
-            styles.leftBarOutline,
-            { width: `${100 - leftPercent}%` },
-          ]}
-        />
+        <View style={[styles.bar, styles.leftBarOutline, { width: `${100 - leftPercent}%` }]} />
       </View>
 
       {/* Right bar - grows from center to right */}
       <View style={styles.rightContainer}>
         {/* Filled portion */}
-        <View
-          style={[
-            styles.bar,
-            styles.rightBarFilled,
-            { width: `${rightPercent}%` },
-          ]}
-        />
+        <View style={[styles.bar, styles.rightBarFilled, { width: `${rightPercent}%` }]} />
         {/* Outlined portion */}
-        <View
-          style={[
-            styles.bar,
-            styles.rightBarOutline,
-            { width: `${100 - rightPercent}%` },
-          ]}
-        />
+        <View style={[styles.bar, styles.rightBarOutline, { width: `${100 - rightPercent}%` }]} />
       </View>
 
       {/* Labels - rendered last so they appear on top */}

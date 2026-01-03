@@ -22,11 +22,7 @@ export interface EmulatorConfig {
  * Default emulator configuration with three robots (one per protocol version)
  */
 const DEFAULT_EMULATOR_CONFIG: EmulatorConfig = {
-  robots: [
-    { firmwareVersion: 10 },
-    { firmwareVersion: 9 },
-    { firmwareVersion: 3 },
-  ],
+  robots: [{ firmwareVersion: 10 }, { firmwareVersion: 9 }, { firmwareVersion: 3 }],
   responseDelay: 100,
 };
 
@@ -234,7 +230,8 @@ export class EmulatorHardwareLayer implements IHardwareLayer {
     this.config.robots.forEach((robotConfig, index) => {
       const id = `emulated-robot-${index}`;
       // Generate a name based on firmware version for internal use
-      const protocolVersion = robotConfig.firmwareVersion >= 10 ? 'V10' : robotConfig.firmwareVersion >= 6 ? 'V6' : 'V3';
+      const protocolVersion =
+        robotConfig.firmwareVersion >= 10 ? 'V10' : robotConfig.firmwareVersion >= 6 ? 'V6' : 'V3';
       const name = `EXPLORE-IT EMU:${protocolVersion}`;
       const robot = new EmulatedRobot(robotConfig.firmwareVersion, name);
       this.emulatedRobots.set(id, robot);

@@ -30,6 +30,8 @@ Make sure to add the corresponding keys to all language files before considering
 
 **Conversational Tone**: The app uses a friendly, encouraging tone when communicating with users.
 
+Use as little text as possible. Make sure the UI is intuitive and self-explanatory.
+
 ### Language-Specific Guidelines
 
 - **German (de)**: Use informal pronouns ("du", "dein", "dich") instead of formal ("Sie", "Ihr", "Ihnen")
@@ -58,3 +60,7 @@ Make sure to add the corresponding keys to all language files before considering
 3. **Be direct**: Get to the point quickly
 4. **Use active voice**: "Your program does X" not "X is done by your program"
 5. **Avoid jargon**: Explain technical concepts in simple terms
+
+## Bluetooth Protocol
+
+The Bluetooth Protocol documentation can be found in the [Bluetooth Protocol Specification](docs/BLUETOOTH_PROTOCOL.md) file.

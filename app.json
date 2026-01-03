@@ -51,10 +51,7 @@
         "react-native-ble-plx",
         {
           "isBackgroundEnabled": true,
-          "modes": [
-            "peripheral",
-            "central"
-          ],
+          "modes": ["peripheral", "central"],
           "bluetoothAlwaysPermission": "This app uses Bluetooth to connect to EXPLORE-IT robots."
         }
       ]

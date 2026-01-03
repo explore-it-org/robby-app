@@ -14,30 +14,21 @@ interface NoRobotConnectedDisplayProps {
   onConnect: () => void;
 }
 
-export function NoRobotConnectedDisplay({
-  onConnect,
-}: NoRobotConnectedDisplayProps) {
+export function NoRobotConnectedDisplay({ onConnect }: NoRobotConnectedDisplayProps) {
   const { t } = useTranslation();
 
   return (
     <View style={styles.card}>
       {/* Message */}
-      <ThemedText style={styles.message}>
-        {t('controlBar.noRobotConnected')}
-      </ThemedText>
+      <ThemedText style={styles.message}>{t('controlBar.noRobotConnected')}</ThemedText>
 
       {/* Connect Button */}
       <Pressable
         onPress={onConnect}
-        style={({ pressed }) => [
-          styles.connectButton,
-          pressed && styles.connectButtonPressed,
-        ]}
+        style={({ pressed }) => [styles.connectButton, pressed && styles.connectButtonPressed]}
       >
         <IconSymbol name="bolt.fill" size={16} color="#FFFFFF" />
-        <ThemedText style={styles.connectButtonText}>
-          {t('controlBar.connect')}
-        </ThemedText>
+        <ThemedText style={styles.connectButtonText}>{t('controlBar.connect')}</ThemedText>
       </Pressable>
     </View>
   );

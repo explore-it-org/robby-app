@@ -78,7 +78,9 @@ export function RobotMenuModal({
                 onPress={() => handleAction(onDelete)}
               >
                 <Text style={styles.optionIcon}>🗑️</Text>
-                <Text style={[styles.optionText, styles.deleteText]}>{t('robotOptionsMenu.delete')}</Text>
+                <Text style={[styles.optionText, styles.deleteText]}>
+                  {t('robotOptionsMenu.delete')}
+                </Text>
               </Pressable>
             </View>
 

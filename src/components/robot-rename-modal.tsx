@@ -17,12 +17,7 @@ interface RobotRenameModalProps {
   onRename: (newName: string) => void;
 }
 
-export function RobotRenameModal({
-  visible,
-  robotName,
-  onClose,
-  onRename,
-}: RobotRenameModalProps) {
+export function RobotRenameModal({ visible, robotName, onClose, onRename }: RobotRenameModalProps) {
   const { t } = useTranslation();
   const [newName, setNewName] = useState(robotName);
 

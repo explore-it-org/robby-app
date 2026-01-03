@@ -23,7 +23,7 @@ export function uint8ArrayToLatin1(data: Uint8Array): string {
 export function latin1ToUint8Array(str: string): Uint8Array {
   const arr = new Uint8Array(str.length);
   for (let i = 0; i < str.length; i++) {
-    arr[i] = str.charCodeAt(i) & 0xFF;
+    arr[i] = str.charCodeAt(i) & 0xff;
   }
   return arr;
 }

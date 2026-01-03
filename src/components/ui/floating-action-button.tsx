@@ -20,7 +20,13 @@ interface FloatingActionButtonProps {
   backgroundColor?: string;
 }
 
-export function FloatingActionButton({ onPress, icon = 'plus', customIcon, position = 'right', backgroundColor }: FloatingActionButtonProps) {
+export function FloatingActionButton({
+  onPress,
+  icon = 'plus',
+  customIcon,
+  position = 'right',
+  backgroundColor,
+}: FloatingActionButtonProps) {
   const primaryColor = useThemeColor({}, 'primary');
   const fabBackgroundColor = backgroundColor || primaryColor;
 

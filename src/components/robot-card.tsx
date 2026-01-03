@@ -50,7 +50,7 @@ export function RobotCard({
       <View style={styles.header}>
         <View style={styles.robotInfoContainer}>
           <View style={styles.robotIconContainer}>
-            <WheelIcon size={48} color={isConnected ? "#FFFFFF" : "#9370DB"} />
+            <WheelIcon size={48} color={isConnected ? '#FFFFFF' : '#9370DB'} />
           </View>
           <View style={styles.robotInfo}>
             <ThemedText style={[styles.robotName, isConnected && styles.whiteText]}>
@@ -63,12 +63,13 @@ export function RobotCard({
         </View>
         <Pressable
           onPress={onMenuPress}
-          style={({ pressed }) => [
-            styles.menuButton,
-            pressed && styles.menuButtonPressed,
-          ]}
+          style={({ pressed }) => [styles.menuButton, pressed && styles.menuButtonPressed]}
         >
-          <IconSymbol name="ellipsis.circle" size={24} color={isConnected ? "#FFFFFF" : "#9370DB"} />
+          <IconSymbol
+            name="ellipsis.circle"
+            size={24}
+            color={isConnected ? '#FFFFFF' : '#9370DB'}
+          />
         </Pressable>
       </View>
 
@@ -78,37 +79,25 @@ export function RobotCard({
           <>
             <Pressable
               onPress={onPlay}
-              style={({ pressed }) => [
-                styles.actionButton,
-                pressed && styles.actionButtonPressed,
-              ]}
+              style={({ pressed }) => [styles.actionButton, pressed && styles.actionButtonPressed]}
             >
               <PlayIcon size={24} color="#FFFFFF" />
             </Pressable>
             <Pressable
               onPress={onStop}
-              style={({ pressed }) => [
-                styles.actionButton,
-                pressed && styles.actionButtonPressed,
-              ]}
+              style={({ pressed }) => [styles.actionButton, pressed && styles.actionButtonPressed]}
             >
               <StopIcon size={24} color="#FFFFFF" />
             </Pressable>
             <Pressable
               onPress={onRecord}
-              style={({ pressed }) => [
-                styles.actionButton,
-                pressed && styles.actionButtonPressed,
-              ]}
+              style={({ pressed }) => [styles.actionButton, pressed && styles.actionButtonPressed]}
             >
               <RecordIcon size={24} color="#FFFFFF" />
             </Pressable>
             <Pressable
               onPress={onDownload}
-              style={({ pressed }) => [
-                styles.actionButton,
-                pressed && styles.actionButtonPressed,
-              ]}
+              style={({ pressed }) => [styles.actionButton, pressed && styles.actionButtonPressed]}
             >
               <DownloadIcon size={24} color="#FFFFFF" />
             </Pressable>
@@ -116,10 +105,7 @@ export function RobotCard({
         ) : (
           <Pressable
             onPress={onConnect}
-            style={({ pressed }) => [
-              styles.connectButton,
-              pressed && styles.connectButtonPressed,
-            ]}
+            style={({ pressed }) => [styles.connectButton, pressed && styles.connectButtonPressed]}
           >
             <IconSymbol name="bolt.fill" size={18} color="#FFFFFF" />
             <ThemedText style={styles.connectButtonText}>{t('controlBar.connect')}</ThemedText>

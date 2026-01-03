@@ -18,12 +18,7 @@ interface RobotOptionsMenuProps {
   onDelete: () => void;
 }
 
-export function RobotOptionsMenu({
-  visible,
-  onClose,
-  onEdit,
-  onDelete,
-}: RobotOptionsMenuProps) {
+export function RobotOptionsMenu({ visible, onClose, onEdit, onDelete }: RobotOptionsMenuProps) {
   const { t } = useTranslation();
 
   const handleAction = (action: () => void) => {

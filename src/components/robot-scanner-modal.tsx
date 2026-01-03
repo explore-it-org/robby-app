@@ -28,7 +28,12 @@ interface RobotScannerModalProps {
   knownRobotIds?: string[];
 }
 
-export function RobotScannerModal({ visible, onClose, onSelectRobot, knownRobotIds = [] }: RobotScannerModalProps) {
+export function RobotScannerModal({
+  visible,
+  onClose,
+  onSelectRobot,
+  knownRobotIds = [],
+}: RobotScannerModalProps) {
   const { t } = useTranslation();
   const { getRobotManager } = useRobotManager();
   const [discoveryStatus, setDiscoveryStatus] = useState<DiscoveryStatus>('idle');

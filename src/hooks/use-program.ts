@@ -7,7 +7,10 @@
 
 import { compileProgram } from '@/services/program-compilation';
 import { loadProgram, saveProgram } from '@/services/program-storage';
-import { syncSubroutineNames, updateSubroutineReferences } from '@/services/subroutine-reference-updater';
+import {
+  syncSubroutineNames,
+  updateSubroutineReferences,
+} from '@/services/subroutine-reference-updater';
 import { CompiledProgram } from '@/types/compiled-program';
 import { Instruction } from '@/types/instruction';
 import { Program } from '@/types/program';
