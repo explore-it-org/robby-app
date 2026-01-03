@@ -1,0 +1,310 @@
+/**
+ * Program Compiler
+ *
+ * Compiles high-level ProgramSource (with Statements) into low-level Program (with Instructions).
+ *
+ * ## Compilation Process:
+ *
+ * 1. **Statement Expansion**: Each Statement is compiled into one or more Instructions
+ *    - MoveStatement with repetitions=N → N identical MoveInstructions
+ *    - SubroutineStatement → Recursively compile referenced program and inline its instructions
+ *
+ * 2. **Subroutine Resolution**: Subroutines are expanded inline
+ *    - Load referenced program by name
+ *    - Recursively compile it
+ *    - Insert all its instructions (repeated N times based on repetitions field)
+ *
+ * 3. **Cycle Detection**: Call stack prevents infinite recursion
+ *    - Track program names in callStack during compilation
+ *    - If a program references itself (directly or indirectly), return cyclic-reference error
+ *
+ * 4. **Complexity Limiting**: Total instruction count is capped at MAX_INSTRUCTIONS (1000)
+ *    - After expanding all statements, check total instruction count
+ *    - If exceeded, add complexity error to prevent memory/performance issues
+ *
+ * 5. **Validation**: Detect missing or faulty program references
+ *    - missing-reference: Referenced program doesn't exist
+ *    - faulty-reference: Referenced program exists but failed to compile
+ *
+ * ## Output:
+ * - **CompiledProgram**: Valid program ready for execution (instructions array)
+ * - **FaultyProgram**: Invalid program with errors array explaining what went wrong
+ */
+
+import { ProgramError } from './errors';
+import { Instruction } from './instructions';
+import { Program } from './program';
+import { loadProgramSource, ProgramSource } from './source';
+import { MoveStatement, Statement, SubroutineStatement } from './statements';
+
+/**
+ * Clamp a value between min and max (inclusive)
+ * Used for defensive programming to handle invalid input values
+ */
+function clamp(value: number, min: number, max: number): number {
+  return Math.max(min, Math.min(max, value));
+}
+
+/**
+ * Compile a program source into executable instructions
+ *
+ * Entry point for compilation. Delegates to compileInternal with initial call stack.
+ *
+ * @param source - High-level program source with statements
+ * @returns Promise resolving to either CompiledProgram (success) or FaultyProgram (errors)
+ */
+export async function compile(source: ProgramSource): Promise<Program> {
+  return await compileInternal(source, [source.name]);
+}
+
+/**
+ * Internal compilation function with call stack tracking
+ *
+ * Recursively compiles programs while tracking the call chain to detect cycles.
+ *
+ * @param source - Program source to compile
+ * @param callStack - Chain of program names in current compilation path (for cycle detection)
+ *                    Example: ["MainProgram", "SubA", "SubB"] means MainProgram → SubA → SubB
+ * @returns Compiled program (with instructions) or faulty program (with errors)
+ *
+ * ## Algorithm:
+ * 1. Initialize empty instruction list and error list
+ * 2. For each statement in source:
+ *    a. Compile the statement (may expand to multiple instructions)
+ *    b. If successful and within limits, add to instruction list
+ *    c. If complexity limit exceeded, add complexity error
+ *    d. If compilation failed, add error to error list
+ * 3. Return CompiledProgram if no errors, otherwise FaultyProgram
+ */
+async function compileInternal(source: ProgramSource, callStack: string[]): Promise<Program> {
+  const MAX_INSTRUCTIONS = 1000; // Maximum total instructions after expansion
+  let instructions: Instruction[] = [];
+  let errors: ProgramError[] = [];
+
+  // Compile each statement sequentially
+  for (let i = 0; i < source.statements.length; i++) {
+    let statement = source.statements[i];
+    let result = await compileStatement(statement, i, callStack);
+
+    if (isSuccessful(result)) {
+      // Result is an array of instructions
+      // Check if adding these instructions would exceed the limit
+      if (instructions.length + result.length > MAX_INSTRUCTIONS) {
+        errors.push({
+          type: 'complexity',
+          maxInstructions: MAX_INSTRUCTIONS,
+        });
+        // Continue processing to find other potential errors
+        // Note: This could generate multiple complexity errors if many statements exceed limit
+      } else {
+        instructions.push(...result);
+      }
+    } else {
+      // Result is an error (missing-reference, cyclic-reference, or faulty-reference)
+      errors.push(result);
+    }
+  }
+
+  // Return based on whether any errors were encountered
+  if (errors.length > 0) {
+    return {
+      type: 'faulty',
+      source,
+      errors,
+    };
+  } else {
+    return {
+      type: 'compiled',
+      source,
+      instructions,
+    };
+  }
+}
+
+/**
+ * Compile a single statement into instructions or error
+ *
+ * Dispatcher that delegates to specific compilers based on statement type.
+ *
+ * @param statement - Statement to compile
+ * @param index - Position of this statement in the source (for error reporting)
+ * @param callStack - Current program call chain (for cycle detection)
+ * @returns Array of instructions (success) or ProgramError (failure)
+ */
+async function compileStatement(
+  statement: Statement,
+  index: number,
+  callStack: string[]
+): Promise<CompilationResult> {
+  switch (statement.type) {
+    case 'move':
+      return compileMoveStatement(statement);
+    case 'subroutine':
+      return await compileSubroutineStatement(statement, index, callStack);
+    default:
+      throw new Error(`Unknown statement type: ${(statement as any).type}`);
+  }
+}
+
+/**
+ * Compile a move statement into move instructions
+ *
+ * Expands a single MoveStatement with repetitions into N identical MoveInstructions.
+ *
+ * @param statement - Move statement with motor speeds and repetitions
+ * @returns Array of identical move instructions
+ *
+ * ## Example:
+ * Input:  MoveStatement { leftMotorSpeed: 80, rightMotorSpeed: 50, repetitions: 3 }
+ * Output: [
+ *   { leftMotorSpeed: 80, rightMotorSpeed: 50 },
+ *   { leftMotorSpeed: 80, rightMotorSpeed: 50 },
+ *   { leftMotorSpeed: 80, rightMotorSpeed: 50 }
+ * ]
+ *
+ * ## Optimization:
+ * Uses Array.fill() to create array with shared object references.
+ * This is safe because compiled instructions are immutable.
+ */
+function compileMoveStatement(statement: MoveStatement): CompilationResult {
+  // Clamp motor speeds to valid range (0-100)
+  // UI validation should prevent invalid values, but clamp for defensive programming
+  const leftMotorSpeed = clamp(statement.leftMotorSpeed, 0, 100);
+  const rightMotorSpeed = clamp(statement.rightMotorSpeed, 0, 100);
+
+  // Clamp repetitions to valid range (1-100)
+  const repetitions = clamp(statement.repetitions, 1, 100);
+
+  // Create the instruction template
+  let instruction: Instruction = {
+    leftMotorSpeed,
+    rightMotorSpeed,
+  };
+
+  // Fill array with references to the same instruction object
+  // Safe because instructions are immutable after creation
+  return Array(repetitions).fill(instruction);
+}
+
+/**
+ * Compile a subroutine statement by inlining the referenced program
+ *
+ * This is the most complex compilation step. It:
+ * 1. Loads the referenced program by name
+ * 2. Recursively compiles it (expanding any nested subroutines)
+ * 3. Inlines all its instructions, repeated N times
+ *
+ * @param statement - Subroutine statement with program name and repetitions
+ * @param index - Position in source (for error reporting)
+ * @param callStack - Current call chain (for cycle detection)
+ * @returns Array of inlined instructions or error
+ *
+ * ## Example:
+ * ```
+ * Program "Main":
+ *   SubroutineStatement { programReference: "Forward", repetitions: 2 }
+ *
+ * Program "Forward":
+ *   MoveStatement { left: 100, right: 100, repetitions: 3 }
+ *
+ * Compilation result for "Main":
+ *   [
+ *     // First call to "Forward" (3 instructions)
+ *     { left: 100, right: 100 },
+ *     { left: 100, right: 100 },
+ *     { left: 100, right: 100 },
+ *     // Second call to "Forward" (3 instructions)
+ *     { left: 100, right: 100 },
+ *     { left: 100, right: 100 },
+ *     { left: 100, right: 100 }
+ *   ]
+ * ```
+ *
+ * ## Cycle Detection:
+ * Call stack tracks the chain: ["Main", "SubA", "SubB"]
+ * If "SubB" tries to reference "Main" or "SubA", a cycle is detected and error returned.
+ *
+ * ## Error Cases:
+ * - **cyclic-reference**: Infinite recursion (A → B → A)
+ * - **missing-reference**: Referenced program doesn't exist
+ * - **faulty-reference**: Referenced program exists but failed to compile
+ */
+async function compileSubroutineStatement(
+  statement: SubroutineStatement,
+  index: number,
+  callStack: string[]
+): Promise<CompilationResult> {
+  // STEP 1: Detect circular references (cycle detection)
+  // Check if this program is already in the call stack
+  // Example: If callStack = ["Main", "SubA"] and statement.programReference = "Main"
+  //          This creates cycle: Main → SubA → Main (infinite recursion)
+  if (callStack.includes(statement.programReference)) {
+    return {
+      type: 'cyclic-reference',
+      statementIndex: index,
+      programReference: statement.programReference,
+    };
+  }
+
+  // STEP 2: Load the referenced program from storage
+  // Uses name-based lookup (see source.ts for implementation)
+  let referencedProgramSource = await loadProgramSource(statement.programReference);
+  if (!referencedProgramSource) {
+    // Program with this name doesn't exist in storage
+    return {
+      type: 'missing-reference',
+      statementIndex: index,
+      programReference: statement.programReference,
+    };
+  }
+
+  // STEP 3: Recursively compile the referenced program
+  // Add this program to call stack to detect cycles in nested calls
+  // Example: callStack ["Main"] becomes ["Main", "SubA"]
+  let compiledReferencedProgram = await compileInternal(referencedProgramSource, [
+    ...callStack,
+    statement.programReference,
+  ]);
+
+  // STEP 4: Check if referenced program compiled successfully
+  if (compiledReferencedProgram.type === 'faulty') {
+    // Referenced program has compilation errors
+    // Don't inline it - report as faulty reference
+    return {
+      type: 'faulty-reference',
+      statementIndex: index,
+      programReference: statement.programReference,
+    };
+  }
+
+  // STEP 5: Inline the compiled instructions, repeated N times
+  // Clamp repetitions to valid range (1-100)
+  const repetitions = clamp(statement.repetitions, 1, 100);
+  let instructions: Instruction[] = [];
+
+  // Repeat the entire instruction sequence N times
+  for (let i = 0; i < repetitions; i++) {
+    instructions.push(...compiledReferencedProgram.instructions);
+  }
+
+  return instructions;
+}
+
+/**
+ * Result of compiling a single statement
+ *
+ * Either:
+ * - Array of Instructions (success - statement was compiled)
+ * - ProgramError (failure - validation error or reference issue)
+ */
+type CompilationResult = Instruction[] | ProgramError;
+
+/**
+ * Type guard to check if compilation result is successful
+ *
+ * @param result - Compilation result to check
+ * @returns true if result is an instruction array, false if it's an error
+ */
+function isSuccessful(result: CompilationResult): result is Instruction[] {
+  return Array.isArray(result);
+}

@@ -1,0 +1,14 @@
+# Prettier ignore file
+# Ignore build outputs and dependencies
+node_modules
+dist
+.expo
+.expo-shared
+*.log
+
+# Ignore legacy code
+docs/legacy-src
+
+# Ignore generated files
+*.d.ts
+!src/**/*.d.ts

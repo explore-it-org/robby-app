@@ -1,0 +1,267 @@
+{
+  "app": {
+    "name": "explore-it Robotik"
+  },
+  "tabs": {
+    "robot": "Roboter",
+    "programs": "Programme"
+  },
+  "robot": {
+    "title": "Roboterverwaltung",
+    "subtitle": "Verbinde dich mit deinem EXPLORE-IT Roboter über Bluetooth",
+    "discovery": {
+      "startScan": "Scan starten",
+      "stopScan": "Scan stoppen",
+      "scanning": "Suche nach Robotern...",
+      "idle": "Bereit zum Scannen",
+      "stopped": "Scan gestoppt",
+      "error": "Fehler beim Scannen",
+      "noRobots": "Noch keine Roboter gefunden",
+      "robotsFound_one": "{{count}} Roboter gefunden",
+      "robotsFound_other": "{{count}} Roboter gefunden",
+      "mode": "Erkennungsmodus:",
+      "modeMock": "Mock (Demo)",
+      "modeBle": "Bluetooth (BLE)",
+      "modeAuto": "Automatisch",
+      "bleAvailable": "BLE ist verfügbar, verwende echtes Bluetooth",
+      "bleNotAvailable": "Läuft in Expo Go - verwende Demo-Roboter",
+      "signalStrength": "Signal: {{rssi}} dBm"
+    },
+    "signalStrength": {
+      "excellent": "Hervorragendes Signal",
+      "good": "Gutes Signal",
+      "fair": "Akzeptables Signal",
+      "weak": "Schwaches Signal"
+    },
+    "selectedRobot": {
+      "noRobotSelected": "Kein Roboter ausgewählt",
+      "selectRobot": "Roboter auswählen",
+      "changeRobot": "Roboter wechseln",
+      "clearRobot": "Roboter entfernen",
+      "clearRobotHint": "Entfernt den ausgewählten Roboter",
+      "selected": "Ausgewählter Roboter"
+    },
+    "overview": {
+      "title": "Roboter",
+      "scanForRobots": "Nach Robotern suchen",
+      "cancelScanning": "Suche abbrechen",
+      "scanning": "Suche nach Robotern...",
+      "selectRobotToConnect": "Roboter zum Verbinden auswählen"
+    }
+  },
+  "robotScanner": {
+    "title": "Roboter auswählen",
+    "noRobotsFound": "Noch keine Roboter gefunden",
+    "waitingForRobots": "Halte deinen Roboter in der Nähe und schalte ihn ein"
+  },
+  "programs": {
+    "title": "Programme",
+    "noPrograms": "Keine Programme",
+    "noProgramsMessage": "Erstelle ein neues Programm, um zu beginnen",
+    "noProgramSelected": "Kein Programm ausgewählt",
+    "selectProgram": "Wähle ein Programm aus der Liste aus, um Details anzuzeigen",
+    "newProgram": "Neues Programm {{number}}",
+    "updated": "Aktualisiert",
+    "instruction_one": "{{count}} Anweisung",
+    "instruction_other": "{{count}} Anweisungen",
+    "lastModified": "Zuletzt geändert: {{time}}"
+  },
+  "programDetail": {
+    "notFound": "Programm nicht gefunden",
+    "notFoundMessage": "Das angeforderte Programm konnte nicht gefunden werden"
+  },
+  "controlBar": {
+    "debug": "🐛 Debuggen",
+    "connectRobot": "Roboter verbinden",
+    "uploadAndRun": "Hochladen & Ausführen",
+    "run": "Ausführen",
+    "upload": "Hochladen",
+    "stop": "Stopp",
+    "noRobotConnected": "Kein Roboter verbunden",
+    "connect": "Verbinden"
+  },
+  "instructionPicker": {
+    "title": "Anweisung hinzufügen",
+    "addMove": "Schritt hinzufügen",
+    "move": {
+      "title": "Bewegen",
+      "description": "Linke und rechte Motorgeschwindigkeit steuern"
+    },
+    "comment": {
+      "title": "Kommentar",
+      "description": "Notizen und Dokumentation hinzufügen",
+      "placeholder": "Füge eine Notiz zu diesem Schritt hinzu..."
+    },
+    "subroutine": {
+      "title": "Unterprogramm",
+      "description": "Ein anderes Programm aufrufen"
+    },
+    "repetition": {
+      "title": "Wiederholung",
+      "description": "Eine Sequenz von Anweisungen wiederholen",
+      "maxNesting": "Maximale Verschachtelungstiefe (3) erreicht"
+    },
+    "cancel": "Abbrechen"
+  },
+  "alerts": {
+    "debug": {
+      "title": "Debuggen",
+      "message": "Debug-Funktion kommt bald"
+    },
+    "connectRobot": {
+      "title": "Roboter verbinden",
+      "message": "Bitte verwende den Roboter-Tab, um deinen Roboter zu verbinden"
+    },
+    "uploadAndRun": {
+      "title": "Hochladen & Ausführen",
+      "message": "Programm wird hochgeladen und ausgeführt..."
+    },
+    "run": {
+      "title": "Ausführen",
+      "message": "Programm wird auf dem Roboter ausgeführt..."
+    },
+    "upload": {
+      "title": "Hochladen",
+      "message": "Programm wird auf den Roboter hochgeladen..."
+    },
+    "stop": {
+      "title": "Stopp",
+      "message": "Programmausführung wird gestoppt..."
+    },
+    "deleteProgram": {
+      "title": "Programm löschen",
+      "message": "Bist du sicher, dass du \"{{name}}\" löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "messageWithReferences": "Bist du sicher, dass du \"{{name}}\" löschen möchtest?\n\n⚠️ Warnung: Dieses Programm wird in {{count}} anderen Programm(en) verwendet:\n{{programs}}\n\nDas Löschen wird defekte Referenzen in diesen Programmen erzeugen.",
+      "confirm": "Löschen"
+    },
+    "deleteInstruction": {
+      "title": "Anweisung löschen",
+      "message": "Bist du sicher, dass du diese Anweisung löschen möchtest?",
+      "confirm": "Löschen"
+    },
+    "programComplete": {
+      "title": "Programm abgeschlossen",
+      "message": "Das Programm wurde vollständig ausgeführt."
+    },
+    "help": {
+      "title": "Hilfe",
+      "message": "Debug-Ansicht Hilfe kommt bald"
+    },
+    "debugMenu": {
+      "title": "Debug-Menü",
+      "message": "Menüoptionen kommen bald"
+    },
+    "error": {
+      "title": "Fehler",
+      "deleteFailed": "Programm konnte nicht gelöscht werden. Bitte versuche es erneut.",
+      "saveRobotFailed": "Ausgewählter Roboter konnte nicht gespeichert werden",
+      "clearRobotFailed": "Ausgewählter Roboter konnte nicht entfernt werden"
+    }
+  },
+  "actionSheet": {
+    "cancel": "Abbrechen",
+    "resetSimulation": "Simulation zurücksetzen",
+    "helpTutorial": "Hilfe / Tutorial"
+  },
+  "debug": {
+    "title": "Debuggen: {{programName}}",
+    "speed": "Geschwindigkeit: {{duration}}s",
+    "stepDuration": "Schrittdauer"
+  },
+  "compilationErrors": {
+    "error_one": "Fehler",
+    "error_other": "Fehler",
+    "found": "Gefunden",
+    "errorsFound_one": "{{count}} Fehler gefunden",
+    "errorsFound_other": "{{count}} Fehler gefunden",
+    "helpText": "Behebe diese Fehler, um Debugging und Roboterausführung zu aktivieren.",
+    "cyclicDependency": "Zyklische Abhängigkeit erkannt:",
+    "cyclicDependencyExplanation": "Diese Programme würden sich gegenseitig endlos aufrufen und ein unendlich grosses Programm erzeugen.",
+    "instructionLimitExplanation": "Die Roboter haben eine begrenzte Speicherkapazität, die dein Programm überschreiten würde."
+  },
+  "instructionOptionsMenu": {
+    "title": "Anweisungsoptionen",
+    "addBefore": "Anweisung davor einfügen",
+    "addAfter": "Anweisung danach einfügen",
+    "moveUp": "Nach oben bewegen",
+    "moveDown": "Nach unten bewegen",
+    "delete": "Löschen"
+  },
+  "programOptionsMenu": {
+    "title": "Programmoptionen",
+    "rename": "Programm umbenennen",
+    "delete": "Programm löschen"
+  },
+  "programPicker": {
+    "title": "Programm auswählen",
+    "noPrograms": "Keine Programme verfügbar",
+    "searchPlaceholder": "Programme durchsuchen...",
+    "noResults": "Keine Programme entsprechen Ihrer Suche"
+  },
+  "instruction": {
+    "move": {
+      "leftWheel": "Linkes Rad",
+      "rightWheel": "Rechtes Rad"
+    }
+  },
+  "instructionCard": {
+    "collapse": "Einklappen ▲"
+  },
+  "subroutineCard": {
+    "title": "Unterprogramm",
+    "selectProgram": "Programm auswählen:",
+    "openProgram": "Programm öffnen"
+  },
+  "common": {
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "close": "Schließen",
+    "characters": "{{count}}/{{max}} Zeichen"
+  },
+  "virtualRobot": {
+    "title": "Virtueller Roboter",
+    "addButton": "Virtuellen Roboter hinzufügen",
+    "addTitle": "Virtuellen Roboter hinzufügen",
+    "configureTitle": "Virtuellen Roboter konfigurieren",
+    "name": "Robotername",
+    "wheelSpacing": "Radabstand",
+    "motorSpeed": "Motorgeschwindigkeit",
+    "configuration": "Konfiguration",
+    "deleteConfirm": "Diesen virtuellen Roboter löschen?",
+    "deleteMessage": "Damit wird der virtuelle Roboter entfernt. Programme, die darauf hochgeladen wurden, gehen verloren.",
+    "ready": "Bereit",
+    "connectedTo": "Verbunden mit {{name}}",
+    "executionView": "{{name}}: {{program}}",
+    "configureRobot": "Roboter konfigurieren",
+    "defaultName": "Virtueller Roboter {{number}}",
+    "wheelSpacingUnit": "mm",
+    "motorSpeedUnit": "cm/s",
+    "speedSlow": "🐢 Langsam",
+    "speedFast": "🚀 Schnell",
+    "virtualBadge": "Virtuell",
+    "physicalRobots": "Physische Roboter",
+    "virtualRobots": "Virtuelle Roboter",
+    "delete": "Löschen",
+    "configure": "Konfigurieren",
+    "connect": "Verbinden",
+    "errors": {
+      "nameRequired": "Robotername darf nicht leer sein",
+      "saveFailed": "Virtueller Roboter konnte nicht gespeichert werden",
+      "deleteFailed": "Virtueller Roboter konnte nicht gelöscht werden",
+      "wheelSpacingOutOfRange": "Radabstand muss zwischen {{min}} und {{max}} mm liegen",
+      "motorSpeedOutOfRange": "Motorgeschwindigkeit muss zwischen {{min}} und {{max}} cm/s liegen"
+    }
+  },
+  "robotOptionsMenu": {
+    "title": "Roboter-Optionen",
+    "rename": "Umbenennen",
+    "disconnect": "Trennen",
+    "delete": "Löschen"
+  },
+  "robotRenameModal": {
+    "title": "Roboter umbenennen",
+    "description": "Gib einen neuen Namen für den Roboter ein",
+    "placeholder": "Robotername",
+    "rename": "Umbenennen"
+  }
+}

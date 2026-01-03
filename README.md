@@ -1,159 +1,221 @@
-# React Native Robotics Programing UI
+# explore-it Robotics 🤖
 
-## Development
+An educational mobile app for teaching robotics programming to children ages 8-14. Students create visual programs using drag-and-drop instruction blocks, then upload and run them on physical robots via Bluetooth.
 
-This app is based on React Native 0.63
+Built with React Native, Expo, and TypeScript.
 
-### Requirements
+## Features
 
-* Node.js  >= 10.0 && < 11.0
-* Npm >= 6.0.0
-* React Native CLI == 0.63
+- **Visual Programming:** Intuitive block-based interface with 4 instruction types:
+  - Move (motor control)
+  - Comment (documentation)
+  - Subroutine (program reuse)
+  - Repetition (loops with nesting)
 
-### Install
+- **Robot Connection:** Bluetooth Low Energy (BLE) connection to explore-it robots
+- **Program Simulation:** Debug mode with visual robot simulator
+- **Multi-Language Support:** English, German, French, Italian
+- **Responsive Design:** Optimized for phones and tablets
+- **Local Storage:** Programs saved to device file system
 
-```sh
-yarn install
+See [FEATURES.md](./docs/FEATURES.md) for detailed feature documentation.
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18+ and npm
+- Expo CLI
+- For iOS development: Xcode and iOS Simulator
+- For Android development: Android Studio and Android Emulator
+
+### Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/frenetisch-applaudierend/explore-it-robotics.git
+   cd explore-it-robotics
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+3. Start the development server:
+
+   ```bash
+   npx expo start
+   ```
+
+4. Run on your platform:
+   - Press `i` for iOS Simulator
+   - Press `a` for Android Emulator
+   - Scan QR code with Expo Go app for physical device testing
+
+### Development Scripts
+
+```bash
+npm start        # Start Expo development server
+npm run android  # Run on Android emulator
+npm run ios      # Run on iOS simulator
+npm run lint     # Run ESLint
 ```
 
-## Versioning
+## Project Structure
 
-In a React Native app different tools and technologies come together, like JavaScript, npm, Android, iOS, Gradle and Xcode. This fact requires from developers to manage versioning at several locations for each app. Keeping them all in sync manually is a tedious and error prone task but fortunately, there is [react-native-version](https://www.andreadelis.com/react-native-app-versioning/) tool, an easier way to do it with a single command!
-
-Examples:
-
-```sh
-yarn version 0.5.0  # set app version to 0.5.0
-yarn version patch  # increment patch number
-yarn version minor  # increment minor number
-yarn version major  # increment major number
+```
+explore-it-robotics/
+├── src/
+│   ├── app/              # Expo Router screens and navigation
+│   ├── components/       # React components
+│   │   ├── program-detail/  # Program editing UI
+│   │   ├── debug/           # Debugging/simulation UI
+│   │   └── ui/              # Reusable UI components
+│   ├── hooks/            # Custom React hooks
+│   ├── services/         # Business logic and services
+│   │   ├── program-storage.ts      # File system persistence
+│   │   ├── program-compilation.ts  # Program validation
+│   │   ├── program-references.ts   # Dependency tracking
+│   │   └── robot-manager-*.ts      # Robot connection
+│   ├── types/            # TypeScript type definitions
+│   ├── utils/            # Utility functions
+│   ├── constants/        # App-wide constants (colors, spacing)
+│   └── i18n/             # Internationalization
+│       └── locales/      # Translation files (en, de, fr, it)
+├── docs/                 # Documentation
+│   ├── spec/features/    # Feature specifications
+│   ├── FEATURES.md       # Feature overview
+│   └── ARCHITECTURE.md   # System architecture
+├── assets/               # Images, fonts, icons
+└── scripts/              # Build and utility scripts
 ```
 
-### Tagging Releases
+## Architecture
 
-Use the *Annotated Tag* support by Git to tag releases on the master branch with a descriptive message like:
+The app uses a layered architecture:
 
-```sh
-git tag -a v1.0.0 -m "Releasing version v1.0.0"
-git push origin v1.0.0
-```
+- **UI Layer:** React components with React Navigation and Expo Router
+- **State Management:** React hooks and context (no Redux)
+- **Services Layer:** Business logic for storage, compilation, and robot communication
+- **Storage:** Local file system using expo-file-system
 
-## Development Environment
+Key services:
 
-**The app does NOT use [Expo](https://expo.io/)!**
+- `program-storage.ts`: Manages program persistence (CRUD operations)
+- `program-compilation.ts`: Validates programs and detects errors
+- `program-references.ts`: Tracks subroutine dependencies
+- `robot-manager-ble.ts`: Handles Bluetooth robot communication
+- `simulation-engine.ts`: Simulates program execution for debugging
 
-Follow the instructions [Building Projects with Native Code](https://facebook.github.io/react-native/docs/getting-started) provided by the React Native team to setup the development environment for both android and ios. You'll need [Node](https://nodejs.org/en/download/), the [React Native CLI](https://facebook.github.io/react-native/docs/getting-started#the-react-native-cli), [Xcode](https://itunes.apple.com/us/app/xcode/id497799835?mt=12) and a Text Editor like [Visual Studio Code](https://code.visualstudio.com/). That's all!  
+See [ARCHITECTURE.md](./docs/ARCHITECTURE.md) for detailed architecture documentation.
 
-It seems like Node 16 or lower is required. Make sure you have the default node version set to 16, if you use nvs/nvm, as expo will start in a different shell. For higher node versions you will get
-an error like this:
+## Localization
 
-```plain
-Failed to construct transformer:  Error: error:0308010C:digital envelope routines::unsupported
-```
+All user-facing strings must be localized using the i18n system.
 
-### Run App on Android
+### Adding Translations
 
-**NOTE**: You must use [Java 8](https://facebook.github.io/react-native/docs/getting-started#java-development-kit) (It seems like 1.8 doesn't work either, but 11 seems to be ok. TODO: Fix that whole mess). You may have to switch your JRE:
+1. Add translation keys to all language files in `src/i18n/locales/`:
+   - `en.json` (English)
+   - `de.json` (German)
+   - `fr.json` (French)
+   - `it.json` (Italian)
 
-```sh
-export JAVA_HOME=`/usr/libexec/java_home -v 11`
-```
+2. Use translations in components:
 
-See [here](https://medium.com/@devkosal/switching-java-jdk-versions-on-macos-80bc868e686a) for more details.
+   ```typescript
+   import { useTranslation } from 'react-i18next';
 
-To run on a device you need to also make sure adb is in your path, e.g.
+   function MyComponent() {
+     const { t } = useTranslation();
+     return <Text>{t('myFeature.title')}</Text>;
+   }
+   ```
 
-```sh
-export PATH="$PATH:$HOME/Library/Android/sdk/platform-tools"
-```
+### Translation Guidelines
 
-Have an Android emulator running (quickest way to get started), or a device connected
+**Target Audience:** Children ages 8-14
 
-```sh
-$ emulator -list-avds
-Nexus_6_API_25
-$ emulator @Nexus_6_API_25
-$ yarn react-native run-android
-...
-$ yarn react-native log-android
-```
+**Tone:** Friendly, encouraging, informal
 
-### Run App on iOS
+- German: Use "du" (not "Sie")
+- French: Use "tu" (not "vous")
+- Italian: Use "tu" (not "Lei")
+- English: Direct, friendly language
 
-Only works on MacOs.
+**Example:**
 
-Do not run app with react native cli!
+- ✅ "Your program is too large. Try reducing the number of repetitions!"
+- ❌ "The compilation process has encountered an error."
 
-Run `pod install` inside the `ios` folder if you have cloned this repo for the first time.
+See [CLEANUP_TODO.md](./CLEANUP_TODO.md) for more localization guidelines.
 
-#### Setup BLE
+## Contributing
 
-1. run `open ios/Robotics.xcworkspace/
-    1. Select/New/File...
-    2. Choose Swift file and click `Next`
-    3. Name it as you wish (does not matter)
-    4. Accept to create Objective-C bridging header
-2. manuel link ble by adding following lines to `ios/Podfile`
+### Code Style
 
-    ```sh
-    pod 'react-native-ble-plx', :path => '../node_modules/react-native-ble-plx'
-    pod 'react-native-ble-plx-swift', :path => '../node_modules/react-native-ble-plx'
-    ```
+- TypeScript for all source files
+- ESLint for code quality (run `npm run lint`)
+- Component files use kebab-case naming
+- Follow existing patterns for consistency
 
-3. in `ios` folder run `pod update`
-4. starting from iOS 13 add `NSBluetoothAlwaysUsageDescription` to `info.plist`
+### Adding Features
 
-#### Setup realm db
+1. Review existing feature specs in `docs/spec/features/`
+2. Create new components in appropriate `src/components/` subdirectory
+3. Add translations for all user-facing strings
+4. Update feature documentation
+5. Test on both phone and tablet layouts
+6. Ensure dark mode compatibility
 
-1. run `open node_modules/realm/src/RealmJS.xcodeproj`
-2. go to target
-3. delete testTarget
-4. pod update
-5. clean build folder (xcode)
+### Known Issues
 
-**NOTE**: These steps must be completed every single time you install or update the realm packages.
+See [CLEANUP_TODO.md](./CLEANUP_TODO.md) for a comprehensive list of known issues, technical debt, and planned improvements.
 
-#### Actually run iOS build
+## Testing
 
-1. connect iPhone and Mac to the same network. The choosen network must be connect to the world wide web and also must no block websocket connection between Mac and iPhone.
-2. connect iPhone and Mac with the lightning cable.
-3. select  iPhone as build target
-4. in xcode click on project
-    1. choose Robotics target
-        1. click on signing & capabilities and select you (or Dominik Gruntz) appelID from the team dropdwon
-    2. repeat this step for RoboticsTests target
-5. run the app
+Currently, the project has no automated tests. Testing is manual:
 
-## Upgrading the React Native Version
+1. **Program Creation:** Create programs with all instruction types
+2. **Program Editing:** Test add, edit, delete, reorder operations
+3. **Compilation:** Verify error detection (cyclic deps, instruction limits)
+4. **Robot Connection:** Test BLE scanning and connection (requires physical robot)
+5. **Debugging:** Run programs in debug simulator
+6. **Responsive Design:** Test on phone and tablet screen sizes
+7. **Localization:** Verify all languages display correctly
 
-60.5 is the latest version we are able to support.
+## Dependencies
 
-In case the [ble-library](https://github.com/Polidea/react-native-ble-plx) suddenly decided to support 60.5 + you may use the react-native [upgrade tool](https://facebook.github.io/react-native/docs/upgrading) to upgrade.
+Key dependencies:
 
-If you have to update multiple version it might be easier to just create a new project.
+- **expo**: Cross-platform app framework
+- **react-native**: Mobile UI framework
+- **react-navigation**: Navigation and routing
+- **expo-file-system**: Local file storage
+- **react-native-ble-plx**: Bluetooth Low Energy communication
+- **react-i18next**: Internationalization
+- **date-fns**: Date formatting and localization
+- **human-id**: Human-readable ID generation
 
-## Found UIDs
+## Platform Support
 
-```plain
-service uuid:        0000ffe0-0000-1000-8000-00805f9b34fb
-characteristic uuid: 0000ffe1-0000-1000-8000-00805f9b34fb
-```
+- **iOS:** 13.0+
+- **Android:** 5.0+ (API level 21)
+- **Web:** Limited support (no BLE, reduced features)
 
-## Adding AppCenter
+## License
 
-To distribute the App during the development cycle the Cloud Service [AppCenter](https://visualstudio.microsoft.com/de/app-center/) will be used.
+[License information to be added]
 
-### AppCenter not working correctly
+## Contact
 
-Currently AppCenter seems to have a problem releasing the app. To manually create a release:
+For questions or support, please contact the explore-it team.
 
-* Update version numbers in android/app/build.gradle, ios/Robotics.xcodeproj/project.pbxproj, src/utillity/Global.js and package.json
-* Optionally update version numbers in ios/Robotics-tvOSTests/Info.plist and ios/RoboticsTests/Info.plist but I don't think it's needed really
-* Commit and push
-* For Android
-  * Make sure you run Node 16 (`nvs use 16`, if using nvs)
-  * Go to android folder, and run `./gradlew bundleRelease`
-  * Copy Bundle: `cp app/build/outputs/bundle/release/app.aab ~/Desktop/Robo.aab`
-  * Upload manually to play store
-* For iOS
-  * TBD
+---
+
+**Documentation:** See `docs/` directory for detailed feature specifications and architecture documentation.
+
+**Feature Overview:** See [FEATURES.md](./docs/FEATURES.md) for comprehensive feature documentation.
