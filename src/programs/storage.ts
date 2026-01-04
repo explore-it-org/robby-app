@@ -20,12 +20,14 @@
  * ```
  */
 
+import { Paths, File, Directory } from 'expo-file-system';
 import { ProgramSource } from './source';
 
 export interface ProgramStorage {
   getAvailablePrograms(): ProgramInfo[];
   getProgramSource(name: string): ProgramSource | null;
   saveProgramSource(source: ProgramSource): void;
+  deleteProgramSource(name: string): void;
 }
 
 /**
@@ -57,14 +59,85 @@ export class FileProgramStorage implements ProgramStorage {
     });
   }
 
+  deleteProgramSource(name: string) {
+    this.loadedPrograms.delete(name);
+  }
+
   async reloadFromDisk(): Promise<void> {
-    // TODO: Reload all programs from disk and update in-memory cache
-    throw new Error('Not implemented');
+    this.loadedPrograms.clear();
+
+    const programsDir = this.getProgramsDirectory();
+    if (!programsDir.exists) {
+      return;
+    }
+
+    const dirContents = programsDir.list();
+    const files = dirContents.filter(
+      (item) => item instanceof File && item.name.endsWith('.json')
+    ) as File[];
+
+    for (const file of files) {
+      try {
+        const content = await file.text();
+        const source: ProgramSource = JSON.parse(content);
+        source.lastModified = new Date(source.lastModified);
+        this.loadedPrograms.set(source.name, source);
+      } catch (error) {
+        console.error(`Error loading program from ${file.name}:`, error);
+      }
+    }
   }
 
   async saveToDisk(): Promise<void> {
-    // TODO: Save all programs from the in-memory cache to disk
-    throw new Error('Not implemented');
+    const programsDir = this.getProgramsDirectory();
+    if (!programsDir.exists) {
+      programsDir.create();
+    }
+
+    // Get all existing files in the directory
+    const dirContents = programsDir.list();
+    const existingFiles = dirContents.filter((item) => item instanceof File) as File[];
+    
+    // Track which files should exist based on current cache
+    const expectedFileNames = new Set(
+      Array.from(this.loadedPrograms.keys()).map((name) => `${this.encodeFileName(name)}.json`)
+    );
+
+    // Delete files that are no longer in the cache
+    for (const file of existingFiles) {
+      if (file.name.endsWith('.json') && !expectedFileNames.has(file.name)) {
+        try {
+          file.delete();
+        } catch (error) {
+          console.error(`Error deleting file ${file.name}:`, error);
+        }
+      }
+    }
+
+    // Save all programs in the cache
+    for (const source of this.loadedPrograms.values()) {
+      const fileName = this.encodeFileName(source.name);
+      const file = new File(programsDir, `${fileName}.json`);
+
+      try {
+        if (file.exists) {
+          file.delete();
+        }
+        file.create();
+        file.write(JSON.stringify(source, null, 2));
+      } catch (error) {
+        console.error(`Error saving program ${source.name}:`, error);
+        throw error;
+      }
+    }
+  }
+
+  private getProgramsDirectory(): Directory {
+    return new Directory(Paths.document, 'ProgramSources');
+  }
+
+  private encodeFileName(name: string): string {
+    return Buffer.from(name).toString('base64');
   }
 }
 

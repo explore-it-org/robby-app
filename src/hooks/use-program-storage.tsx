@@ -30,7 +30,7 @@ import { ProgramSource } from '@/programs/source';
 interface ProgramStorageContextValue {
   storage: ProgramStorage;
   version: number;
-  increaseVersion: () => void;
+  notifyChanged: () => void;
 }
 
 const ProgramStorageContext = createContext<ProgramStorageContextValue | null>(null);
@@ -80,7 +80,7 @@ export function ProgramStorageProvider({ children }: Props) {
   }, [storage, notifyChanged]);
 
   return (
-    <ProgramStorageContext.Provider value={{ storage, version, increaseVersion: notifyChanged }}>
+    <ProgramStorageContext.Provider value={{ storage, version, notifyChanged }}>
       {children}
     </ProgramStorageContext.Provider>
   );
@@ -99,19 +99,28 @@ export function useProgramStorage(): ProgramStorage {
     throw new Error('useProgramStorage must be used within a ProgramStorageProvider');
   }
 
-  const { storage, increaseVersion } = context;
+  const { storage, notifyChanged } = context;
 
   const saveProgramSource = useCallback(
     (source: ProgramSource) => {
       storage.saveProgramSource(source);
-      increaseVersion();
+      notifyChanged();
     },
-    [storage, increaseVersion]
+    [storage, notifyChanged]
+  );
+
+  const deleteProgramSource = useCallback(
+    (name: string) => {
+      storage.deleteProgramSource(name);
+      notifyChanged();
+    },
+    [storage, notifyChanged]
   );
 
   return {
     getAvailablePrograms: storage.getAvailablePrograms,
     getProgramSource: storage.getProgramSource,
     saveProgramSource,
+    deleteProgramSource,
   };
 }
