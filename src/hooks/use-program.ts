@@ -1,6 +1,8 @@
+import { compile } from '@/programs/compiler';
 import { CompiledProgram } from '@/programs/program';
-import { ProgramSource } from '@/programs/source';
+import { loadProgramSource, ProgramSource } from '@/programs/source';
 import { Statement } from '@/programs/statements';
+import { useEffect, useState } from 'react';
 
 /**
  * Return type for the useProgram hook.
@@ -117,17 +119,85 @@ export type ProgramNotFound = 'not-found';
  * ```
  */
 export function useProgram(name: string): UseProgramHook {
-  // TODO
-  //
-  // Should load the program by name from the program store.
-  // If the program is found, it should return the compiled program and an editor.
-  // If the program is still loading, it should return 'loading'.
-  // If the program is not found, it should return 'not-found'.
-  // The program should be memoized to avoid unnecessary reloads and recompilations.
-  //
-  // The editor should provide methods to modify the program, which should update the program store accordingly.
-  // All operations in the editor return immediately and optimistically update the program state in the UI.
-  // Saves are writen in a background queue.
+  const [state, setState] = useState<UseProgramHook>('loading');
 
-  throw new Error('Not implemented');
+  useEffect(() => {
+    let isMounted = true;
+
+    // Reset to loading state when name changes
+    setState('loading');
+
+    // Load and compile the program
+    async function loadAndCompile() {
+      try {
+        // Load program source from storage
+        const source = await loadProgramSource(name);
+
+        // Check if program was found
+        if (!source) {
+          if (isMounted) {
+            setState('not-found');
+          }
+          return;
+        }
+
+        // Compile the program
+        const compiled = await compile(source);
+
+        // Update state if component is still mounted
+        if (isMounted) {
+          setState({
+            source,
+            compiled,
+            editor: createDummyEditor(),
+          });
+        }
+      } catch (error) {
+        console.error('Error loading program:', error);
+        // Treat errors as not-found for now
+        if (isMounted) {
+          setState('not-found');
+        }
+      }
+    }
+
+    loadAndCompile();
+
+    // Cleanup function to prevent state updates after unmount
+    return () => {
+      isMounted = false;
+    };
+  }, [name]);
+
+  return state;
+}
+
+/**
+ * Create a dummy editor implementation
+ * TODO: Replace with actual implementation that updates program store
+ */
+function createDummyEditor(): ProgramEditor {
+  return {
+    renameProgram: (newName: string) => {
+      console.warn('Editor not implemented: renameProgram', newName);
+    },
+    deleteProgram: () => {
+      console.warn('Editor not implemented: deleteProgram');
+    },
+    addStatement: (statement: Statement, index: number) => {
+      console.warn('Editor not implemented: addStatement', statement, index);
+    },
+    replaceStatement: (index: number, statement: Statement) => {
+      console.warn('Editor not implemented: replaceStatement', index, statement);
+    },
+    deleteStatement: (index: number) => {
+      console.warn('Editor not implemented: deleteStatement', index);
+    },
+    moveStatementUp: (index: number) => {
+      console.warn('Editor not implemented: moveStatementUp', index);
+    },
+    moveStatementDown: (index: number) => {
+      console.warn('Editor not implemented: moveStatementDown', index);
+    },
+  };
 }
