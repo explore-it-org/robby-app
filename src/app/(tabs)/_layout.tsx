@@ -32,6 +32,12 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
+        name="index"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
         name="robots"
         options={{
           title: t('tabs.robot'),
@@ -40,6 +46,13 @@ export default function TabLayout() {
       />
       <Tabs.Screen
         name="programs"
+        options={{
+          title: t('tabs.programs'),
+          tabBarIcon: ({ color }) => <ProgramIcon size={28} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="programs_new"
         options={{
           title: t('tabs.programs'),
           tabBarIcon: ({ color }) => <ProgramIcon size={28} color={color} />,

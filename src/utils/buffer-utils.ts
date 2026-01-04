@@ -43,3 +43,21 @@ export function base64ToUint8Array(base64: string): Uint8Array {
   const latin1 = atob(base64);
   return latin1ToUint8Array(latin1);
 }
+
+/**
+ * Encode a UTF-8 string to base64
+ */
+export function stringToBase64(str: string): string {
+  const encoder = new TextEncoder();
+  const uint8Array = encoder.encode(str);
+  return uint8ArrayToBase64(uint8Array);
+}
+
+/**
+ * Decode a base64 string to UTF-8 string
+ */
+export function base64ToString(base64: string): string {
+  const uint8Array = base64ToUint8Array(base64);
+  const decoder = new TextDecoder();
+  return decoder.decode(uint8Array);
+}

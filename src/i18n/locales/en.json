@@ -61,6 +61,7 @@
     "noProgramSelected": "No program selected",
     "selectProgram": "Select a program from the list to view its details here",
     "newProgram": "New Program {{number}}",
+    "defaultName": "Program {{number}}",
     "updated": "Updated",
     "instruction_one": "{{count}} instruction",
     "instruction_other": "{{count}} instructions",

@@ -21,10 +21,11 @@
  */
 
 import { Paths, File, Directory } from 'expo-file-system';
+import { stringToBase64 } from '@/utils/buffer-utils';
 import { ProgramSource } from './source';
 
 export interface ProgramStorage {
-  getAvailablePrograms(): ProgramInfo[];
+  availablePrograms: ProgramInfo[];
   getProgramSource(name: string): ProgramSource | null;
   saveProgramSource(source: ProgramSource): void;
   deleteProgramSource(name: string): void;
@@ -39,13 +40,25 @@ export interface ProgramStorage {
 export class FileProgramStorage implements ProgramStorage {
   private loadedPrograms: Map<string, ProgramSource> = new Map();
 
-  getAvailablePrograms(): ProgramInfo[] {
+  get availablePrograms(): ProgramInfo[] {
+    console.log(
+      'FileProgramStorage.getAvailablePrograms is called, loadedPrograms size',
+      this.loadedPrograms.size
+    );
+
     const programs = Array.from(this.loadedPrograms.values()).map((source) => ({
       name: source.name,
       lastModified: source.lastModified,
       statementCount: source.statements.length,
     }));
-    return programs.sort((a, b) => a.name.localeCompare(b.name));
+    const sortedPrograms = programs.sort((a, b) => a.name.localeCompare(b.name));
+
+    console.log(
+      'FileProgramStorage.getAvailablePrograms is returning',
+      sortedPrograms.length,
+      'programs'
+    );
+    return sortedPrograms;
   }
 
   getProgramSource(name: string): ProgramSource | null {
@@ -97,7 +110,7 @@ export class FileProgramStorage implements ProgramStorage {
     // Get all existing files in the directory
     const dirContents = programsDir.list();
     const existingFiles = dirContents.filter((item) => item instanceof File) as File[];
-    
+
     // Track which files should exist based on current cache
     const expectedFileNames = new Set(
       Array.from(this.loadedPrograms.keys()).map((name) => `${this.encodeFileName(name)}.json`)
@@ -137,7 +150,7 @@ export class FileProgramStorage implements ProgramStorage {
   }
 
   private encodeFileName(name: string): string {
-    return Buffer.from(name).toString('base64');
+    return stringToBase64(name);
   }
 }
 

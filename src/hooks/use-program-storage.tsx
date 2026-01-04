@@ -24,11 +24,11 @@ import React, {
   useCallback,
   useMemo,
 } from 'react';
-import { FileProgramStorage, ProgramStorage } from '@/programs/storage';
+import { FileProgramStorage, ProgramInfo, ProgramStorage } from '@/programs/storage';
 import { ProgramSource } from '@/programs/source';
 
 interface ProgramStorageContextValue {
-  storage: ProgramStorage;
+  storage: FileProgramStorage;
   version: number;
   notifyChanged: () => void;
 }
@@ -99,7 +99,20 @@ export function useProgramStorage(): ProgramStorage {
     throw new Error('useProgramStorage must be used within a ProgramStorageProvider');
   }
 
-  const { storage, notifyChanged } = context;
+  const { storage, version, notifyChanged } = context;
+
+  // Compute programs directly based on version
+  const availablePrograms = useMemo(() => {
+    void version; // Mark version as used
+    return storage.availablePrograms;
+  }, [storage, version]);
+
+  const getProgramSource = useCallback(
+    (name: string) => {
+      return storage.getProgramSource(name);
+    },
+    [storage]
+  );
 
   const saveProgramSource = useCallback(
     (source: ProgramSource) => {
@@ -118,8 +131,8 @@ export function useProgramStorage(): ProgramStorage {
   );
 
   return {
-    getAvailablePrograms: storage.getAvailablePrograms,
-    getProgramSource: storage.getProgramSource,
+    availablePrograms,
+    getProgramSource,
     saveProgramSource,
     deleteProgramSource,
   };
