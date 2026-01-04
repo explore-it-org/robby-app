@@ -59,13 +59,22 @@
     "noPrograms": "No Programs",
     "noProgramsMessage": "Start by creating a new program",
     "noProgramSelected": "No program selected",
+    "noProgramFound": "Program Not Found",
     "selectProgram": "Select a program from the list to view its details here",
     "newProgram": "New Program {{number}}",
     "defaultName": "Program {{number}}",
     "updated": "Updated",
     "instruction_one": "{{count}} instruction",
     "instruction_other": "{{count}} instructions",
-    "lastModified": "Last modified: {{time}}"
+    "lastModified": "Last modified: {{time}}",
+    "renameTitle": "Rename Program",
+    "renameDescription": "Enter a new name for the program",
+    "renamePlaceholder": "Program name",
+    "renameButton": "Rename",
+    "renameError": {
+      "empty": "Name cannot be empty",
+      "exists": "A program with this name already exists"
+    }
   },
   "programDetail": {
     "notFound": "Program Not Found",

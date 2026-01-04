@@ -71,7 +71,9 @@ export default function ProgramsScreen() {
 
         {/* Right pane: Program detail */}
         <ThemedView style={styles.detailPane}>
-          {selectedProgramName ? <ProgramEditor programName={selectedProgramName} /> : null}
+          {selectedProgramName ? (
+            <ProgramEditor programName={selectedProgramName} onProgramRenamed={onProgramSelected} />
+          ) : null}
         </ThemedView>
       </ThemedView>
     );

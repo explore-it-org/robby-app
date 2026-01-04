@@ -59,13 +59,22 @@
     "noPrograms": "Nessun programma",
     "noProgramsMessage": "Inizia creando un nuovo programma",
     "noProgramSelected": "Nessun programma selezionato",
+    "noProgramFound": "Programma non trovato",
     "selectProgram": "Seleziona un programma dall'elenco per visualizzarne i dettagli qui",
     "newProgram": "Nuovo programma {{number}}",
     "defaultName": "Programma {{number}}",
     "updated": "Aggiornato",
     "instruction_one": "{{count}} istruzione",
     "instruction_other": "{{count}} istruzioni",
-    "lastModified": "Ultima modifica: {{time}}"
+    "lastModified": "Ultima modifica: {{time}}",
+    "renameTitle": "Rinomina programma",
+    "renameDescription": "Inserisci un nuovo nome per il programma",
+    "renamePlaceholder": "Nome del programma",
+    "renameButton": "Rinomina",
+    "renameError": {
+      "empty": "Il nome non può essere vuoto",
+      "exists": "Esiste già un programma con questo nome"
+    }
   },
   "programDetail": {
     "notFound": "Programma non trovato",

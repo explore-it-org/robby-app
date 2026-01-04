@@ -5,22 +5,29 @@ import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet } from 'react-na
 import { ThemedView } from '../themed-view';
 import { RobotControlHeader } from '../robots';
 import { useRobotConnection } from '@/hooks/use-robot-connection';
+import { useProgramStorage } from '@/hooks/use-program-storage';
 import { useCallback, useState } from 'react';
 import { router } from 'expo-router';
 import { ProgramHeader } from './program-header';
 import { StatementList } from './statement-list';
 import { ProgramHeaderMenu } from './program-header-menu';
+import { ProgramRenameModal } from './program-rename-modal';
 import { showDeleteProgramConfirmation } from '@/utils/alerts';
 
 interface Props {
   programName: string;
+  onProgramRenamed: (newName: string) => void;
 }
 
-export function ProgramEditor({ programName }: Props) {
+export function ProgramEditor({ programName, onProgramRenamed }: Props) {
   const { t } = useTranslation();
   const program = useProgram(programName);
+  const programStorage = useProgramStorage();
   const { connectedRobot } = useRobotConnection();
   const [showMenu, setShowMenu] = useState(false);
+  const [showRenameModal, setShowRenameModal] = useState(false);
+
+  const existingProgramNames = programStorage.availablePrograms.map((p) => p.name);
 
   const handleConnectRobot = useCallback(() => {
     router.replace('/(tabs)/robots');
@@ -43,8 +50,20 @@ export function ProgramEditor({ programName }: Props) {
   }, []);
 
   const handleRenameProgram = useCallback(() => {
-    console.log('Rename program');
+    setShowRenameModal(true);
   }, []);
+
+  const handleRename = useCallback(
+    (newName: string) => {
+      if (program === 'not-found') return;
+
+      program.editor.renameProgram(newName);
+
+      // Notify parent about the rename so it can update the selected program name
+      onProgramRenamed(newName);
+    },
+    [program, onProgramRenamed]
+  );
 
   const handleDeleteProgram = useCallback(() => {
     if (program === 'not-found') return;
@@ -101,6 +120,15 @@ export function ProgramEditor({ programName }: Props) {
         onClose={() => setShowMenu(false)}
         onRename={handleRenameProgram}
         onDelete={handleDeleteProgram}
+      />
+
+      {/* Program Rename Modal */}
+      <ProgramRenameModal
+        visible={showRenameModal}
+        programName={programName}
+        existingNames={existingProgramNames}
+        onClose={() => setShowRenameModal(false)}
+        onRename={handleRename}
       />
     </>
   );

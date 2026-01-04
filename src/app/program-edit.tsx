@@ -5,11 +5,14 @@ import { LAYOUT_SPACING } from '@/constants/spacing';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { Stack, useLocalSearchParams } from 'expo-router';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet } from 'react-native';
 
 export default function ProgramEditScreen() {
-  const { name } = useLocalSearchParams<{ name: string }>();
+  const { name: initialName } = useLocalSearchParams<{ name: string }>();
+  const [name, setName] = useState(initialName);
+
   const colorScheme = useColorScheme();
   const { t } = useTranslation();
 
@@ -29,7 +32,7 @@ export default function ProgramEditScreen() {
           },
         }}
       />
-      <ProgramEditor programName={name} />
+      <ProgramEditor programName={name} onProgramRenamed={setName} />
     </ThemedView>
   );
 }
