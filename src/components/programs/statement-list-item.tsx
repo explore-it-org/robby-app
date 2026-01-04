@@ -5,6 +5,7 @@ import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import { COLORS } from '@/constants/colors';
 import { SPACING } from '@/constants/spacing';
 import { NumberInput } from '@/components/ui/number-input';
+import { IconSymbol } from '@/components/ui/icon-symbol';
 
 interface StatementItemLayoutProps {
   repetitions: number;
@@ -306,6 +307,7 @@ interface SubroutineStatementProps {
   index: number;
   onChange: (statement: SubroutineStatement) => void;
   onProgramSelect: () => void;
+  onOpenProgram: () => void;
   onDelete: (index: number) => void;
   onMoveUp: (index: number) => void;
   onMoveDown: (index: number) => void;
@@ -320,6 +322,7 @@ export function SubroutineStatementItem({
   index,
   onChange,
   onProgramSelect,
+  onOpenProgram,
   onDelete,
   onMoveUp,
   onMoveDown,
@@ -369,6 +372,10 @@ export function SubroutineStatementItem({
     >
       <Pressable style={styles.subroutineContent} onPress={onProgramSelect}>
         <Text style={styles.subroutineName}>{statement.programReference}</Text>
+      </Pressable>
+
+      <Pressable style={styles.editButton} onPress={onOpenProgram}>
+        <IconSymbol name="pencil" size={20} color={COLORS.TEXT_SECONDARY} />
       </Pressable>
     </StatementItemLayout>
   );
@@ -443,6 +450,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: COLORS.TEXT_PRIMARY,
+  },
+  editButton: {
+    paddingHorizontal: SPACING.SM,
+    justifyContent: 'center',
   },
   backdrop: {
     flex: 1,

@@ -10,6 +10,7 @@ import { createMoveStatement, createSubroutineStatement, Statement } from '@/pro
 import { useProgramStorage } from '@/hooks/use-program-storage';
 import { COLORS } from '@/constants/colors';
 import { SPACING } from '@/constants/spacing';
+import { router } from 'expo-router';
 
 interface Props {
   program: EditableProgram;
@@ -68,8 +69,20 @@ export function StatementList({ program }: Props) {
     setShowProgramPicker(true);
   }, []);
 
+  const handleOpenProgram = useCallback((programName: string) => {
+    router.push(`/program-edit?name=${encodeURIComponent(programName)}`);
+  }, []);
+
   const handleOpenStatementPicker = useCallback(() => {
     setShowTypePicker(true);
+  }, []);
+
+  const handleCloseTypePicker = useCallback(() => {
+    setShowTypePicker(false);
+  }, []);
+
+  const handleCloseProgramPicker = useCallback(() => {
+    setShowProgramPicker(false);
   }, []);
 
   const handleChangeStatement = useCallback(
@@ -114,23 +127,17 @@ export function StatementList({ program }: Props) {
     [program.editor]
   );
 
-  const handleInsertBefore = useCallback(
-    (index: number) => {
-      setInsertAtIndex(index);
-      setEditingSubroutineIndex(null);
-      setShowTypePicker(true);
-    },
-    []
-  );
+  const handleInsertBefore = useCallback((index: number) => {
+    setInsertAtIndex(index);
+    setEditingSubroutineIndex(null);
+    setShowTypePicker(true);
+  }, []);
 
-  const handleInsertAfter = useCallback(
-    (index: number) => {
-      setInsertAtIndex(index + 1);
-      setEditingSubroutineIndex(null);
-      setShowTypePicker(true);
-    },
-    []
-  );
+  const handleInsertAfter = useCallback((index: number) => {
+    setInsertAtIndex(index + 1);
+    setEditingSubroutineIndex(null);
+    setShowTypePicker(true);
+  }, []);
 
   return (
     <>
@@ -163,6 +170,7 @@ export function StatementList({ program }: Props) {
                   index={index}
                   onChange={(updatedStatement) => handleChangeStatement(index, updatedStatement)}
                   onProgramSelect={() => handleEditSubroutine(index)}
+                  onOpenProgram={() => handleOpenProgram(statement.programReference)}
                   onDelete={handleDeleteStatement}
                   onMoveUp={handleMoveUp}
                   onMoveDown={handleMoveDown}
@@ -189,7 +197,7 @@ export function StatementList({ program }: Props) {
       {/* Statement Type Picker Modal */}
       <StatementTypePicker
         visible={showTypePicker}
-        onClose={() => setShowTypePicker(false)}
+        onClose={handleCloseTypePicker}
         onSelectMove={handleAddMove}
         onSelectSubroutine={handleAddSubroutine}
       />
@@ -199,12 +207,12 @@ export function StatementList({ program }: Props) {
         visible={showProgramPicker}
         animationType="slide"
         presentationStyle="fullScreen"
-        onRequestClose={() => setShowProgramPicker(false)}
+        onRequestClose={handleCloseProgramPicker}
       >
         <SafeAreaView style={styles.pickerContainer} edges={['top']}>
           <View style={styles.pickerHeader}>
             <Text style={styles.pickerTitle}>{t('programPicker.title')}</Text>
-            <Pressable onPress={() => setShowProgramPicker(false)}>
+            <Pressable onPress={handleCloseProgramPicker}>
               <Text style={styles.cancelButton}>{t('common.cancel')}</Text>
             </Pressable>
           </View>
