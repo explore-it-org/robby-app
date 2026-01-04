@@ -1,7 +1,10 @@
 /**
  * Program Compiler
  *
- * Compiles high-level ProgramSource (with Statements) into low-level Program (with Instructions).
+ * Compiles high-level ProgramSource (with Statements) into a CompiledProgram.
+ * The result is always a CompiledProgram (discriminated union), which can be either:
+ * - Successfully compiled (type='compiled') with executable instructions
+ * - Faulty (type='faulty') with compilation errors
  *
  * ## Compilation Process:
  *
@@ -26,14 +29,15 @@
  *    - missing-reference: Referenced program doesn't exist
  *    - faulty-reference: Referenced program exists but failed to compile
  *
- * ## Output:
- * - **CompiledProgram**: Valid program ready for execution (instructions array)
- * - **FaultyProgram**: Invalid program with errors array explaining what went wrong
+ * ## Output (CompiledProgram):
+ * Always returns a CompiledProgram discriminated union:
+ * - **type='compiled'**: Successfully compiled, ready for execution (instructions array)
+ * - **type='faulty'**: Has compilation errors (errors array), can be edited to fix
  */
 
 import { ProgramError } from './errors';
 import { Instruction } from './instructions';
-import { Program } from './program';
+import { CompiledProgram } from './program';
 import { loadProgramSource, ProgramSource } from './source';
 import { MoveStatement, Statement, SubroutineStatement } from './statements';
 
@@ -46,14 +50,16 @@ function clamp(value: number, min: number, max: number): number {
 }
 
 /**
- * Compile a program source into executable instructions
+ * Compile a program source into a compiled program
  *
  * Entry point for compilation. Delegates to compileInternal with initial call stack.
+ * Always returns a CompiledProgram (discriminated union) which can be either successfully
+ * compiled (type='compiled') or faulty (type='faulty').
  *
  * @param source - High-level program source with statements
- * @returns Promise resolving to either CompiledProgram (success) or FaultyProgram (errors)
+ * @returns Promise resolving to CompiledProgram (CorrectProgram | FaultyProgram)
  */
-export async function compile(source: ProgramSource): Promise<Program> {
+export async function compile(source: ProgramSource): Promise<CompiledProgram> {
   return await compileInternal(source, [source.name]);
 }
 
@@ -65,7 +71,7 @@ export async function compile(source: ProgramSource): Promise<Program> {
  * @param source - Program source to compile
  * @param callStack - Chain of program names in current compilation path (for cycle detection)
  *                    Example: ["MainProgram", "SubA", "SubB"] means MainProgram → SubA → SubB
- * @returns Compiled program (with instructions) or faulty program (with errors)
+ * @returns CompiledProgram (either type='compiled' with instructions, or type='faulty' with errors)
  *
  * ## Algorithm:
  * 1. Initialize empty instruction list and error list
@@ -74,9 +80,12 @@ export async function compile(source: ProgramSource): Promise<Program> {
  *    b. If successful and within limits, add to instruction list
  *    c. If complexity limit exceeded, add complexity error
  *    d. If compilation failed, add error to error list
- * 3. Return CompiledProgram if no errors, otherwise FaultyProgram
+ * 3. Return CorrectProgram (type='compiled') if no errors, otherwise FaultyProgram (type='faulty')
  */
-async function compileInternal(source: ProgramSource, callStack: string[]): Promise<Program> {
+async function compileInternal(
+  source: ProgramSource,
+  callStack: string[]
+): Promise<CompiledProgram> {
   const MAX_INSTRUCTIONS = 1000; // Maximum total instructions after expansion
   let instructions: Instruction[] = [];
   let errors: ProgramError[] = [];
@@ -106,16 +115,15 @@ async function compileInternal(source: ProgramSource, callStack: string[]): Prom
   }
 
   // Return based on whether any errors were encountered
+  // Both return types are part of the CompiledProgram discriminated union
   if (errors.length > 0) {
     return {
       type: 'faulty',
-      source,
       errors,
     };
   } else {
     return {
       type: 'compiled',
-      source,
       instructions,
     };
   }
@@ -267,6 +275,7 @@ async function compileSubroutineStatement(
   ]);
 
   // STEP 4: Check if referenced program compiled successfully
+  // compiledReferencedProgram is a CompiledProgram, check if it's faulty
   if (compiledReferencedProgram.type === 'faulty') {
     // Referenced program has compilation errors
     // Don't inline it - report as faulty reference
