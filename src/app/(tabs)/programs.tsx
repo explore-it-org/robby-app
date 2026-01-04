@@ -1,151 +1,112 @@
-import { useState, useEffect, useCallback } from 'react';
-import { StyleSheet } from 'react-native';
-import { router, useFocusEffect } from 'expo-router';
-import { useTranslation } from 'react-i18next';
+import { ProgramEditor, ProgramList } from '@/components/programs';
 import { ThemedView } from '@/components/themed-view';
-import { ProgramList } from '@/components/program-list';
-import { Program } from '@/types/program';
+import { useProgramStorage } from '@/hooks/use-program-storage';
 import { useResponsiveLayout } from '@/hooks/use-responsive-layout';
-import { FloatingActionButton } from '@/components/ui/floating-action-button';
-import { loadAllPrograms, saveProgram, generateProgramId } from '@/services/program-storage';
+import { useThemeColor } from '@/hooks/use-theme-color';
+import { router } from 'expo-router';
+import { useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { StyleSheet } from 'react-native';
 
 export default function ProgramsScreen() {
   const { t } = useTranslation();
   const { isTablet } = useResponsiveLayout();
-  const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
-  const [programs, setPrograms] = useState<Program[]>([]);
+  const borderColor = useThemeColor({}, 'border');
 
-  // Load programs from storage
-  const loadPrograms = useCallback(async () => {
-    try {
-      const loadedPrograms = await loadAllPrograms();
-      setPrograms(loadedPrograms);
-    } catch (error) {
-      console.error('Error loading programs:', error);
-    }
-  }, []);
+  const programStorage = useProgramStorage();
+  const availablePrograms = programStorage.availablePrograms;
 
-  // Reload programs when screen comes into focus
-  useFocusEffect(
-    useCallback(() => {
-      loadPrograms();
-    }, [loadPrograms])
+  const [selectedProgramName, setSelectedProgramName] = useState<string | null>(
+    isTablet ? (availablePrograms[0]?.name ?? null) : null
   );
 
-  // Auto-select first program on tablet when programs are available
-  useEffect(() => {
-    if (isTablet && programs.length > 0 && !selectedProgram) {
-      setSelectedProgram(programs[0]);
-    }
-  }, [isTablet, selectedProgram, programs]);
-
-  // Handle program changes from detail view
-  const handleProgramChanged = useCallback(
-    (updatedProgram: Program) => {
-      setPrograms((prevPrograms) => {
-        const index = prevPrograms.findIndex((p) => p.id === updatedProgram.id);
-        if (index === -1) {
-          // Program not found, shouldn't happen but handle gracefully
-          return prevPrograms;
-        }
-
-        // Create new array with updated program
-        const newPrograms = [...prevPrograms];
-        newPrograms[index] = updatedProgram;
-
-        // Re-sort by last modified
-        newPrograms.sort((a, b) => b.lastModified.getTime() - a.lastModified.getTime());
-
-        return newPrograms;
-      });
-
-      // Update selected program if it's the one that changed
-      if (selectedProgram?.id === updatedProgram.id) {
-        setSelectedProgram(updatedProgram);
+  const onProgramSelected = useCallback(
+    (name: string) => {
+      if (isTablet) {
+        setSelectedProgramName(name);
+      } else {
+        router.push(`/program-edit?name=${name}`);
       }
     },
-    [selectedProgram]
+    [isTablet]
   );
 
-  // Handle program deletion from detail view
-  const handleProgramDeleted = useCallback(
-    async (deletedProgramId: string) => {
-      // Remove from list
-      setPrograms((prevPrograms) => prevPrograms.filter((p) => p.id !== deletedProgramId));
+  const onNewProgramRequested = useCallback(() => {
+    // Find the next available program number
+    const existingNames = availablePrograms.map((p) => p.name);
+    let number = 1;
+    let newName: string;
 
-      // Clear selection if the deleted program was selected
-      if (selectedProgram?.id === deletedProgramId) {
-        setSelectedProgram(null);
-      }
+    do {
+      newName = t('programs.defaultName', { number });
+      number += 1;
+    } while (existingNames.includes(newName));
 
-      // Reload programs to ensure consistency
-      await loadPrograms();
-    },
-    [selectedProgram, loadPrograms]
-  );
-
-  const handleProgramPress = (program: Program) => {
-    if (isTablet) {
-      // On tablet, update selection to show in detail pane
-      setSelectedProgram(program);
-    } else {
-      // On phone, navigate to full-screen detail view
-      router.push(`/program-detail?id=${program.id}`);
-    }
-  };
-
-  const handleAddProgram = async () => {
-    const now = new Date();
-    // Default name: "Program YYYY-MM-DD"
-    const newProgram: Program = {
-      id: generateProgramId(),
-      name: t('programs.newProgram', { number: programs.length + 1 }),
-      type: 'step',
-      instructionCount: 0,
-      createdDate: now,
-      lastModified: now,
-      instructions: [],
+    // Create new program source
+    const newSource = {
+      name: newName,
+      lastModified: new Date(),
+      statements: [],
     };
 
-    try {
-      await saveProgram(newProgram);
-      const reloadedPrograms = await loadAllPrograms();
-      setPrograms(reloadedPrograms);
+    // Save to storage
+    programStorage.saveProgramSource(newSource);
 
-      // Find the newly created program in the reloaded list
-      const freshProgram = reloadedPrograms.find((p) => p.id === newProgram.id);
+    // Select the new program
+    onProgramSelected(newName);
+  }, [availablePrograms, onProgramSelected, programStorage, t]);
 
-      // Navigate to the new program or select it
-      if (isTablet && freshProgram) {
-        setSelectedProgram(freshProgram);
-      } else if (!isTablet) {
-        router.push(`/program-detail?id=${newProgram.id}`);
-      }
-    } catch (error) {
-      console.error('Error creating program:', error);
-    }
-  };
+  if (isTablet) {
+    return (
+      <ThemedView style={styles.tabletContainer}>
+        {/* Left pane: Program list */}
+        <ThemedView style={[styles.listPane, { borderRightColor: borderColor }]}>
+          <ProgramList
+            programs={availablePrograms}
+            selectedProgramName={selectedProgramName}
+            onProgramSelected={onProgramSelected}
+            onNewProgramRequested={onNewProgramRequested}
+          />
+        </ThemedView>
 
-  return (
-    <ThemedView style={styles.container}>
-      <ProgramList
-        programs={programs}
-        onProgramPress={handleProgramPress}
-        isTabletLayout={isTablet}
-        selectedProgram={selectedProgram}
-        onProgramChanged={handleProgramChanged}
-        onProgramDeleted={handleProgramDeleted}
-        onAddProgram={isTablet ? handleAddProgram : undefined}
-      />
-
-      {/* FAB - only in phone mode (tablet mode FAB is in ProgramList) */}
-      {!isTablet && <FloatingActionButton onPress={handleAddProgram} />}
-    </ThemedView>
-  );
+        {/* Right pane: Program detail */}
+        <ThemedView style={styles.detailPane}>
+          {selectedProgramName ? (
+            <ProgramEditor programName={selectedProgramName} onProgramRenamed={onProgramSelected} />
+          ) : null}
+        </ThemedView>
+      </ThemedView>
+    );
+  } else {
+    return (
+      <ThemedView style={styles.container}>
+        <ProgramList
+          programs={availablePrograms}
+          selectedProgramName={selectedProgramName}
+          onProgramSelected={onProgramSelected}
+          onNewProgramRequested={onNewProgramRequested}
+        />
+      </ThemedView>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  tabletContainer: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  listPane: {
+    flex: 0.4, // Style guide: 40% for list pane
+    minWidth: 320, // Style guide: minimum list pane width
+    maxWidth: 500,
+    borderRightWidth: 1,
+  },
+  detailPane: {
+    flex: 0.6, // Style guide: 60% for detail pane
+    minWidth: 400, // Style guide: minimum detail pane width
   },
 });

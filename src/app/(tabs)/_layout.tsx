@@ -51,13 +51,6 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <ProgramIcon size={28} color={color} />,
         }}
       />
-      <Tabs.Screen
-        name="programs_new"
-        options={{
-          title: t('tabs.programs'),
-          tabBarIcon: ({ color }) => <ProgramIcon size={28} color={color} />,
-        }}
-      />
     </Tabs>
   );
 }
