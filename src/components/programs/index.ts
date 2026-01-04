@@ -5,3 +5,4 @@ export { ProgramHeaderMenu } from './program-header-menu';
 export { ProgramRenameModal } from './program-rename-modal';
 export { StatementList } from './statement-list';
 export { MoveStatementItem, SubroutineStatementItem } from './statement-list-item';
+export { StatementTypePicker } from './statement-type-picker';

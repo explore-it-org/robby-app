@@ -6,10 +6,8 @@
  * Secondary button (dropdown arrow) opens menu to select other instruction types.
  */
 
-import { StyleSheet, Pressable, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { COLORS } from '@/constants/colors';
-import { SPACING } from '@/constants/spacing';
+import { MultiOptionButton } from '@/components/ui/multi-option-button';
 
 interface AddInstructionButtonProps {
   onAddMove: () => void;
@@ -20,81 +18,11 @@ export function AddInstructionButton({ onAddMove, onOpenMenu }: AddInstructionBu
   const { t } = useTranslation();
 
   return (
-    <View style={styles.container}>
-      {/* Main button - Add Move instruction */}
-      <Pressable
-        style={({ pressed }) => [styles.mainButton, pressed && styles.pressed]}
-        onPress={onAddMove}
-      >
-        <Text style={styles.icon}>+</Text>
-        <Text style={styles.label}>{t('instructionPicker.addMove')}</Text>
-      </Pressable>
-
-      {/* Secondary button - Open menu for other types */}
-      <Pressable
-        style={({ pressed }) => [styles.menuButton, pressed && styles.pressed]}
-        onPress={onOpenMenu}
-      >
-        <Text style={styles.menuIcon}>▼</Text>
-      </Pressable>
-    </View>
+    <MultiOptionButton
+      icon="+"
+      label={t('instructionPicker.addMove')}
+      onMainPress={onAddMove}
+      onMenuPress={onOpenMenu}
+    />
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: SPACING.MD,
-    gap: 0,
-  },
-  mainButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: SPACING.SM,
-    paddingHorizontal: SPACING.LG,
-    minHeight: 44,
-    gap: SPACING.SM,
-    borderTopLeftRadius: 8,
-    borderBottomLeftRadius: 8,
-    backgroundColor: COLORS.CURIOUS_BLUE,
-    borderWidth: 1,
-    borderColor: COLORS.CURIOUS_BLUE,
-    borderRightWidth: 0,
-  },
-  menuButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: SPACING.SM,
-    paddingHorizontal: SPACING.MD,
-    minHeight: 44,
-    borderTopRightRadius: 8,
-    borderBottomRightRadius: 8,
-    backgroundColor: COLORS.CURIOUS_BLUE,
-    borderWidth: 1,
-    borderColor: COLORS.CURIOUS_BLUE,
-    borderLeftWidth: 1,
-    borderLeftColor: 'rgba(255, 255, 255, 0.3)',
-  },
-  icon: {
-    fontSize: 18,
-    color: COLORS.WHITE,
-    fontWeight: 'bold',
-  },
-  label: {
-    fontSize: 14,
-    color: COLORS.WHITE,
-    fontWeight: '600',
-  },
-  menuIcon: {
-    fontSize: 12,
-    color: COLORS.WHITE,
-    fontWeight: 'bold',
-  },
-  pressed: {
-    opacity: 0.5,
-  },
-});
