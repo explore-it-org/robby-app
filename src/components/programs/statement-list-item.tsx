@@ -260,9 +260,10 @@ function StatementOptionsMenu({
 
 interface SubroutineStatementProps {
   statement: SubroutineStatement;
+  onProgramSelect: () => void;
 }
 
-export function SubroutineStatementItem({ statement }: SubroutineStatementProps) {
+export function SubroutineStatementItem({ statement, onProgramSelect }: SubroutineStatementProps) {
   const handleRepetitionChange = (value: number) => {
     console.log('Repetition changed:', value);
   };
@@ -297,9 +298,9 @@ export function SubroutineStatementItem({ statement }: SubroutineStatementProps)
       onInsertBefore={handleInsertBefore}
       onInsertAfter={handleInsertAfter}
     >
-      <View style={styles.subroutineContent}>
+      <Pressable style={styles.subroutineContent} onPress={onProgramSelect}>
         <Text style={styles.subroutineName}>{statement.programReference}</Text>
-      </View>
+      </Pressable>
     </StatementItemLayout>
   );
 }

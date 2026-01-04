@@ -20,6 +20,7 @@ export function StatementList({ program }: Props) {
   const statements = program.source.statements;
   const [showTypePicker, setShowTypePicker] = useState(false);
   const [showProgramPicker, setShowProgramPicker] = useState(false);
+  const [editingSubroutineIndex, setEditingSubroutineIndex] = useState<number | null>(null);
   const programStorage = useProgramStorage();
 
   // Get all available programs except the current one
@@ -32,19 +33,38 @@ export function StatementList({ program }: Props) {
   }, [program.editor, statements.length]);
 
   const handleAddSubroutine = useCallback(() => {
+    setEditingSubroutineIndex(null);
     setShowProgramPicker(true);
   }, []);
 
   const handleSelectProgram = useCallback(
     (programName: string) => {
-      program.editor.addStatement(
-        createSubroutineStatement(programName),
-        statements.length
-      );
+      if (editingSubroutineIndex !== null) {
+        // Editing existing subroutine
+        const statement = statements[editingSubroutineIndex];
+        if (statement.type === 'subroutine') {
+          program.editor.replaceStatement(editingSubroutineIndex, {
+            ...statement,
+            programReference: programName,
+          });
+        }
+      } else {
+        // Adding new subroutine
+        program.editor.addStatement(
+          createSubroutineStatement(programName),
+          statements.length
+        );
+      }
       setShowProgramPicker(false);
+      setEditingSubroutineIndex(null);
     },
-    [program.editor, statements.length]
+    [program.editor, statements, editingSubroutineIndex]
   );
+
+  const handleEditSubroutine = useCallback((index: number) => {
+    setEditingSubroutineIndex(index);
+    setShowProgramPicker(true);
+  }, []);
 
   const handleOpenStatementPicker = useCallback(() => {
     setShowTypePicker(true);
@@ -96,7 +116,13 @@ export function StatementList({ program }: Props) {
                 />
               );
             case 'subroutine':
-              return <SubroutineStatementItem key={key} statement={statement} />;
+              return (
+                <SubroutineStatementItem
+                  key={key}
+                  statement={statement}
+                  onProgramSelect={() => handleEditSubroutine(index)}
+                />
+              );
             default:
               return null;
           }
