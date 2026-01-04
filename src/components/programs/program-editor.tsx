@@ -5,10 +5,11 @@ import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet } from 'react-na
 import { ThemedView } from '../themed-view';
 import { RobotControlHeader } from '../robots';
 import { useRobotConnection } from '@/hooks/use-robot-connection';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { router } from 'expo-router';
 import { ProgramHeader } from './program-header';
 import { StatementList } from './statement-list';
+import { ProgramHeaderMenu } from './program-header-menu';
 
 interface Props {
   programName: string;
@@ -18,25 +19,34 @@ export function ProgramEditor({ programName }: Props) {
   const { t } = useTranslation();
   const program = useProgram(programName);
   const { connectedRobot } = useRobotConnection();
+  const [showMenu, setShowMenu] = useState(false);
 
-  const onConnectRobot = useCallback(() => {
+  const handleConnectRobot = useCallback(() => {
     router.replace('/(tabs)/robots');
   }, []);
-
-  const onUploadAndRun = useCallback(() => {
-    console.log('Upload and run program');
-  }, []);
-
-  const onStop = useCallback(() => {
-    console.log('Stop program');
-  }, []);
-
-  const onUpload = useCallback(() => {
+  
+  const handleUploadToRobot = useCallback(() => {
     console.log('Upload program');
   }, []);
 
-  const onMenuRequested = useCallback(() => {
-    console.log('Menu requested');
+  const handleUploadToRobotAndRun = useCallback(() => {
+    console.log('Upload and run program');
+  }, []);
+
+  const handleStopRobot = useCallback(() => {
+    console.log('Stop program');
+  }, []);
+
+  const handleMenuRequested = useCallback(() => {
+    setShowMenu(true);
+  }, []);
+
+  const handleRenameProgram = useCallback(() => {
+    console.log('Rename program');
+  }, []);
+
+  const handleDeleteProgram = useCallback(() => {
+    console.log('Delete program');
   }, []);
 
   if (program === 'not-found') {
@@ -53,29 +63,39 @@ export function ProgramEditor({ programName }: Props) {
   }
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
-    >
-      <ThemedView style={styles.flex}>
-        <RobotControlHeader
-          connectedRobot={connectedRobot}
-          onConnect={onConnectRobot}
-          onUploadAndRun={onUploadAndRun}
-          onStop={onStop}
-          onUpload={onUpload}
-        />
-        <ScrollView
-          style={styles.scrollView}
-          contentContainerStyle={styles.scrollContent}
-          keyboardShouldPersistTaps="handled"
-        >
-          <ProgramHeader programName={programName} onMenuRequested={onMenuRequested} />
-          <StatementList program={program} />
-        </ScrollView>
-      </ThemedView>
-    </KeyboardAvoidingView>
+    <>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
+      >
+        <ThemedView style={styles.flex}>
+          <RobotControlHeader
+            connectedRobot={connectedRobot}
+            onConnect={handleConnectRobot}
+            onUploadAndRun={handleUploadToRobotAndRun}
+            onStop={handleStopRobot}
+            onUpload={handleUploadToRobot}
+          />
+          <ScrollView
+            style={styles.scrollView}
+            contentContainerStyle={styles.scrollContent}
+            keyboardShouldPersistTaps="handled"
+          >
+            <ProgramHeader programName={programName} onMenuRequested={handleMenuRequested} />
+            <StatementList program={program} />
+          </ScrollView>
+        </ThemedView>
+      </KeyboardAvoidingView>
+
+      {/* Program Header Menu Modal */}
+      <ProgramHeaderMenu
+        visible={showMenu}
+        onClose={() => setShowMenu(false)}
+        onRename={handleRenameProgram}
+        onDelete={handleDeleteProgram}
+      />
+    </>
   );
 }
 
