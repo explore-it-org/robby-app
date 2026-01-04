@@ -1,12 +1,14 @@
 import { ThemedText } from '@/components/themed-text';
 import { useProgram } from '@/hooks/use-program';
 import { useTranslation } from 'react-i18next';
-import { KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet } from 'react-native';
 import { ThemedView } from '../themed-view';
 import { RobotControlHeader } from '../robots';
 import { useRobotConnection } from '@/hooks/use-robot-connection';
 import { useCallback } from 'react';
 import { router } from 'expo-router';
+import { ProgramHeader } from './program-header';
+import { StatementList } from './statement-list';
 
 interface Props {
   programName: string;
@@ -31,6 +33,10 @@ export function ProgramEditor({ programName }: Props) {
 
   const onUpload = useCallback(() => {
     console.log('Upload program');
+  }, []);
+
+  const onMenuRequested = useCallback(() => {
+    console.log('Menu requested');
   }, []);
 
   if (program === 'not-found') {
@@ -60,9 +66,14 @@ export function ProgramEditor({ programName }: Props) {
           onStop={onStop}
           onUpload={onUpload}
         />
-        <ThemedText>
-          {t('program_editor.title')} {programName}
-        </ThemedText>
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.scrollContent}
+          keyboardShouldPersistTaps="handled"
+        >
+          <ProgramHeader programName={programName} onMenuRequested={onMenuRequested} />
+          <StatementList program={program} />
+        </ScrollView>
       </ThemedView>
     </KeyboardAvoidingView>
   );
