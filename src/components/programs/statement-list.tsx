@@ -36,7 +36,15 @@ export function StatementList({ program }: Props) {
 
           switch (statement.type) {
             case 'move':
-              return <MoveStatementItem key={key} statement={statement} />;
+              return (
+                <MoveStatementItem
+                  key={key}
+                  statement={statement}
+                  onChange={(updatedStatement) =>
+                    program.editor.replaceStatement(index, updatedStatement)
+                  }
+                />
+              );
             case 'subroutine':
               return <SubroutineStatementItem key={key} statement={statement} />;
             default:

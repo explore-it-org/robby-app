@@ -1,20 +1,38 @@
-import { NumberInput } from '@/components/ui/number-input';
-import { COLORS } from '@/constants/colors';
-import { SPACING } from '@/constants/spacing';
 import { MoveStatement, SubroutineStatement } from '@/programs/statements';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
+import { COLORS } from '@/constants/colors';
+import { SPACING } from '@/constants/spacing';
+import { NumberInput } from '@/components/ui/number-input';
 
 interface MoveStatementProps {
   statement: MoveStatement;
+  onChange: (statement: MoveStatement) => void;
 }
 
-export function MoveStatementItem({ statement }: MoveStatementProps) {
+export function MoveStatementItem({ statement, onChange }: MoveStatementProps) {
   const [showMenu, setShowMenu] = useState(false);
 
   const handleRepetitionChange = (value: number) => {
-    console.log('Repetition changed:', value);
+    onChange({
+      ...statement,
+      repetitions: value,
+    });
+  };
+
+  const handleLeftMotorChange = (value: number) => {
+    onChange({
+      ...statement,
+      leftMotorSpeed: value,
+    });
+  };
+
+  const handleRightMotorChange = (value: number) => {
+    onChange({
+      ...statement,
+      rightMotorSpeed: value,
+    });
   };
 
   const handleDelete = () => {
@@ -47,21 +65,23 @@ export function MoveStatementItem({ statement }: MoveStatementProps) {
     <>
       <View style={styles.container}>
         {/* Repetition Count */}
-        <View style={styles.repetitionContainer}>
-          <NumberInput
-            value={statement.repetitions}
-            onValueChange={handleRepetitionChange}
-            min={1}
-            max={100}
-            unit="×"
-            containerStyle={styles.repetitionInput}
-          />
-        </View>
+        <NumberInput
+          value={statement.repetitions}
+          onValueChange={handleRepetitionChange}
+          min={1}
+          max={99}
+          unit="×"
+          containerStyle={styles.repetitionBox}
+        />
 
         {/* Left Motor Speed */}
-        <View style={styles.motorSpeedBox}>
-          <Text style={styles.motorSpeedText}>{leftSpeed}</Text>
-        </View>
+        <NumberInput
+          value={leftSpeed}
+          onValueChange={handleLeftMotorChange}
+          min={0}
+          max={100}
+          containerStyle={styles.motorSpeedBox}
+        />
 
         {/* Movement Visualization Bar */}
         <View style={styles.visualizationBar}>
@@ -70,9 +90,13 @@ export function MoveStatementItem({ statement }: MoveStatementProps) {
         </View>
 
         {/* Right Motor Speed */}
-        <View style={styles.motorSpeedBox}>
-          <Text style={styles.motorSpeedText}>{rightSpeed}</Text>
-        </View>
+        <NumberInput
+          value={rightSpeed}
+          onValueChange={handleRightMotorChange}
+          min={0}
+          max={100}
+          containerStyle={styles.motorSpeedBox}
+        />
 
         {/* Menu Button */}
         <Pressable onPress={() => setShowMenu(true)} hitSlop={8}>
@@ -205,19 +229,16 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.WHITE,
     borderRadius: 12,
-    borderWidth: 2,
-    borderColor: COLORS.CURIOUS_BLUE,
     padding: SPACING.SM,
     gap: SPACING.SM,
   },
-  repetitionContainer: {
-    minWidth: 50,
-  },
-  repetitionInput: {
-    borderWidth: 0,
-    paddingVertical: SPACING.XS,
+  repetitionBox: {
+    backgroundColor: COLORS.WHITE,
+    borderWidth: 2,
+    borderColor: COLORS.GRAY_LIGHT,
+    borderRadius: 8,
+    paddingVertical: SPACING.SM,
     paddingHorizontal: SPACING.SM,
   },
   motorSpeedBox: {
@@ -227,13 +248,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingVertical: SPACING.SM,
     paddingHorizontal: SPACING.MD,
-    minWidth: 60,
-    alignItems: 'center',
-  },
-  motorSpeedText: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: COLORS.TEXT_PRIMARY,
   },
   visualizationBar: {
     flex: 1,
