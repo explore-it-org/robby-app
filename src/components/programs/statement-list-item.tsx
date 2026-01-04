@@ -1,10 +1,69 @@
 import { MoveStatement, SubroutineStatement } from '@/programs/statements';
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import { COLORS } from '@/constants/colors';
 import { SPACING } from '@/constants/spacing';
 import { NumberInput } from '@/components/ui/number-input';
+
+interface StatementItemLayoutProps {
+  repetitions: number;
+  onRepetitionChange: (value: number) => void;
+  onDelete: () => void;
+  onMoveUp: () => void;
+  onMoveDown: () => void;
+  onInsertBefore: () => void;
+  onInsertAfter: () => void;
+  children: ReactNode;
+}
+
+function StatementItemLayout({
+  repetitions,
+  onRepetitionChange,
+  onDelete,
+  onMoveUp,
+  onMoveDown,
+  onInsertBefore,
+  onInsertAfter,
+  children,
+}: StatementItemLayoutProps) {
+  const [showMenu, setShowMenu] = useState(false);
+
+  return (
+    <>
+      <View style={styles.container}>
+        {/* Repetition Count */}
+        <NumberInput
+          value={repetitions}
+          onValueChange={onRepetitionChange}
+          min={1}
+          max={99}
+          unit="×"
+          containerStyle={styles.repetitionBox}
+        />
+
+        {/* Statement Content */}
+        {children}
+
+        {/* Menu Button */}
+        <Pressable onPress={() => setShowMenu(true)} hitSlop={8}>
+          <Text style={styles.menuIcon}>⋯</Text>
+        </Pressable>
+      </View>
+
+      {/* Statement Options Menu */}
+      <StatementOptionsMenu
+        visible={showMenu}
+        onClose={() => setShowMenu(false)}
+        onDelete={onDelete}
+        onMoveUp={onMoveUp}
+        onMoveDown={onMoveDown}
+        onInsertBefore={onInsertBefore}
+        onInsertAfter={onInsertAfter}
+      />
+    </>
+  );
+}
 
 interface MoveStatementProps {
   statement: MoveStatement;
@@ -14,8 +73,6 @@ interface MoveStatementProps {
 }
 
 export function MoveStatementItem({ statement, index, onChange, onDelete }: MoveStatementProps) {
-  const [showMenu, setShowMenu] = useState(false);
-
   const handleRepetitionChange = (value: number) => {
     onChange({
       ...statement,
@@ -62,63 +119,43 @@ export function MoveStatementItem({ statement, index, onChange, onDelete }: Move
   const rightSpeed = statement.rightMotorSpeed;
 
   return (
-    <>
-      <View style={styles.container}>
-        {/* Repetition Count */}
-        <NumberInput
-          value={statement.repetitions}
-          onValueChange={handleRepetitionChange}
-          min={1}
-          max={99}
-          unit="×"
-          containerStyle={styles.repetitionBox}
-        />
+    <StatementItemLayout
+      repetitions={statement.repetitions}
+      onRepetitionChange={handleRepetitionChange}
+      onDelete={handleDelete}
+      onMoveUp={handleMoveUp}
+      onMoveDown={handleMoveDown}
+      onInsertBefore={handleInsertBefore}
+      onInsertAfter={handleInsertAfter}
+    >
+      {/* Left Motor Speed */}
+      <NumberInput
+        value={leftSpeed}
+        onValueChange={handleLeftMotorChange}
+        min={0}
+        max={100}
+        containerStyle={styles.motorSpeedBox}
+      />
 
-        {/* Left Motor Speed */}
-        <NumberInput
-          value={leftSpeed}
-          onValueChange={handleLeftMotorChange}
-          min={0}
-          max={100}
-          containerStyle={styles.motorSpeedBox}
-        />
-
-        {/* Movement Visualization Bar */}
-        <View style={styles.visualizationBar}>
-          <View style={styles.visualizationColumn}>
-            <View style={[styles.visualizationLeft, { width: `${leftSpeed}%` }]} />
-          </View>
-          <View style={styles.visualizationColumn}>
-            <View style={[styles.visualizationRight, { width: `${rightSpeed}%` }]} />
-          </View>
+      {/* Movement Visualization Bar */}
+      <View style={styles.visualizationBar}>
+        <View style={styles.visualizationColumn}>
+          <View style={[styles.visualizationLeft, { width: `${leftSpeed}%` }]} />
         </View>
-
-        {/* Right Motor Speed */}
-        <NumberInput
-          value={rightSpeed}
-          onValueChange={handleRightMotorChange}
-          min={0}
-          max={100}
-          containerStyle={styles.motorSpeedBox}
-        />
-
-        {/* Menu Button */}
-        <Pressable onPress={() => setShowMenu(true)} hitSlop={8}>
-          <Text style={styles.menuIcon}>⋯</Text>
-        </Pressable>
+        <View style={styles.visualizationColumn}>
+          <View style={[styles.visualizationRight, { width: `${rightSpeed}%` }]} />
+        </View>
       </View>
 
-      {/* Statement Options Menu */}
-      <StatementOptionsMenu
-        visible={showMenu}
-        onClose={() => setShowMenu(false)}
-        onDelete={handleDelete}
-        onMoveUp={handleMoveUp}
-        onMoveDown={handleMoveDown}
-        onInsertBefore={handleInsertBefore}
-        onInsertAfter={handleInsertAfter}
+      {/* Right Motor Speed */}
+      <NumberInput
+        value={rightSpeed}
+        onValueChange={handleRightMotorChange}
+        min={0}
+        max={100}
+        containerStyle={styles.motorSpeedBox}
       />
-    </>
+    </StatementItemLayout>
   );
 }
 
@@ -226,7 +263,43 @@ interface SubroutineStatementProps {
 }
 
 export function SubroutineStatementItem({ statement }: SubroutineStatementProps) {
-  return <Text>Placeholder</Text>;
+  const handleRepetitionChange = (value: number) => {
+    console.log('Repetition changed:', value);
+  };
+
+  const handleDelete = () => {
+    console.log('Delete statement');
+  };
+
+  const handleMoveUp = () => {
+    console.log('Move statement up');
+  };
+
+  const handleMoveDown = () => {
+    console.log('Move statement down');
+  };
+
+  const handleInsertBefore = () => {
+    console.log('Insert statement before');
+  };
+
+  const handleInsertAfter = () => {
+    console.log('Insert statement after');
+  };
+
+  return (
+    <StatementItemLayout
+      repetitions={statement.repetitions}
+      onRepetitionChange={handleRepetitionChange}
+      onDelete={handleDelete}
+      onMoveUp={handleMoveUp}
+      onMoveDown={handleMoveDown}
+      onInsertBefore={handleInsertBefore}
+      onInsertAfter={handleInsertAfter}
+    >
+      <Text>Placeholder</Text>
+    </StatementItemLayout>
+  );
 }
 
 const styles = StyleSheet.create({
