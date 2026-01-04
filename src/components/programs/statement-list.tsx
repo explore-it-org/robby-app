@@ -21,6 +21,7 @@ export function StatementList({ program }: Props) {
   const [showTypePicker, setShowTypePicker] = useState(false);
   const [showProgramPicker, setShowProgramPicker] = useState(false);
   const [editingSubroutineIndex, setEditingSubroutineIndex] = useState<number | null>(null);
+  const [insertAtIndex, setInsertAtIndex] = useState<number | null>(null);
   const programStorage = useProgramStorage();
 
   // Get all available programs except the current one
@@ -29,8 +30,10 @@ export function StatementList({ program }: Props) {
   );
 
   const handleAddMove = useCallback(() => {
-    program.editor.addStatement(createMoveStatement(), statements.length);
-  }, [program.editor, statements.length]);
+    const targetIndex = insertAtIndex !== null ? insertAtIndex : statements.length;
+    program.editor.addStatement(createMoveStatement(), targetIndex);
+    setInsertAtIndex(null);
+  }, [program.editor, statements.length, insertAtIndex]);
 
   const handleAddSubroutine = useCallback(() => {
     setEditingSubroutineIndex(null);
@@ -50,15 +53,14 @@ export function StatementList({ program }: Props) {
         }
       } else {
         // Adding new subroutine
-        program.editor.addStatement(
-          createSubroutineStatement(programName),
-          statements.length
-        );
+        const targetIndex = insertAtIndex !== null ? insertAtIndex : statements.length;
+        program.editor.addStatement(createSubroutineStatement(programName), targetIndex);
+        setInsertAtIndex(null);
       }
       setShowProgramPicker(false);
       setEditingSubroutineIndex(null);
     },
-    [program.editor, statements, editingSubroutineIndex]
+    [program.editor, statements, editingSubroutineIndex, insertAtIndex]
   );
 
   const handleEditSubroutine = useCallback((index: number) => {
@@ -98,6 +100,38 @@ export function StatementList({ program }: Props) {
     [program.editor, t]
   );
 
+  const handleMoveUp = useCallback(
+    (index: number) => {
+      program.editor.moveStatementUp(index);
+    },
+    [program.editor]
+  );
+
+  const handleMoveDown = useCallback(
+    (index: number) => {
+      program.editor.moveStatementDown(index);
+    },
+    [program.editor]
+  );
+
+  const handleInsertBefore = useCallback(
+    (index: number) => {
+      setInsertAtIndex(index);
+      setEditingSubroutineIndex(null);
+      setShowTypePicker(true);
+    },
+    []
+  );
+
+  const handleInsertAfter = useCallback(
+    (index: number) => {
+      setInsertAtIndex(index + 1);
+      setEditingSubroutineIndex(null);
+      setShowTypePicker(true);
+    },
+    []
+  );
+
   return (
     <>
       <View style={styles.container}>
@@ -113,6 +147,12 @@ export function StatementList({ program }: Props) {
                   index={index}
                   onChange={(updatedStatement) => handleChangeStatement(index, updatedStatement)}
                   onDelete={handleDeleteStatement}
+                  onMoveUp={handleMoveUp}
+                  onMoveDown={handleMoveDown}
+                  onInsertBefore={handleInsertBefore}
+                  onInsertAfter={handleInsertAfter}
+                  canMoveUp={index > 0}
+                  canMoveDown={index < statements.length - 1}
                 />
               );
             case 'subroutine':
@@ -120,7 +160,16 @@ export function StatementList({ program }: Props) {
                 <SubroutineStatementItem
                   key={key}
                   statement={statement}
+                  index={index}
+                  onChange={(updatedStatement) => handleChangeStatement(index, updatedStatement)}
                   onProgramSelect={() => handleEditSubroutine(index)}
+                  onDelete={handleDeleteStatement}
+                  onMoveUp={handleMoveUp}
+                  onMoveDown={handleMoveDown}
+                  onInsertBefore={handleInsertBefore}
+                  onInsertAfter={handleInsertAfter}
+                  canMoveUp={index > 0}
+                  canMoveDown={index < statements.length - 1}
                 />
               );
             default:

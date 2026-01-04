@@ -14,6 +14,8 @@ interface StatementItemLayoutProps {
   onMoveDown: () => void;
   onInsertBefore: () => void;
   onInsertAfter: () => void;
+  canMoveUp: boolean;
+  canMoveDown: boolean;
   children: ReactNode;
 }
 
@@ -25,6 +27,8 @@ function StatementItemLayout({
   onMoveDown,
   onInsertBefore,
   onInsertAfter,
+  canMoveUp,
+  canMoveDown,
   children,
 }: StatementItemLayoutProps) {
   const [showMenu, setShowMenu] = useState(false);
@@ -60,6 +64,8 @@ function StatementItemLayout({
         onMoveDown={onMoveDown}
         onInsertBefore={onInsertBefore}
         onInsertAfter={onInsertAfter}
+        canMoveUp={canMoveUp}
+        canMoveDown={canMoveDown}
       />
     </>
   );
@@ -70,9 +76,26 @@ interface MoveStatementProps {
   index: number;
   onChange: (statement: MoveStatement) => void;
   onDelete: (index: number) => void;
+  onMoveUp: (index: number) => void;
+  onMoveDown: (index: number) => void;
+  onInsertBefore: (index: number) => void;
+  onInsertAfter: (index: number) => void;
+  canMoveUp: boolean;
+  canMoveDown: boolean;
 }
 
-export function MoveStatementItem({ statement, index, onChange, onDelete }: MoveStatementProps) {
+export function MoveStatementItem({
+  statement,
+  index,
+  onChange,
+  onDelete,
+  onMoveUp,
+  onMoveDown,
+  onInsertBefore,
+  onInsertAfter,
+  canMoveUp,
+  canMoveDown,
+}: MoveStatementProps) {
   const handleRepetitionChange = (value: number) => {
     onChange({
       ...statement,
@@ -99,19 +122,19 @@ export function MoveStatementItem({ statement, index, onChange, onDelete }: Move
   };
 
   const handleMoveUp = () => {
-    console.log('Move statement up');
+    onMoveUp(index);
   };
 
   const handleMoveDown = () => {
-    console.log('Move statement down');
+    onMoveDown(index);
   };
 
   const handleInsertBefore = () => {
-    console.log('Insert statement before');
+    onInsertBefore(index);
   };
 
   const handleInsertAfter = () => {
-    console.log('Insert statement after');
+    onInsertAfter(index);
   };
 
   // Calculate visualization based on motor speeds
@@ -127,6 +150,8 @@ export function MoveStatementItem({ statement, index, onChange, onDelete }: Move
       onMoveDown={handleMoveDown}
       onInsertBefore={handleInsertBefore}
       onInsertAfter={handleInsertAfter}
+      canMoveUp={canMoveUp}
+      canMoveDown={canMoveDown}
     >
       {/* Left Motor Speed */}
       <NumberInput
@@ -167,6 +192,8 @@ interface StatementOptionsMenuProps {
   onMoveDown: () => void;
   onInsertBefore: () => void;
   onInsertAfter: () => void;
+  canMoveUp: boolean;
+  canMoveDown: boolean;
 }
 
 function StatementOptionsMenu({
@@ -177,6 +204,8 @@ function StatementOptionsMenu({
   onMoveDown,
   onInsertBefore,
   onInsertAfter,
+  canMoveUp,
+  canMoveDown,
 }: StatementOptionsMenuProps) {
   const { t } = useTranslation();
 
@@ -195,20 +224,34 @@ function StatementOptionsMenu({
             <View style={styles.optionsContainer}>
               {/* Move Up */}
               <Pressable
-                style={({ pressed }) => [styles.option, pressed && styles.optionPressed]}
-                onPress={() => handleAction(onMoveUp)}
+                style={({ pressed }) => [
+                  styles.option,
+                  !canMoveUp && styles.optionDisabled,
+                  pressed && canMoveUp && styles.optionPressed,
+                ]}
+                onPress={() => canMoveUp && handleAction(onMoveUp)}
+                disabled={!canMoveUp}
               >
                 <Text style={styles.optionIcon}>⬆️</Text>
-                <Text style={styles.optionText}>{t('statementOptionsMenu.moveUp')}</Text>
+                <Text style={[styles.optionText, !canMoveUp && styles.optionTextDisabled]}>
+                  {t('statementOptionsMenu.moveUp')}
+                </Text>
               </Pressable>
 
               {/* Move Down */}
               <Pressable
-                style={({ pressed }) => [styles.option, pressed && styles.optionPressed]}
-                onPress={() => handleAction(onMoveDown)}
+                style={({ pressed }) => [
+                  styles.option,
+                  !canMoveDown && styles.optionDisabled,
+                  pressed && canMoveDown && styles.optionPressed,
+                ]}
+                onPress={() => canMoveDown && handleAction(onMoveDown)}
+                disabled={!canMoveDown}
               >
                 <Text style={styles.optionIcon}>⬇️</Text>
-                <Text style={styles.optionText}>{t('statementOptionsMenu.moveDown')}</Text>
+                <Text style={[styles.optionText, !canMoveDown && styles.optionTextDisabled]}>
+                  {t('statementOptionsMenu.moveDown')}
+                </Text>
               </Pressable>
 
               {/* Insert Before */}
@@ -260,32 +303,56 @@ function StatementOptionsMenu({
 
 interface SubroutineStatementProps {
   statement: SubroutineStatement;
+  index: number;
+  onChange: (statement: SubroutineStatement) => void;
   onProgramSelect: () => void;
+  onDelete: (index: number) => void;
+  onMoveUp: (index: number) => void;
+  onMoveDown: (index: number) => void;
+  onInsertBefore: (index: number) => void;
+  onInsertAfter: (index: number) => void;
+  canMoveUp: boolean;
+  canMoveDown: boolean;
 }
 
-export function SubroutineStatementItem({ statement, onProgramSelect }: SubroutineStatementProps) {
+export function SubroutineStatementItem({
+  statement,
+  index,
+  onChange,
+  onProgramSelect,
+  onDelete,
+  onMoveUp,
+  onMoveDown,
+  onInsertBefore,
+  onInsertAfter,
+  canMoveUp,
+  canMoveDown,
+}: SubroutineStatementProps) {
   const handleRepetitionChange = (value: number) => {
-    console.log('Repetition changed:', value);
+    onChange({
+      ...statement,
+      repetitions: value,
+    });
   };
 
   const handleDelete = () => {
-    console.log('Delete statement');
+    onDelete(index);
   };
 
   const handleMoveUp = () => {
-    console.log('Move statement up');
+    onMoveUp(index);
   };
 
   const handleMoveDown = () => {
-    console.log('Move statement down');
+    onMoveDown(index);
   };
 
   const handleInsertBefore = () => {
-    console.log('Insert statement before');
+    onInsertBefore(index);
   };
 
   const handleInsertAfter = () => {
-    console.log('Insert statement after');
+    onInsertAfter(index);
   };
 
   return (
@@ -297,6 +364,8 @@ export function SubroutineStatementItem({ statement, onProgramSelect }: Subrouti
       onMoveDown={handleMoveDown}
       onInsertBefore={handleInsertBefore}
       onInsertAfter={handleInsertAfter}
+      canMoveUp={canMoveUp}
+      canMoveDown={canMoveDown}
     >
       <Pressable style={styles.subroutineContent} onPress={onProgramSelect}>
         <Text style={styles.subroutineName}>{statement.programReference}</Text>
@@ -417,6 +486,9 @@ const styles = StyleSheet.create({
   optionPressed: {
     backgroundColor: '#F0EDE6',
   },
+  optionDisabled: {
+    opacity: 0.4,
+  },
   optionIcon: {
     fontSize: 20,
   },
@@ -425,6 +497,9 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: COLORS.TEXT_PRIMARY,
     flex: 1,
+  },
+  optionTextDisabled: {
+    color: COLORS.TEXT_SECONDARY,
   },
   deleteOption: {
     backgroundColor: '#FFE5E5',
