@@ -60,8 +60,6 @@ export function MoveStatementItem({ statement, index, onChange, onDelete }: Move
   // Calculate visualization based on motor speeds
   const leftSpeed = statement.leftMotorSpeed;
   const rightSpeed = statement.rightMotorSpeed;
-  const total = leftSpeed + rightSpeed;
-  const leftRatio = total > 0 ? leftSpeed / total : 0.5;
 
   return (
     <>
@@ -87,8 +85,12 @@ export function MoveStatementItem({ statement, index, onChange, onDelete }: Move
 
         {/* Movement Visualization Bar */}
         <View style={styles.visualizationBar}>
-          <View style={[styles.visualizationLeft, { flex: leftRatio }]} />
-          <View style={[styles.visualizationRight, { flex: 1 - leftRatio }]} />
+          <View style={styles.visualizationColumn}>
+            <View style={[styles.visualizationLeft, { width: `${leftSpeed}%` }]} />
+          </View>
+          <View style={styles.visualizationColumn}>
+            <View style={[styles.visualizationRight, { width: `${rightSpeed}%` }]} />
+          </View>
         </View>
 
         {/* Right Motor Speed */}
@@ -232,8 +234,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: 12,
-    padding: SPACING.SM,
-    gap: SPACING.SM,
+    paddingVertical: SPACING.SM,
+    paddingRight: SPACING.SM,
+    paddingLeft: 0,
+    gap: SPACING.XS,
   },
   repetitionBox: {
     backgroundColor: COLORS.WHITE,
@@ -241,7 +245,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.GRAY_LIGHT,
     borderRadius: 8,
     paddingVertical: SPACING.SM,
-    paddingHorizontal: SPACING.SM,
+    paddingHorizontal: SPACING.XS,
   },
   motorSpeedBox: {
     backgroundColor: COLORS.WHITE,
@@ -254,15 +258,25 @@ const styles = StyleSheet.create({
   visualizationBar: {
     flex: 1,
     height: 40,
-    borderRadius: 4,
     flexDirection: 'row',
     overflow: 'hidden',
   },
+  visualizationColumn: {
+    flex: 1,
+    flexDirection: 'row',
+  },
   visualizationLeft: {
-    backgroundColor: '#A8DADC',
+    backgroundColor: '#EFC24A',
+    borderTopLeftRadius: 4,
+    borderBottomLeftRadius: 4,
+    alignSelf: 'stretch',
+    marginLeft: 'auto',
   },
   visualizationRight: {
     backgroundColor: '#B8D4E8',
+    borderTopRightRadius: 4,
+    borderBottomRightRadius: 4,
+    alignSelf: 'stretch',
   },
   menuIcon: {
     fontSize: 24,

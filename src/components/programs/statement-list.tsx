@@ -5,7 +5,7 @@ import { useCallback, useState } from 'react';
 import { MoveStatementItem, SubroutineStatementItem } from './statement-list-item';
 import { MultiOptionButton } from '@/components/ui/multi-option-button';
 import { StatementTypePicker } from './statement-type-picker';
-import { createDefaultMoveStatement, Statement } from '@/programs/statements';
+import { createMoveStatement, Statement } from '@/programs/statements';
 
 interface Props {
   program: EditableProgram;
@@ -17,7 +17,7 @@ export function StatementList({ program }: Props) {
   const [showTypePicker, setShowTypePicker] = useState(false);
 
   const handleAddMove = useCallback(() => {
-    program.editor.addStatement(createDefaultMoveStatement(), statements.length);
+    program.editor.addStatement(createMoveStatement(), statements.length);
   }, [program.editor, statements.length]);
 
   const handleAddSubroutine = useCallback(() => {
@@ -69,9 +69,7 @@ export function StatementList({ program }: Props) {
                   key={key}
                   statement={statement}
                   index={index}
-                  onChange={(updatedStatement) =>
-                    handleChangeStatement(index, updatedStatement)
-                  }
+                  onChange={(updatedStatement) => handleChangeStatement(index, updatedStatement)}
                   onDelete={handleDeleteStatement}
                 />
               );
@@ -105,6 +103,6 @@ export function StatementList({ program }: Props) {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-    gap: 12,
+    gap: 6,
   },
 });
