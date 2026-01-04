@@ -41,23 +41,15 @@ export class FileProgramStorage implements ProgramStorage {
   private loadedPrograms: Map<string, ProgramSource> = new Map();
 
   get availablePrograms(): ProgramInfo[] {
-    console.log(
-      'FileProgramStorage.getAvailablePrograms is called, loadedPrograms size',
-      this.loadedPrograms.size
-    );
-
     const programs = Array.from(this.loadedPrograms.values()).map((source) => ({
       name: source.name,
       lastModified: source.lastModified,
       statementCount: source.statements.length,
     }));
-    const sortedPrograms = programs.sort((a, b) => a.name.localeCompare(b.name));
-
-    console.log(
-      'FileProgramStorage.getAvailablePrograms is returning',
-      sortedPrograms.length,
-      'programs'
+    const sortedPrograms = programs.sort((a, b) =>
+      a.name.localeCompare(b.name, undefined, { numeric: true })
     );
+
     return sortedPrograms;
   }
 

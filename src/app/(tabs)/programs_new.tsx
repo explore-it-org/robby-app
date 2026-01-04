@@ -8,16 +8,12 @@ import { useProgramStorage } from '@/hooks/use-program-storage';
 import { useThemeColor } from '@/hooks/use-theme-color';
 
 export default function ProgramsScreen() {
-  console.log('Render ProgramsScreen');
-
   const { t } = useTranslation();
   const { isTablet } = useResponsiveLayout();
   const borderColor = useThemeColor({}, 'border');
 
   const programStorage = useProgramStorage();
-  console.log('ProgramsScreen is loading availablePrograms');
   const availablePrograms = programStorage.availablePrograms;
-  console.log('ProgramsScreen.availablePrograms:', availablePrograms.length);
 
   const [selectedProgramName, setSelectedProgramName] = useState<string | null>(
     availablePrograms[0]?.name ?? null
