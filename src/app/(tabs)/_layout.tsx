@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import { HapticTab } from '@/components/haptic-tab';
 import { GearIcon } from '@/components/icons/GearIcon';
 import { ProgramIcon } from '@/components/icons/ProgramIcon';
-import { COLORS } from '@/constants/colors';
 import { Colors } from '@/constants/theme';
 
 export default function TabLayout() {
@@ -33,7 +32,7 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="index"
+        name="robots"
         options={{
           title: t('tabs.robot'),
           tabBarIcon: ({ color }) => <GearIcon size={28} color={color} />,

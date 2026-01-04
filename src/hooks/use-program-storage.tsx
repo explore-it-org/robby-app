@@ -49,9 +49,10 @@ export function ProgramStorageProvider({ children }: Props) {
   const storage = useMemo(() => new FileProgramStorage(), []);
   const [version, setVersion] = useState(0);
 
-  const increaseVersion = useCallback(() => {
+  const notifyChanged = useCallback(async () => {
     setVersion((prevVersion) => prevVersion + 1);
-  }, []);
+    await storage.saveToDisk();
+  }, [storage]);
 
   useEffect(() => {
     let isMounted = true;
@@ -61,12 +62,12 @@ export function ProgramStorageProvider({ children }: Props) {
         await storage.reloadFromDisk();
 
         if (isMounted) {
-          increaseVersion();
+          notifyChanged();
         }
       } catch (err) {
         console.error('Failed to load programs from disk:', err);
         if (isMounted) {
-          increaseVersion();
+          notifyChanged();
         }
       }
     }
@@ -76,10 +77,10 @@ export function ProgramStorageProvider({ children }: Props) {
     return () => {
       isMounted = false;
     };
-  }, [storage, increaseVersion]);
+  }, [storage, notifyChanged]);
 
   return (
-    <ProgramStorageContext.Provider value={{ storage, version, increaseVersion }}>
+    <ProgramStorageContext.Provider value={{ storage, version, increaseVersion: notifyChanged }}>
       {children}
     </ProgramStorageContext.Provider>
   );

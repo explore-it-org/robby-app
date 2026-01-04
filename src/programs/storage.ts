@@ -38,19 +38,23 @@ export class FileProgramStorage implements ProgramStorage {
   private loadedPrograms: Map<string, ProgramSource> = new Map();
 
   getAvailablePrograms(): ProgramInfo[] {
-    // Get the programs from the cache and create ProgramInfo objects
-    // Order the returned programs by name alphabetically
-    throw new Error('Not implemented');
+    const programs = Array.from(this.loadedPrograms.values()).map((source) => ({
+      name: source.name,
+      lastModified: source.lastModified,
+      statementCount: source.statements.length,
+    }));
+    return programs.sort((a, b) => a.name.localeCompare(b.name));
   }
 
   getProgramSource(name: string): ProgramSource | null {
-    // Retrieve a program source by name from the in-memory cache
-    throw new Error('Not implemented');
+    return this.loadedPrograms.get(name) ?? null;
   }
 
   saveProgramSource(source: ProgramSource) {
-    // Add or update a program source in the in-memory cache
-    throw new Error('Not implemented');
+    this.loadedPrograms.set(source.name, {
+      ...source,
+      lastModified: new Date(),
+    });
   }
 
   async reloadFromDisk(): Promise<void> {
