@@ -27,3 +27,26 @@ export interface SubroutineStatement {
  * Union type for all instruction types
  */
 export type Statement = MoveStatement | SubroutineStatement;
+
+/**
+ * Creates a default move statement with standard values
+ */
+export function createMoveStatement(): MoveStatement {
+  return {
+    type: 'move',
+    leftMotorSpeed: 50,
+    rightMotorSpeed: 50,
+    repetitions: 1,
+  };
+}
+
+/**
+ * Creates a default subroutine statement
+ */
+export function createSubroutineStatement(programReference: string): SubroutineStatement {
+  return {
+    type: 'subroutine',
+    programReference,
+    repetitions: 1,
+  };
+}

@@ -5,6 +5,7 @@ import { useCallback, useState } from 'react';
 import { MoveStatementItem, SubroutineStatementItem } from './statement-list-item';
 import { MultiOptionButton } from '@/components/ui/multi-option-button';
 import { StatementTypePicker } from './statement-type-picker';
+import { createMoveStatement } from '@/programs/statements';
 
 interface Props {
   program: EditableProgram;
@@ -16,8 +17,8 @@ export function StatementList({ program }: Props) {
   const [showTypePicker, setShowTypePicker] = useState(false);
 
   const handleAddMove = useCallback(() => {
-    console.log('Add move statement');
-  }, []);
+    program.editor.addStatement(createMoveStatement(), statements.length);
+  }, [program.editor, statements.length]);
 
   const handleAddSubroutine = useCallback(() => {
     console.log('Add subroutine statement');

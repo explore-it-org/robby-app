@@ -197,6 +197,14 @@
     "moveDown": "Déplacer vers le bas",
     "delete": "Supprimer"
   },
+  "statementOptionsMenu": {
+    "title": "Options d'instruction",
+    "insertBefore": "Insérer avant",
+    "insertAfter": "Insérer après",
+    "moveUp": "Vers le haut",
+    "moveDown": "Vers le bas",
+    "delete": "Supprimer"
+  },
   "programOptionsMenu": {
     "title": "Options du programme",
     "rename": "Renommer le programme",

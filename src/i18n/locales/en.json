@@ -197,6 +197,14 @@
     "moveDown": "Move down",
     "delete": "Delete"
   },
+  "statementOptionsMenu": {
+    "title": "Instruction Options",
+    "insertBefore": "Insert before",
+    "insertAfter": "Insert after",
+    "moveUp": "Move up",
+    "moveDown": "Move down",
+    "delete": "Delete"
+  },
   "programOptionsMenu": {
     "title": "Program Options",
     "rename": "Rename Program",

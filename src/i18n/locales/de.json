@@ -197,6 +197,14 @@
     "moveDown": "Nach unten bewegen",
     "delete": "Löschen"
   },
+  "statementOptionsMenu": {
+    "title": "Anweisungsoptionen",
+    "insertBefore": "Davor einfügen",
+    "insertAfter": "Danach einfügen",
+    "moveUp": "Nach oben",
+    "moveDown": "Nach unten",
+    "delete": "Löschen"
+  },
   "programOptionsMenu": {
     "title": "Programmoptionen",
     "rename": "Programm umbenennen",
