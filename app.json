@@ -3,7 +3,7 @@
     "name": "explore-it-robotics",
     "slug": "explore-it-robotics",
     "version": "2.3.9",
-    "orientation": "portrait",
+    "orientation": "default",
     "icon": "./assets/images/icon.png",
     "scheme": "exploreitrobotics",
     "userInterfaceStyle": "automatic",

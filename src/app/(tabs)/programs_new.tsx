@@ -1,11 +1,13 @@
-import { useCallback, useState } from 'react';
-import { StyleSheet, Text } from 'react-native';
-import { useTranslation } from 'react-i18next';
-import { ThemedView } from '@/components/themed-view';
 import { ProgramList } from '@/components/programs';
-import { useResponsiveLayout } from '@/hooks/use-responsive-layout';
+import { ProgramEditor } from '@/components/programs/program-editor';
+import { ThemedView } from '@/components/themed-view';
 import { useProgramStorage } from '@/hooks/use-program-storage';
+import { useResponsiveLayout } from '@/hooks/use-responsive-layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
+import { router } from 'expo-router';
+import { useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { StyleSheet } from 'react-native';
 
 export default function ProgramsScreen() {
   const { t } = useTranslation();
@@ -19,15 +21,16 @@ export default function ProgramsScreen() {
     availablePrograms[0]?.name ?? null
   );
 
-  // const handleProgramPress = (program: Program) => {
-  //   if (isTablet) {
-  //     // On tablet, update selection to show in detail pane
-  //     setSelectedProgram(program);
-  //   } else {
-  //     // On phone, navigate to full-screen detail view
-  //     router.push(`/program-detail?id=${program.id}`);
-  //   }
-  // };
+  const onProgramSelected = useCallback(
+    (name: string) => {
+      if (isTablet) {
+        setSelectedProgramName(name);
+      } else {
+        router.push(`/program-edit?name=${name}`);
+      }
+    },
+    [isTablet]
+  );
 
   const onNewProgramRequested = useCallback(() => {
     // Find the next available program number
@@ -51,8 +54,8 @@ export default function ProgramsScreen() {
     programStorage.saveProgramSource(newSource);
 
     // Select the new program
-    setSelectedProgramName(newName);
-  }, [availablePrograms, programStorage, t]);
+    onProgramSelected(newName);
+  }, [availablePrograms, onProgramSelected, programStorage, t]);
 
   if (isTablet) {
     return (
@@ -62,14 +65,14 @@ export default function ProgramsScreen() {
           <ProgramList
             programs={availablePrograms}
             selectedProgramName={selectedProgramName}
-            onProgramSelected={setSelectedProgramName}
+            onProgramSelected={onProgramSelected}
             onNewProgramRequested={onNewProgramRequested}
           />
         </ThemedView>
 
         {/* Right pane: Program detail */}
         <ThemedView style={styles.detailPane}>
-          <Text>Placeholder</Text>
+          {selectedProgramName ? <ProgramEditor programName={selectedProgramName} /> : null}
         </ThemedView>
       </ThemedView>
     );
@@ -79,7 +82,7 @@ export default function ProgramsScreen() {
         <ProgramList
           programs={availablePrograms}
           selectedProgramName={selectedProgramName}
-          onProgramSelected={setSelectedProgramName}
+          onProgramSelected={onProgramSelected}
           onNewProgramRequested={onNewProgramRequested}
         />
       </ThemedView>

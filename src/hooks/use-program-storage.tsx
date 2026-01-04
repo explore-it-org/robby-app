@@ -24,7 +24,7 @@ import React, {
   useCallback,
   useMemo,
 } from 'react';
-import { FileProgramStorage, ProgramInfo, ProgramStorage } from '@/programs/storage';
+import { FileProgramStorage, ProgramStorage } from '@/programs/storage';
 import { ProgramSource } from '@/programs/source';
 
 interface ProgramStorageContextValue {
