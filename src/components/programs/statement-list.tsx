@@ -25,6 +25,19 @@ export function StatementList({ program }: Props) {
   const [insertAtIndex, setInsertAtIndex] = useState<number | null>(null);
   const programStorage = useProgramStorage();
 
+  // Get compilation errors if program is faulty
+  const errors = program.compiled.type === 'faulty' ? program.compiled.errors : [];
+
+  // Helper to check if a statement at a given index has errors
+  const hasErrorAtIndex = (index: number): boolean => {
+    return errors.some((error) => {
+      if (error.type === 'complexity') {
+        return false; // Complexity errors are program-level, not statement-level
+      }
+      return error.statementIndex === index;
+    });
+  };
+
   // Get all available programs except the current one
   const availablePrograms = programStorage.availablePrograms.filter(
     (p) => p.name !== program.source.name
@@ -178,6 +191,7 @@ export function StatementList({ program }: Props) {
                   onInsertAfter={handleInsertAfter}
                   canMoveUp={index > 0}
                   canMoveDown={index < statements.length - 1}
+                  hasError={hasErrorAtIndex(index)}
                 />
               );
             default:

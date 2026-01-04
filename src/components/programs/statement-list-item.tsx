@@ -315,6 +315,7 @@ interface SubroutineStatementProps {
   onInsertAfter: (index: number) => void;
   canMoveUp: boolean;
   canMoveDown: boolean;
+  hasError: boolean;
 }
 
 export function SubroutineStatementItem({
@@ -330,6 +331,7 @@ export function SubroutineStatementItem({
   onInsertAfter,
   canMoveUp,
   canMoveDown,
+  hasError,
 }: SubroutineStatementProps) {
   const handleRepetitionChange = (value: number) => {
     onChange({
@@ -370,8 +372,13 @@ export function SubroutineStatementItem({
       canMoveUp={canMoveUp}
       canMoveDown={canMoveDown}
     >
-      <Pressable style={styles.subroutineContent} onPress={onProgramSelect}>
-        <Text style={styles.subroutineName}>{statement.programReference}</Text>
+      <Pressable
+        style={[styles.subroutineContent, hasError && styles.subroutineContentError]}
+        onPress={onProgramSelect}
+      >
+        <Text style={[styles.subroutineName, hasError && styles.subroutineNameError]}>
+          {statement.programReference}
+        </Text>
       </Pressable>
 
       <Pressable style={styles.editButton} onPress={onOpenProgram}>
@@ -446,10 +453,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     minHeight: 40,
   },
+  subroutineContentError: {
+    backgroundColor: '#FFF5F5',
+    borderColor: COLORS.ERROR_CORAL,
+  },
   subroutineName: {
     fontSize: 16,
     fontWeight: '600',
     color: COLORS.TEXT_PRIMARY,
+  },
+  subroutineNameError: {
+    color: COLORS.ERROR_CORAL,
   },
   editButton: {
     paddingHorizontal: SPACING.SM,
