@@ -17,9 +17,7 @@ import { StyleSheet, View } from 'react-native';
 import { ThemedText } from '../themed-text';
 import { ThemedView } from '../themed-view';
 import { AddInstructionButton } from './add-instruction-button';
-import { CommentInstructionCard } from './comment-instruction-card';
 import { MoveInstructionCard } from './move-instruction-card';
-import { RepetitionInstructionCard } from './repetition-instruction-card';
 import { SubroutineInstructionCard } from './subroutine-instruction-card';
 
 /**
@@ -83,15 +81,6 @@ export function InstructionList({
             {...commonProps}
           />
         );
-      case 'comment':
-        return (
-          <CommentInstructionCard
-            key={instruction.id}
-            instruction={instruction}
-            onUpdate={(updated) => onUpdateInstruction(index, updated)}
-            {...commonProps}
-          />
-        );
       case 'subroutine':
         return (
           <SubroutineInstructionCard
@@ -101,82 +90,6 @@ export function InstructionList({
             onSelectProgram={() => onSelectSubroutineProgram?.(index)}
             onPreviewProgram={() => onPreviewSubroutineProgram?.(index)}
             {...commonProps}
-          />
-        );
-      case 'repetition':
-        return (
-          <RepetitionInstructionCard
-            key={instruction.id}
-            instruction={instruction}
-            onUpdate={(updated) => onUpdateInstruction(index, updated)}
-            nestingLevel={1}
-            onDelete={commonProps.onDelete}
-            onOptions={commonProps.onOptions}
-            // Repetitions manage their own expansion state internally
-            // Only nested instructions use the global expandedInstructionId
-            onAddInstruction={(pos) => {
-              // Now handled by the repetition's own instruction picker
-              // This shouldn't be called anymore as repetitions handle their own nested pickers
-              console.warn(
-                'onAddInstruction called on repetition - should use nested picker instead'
-              );
-            }}
-            onAddMove={(pos) => {
-              // Add move instruction inside repetition
-              const newId = `${instruction.id}-${Date.now()}`;
-              const newInstruction: Instruction = {
-                id: newId,
-                type: 'move',
-                leftMotorSpeed: 50,
-                rightMotorSpeed: 50,
-              };
-              const updatedInstructions = [...instruction.instructions];
-              updatedInstructions.splice(pos, 0, newInstruction);
-              onUpdateInstruction(index, {
-                ...instruction,
-                instructions: updatedInstructions,
-              });
-              // Auto-expand the newly created instruction
-              onToggleExpand(newId);
-            }}
-            onUpdateNested={(nestedIndex, updated) => {
-              const updatedInstructions = [...instruction.instructions];
-              updatedInstructions[nestedIndex] = updated;
-              onUpdateInstruction(index, {
-                ...instruction,
-                instructions: updatedInstructions,
-              });
-            }}
-            onDeleteNested={(nestedIndex) => {
-              const updatedInstructions = instruction.instructions.filter(
-                (_, i) => i !== nestedIndex
-              );
-              onUpdateInstruction(index, {
-                ...instruction,
-                instructions: updatedInstructions,
-              });
-            }}
-            onConfirmDeleteNested={
-              showDeleteConfirmation
-                ? (nestedIndex) => {
-                    showDeleteConfirmation(() => {
-                      const updatedInstructions = instruction.instructions.filter(
-                        (_, i) => i !== nestedIndex
-                      );
-                      onUpdateInstruction(index, {
-                        ...instruction,
-                        instructions: updatedInstructions,
-                      });
-                    });
-                  }
-                : undefined
-            }
-            showDeleteConfirmation={showDeleteConfirmation}
-            expandedNestedId={expandedInstructionId}
-            onToggleNestedExpand={onToggleExpand}
-            errors={errors}
-            onSelectSubroutineProgramById={onSelectSubroutineProgramById}
-            onPreviewSubroutineProgramById={onPreviewSubroutineProgramById}
           />
         );
       default:

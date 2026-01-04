@@ -12,19 +12,17 @@ import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 interface InstructionTypePickerProps {
   visible: boolean;
   onClose: () => void;
-  onSelectType: (type: 'move' | 'comment' | 'subroutine' | 'repetition') => void;
-  maxNestingReached?: boolean;
+  onSelectType: (type: 'move' | 'subroutine') => void;
 }
 
 export function InstructionTypePicker({
   visible,
   onClose,
   onSelectType,
-  maxNestingReached = false,
 }: InstructionTypePickerProps) {
   const { t } = useTranslation();
 
-  const handleSelect = (type: 'move' | 'comment' | 'subroutine' | 'repetition') => {
+  const handleSelect = (type: 'move' | 'subroutine') => {
     onSelectType(type);
     onClose();
   };
@@ -52,20 +50,6 @@ export function InstructionTypePicker({
                   </View>
                 </Pressable>
 
-                {/* Comment */}
-                <Pressable
-                  style={({ pressed }) => [styles.option, pressed && styles.optionPressed]}
-                  onPress={() => handleSelect('comment')}
-                >
-                  <Text style={styles.optionIcon}>💭</Text>
-                  <View style={styles.optionTextContainer}>
-                    <Text style={styles.optionTitle}>{t('instructionPicker.comment.title')}</Text>
-                    <Text style={styles.optionDescription}>
-                      {t('instructionPicker.comment.description')}
-                    </Text>
-                  </View>
-                </Pressable>
-
                 {/* Subroutine */}
                 <Pressable
                   style={({ pressed }) => [styles.option, pressed && styles.optionPressed]}
@@ -78,36 +62,6 @@ export function InstructionTypePicker({
                     </Text>
                     <Text style={styles.optionDescription}>
                       {t('instructionPicker.subroutine.description')}
-                    </Text>
-                  </View>
-                </Pressable>
-
-                {/* Repetition */}
-                <Pressable
-                  style={({ pressed }) => [
-                    styles.option,
-                    maxNestingReached && styles.optionDisabled,
-                    pressed && !maxNestingReached && styles.optionPressed,
-                  ]}
-                  onPress={() => !maxNestingReached && handleSelect('repetition')}
-                  disabled={maxNestingReached}
-                >
-                  <Text style={styles.optionIcon}>🔁</Text>
-                  <View style={styles.optionTextContainer}>
-                    <Text
-                      style={[styles.optionTitle, maxNestingReached && styles.optionTextDisabled]}
-                    >
-                      {t('instructionPicker.repetition.title')}
-                    </Text>
-                    <Text
-                      style={[
-                        styles.optionDescription,
-                        maxNestingReached && styles.optionTextDisabled,
-                      ]}
-                    >
-                      {maxNestingReached
-                        ? t('instructionPicker.repetition.maxNesting')
-                        : t('instructionPicker.repetition.description')}
                     </Text>
                   </View>
                 </Pressable>
@@ -173,9 +127,6 @@ const styles = StyleSheet.create({
   optionPressed: {
     backgroundColor: '#F0EDE6',
   },
-  optionDisabled: {
-    opacity: 0.5,
-  },
   optionIcon: {
     fontSize: 32,
   },
@@ -191,9 +142,6 @@ const styles = StyleSheet.create({
   optionDescription: {
     fontSize: 14,
     color: COLORS.TEXT_SECONDARY,
-  },
-  optionTextDisabled: {
-    opacity: 0.7,
   },
   cancelButton: {
     padding: SPACING.MD,
