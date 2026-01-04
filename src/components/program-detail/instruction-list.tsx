@@ -55,9 +55,7 @@ export function InstructionList({
   showDeleteConfirmation,
   errors = [],
   onSelectSubroutineProgram,
-  onSelectSubroutineProgramById,
   onPreviewSubroutineProgram,
-  onPreviewSubroutineProgramById,
 }: InstructionListProps) {
   const renderInstruction = (instruction: Instruction, index: number) => {
     // Find all errors for this instruction (both direct and transitive)

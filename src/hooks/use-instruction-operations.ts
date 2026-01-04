@@ -3,10 +3,10 @@
  * Extracted from program-detail-content.tsx to reduce complexity
  */
 
+import { ProgramEditor } from '@/hooks/use-program-legacy';
 import { Instruction, SubroutineInstruction } from '@/types/instruction';
 import { Program } from '@/types/program';
-import { ProgramEditor } from '@/hooks/use-program';
-import { useState, useCallback, useRef } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert } from 'react-native';
 

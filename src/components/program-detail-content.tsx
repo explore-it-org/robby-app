@@ -7,11 +7,12 @@
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { useProgram } from '@/hooks/use-program';
-import { useProgramPicker } from '@/hooks/use-program-picker';
-import { useProgramDeletion } from '@/hooks/use-program-deletion';
 import { useInstructionOperations } from '@/hooks/use-instruction-operations';
+import { useProgramDeletion } from '@/hooks/use-program-deletion';
+import { useProgram } from '@/hooks/use-program-legacy';
+import { useProgramPicker } from '@/hooks/use-program-picker';
 import { useRobotConnection } from '@/hooks/use-robot-connection';
+import { Instruction } from '@/types/instruction';
 import { Program } from '@/types/program';
 import type { Locale } from 'date-fns';
 import { formatDistanceToNow } from 'date-fns';
@@ -99,7 +100,6 @@ export function ProgramDetailContent({
     handleMoveInstruction,
     handleToggleExpand,
     handleSelectSubroutineProgram,
-    handleSelectSubroutineProgramById,
     handleProgramSelected,
   } = useInstructionOperations({ program, editor });
 
@@ -237,30 +237,6 @@ export function ProgramDetailContent({
     }
   };
 
-  const handlePreviewSubroutineProgramById = (instructionId: string) => {
-    if (!program) return;
-
-    // Recursively find the instruction by ID
-    const findInstruction = (instructions: Instruction[]): Instruction | null => {
-      for (const instr of instructions) {
-        if (instr.id === instructionId) return instr;
-        if (instr.type === 'repetition') {
-          const found = findInstruction(instr.instructions);
-          if (found) return found;
-        }
-      }
-      return null;
-    };
-
-    const instruction = findInstruction(program.instructions);
-    if (instruction?.type === 'subroutine' && instruction.programId) {
-      try {
-        router.push(`/program-detail?id=${instruction.programId}`);
-      } catch (error) {
-        console.warn('Navigation to program preview failed:', error);
-      }
-    }
-  };
 
   const getRelativeTime = (date: Date) => {
     // Map i18n language codes to date-fns locales
@@ -334,9 +310,7 @@ export function ProgramDetailContent({
             showDeleteConfirmation={showDeleteConfirmation}
             errors={compiledProgram?.errors}
             onSelectSubroutineProgram={handleSelectSubroutineProgram}
-            onSelectSubroutineProgramById={handleSelectSubroutineProgramById}
             onPreviewSubroutineProgram={handlePreviewSubroutineProgram}
-            onPreviewSubroutineProgramById={handlePreviewSubroutineProgramById}
           />
         </ScrollView>
 
@@ -377,9 +351,9 @@ export function ProgramDetailContent({
           selectedProgramId={
             programPickerInstructionIndex >= 0 && program
               ? (() => {
-                  const instr = program.instructions[programPickerInstructionIndex];
-                  return instr?.type === 'subroutine' ? instr.programId : undefined;
-                })()
+                const instr = program.instructions[programPickerInstructionIndex];
+                return instr?.type === 'subroutine' ? instr.programId : undefined;
+              })()
               : undefined
           }
         />

@@ -10,24 +10,14 @@
  */
 export interface SubroutineCallbacks {
   /**
-   * Select a program for a subroutine instruction (by index for top-level)
+   * Select a program for a subroutine instruction
    */
   onSelectSubroutineProgram?: (index: number) => void;
 
   /**
-   * Select a program for a subroutine instruction (by ID for nested)
-   */
-  onSelectSubroutineProgramById?: (instructionId: string) => void;
-
-  /**
-   * Preview/navigate to a subroutine program (by index for top-level)
+   * Preview/navigate to a subroutine program
    */
   onPreviewSubroutineProgram?: (index: number) => void;
-
-  /**
-   * Preview/navigate to a subroutine program (by ID for nested)
-   */
-  onPreviewSubroutineProgramById?: (instructionId: string) => void;
 }
 
 /**
