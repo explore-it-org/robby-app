@@ -203,7 +203,9 @@
     "insertAfter": "Insérer après",
     "moveUp": "Vers le haut",
     "moveDown": "Vers le bas",
-    "delete": "Supprimer"
+    "delete": "Supprimer",
+    "deleteConfirmTitle": "Supprimer l'instruction",
+    "deleteConfirmMessage": "Es-tu sûr de vouloir supprimer cette instruction ?"
   },
   "programOptionsMenu": {
     "title": "Options du programme",

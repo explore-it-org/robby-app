@@ -203,7 +203,9 @@
     "insertAfter": "Danach einfügen",
     "moveUp": "Nach oben",
     "moveDown": "Nach unten",
-    "delete": "Löschen"
+    "delete": "Löschen",
+    "deleteConfirmTitle": "Anweisung löschen",
+    "deleteConfirmMessage": "Möchtest du diese Anweisung wirklich löschen?"
   },
   "programOptionsMenu": {
     "title": "Programmoptionen",

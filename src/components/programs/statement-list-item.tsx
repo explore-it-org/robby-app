@@ -8,10 +8,12 @@ import { NumberInput } from '@/components/ui/number-input';
 
 interface MoveStatementProps {
   statement: MoveStatement;
+  index: number;
   onChange: (statement: MoveStatement) => void;
+  onDelete: (index: number) => void;
 }
 
-export function MoveStatementItem({ statement, onChange }: MoveStatementProps) {
+export function MoveStatementItem({ statement, index, onChange, onDelete }: MoveStatementProps) {
   const [showMenu, setShowMenu] = useState(false);
 
   const handleRepetitionChange = (value: number) => {
@@ -36,7 +38,7 @@ export function MoveStatementItem({ statement, onChange }: MoveStatementProps) {
   };
 
   const handleDelete = () => {
-    console.log('Delete statement');
+    onDelete(index);
   };
 
   const handleMoveUp = () => {
