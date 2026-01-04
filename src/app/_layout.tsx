@@ -7,6 +7,7 @@ import { useColorScheme } from '@/hooks/use-color-scheme';
 import { Colors } from '@/constants/theme';
 import { COLORS } from '@/constants/colors';
 import { RobotManagerProvider } from '@/services/robot-manager-factory';
+import { ProgramStorageProvider } from '@/hooks/use-program-storage';
 import '@/i18n';
 
 export const unstable_settings = {
@@ -26,24 +27,26 @@ export default function RootLayout() {
   };
 
   return (
-    <RobotManagerProvider>
-      <ThemeProvider value={customTheme}>
-        <Stack
-          screenOptions={{
-            headerStyle: {
-              backgroundColor: Colors.light.primary,
-            },
-            headerTintColor: '#FFFFFF',
-            headerTitleStyle: {
-              color: '#FFFFFF',
-              fontWeight: '600',
-            },
-          }}
-        >
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        </Stack>
-        <StatusBar style="light" />
-      </ThemeProvider>
-    </RobotManagerProvider>
+    <ProgramStorageProvider>
+      <RobotManagerProvider>
+        <ThemeProvider value={customTheme}>
+          <Stack
+            screenOptions={{
+              headerStyle: {
+                backgroundColor: Colors.light.primary,
+              },
+              headerTintColor: '#FFFFFF',
+              headerTitleStyle: {
+                color: '#FFFFFF',
+                fontWeight: '600',
+              },
+            }}
+          >
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          </Stack>
+          <StatusBar style="light" />
+        </ThemeProvider>
+      </RobotManagerProvider>
+    </ProgramStorageProvider>
   );
 }

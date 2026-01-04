@@ -22,24 +22,20 @@
 
 import { ProgramSource } from './source';
 
+export interface ProgramStorage {
+  getAvailablePrograms(): ProgramInfo[];
+  getProgramSource(name: string): ProgramSource | null;
+  saveProgramSource(source: ProgramSource): void;
+}
+
 /**
- * ProgramStorage class - manages program sources in memory
+ * FileProgramStorage class - manages program sources in the file system
  *
  * Maintains an in-memory cache of program metadata and provides
  * methods for loading, saving, and accessing programs.
  */
-export class ProgramStorage {
+export class FileProgramStorage implements ProgramStorage {
   private loadedPrograms: Map<string, ProgramSource> = new Map();
-
-  async reloadFromDisk(): Promise<void> {
-    // TODO: Reload all programs from disk and update in-memory cache
-    throw new Error('Not implemented');
-  }
-
-  async saveToDisk(): Promise<void> {
-    // TODO: Save all programs from the in-memory cache to disk
-    throw new Error('Not implemented');
-  }
 
   getAvailablePrograms(): ProgramInfo[] {
     // Get the programs from the cache and create ProgramInfo objects
@@ -49,6 +45,21 @@ export class ProgramStorage {
 
   getProgramSource(name: string): ProgramSource | null {
     // Retrieve a program source by name from the in-memory cache
+    throw new Error('Not implemented');
+  }
+
+  saveProgramSource(source: ProgramSource) {
+    // Add or update a program source in the in-memory cache
+    throw new Error('Not implemented');
+  }
+
+  async reloadFromDisk(): Promise<void> {
+    // TODO: Reload all programs from disk and update in-memory cache
+    throw new Error('Not implemented');
+  }
+
+  async saveToDisk(): Promise<void> {
+    // TODO: Save all programs from the in-memory cache to disk
     throw new Error('Not implemented');
   }
 }
