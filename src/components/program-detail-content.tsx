@@ -12,7 +12,6 @@ import { useProgramDeletion } from '@/hooks/use-program-deletion';
 import { useProgram } from '@/hooks/use-program-legacy';
 import { useProgramPicker } from '@/hooks/use-program-picker';
 import { useRobotConnection } from '@/hooks/use-robot-connection';
-import { Instruction } from '@/types/instruction';
 import { Program } from '@/types/program';
 import type { Locale } from 'date-fns';
 import { formatDistanceToNow } from 'date-fns';
@@ -237,7 +236,6 @@ export function ProgramDetailContent({
     }
   };
 
-
   const getRelativeTime = (date: Date) => {
     // Map i18n language codes to date-fns locales
     const localeMap: Record<string, Locale> = {
@@ -351,9 +349,9 @@ export function ProgramDetailContent({
           selectedProgramId={
             programPickerInstructionIndex >= 0 && program
               ? (() => {
-                const instr = program.instructions[programPickerInstructionIndex];
-                return instr?.type === 'subroutine' ? instr.programId : undefined;
-              })()
+                  const instr = program.instructions[programPickerInstructionIndex];
+                  return instr?.type === 'subroutine' ? instr.programId : undefined;
+                })()
               : undefined
           }
         />

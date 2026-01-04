@@ -1,14 +1,14 @@
 import { compile } from '@/programs/compiler';
 import { CompiledProgram } from '@/programs/program';
-import { loadProgramSource, ProgramSource } from '@/programs/source';
+import { ProgramSource } from '@/programs/source';
 import { Statement } from '@/programs/statements';
-import { useEffect, useState } from 'react';
+import { useProgramStorage } from './use-program-storage';
 
 /**
  * Return type for the useProgram hook.
  * Can be an editable program, a loading state, or a not-found state.
  */
-export type UseProgramHook = EditableProgram | ProgramLoading | ProgramNotFound;
+export type UseProgramHook = EditableProgram | ProgramNotFound;
 
 /**
  * Program editor interface providing methods to modify a program.
@@ -72,9 +72,6 @@ export interface EditableProgram {
   editor: ProgramEditor;
 }
 
-/** Loading state indicating the program is being loaded from storage */
-export type ProgramLoading = 'loading';
-
 /** Not-found state indicating the program does not exist in storage */
 export type ProgramNotFound = 'not-found';
 
@@ -119,57 +116,20 @@ export type ProgramNotFound = 'not-found';
  * ```
  */
 export function useProgram(name: string): UseProgramHook {
-  const [state, setState] = useState<UseProgramHook>('loading');
+  const programStorage = useProgramStorage();
+  const programSource = programStorage.getProgramSource(name);
 
-  useEffect(() => {
-    let isMounted = true;
+  if (!programSource) {
+    return 'not-found';
+  }
 
-    // Reset to loading state when name changes
-    setState('loading');
+  const compiledProgram = compile(programSource, programStorage);
 
-    // Load and compile the program
-    async function loadAndCompile() {
-      try {
-        // Load program source from storage
-        const source = await loadProgramSource(name);
-
-        // Check if program was found
-        if (!source) {
-          if (isMounted) {
-            setState('not-found');
-          }
-          return;
-        }
-
-        // Compile the program
-        const compiled = await compile(source);
-
-        // Update state if component is still mounted
-        if (isMounted) {
-          setState({
-            source,
-            compiled,
-            editor: createDummyEditor(),
-          });
-        }
-      } catch (error) {
-        console.error('Error loading program:', error);
-        // Treat errors as not-found for now
-        if (isMounted) {
-          setState('not-found');
-        }
-      }
-    }
-
-    loadAndCompile();
-
-    // Cleanup function to prevent state updates after unmount
-    return () => {
-      isMounted = false;
-    };
-  }, [name]);
-
-  return state;
+  return {
+    source: programSource,
+    compiled: compiledProgram,
+    editor: createDummyEditor(),
+  };
 }
 
 /**

@@ -1,5 +1,4 @@
-import { ProgramList } from '@/components/programs';
-import { ProgramEditor } from '@/components/programs/program-editor';
+import { ProgramEditor, ProgramList } from '@/components/programs';
 import { ThemedView } from '@/components/themed-view';
 import { useProgramStorage } from '@/hooks/use-program-storage';
 import { useResponsiveLayout } from '@/hooks/use-responsive-layout';
@@ -18,7 +17,7 @@ export default function ProgramsScreen() {
   const availablePrograms = programStorage.availablePrograms;
 
   const [selectedProgramName, setSelectedProgramName] = useState<string | null>(
-    availablePrograms[0]?.name ?? null
+    isTablet ? (availablePrograms[0]?.name ?? null) : null
   );
 
   const onProgramSelected = useCallback(

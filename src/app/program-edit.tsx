@@ -1,4 +1,4 @@
-import { ProgramEditor } from '@/components/programs/program-editor';
+import { ProgramEditor } from '@/components/programs';
 import { ThemedView } from '@/components/themed-view';
 import { COLORS } from '@/constants/colors';
 import { LAYOUT_SPACING } from '@/constants/spacing';
