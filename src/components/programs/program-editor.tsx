@@ -1,7 +1,7 @@
 import { ThemedText } from '@/components/themed-text';
 import { useProgram } from '@/hooks/use-program';
 import { useTranslation } from 'react-i18next';
-import { Alert, KeyboardAvoidingView, Platform, ScrollView, StyleSheet } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet } from 'react-native';
 import { ThemedView } from '../themed-view';
 import { RobotControlHeader } from '../robots';
 import { useRobotConnection } from '@/hooks/use-robot-connection';
@@ -10,6 +10,7 @@ import { router } from 'expo-router';
 import { ProgramHeader } from './program-header';
 import { StatementList } from './statement-list';
 import { ProgramHeaderMenu } from './program-header-menu';
+import { showDeleteProgramConfirmation } from '@/utils/alerts';
 
 interface Props {
   programName: string;
@@ -24,7 +25,7 @@ export function ProgramEditor({ programName }: Props) {
   const handleConnectRobot = useCallback(() => {
     router.replace('/(tabs)/robots');
   }, []);
-  
+
   const handleUploadToRobot = useCallback(() => {
     console.log('Upload program');
   }, []);
@@ -48,24 +49,10 @@ export function ProgramEditor({ programName }: Props) {
   const handleDeleteProgram = useCallback(() => {
     if (program === 'not-found') return;
 
-    Alert.alert(
-      t('alerts.deleteProgram.title'),
-      t('alerts.deleteProgram.message', { name: programName }),
-      [
-        {
-          text: t('common.cancel'),
-          style: 'cancel',
-        },
-        {
-          text: t('alerts.deleteProgram.confirm'),
-          style: 'destructive',
-          onPress: () => {
-            program.editor.deleteProgram();
-            router.back();
-          },
-        },
-      ]
-    );
+    showDeleteProgramConfirmation(programName, t, () => {
+      program.editor.deleteProgram();
+      router.back();
+    });
   }, [program, programName, t]);
 
   if (program === 'not-found') {
@@ -109,6 +96,7 @@ export function ProgramEditor({ programName }: Props) {
 
       {/* Program Header Menu Modal */}
       <ProgramHeaderMenu
+        programName={programName}
         visible={showMenu}
         onClose={() => setShowMenu(false)}
         onRename={handleRenameProgram}
