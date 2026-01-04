@@ -297,7 +297,9 @@ export function SubroutineStatementItem({ statement }: SubroutineStatementProps)
       onInsertBefore={handleInsertBefore}
       onInsertAfter={handleInsertAfter}
     >
-      <Text>Placeholder</Text>
+      <View style={styles.subroutineContent}>
+        <Text style={styles.subroutineName}>{statement.programReference}</Text>
+      </View>
     </StatementItemLayout>
   );
 }
@@ -355,6 +357,22 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: COLORS.TEXT_SECONDARY,
     paddingHorizontal: SPACING.XS,
+  },
+  subroutineContent: {
+    flex: 1,
+    backgroundColor: '#EAF8F5',
+    borderRadius: 8,
+    borderWidth: 2,
+    borderColor: COLORS.GRAY_LIGHT,
+    paddingVertical: SPACING.SM,
+    paddingHorizontal: SPACING.MD,
+    justifyContent: 'center',
+    minHeight: 40,
+  },
+  subroutineName: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: COLORS.TEXT_PRIMARY,
   },
   backdrop: {
     flex: 1,
