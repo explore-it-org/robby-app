@@ -38,9 +38,7 @@ export function StatementTypePicker({
       <Pressable style={styles.backdrop} onPress={onClose}>
         <View style={styles.modalContainer}>
           <View style={[styles.modal, { backgroundColor }]}>
-            <Text style={[styles.title, { color: textColor }]}>
-              {t('instructionPicker.title')}
-            </Text>
+            <Text style={[styles.title, { color: textColor }]}>{t('instructionPicker.title')}</Text>
 
             <View style={styles.optionsContainer}>
               {/* Move Statement */}

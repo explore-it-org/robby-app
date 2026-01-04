@@ -30,7 +30,7 @@ const MAPPING = {
   'circle.circle': 'radio-button-unchecked', // SF Symbol "circle.circle" maps to Material Icon "radio-button-unchecked" (outline circle for record)
   'arrow.down.circle': 'get-app', // SF Symbol "arrow.down.circle" maps to Material Icon "get-app" (outline download)
   'bolt.fill': 'flash-on', // SF Symbol "bolt.fill" maps to Material Icon "flash-on" (for connect)
-  'pencil': 'edit', // SF Symbol "pencil" maps to Material Icon "edit"
+  pencil: 'edit', // SF Symbol "pencil" maps to Material Icon "edit"
 } as const;
 
 export type IconSymbolName = keyof typeof MAPPING;

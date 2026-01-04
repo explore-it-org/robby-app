@@ -135,7 +135,10 @@ export function useProgram(name: string): UseProgramHook {
 /**
  * Create an editor implementation that updates the program store
  */
-function createEditor(programName: string, programStorage: ReturnType<typeof useProgramStorage>): ProgramEditor {
+function createEditor(
+  programName: string,
+  programStorage: ReturnType<typeof useProgramStorage>
+): ProgramEditor {
   return {
     renameProgram: (newName: string) => {
       const source = programStorage.getProgramSource(programName);
@@ -195,7 +198,10 @@ function createEditor(programName: string, programStorage: ReturnType<typeof use
       if (!source || index <= 0) return;
 
       const newStatements = [...source.statements];
-      [newStatements[index - 1], newStatements[index]] = [newStatements[index], newStatements[index - 1]];
+      [newStatements[index - 1], newStatements[index]] = [
+        newStatements[index],
+        newStatements[index - 1],
+      ];
 
       programStorage.saveProgramSource({
         ...source,
@@ -207,7 +213,10 @@ function createEditor(programName: string, programStorage: ReturnType<typeof use
       if (!source || index >= source.statements.length - 1) return;
 
       const newStatements = [...source.statements];
-      [newStatements[index], newStatements[index + 1]] = [newStatements[index + 1], newStatements[index]];
+      [newStatements[index], newStatements[index + 1]] = [
+        newStatements[index + 1],
+        newStatements[index],
+      ];
 
       programStorage.saveProgramSource({
         ...source,

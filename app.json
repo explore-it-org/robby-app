@@ -54,7 +54,9 @@
           "modes": ["peripheral", "central"],
           "bluetoothAlwaysPermission": "This app uses Bluetooth to connect to EXPLORE-IT robots."
         }
-      ]
+      ],
+      "expo-localization",
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true,

@@ -34,9 +34,7 @@ function findAllErrorsForInstruction(
 }
 
 interface InstructionListProps
-  extends InstructionOperationCallbacks,
-    InstructionUICallbacks,
-    SubroutineCallbacks {
+  extends InstructionOperationCallbacks, InstructionUICallbacks, SubroutineCallbacks {
   instructions: Instruction[];
   expandedInstructionId: string | null;
   errors?: CompilationError[];

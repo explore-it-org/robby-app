@@ -64,9 +64,7 @@ export function ProgramRenameModal({
     );
 
     if (nameExists) {
-      setErrorMessage(
-        t('programs.renameError.exists', 'A program with this name already exists')
-      );
+      setErrorMessage(t('programs.renameError.exists', 'A program with this name already exists'));
       setNewName(trimmedName);
       return;
     }
@@ -136,9 +134,7 @@ export function ProgramRenameModal({
                 ]}
                 onPress={handleRename}
               >
-                <Text style={styles.renameButtonText}>
-                  {t('programs.renameButton', 'Rename')}
-                </Text>
+                <Text style={styles.renameButtonText}>{t('programs.renameButton', 'Rename')}</Text>
               </Pressable>
             </View>
           </View>

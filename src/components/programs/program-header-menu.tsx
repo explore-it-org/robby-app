@@ -40,9 +40,7 @@ export function ProgramHeaderMenu({
       <Pressable style={styles.backdrop} onPress={onClose}>
         <View style={styles.modalContainer}>
           <View style={[styles.modal, { backgroundColor }]}>
-            <Text style={[styles.title, { color: textColor }]}>
-              {programName}
-            </Text>
+            <Text style={[styles.title, { color: textColor }]}>{programName}</Text>
 
             <View style={styles.optionsContainer}>
               {/* Rename Program */}
