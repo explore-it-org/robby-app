@@ -128,36 +128,91 @@ export function useProgram(name: string): UseProgramHook {
   return {
     source: programSource,
     compiled: compiledProgram,
-    editor: createDummyEditor(),
+    editor: createEditor(name, programStorage),
   };
 }
 
 /**
- * Create a dummy editor implementation
- * TODO: Replace with actual implementation that updates program store
+ * Create an editor implementation that updates the program store
  */
-function createDummyEditor(): ProgramEditor {
+function createEditor(programName: string, programStorage: ReturnType<typeof useProgramStorage>): ProgramEditor {
   return {
     renameProgram: (newName: string) => {
-      console.warn('Editor not implemented: renameProgram', newName);
+      const source = programStorage.getProgramSource(programName);
+      if (!source) return;
+
+      // Create updated source with new name
+      const updatedSource: ProgramSource = {
+        ...source,
+        name: newName,
+      };
+
+      // Delete old program and save with new name
+      programStorage.deleteProgramSource(programName);
+      programStorage.saveProgramSource(updatedSource);
     },
     deleteProgram: () => {
-      console.warn('Editor not implemented: deleteProgram');
+      programStorage.deleteProgramSource(programName);
     },
     addStatement: (statement: Statement, index: number) => {
-      console.warn('Editor not implemented: addStatement', statement, index);
+      const source = programStorage.getProgramSource(programName);
+      if (!source) return;
+
+      const newStatements = [...source.statements];
+      newStatements.splice(index, 0, statement);
+
+      programStorage.saveProgramSource({
+        ...source,
+        statements: newStatements,
+      });
     },
     replaceStatement: (index: number, statement: Statement) => {
-      console.warn('Editor not implemented: replaceStatement', index, statement);
+      const source = programStorage.getProgramSource(programName);
+      if (!source) return;
+
+      const newStatements = [...source.statements];
+      newStatements[index] = statement;
+
+      programStorage.saveProgramSource({
+        ...source,
+        statements: newStatements,
+      });
     },
     deleteStatement: (index: number) => {
-      console.warn('Editor not implemented: deleteStatement', index);
+      const source = programStorage.getProgramSource(programName);
+      if (!source) return;
+
+      const newStatements = [...source.statements];
+      newStatements.splice(index, 1);
+
+      programStorage.saveProgramSource({
+        ...source,
+        statements: newStatements,
+      });
     },
     moveStatementUp: (index: number) => {
-      console.warn('Editor not implemented: moveStatementUp', index);
+      const source = programStorage.getProgramSource(programName);
+      if (!source || index <= 0) return;
+
+      const newStatements = [...source.statements];
+      [newStatements[index - 1], newStatements[index]] = [newStatements[index], newStatements[index - 1]];
+
+      programStorage.saveProgramSource({
+        ...source,
+        statements: newStatements,
+      });
     },
     moveStatementDown: (index: number) => {
-      console.warn('Editor not implemented: moveStatementDown', index);
+      const source = programStorage.getProgramSource(programName);
+      if (!source || index >= source.statements.length - 1) return;
+
+      const newStatements = [...source.statements];
+      [newStatements[index], newStatements[index + 1]] = [newStatements[index + 1], newStatements[index]];
+
+      programStorage.saveProgramSource({
+        ...source,
+        statements: newStatements,
+      });
     },
   };
 }

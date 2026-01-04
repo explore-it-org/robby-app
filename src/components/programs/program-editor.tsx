@@ -1,7 +1,7 @@
 import { ThemedText } from '@/components/themed-text';
 import { useProgram } from '@/hooks/use-program';
 import { useTranslation } from 'react-i18next';
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet } from 'react-native';
+import { Alert, KeyboardAvoidingView, Platform, ScrollView, StyleSheet } from 'react-native';
 import { ThemedView } from '../themed-view';
 import { RobotControlHeader } from '../robots';
 import { useRobotConnection } from '@/hooks/use-robot-connection';
@@ -46,8 +46,27 @@ export function ProgramEditor({ programName }: Props) {
   }, []);
 
   const handleDeleteProgram = useCallback(() => {
-    console.log('Delete program');
-  }, []);
+    if (program === 'not-found') return;
+
+    Alert.alert(
+      t('alerts.deleteProgram.title'),
+      t('alerts.deleteProgram.message', { name: programName }),
+      [
+        {
+          text: t('common.cancel'),
+          style: 'cancel',
+        },
+        {
+          text: t('alerts.deleteProgram.confirm'),
+          style: 'destructive',
+          onPress: () => {
+            program.editor.deleteProgram();
+            router.back();
+          },
+        },
+      ]
+    );
+  }, [program, programName, t]);
 
   if (program === 'not-found') {
     return (
