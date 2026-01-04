@@ -13,6 +13,7 @@ import { StatementList } from './statement-list';
 import { ProgramHeaderMenu } from './program-header-menu';
 import { ProgramRenameModal } from './program-rename-modal';
 import { showDeleteProgramConfirmation } from '@/utils/alerts';
+import { ErrorList } from './error-list';
 
 interface Props {
   programName: string;
@@ -102,12 +103,14 @@ export function ProgramEditor({ programName, onProgramRenamed }: Props) {
             onStop={handleStopRobot}
             onUpload={handleUploadToRobot}
           />
+
           <ScrollView
             style={styles.scrollView}
             contentContainerStyle={styles.scrollContent}
             keyboardShouldPersistTaps="handled"
           >
             <ProgramHeader programName={programName} onMenuRequested={handleMenuRequested} />
+            <ErrorList program={program} />
             <StatementList program={program} />
           </ScrollView>
         </ThemedView>
