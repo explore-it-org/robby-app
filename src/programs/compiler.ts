@@ -38,8 +38,9 @@
 import { ProgramError } from './errors';
 import { Instruction } from './instructions';
 import { CompiledProgram } from './program';
-import { loadProgramSource, ProgramSource } from './source';
+import { ProgramSource } from './source';
 import { MoveStatement, Statement, SubroutineStatement } from './statements';
+import { ProgramStorage } from './storage';
 
 /**
  * Clamp a value between min and max (inclusive)
@@ -59,8 +60,8 @@ function clamp(value: number, min: number, max: number): number {
  * @param source - High-level program source with statements
  * @returns Promise resolving to CompiledProgram (CorrectProgram | FaultyProgram)
  */
-export async function compile(source: ProgramSource): Promise<CompiledProgram> {
-  return await compileInternal(source, [source.name]);
+export function compile(source: ProgramSource, programStorage: ProgramStorage): CompiledProgram {
+  return compileInternal(source, [source.name], programStorage);
 }
 
 /**
@@ -82,10 +83,11 @@ export async function compile(source: ProgramSource): Promise<CompiledProgram> {
  *    d. If compilation failed, add error to error list
  * 3. Return CorrectProgram (type='compiled') if no errors, otherwise FaultyProgram (type='faulty')
  */
-async function compileInternal(
+function compileInternal(
   source: ProgramSource,
-  callStack: string[]
-): Promise<CompiledProgram> {
+  callStack: string[],
+  programStorage: ProgramStorage
+): CompiledProgram {
   const MAX_INSTRUCTIONS = 1000; // Maximum total instructions after expansion
   let instructions: Instruction[] = [];
   let errors: ProgramError[] = [];
@@ -93,7 +95,7 @@ async function compileInternal(
   // Compile each statement sequentially
   for (let i = 0; i < source.statements.length; i++) {
     let statement = source.statements[i];
-    let result = await compileStatement(statement, i, callStack);
+    let result = compileStatement(statement, i, callStack, programStorage);
 
     if (isSuccessful(result)) {
       // Result is an array of instructions
@@ -139,16 +141,17 @@ async function compileInternal(
  * @param callStack - Current program call chain (for cycle detection)
  * @returns Array of instructions (success) or ProgramError (failure)
  */
-async function compileStatement(
+function compileStatement(
   statement: Statement,
   index: number,
-  callStack: string[]
-): Promise<CompilationResult> {
+  callStack: string[],
+  programStorage: ProgramStorage
+): CompilationResult {
   switch (statement.type) {
     case 'move':
       return compileMoveStatement(statement);
     case 'subroutine':
-      return await compileSubroutineStatement(statement, index, callStack);
+      return compileSubroutineStatement(statement, index, callStack, programStorage);
     default:
       throw new Error(`Unknown statement type: ${(statement as any).type}`);
   }
@@ -237,11 +240,12 @@ function compileMoveStatement(statement: MoveStatement): CompilationResult {
  * - **missing-reference**: Referenced program doesn't exist
  * - **faulty-reference**: Referenced program exists but failed to compile
  */
-async function compileSubroutineStatement(
+function compileSubroutineStatement(
   statement: SubroutineStatement,
   index: number,
-  callStack: string[]
-): Promise<CompilationResult> {
+  callStack: string[],
+  programStorage: ProgramStorage
+): CompilationResult {
   // STEP 1: Detect circular references (cycle detection)
   // Check if this program is already in the call stack
   // Example: If callStack = ["Main", "SubA"] and statement.programReference = "Main"
@@ -256,7 +260,7 @@ async function compileSubroutineStatement(
 
   // STEP 2: Load the referenced program from storage
   // Uses name-based lookup (see source.ts for implementation)
-  let referencedProgramSource = await loadProgramSource(statement.programReference);
+  let referencedProgramSource = programStorage.getProgramSource(statement.programReference);
   if (!referencedProgramSource) {
     // Program with this name doesn't exist in storage
     return {
@@ -269,10 +273,11 @@ async function compileSubroutineStatement(
   // STEP 3: Recursively compile the referenced program
   // Add this program to call stack to detect cycles in nested calls
   // Example: callStack ["Main"] becomes ["Main", "SubA"]
-  let compiledReferencedProgram = await compileInternal(referencedProgramSource, [
-    ...callStack,
-    statement.programReference,
-  ]);
+  let compiledReferencedProgram = compileInternal(
+    referencedProgramSource,
+    [...callStack, statement.programReference],
+    programStorage
+  );
 
   // STEP 4: Check if referenced program compiled successfully
   // compiledReferencedProgram is a CompiledProgram, check if it's faulty
