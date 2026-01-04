@@ -3,7 +3,6 @@
  */
 
 import { IRobot } from './robot';
-import { VirtualRobotConfig } from './virtual-robot';
 
 /**
  * A discovered robot with basic identification information
@@ -26,9 +25,6 @@ export interface DiscoveredRobot {
 
   /** True if this is a virtual robot (simulated, not physical hardware) */
   isVirtual?: boolean;
-
-  /** Virtual robot configuration (only present for virtual robots) */
-  virtualConfig?: VirtualRobotConfig;
 }
 
 /**

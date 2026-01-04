@@ -35,20 +35,12 @@
  * - **type='faulty'**: Has compilation errors (errors array), can be edited to fix
  */
 
-import { ProgramError } from './errors';
+import { CyclicReferenceError, ProgramError } from './errors';
 import { Instruction } from './instructions';
 import { CompiledProgram } from './program';
 import { ProgramSource } from './source';
 import { MoveStatement, Statement, SubroutineStatement } from './statements';
 import { ProgramStorage } from './storage';
-
-/**
- * Clamp a value between min and max (inclusive)
- * Used for defensive programming to handle invalid input values
- */
-function clamp(value: number, min: number, max: number): number {
-  return Math.max(min, Math.min(max, value));
-}
 
 /**
  * Compile a program source into a compiled program
@@ -91,6 +83,7 @@ function compileInternal(
   const MAX_INSTRUCTIONS = 1000; // Maximum total instructions after expansion
   let instructions: Instruction[] = [];
   let errors: ProgramError[] = [];
+  let complexityExceeded = false;
 
   // Compile each statement sequentially
   for (let i = 0; i < source.statements.length; i++) {
@@ -101,12 +94,14 @@ function compileInternal(
       // Result is an array of instructions
       // Check if adding these instructions would exceed the limit
       if (instructions.length + result.length > MAX_INSTRUCTIONS) {
-        errors.push({
-          type: 'complexity',
-          maxInstructions: MAX_INSTRUCTIONS,
-        });
+        if (!complexityExceeded) {
+          errors.push({
+            type: 'complexity',
+            maxInstructions: MAX_INSTRUCTIONS,
+          });
+          complexityExceeded = true;
+        }
         // Continue processing to find other potential errors
-        // Note: This could generate multiple complexity errors if many statements exceed limit
       } else {
         instructions.push(...result);
       }
@@ -255,6 +250,7 @@ function compileSubroutineStatement(
       type: 'cyclic-reference',
       statementIndex: index,
       programReference: statement.programReference,
+      cycle: [...callStack, statement.programReference],
     };
   }
 
@@ -282,7 +278,24 @@ function compileSubroutineStatement(
   // STEP 4: Check if referenced program compiled successfully
   // compiledReferencedProgram is a CompiledProgram, check if it's faulty
   if (compiledReferencedProgram.type === 'faulty') {
-    // Referenced program has compilation errors
+    // Check if the error is a cyclic reference that involves the current program
+    const cyclicError = compiledReferencedProgram.errors.find(
+      (e): e is CyclicReferenceError =>
+        e.type === 'cyclic-reference' && e.cycle.includes(callStack[0])
+    );
+
+    if (cyclicError) {
+      // The referenced program has a cyclic reference that includes us
+      // Report this as a cyclic reference error instead of faulty reference
+      return {
+        type: 'cyclic-reference',
+        statementIndex: index,
+        programReference: statement.programReference,
+        cycle: cyclicError.cycle,
+      };
+    }
+
+    // Referenced program has other compilation errors
     // Don't inline it - report as faulty reference
     return {
       type: 'faulty-reference',
@@ -321,4 +334,12 @@ type CompilationResult = Instruction[] | ProgramError;
  */
 function isSuccessful(result: CompilationResult): result is Instruction[] {
   return Array.isArray(result);
+}
+
+/**
+ * Clamp a value between min and max (inclusive)
+ * Used for defensive programming to handle invalid input values
+ */
+function clamp(value: number, min: number, max: number): number {
+  return Math.max(min, Math.min(max, value));
 }

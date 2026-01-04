@@ -283,5 +283,12 @@
     "description": "Gib einen neuen Namen für den Roboter ein",
     "placeholder": "Robotername",
     "rename": "Umbenennen"
+  },
+  "errors": {
+    "complexity": "Dein Programm ist zu gross. Es würde mehr als {{maxInstructions}} Anweisungen ergeben.",
+    "missingReference": "Programm \"{{programName}}\" existiert nicht.",
+    "faultyReference": "Programm \"{{programName}}\" hat Fehler.",
+    "cyclicReference": "Zyklische Referenzen: {{cycle}}",
+    "unknown": "Ein unbekannter Fehler ist aufgetreten."
   }
 }

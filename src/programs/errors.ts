@@ -117,6 +117,7 @@ export interface FaultyReferenceError {
  * // Program "Main" contains:
  * SubroutineStatement { programReference: "Main", repetitions: 1 }
  * // → CyclicReferenceError (self-reference)
+ * // cycle: ["Main", "Main"]
  * ```
  *
  * ### Indirect cycle (A → B → A):
@@ -126,12 +127,14 @@ export interface FaultyReferenceError {
  * // Program "SubA" contains:
  * SubroutineStatement { programReference: "Main" }
  * // → CyclicReferenceError when compiling "SubA"
+ * // cycle: ["Main", "SubA", "Main"]
  * ```
  *
  * ### Multi-level cycle (A → B → C → A):
  * ```typescript
  * // Main → SubA → SubB → Main
  * // → CyclicReferenceError when compiling "SubB"
+ * // cycle: ["Main", "SubA", "SubB", "Main"]
  * ```
  *
  * ## Detection:
@@ -146,11 +149,13 @@ export interface FaultyReferenceError {
  * @property type - Discriminant for union type
  * @property statementIndex - Position of the problematic SubroutineStatement in source
  * @property programReference - Name of the program that creates the cycle
+ * @property cycle - Full cycle path including the closing reference (e.g., ["Main", "SubA", "Main"])
  */
 export interface CyclicReferenceError {
   type: 'cyclic-reference';
   statementIndex: number;
   programReference: string;
+  cycle: string[];
 }
 
 /**

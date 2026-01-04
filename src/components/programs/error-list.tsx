@@ -1,8 +1,7 @@
 import { COLORS } from '@/constants/colors';
 import { SPACING } from '@/constants/spacing';
 import { EditableProgram } from '@/hooks/use-program';
-import { CompilationError } from '@/types/compiled-program';
-import { formatErrorMessage } from '@/utils/error-message-formatter';
+import { ProgramError } from '@/programs/errors';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, Text, View } from 'react-native';
 
@@ -23,20 +22,28 @@ export function ErrorList({ program }: Props) {
     return null;
   }
 
-  const getErrorMessage = (error: CompilationError): string => {
-    let message = formatErrorMessage(error);
-
-    if (!message) {
-      return t('compilationErrors.unknownError');
+  const getErrorMessage = (error: ProgramError): string => {
+    switch (error.type) {
+      case 'complexity':
+        return t('errors.complexity', {
+          maxInstructions: error.maxInstructions,
+        });
+      case 'missing-reference':
+        return t('errors.missingReference', {
+          programName: error.programReference,
+        });
+      case 'faulty-reference':
+        return t('errors.faultyReference', {
+          programName: error.programReference,
+        });
+      case 'cyclic-reference':
+        return t('errors.cyclicReference', {
+          programName: error.programReference,
+          cycle: error.cycle.join(' ➞ '),
+        });
+      default:
+        return t('errors.unknown');
     }
-
-    if (message.startsWith('[[CYCLIC_DEPENDENCY]]')) {
-      const pathPart = message.replace('[[CYCLIC_DEPENDENCY]]\n', '');
-      return `${t('compilationErrors.cyclicDependency')}\n${pathPart}`;
-    }
-
-    // Remove markup tags for simple text display
-    return message.replace(/\[\[RED\]\]/g, '').replace(/\[\[\/RED\]\]/g, '');
   };
 
   return (

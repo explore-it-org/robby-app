@@ -9,18 +9,18 @@
  * Only one robot can be connected at a time. No robot history is stored.
  */
 
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
 import { ConnectedRobotDisplay } from '@/components/connected-robot-display';
 import { WheelIcon } from '@/components/icons/WheelIcon';
-import { useRobotManager } from '@/services/robot-manager-factory';
-import { DiscoveredRobot, DiscoveryStatus } from '@/types/robot-discovery';
-import { IRobot } from '@/types/robot';
-import { StoredRobot } from '@/services/known-robots-storage';
-import { useEffect, useState, useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Alert, FlatList, Pressable, StyleSheet, View, ActivityIndicator } from 'react-native';
+import { ThemedText } from '@/components/themed-text';
+import { ThemedView } from '@/components/themed-view';
 import { COLORS } from '@/constants/colors';
+import { StoredRobot } from '@/services/known-robots-storage';
+import { useRobotManager } from '@/services/robot-manager-factory';
+import { IRobot } from '@/types/robot';
+import { DiscoveredRobot, DiscoveryStatus } from '@/types/robot-discovery';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { ActivityIndicator, Alert, FlatList, Pressable, StyleSheet, View } from 'react-native';
 
 export default function RobotScreen() {
   const { t } = useTranslation();
@@ -42,7 +42,7 @@ export default function RobotScreen() {
         robotManager.stopDiscovery().catch(console.error);
       }
     };
-  }, []);
+  }, [connectedRobot, robotManager, status]);
 
   const handleStartScan = async () => {
     try {
