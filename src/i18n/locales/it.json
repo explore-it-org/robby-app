@@ -236,6 +236,7 @@
     "cancel": "Annulla",
     "save": "Salva",
     "close": "Chiudi",
+    "back": "Indietro",
     "characters": "{{count}}/{{max}} caratteri"
   },
   "virtualRobot": {

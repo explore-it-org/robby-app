@@ -223,7 +223,7 @@ export function StatementList({ program }: Props) {
         presentationStyle="fullScreen"
         onRequestClose={handleCloseProgramPicker}
       >
-        <SafeAreaView style={styles.pickerContainer} edges={['top']}>
+        <SafeAreaView style={styles.pickerContainer} edges={['top', 'bottom']}>
           <View style={styles.pickerHeader}>
             <Text style={styles.pickerTitle}>{t('programPicker.title')}</Text>
             <Pressable onPress={handleCloseProgramPicker}>
@@ -231,7 +231,7 @@ export function StatementList({ program }: Props) {
             </Pressable>
           </View>
 
-          <ScrollView style={styles.pickerList}>
+          <ScrollView style={styles.pickerList} contentContainerStyle={styles.pickerListContent}>
             {availablePrograms.length === 0 ? (
               <View style={styles.emptyState}>
                 <Text style={styles.emptyText}>{t('programPicker.noPrograms')}</Text>
@@ -289,8 +289,10 @@ const styles = StyleSheet.create({
   },
   pickerList: {
     flex: 1,
-    padding: SPACING.LG,
     backgroundColor: COLORS.BEIGE_SOFT,
+  },
+  pickerListContent: {
+    padding: SPACING.LG,
   },
   emptyState: {
     flex: 1,

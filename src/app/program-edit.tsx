@@ -20,8 +20,8 @@ export default function ProgramEditScreen() {
     <ThemedView style={styles.container}>
       <Stack.Screen
         options={{
-          title: t('tabs.programs'),
-          headerBackTitle: t('tabs.programs'),
+          title: name,
+          headerBackTitle: t('common.back'),
           headerStyle: {
             backgroundColor: Colors[colorScheme ?? 'light'].primary,
           },
