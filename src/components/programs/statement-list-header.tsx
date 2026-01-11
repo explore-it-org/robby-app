@@ -14,7 +14,7 @@ export function StatementListHeader() {
 
       {/* Left Wheel */}
       <View style={styles.headerWheelContainerLeft}>
-        <WheelIcon size={20} color={COLORS.TEXT_SECONDARY} />
+        <WheelIcon size={24} color={COLORS.TEXT_SECONDARY} />
         <Text style={styles.headerLabel}>{t('instruction.move.leftWheel')[0]}</Text>
       </View>
 
@@ -24,7 +24,7 @@ export function StatementListHeader() {
       {/* Right Wheel */}
       <View style={styles.headerWheelContainerRight}>
         <Text style={styles.headerLabel}>{t('instruction.move.rightWheel')[0]}</Text>
-        <WheelIcon size={20} color={COLORS.TEXT_SECONDARY} />
+        <WheelIcon size={24} color={COLORS.TEXT_SECONDARY} />
       </View>
 
       {/* Spacer for menu button */}
@@ -68,8 +68,8 @@ const styles = StyleSheet.create({
     width: 32, // Approximate width of menu button
   },
   headerLabel: {
-    fontSize: 12,
-    fontWeight: '600',
+    fontSize: 16,
+    fontWeight: 'bold',
     color: COLORS.TEXT_SECONDARY,
     textTransform: 'uppercase',
   },
