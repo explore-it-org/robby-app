@@ -37,7 +37,7 @@
     "expo-web-browser": "~15.0.10",
     "human-id": "^4.1.2",
     "i18next": "^25.6.1",
-    "react": "19.2.3",
+    "react": "^19.1.0",
     "react-i18next": "^16.2.4",
     "react-native": "0.81.5",
     "react-native-ble-plx": "^3.5.0",
@@ -51,7 +51,7 @@
     "uuid": "^13.0.0"
   },
   "devDependencies": {
-    "@types/react": "~19.2.0",
+    "@types/react": "~19.1.0",
     "@types/uuid": "^10.0.0",
     "eslint": "^9.25.0",
     "eslint-config-expo": "~10.0.0",
