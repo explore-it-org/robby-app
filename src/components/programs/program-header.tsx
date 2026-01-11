@@ -1,7 +1,7 @@
-import { Pressable, StyleSheet, View } from 'react-native';
-import { IconSymbol } from '@/components/ui/icon-symbol';
+import { Pressable, StyleSheet, View, Text } from 'react-native';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { ThemedText } from '@/components/themed-text';
+import { COLORS } from '@/constants/colors';
 
 interface Props {
   programName: string;
@@ -10,7 +10,6 @@ interface Props {
 
 export function ProgramHeader({ programName, onMenuRequested }: Props) {
   const borderColor = useThemeColor({}, 'border');
-  const iconColor = useThemeColor({}, 'icon');
 
   return (
     <View style={[styles.container, { borderBottomColor: borderColor }]}>
@@ -20,8 +19,9 @@ export function ProgramHeader({ programName, onMenuRequested }: Props) {
       <Pressable
         style={({ pressed }) => [styles.menuButton, pressed && styles.menuButtonPressed]}
         onPress={onMenuRequested}
+        hitSlop={8}
       >
-        <IconSymbol name="ellipsis.circle" size={28} color={iconColor} />
+        <Text style={styles.menuIcon}>⋯</Text>
       </Pressable>
     </View>
   );
@@ -47,5 +47,9 @@ const styles = StyleSheet.create({
   },
   menuButtonPressed: {
     opacity: 0.5,
+  },
+  menuIcon: {
+    fontSize: 28,
+    color: COLORS.TEXT_SECONDARY,
   },
 });
