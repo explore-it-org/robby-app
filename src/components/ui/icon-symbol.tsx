@@ -26,7 +26,7 @@ const MAPPING = {
   'antenna.radiowaves.left.and.right': 'bluetooth', // SF Symbol for Bluetooth maps to Material Icon "bluetooth"
   'ellipsis.circle': 'more-horiz', // SF Symbol "ellipsis.circle" maps to Material Icon "more-horiz"
   play: 'play-arrow', // SF Symbol "play" maps to Material Icon "play-arrow" (outline)
-  stop: 'stop-circle-outline', // SF Symbol "stop" maps to Material Icon "stop-circle-outline" (outline square)
+  stop: 'stop-circle', // SF Symbol "stop" maps to Material Icon "stop-circle" (outline circle)
   'circle.circle': 'radio-button-unchecked', // SF Symbol "circle.circle" maps to Material Icon "radio-button-unchecked" (outline circle for record)
   'arrow.down.circle': 'get-app', // SF Symbol "arrow.down.circle" maps to Material Icon "get-app" (outline download)
   'bolt.fill': 'flash-on', // SF Symbol "bolt.fill" maps to Material Icon "flash-on" (for connect)

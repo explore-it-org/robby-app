@@ -56,6 +56,7 @@ export function setRobotConnected(robotId: string, robot?: StoredRobot): void {
       robotId,
       robotName: 'Unknown Robot',
       isVirtual: false,
+      addedAt: new Date().toISOString(),
     });
   }
   notifyListeners();

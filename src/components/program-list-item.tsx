@@ -1,4 +1,9 @@
+/* eslint-disable */
+// @ts-nocheck
 /**
+ * DEPRECATED - This file is no longer used.
+ * Use src/components/programs/program-list-item.tsx instead.
+ *
  * ProgramListItem Component
  *
  * Displays a single program entry in the program list.

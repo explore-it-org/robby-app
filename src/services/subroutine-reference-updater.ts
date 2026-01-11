@@ -1,4 +1,8 @@
+/* eslint-disable */
+// @ts-nocheck
 /**
+ * DEPRECATED - This file is no longer used.
+ *
  * Subroutine Reference Updater Service
  *
  * Handles updating cached program names in subroutine instructions

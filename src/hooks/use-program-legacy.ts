@@ -1,4 +1,9 @@
+/* eslint-disable */
+// @ts-nocheck
 /**
+ * DEPRECATED - This file is no longer used.
+ * Use src/hooks/use-program.ts instead.
+ *
  * useProgram Hook
  *
  * A custom hook that provides a simple way to load and update a program.

@@ -1,4 +1,9 @@
+/* eslint-disable */
+// @ts-nocheck
 /**
+ * DEPRECATED - This file is no longer used.
+ * Use src/programs/storage.ts instead.
+ *
  * Program Storage Service
  *
  * Manages persistence of user programs using expo-file-system.

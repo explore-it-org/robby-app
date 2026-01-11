@@ -109,8 +109,7 @@ export default function RobotScreen() {
       const robotDisplay: StoredRobot = {
         robotId: robot.id,
         robotName: robot.name || discoveredRobot.name || robot.id,
-        dateAdded: new Date().toISOString(),
-        lastConnected: new Date().toISOString(),
+        addedAt: new Date().toISOString(),
         isVirtual: discoveredRobot.isVirtual || false,
       };
 

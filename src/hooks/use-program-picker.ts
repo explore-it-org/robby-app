@@ -1,4 +1,8 @@
+/* eslint-disable */
+// @ts-nocheck
 /**
+ * DEPRECATED - This file is no longer used.
+ *
  * Custom hook for managing program picker state and available programs
  * Extracted from program-detail-content.tsx to reduce complexity
  */

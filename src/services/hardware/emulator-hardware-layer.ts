@@ -219,7 +219,7 @@ export class EmulatorHardwareLayer implements IHardwareLayer {
   private discoveryCallback?: (device: DiscoveredDevice) => void;
   private notificationCallbacks: ((data: Uint8Array) => void)[] = [];
   private stateChangeCallbacks: ((state: HardwareState) => void)[] = [];
-  private discoveryTimeouts: NodeJS.Timeout[] = [];
+  private discoveryTimeouts: ReturnType<typeof setTimeout>[] = [];
 
   constructor(config: EmulatorConfig = DEFAULT_EMULATOR_CONFIG) {
     this.config = config;

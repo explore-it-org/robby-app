@@ -6,12 +6,12 @@
  */
 
 import { COLORS } from '@/constants/colors';
-import { StyleSheet, Text, ViewStyle } from 'react-native';
+import { StyleSheet, Text, TextStyle } from 'react-native';
 
 interface InputLabelProps {
   text: string;
   alignment?: 'left' | 'right' | 'center';
-  style?: ViewStyle;
+  style?: TextStyle;
 }
 
 export function InputLabel({ text, alignment = 'left', style }: InputLabelProps) {

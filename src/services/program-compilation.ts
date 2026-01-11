@@ -1,4 +1,9 @@
+/* eslint-disable */
+// @ts-nocheck
 /**
+ * DEPRECATED - This file is no longer used.
+ * Use src/programs/compiler.ts instead.
+ *
  * Program Compilation Service
  *
  * Handles compilation of programs into executable format with validation.

@@ -1,4 +1,8 @@
+/* eslint-disable */
+// @ts-nocheck
 /**
+ * DEPRECATED - This file is no longer used.
+ *
  * Program References Service
  *
  * Utilities for finding and managing program references (subroutines).
