@@ -6,6 +6,7 @@ import { MoveStatementItem, SubroutineStatementItem } from './statement-list-ite
 import { MultiOptionButton } from '@/components/ui/multi-option-button';
 import { StatementTypePicker } from './statement-type-picker';
 import { ProgramPickerModal } from './program-picker-modal';
+import { StatementListHeader } from './statement-list-header';
 import { createMoveStatement, createSubroutineStatement, Statement } from '@/programs/statements';
 import { useProgramStorage } from '@/hooks/use-program-storage';
 import { router } from 'expo-router';
@@ -153,6 +154,9 @@ export function StatementList({ program }: Props) {
   return (
     <>
       <View style={styles.container}>
+        {/* Header with wheel icons and labels */}
+        {statements.length > 0 && <StatementListHeader />}
+
         {statements.map((statement, index) => {
           const key = `statement-${index}`;
 
