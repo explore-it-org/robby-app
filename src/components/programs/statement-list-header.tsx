@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: SPACING.XS,
     minWidth: 70, // Width to match motorSpeedBox
-    marginLeft: 8,
+    marginLeft: 12,
   },
   headerWheelContainerRight: {
     flexDirection: 'row',
