@@ -9,10 +9,10 @@
  * Only one robot can be connected at a time. No robot history is stored.
  */
 
-import { ConnectedRobotDisplay } from '@/components/connected-robot-display';
+import { ConnectedRobotDisplay } from '@/components/robots/connected-robot-display';
 import { WheelIcon } from '@/components/icons/WheelIcon';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
+import { ThemedText } from '@/components/ui/themed-text';
+import { ThemedView } from '@/components/ui/themed-view';
 import { COLORS } from '@/constants/colors';
 import { StoredRobot } from '@/services/known-robots-storage';
 import { useRobotManager } from '@/services/robot-manager-factory';

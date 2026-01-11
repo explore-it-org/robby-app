@@ -2,7 +2,7 @@ import { Tabs } from 'expo-router';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { HapticTab } from '@/components/haptic-tab';
+import { HapticTab } from '@/components/ui/haptic-tab';
 import { GearIcon } from '@/components/icons/GearIcon';
 import { ProgramIcon } from '@/components/icons/ProgramIcon';
 import { Colors } from '@/constants/theme';

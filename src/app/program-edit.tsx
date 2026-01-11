@@ -1,5 +1,5 @@
 import { ProgramEditor } from '@/components/programs';
-import { ThemedView } from '@/components/themed-view';
+import { ThemedView } from '@/components/ui/themed-view';
 import { COLORS } from '@/constants/colors';
 import { LAYOUT_SPACING } from '@/constants/spacing';
 import { Colors } from '@/constants/theme';

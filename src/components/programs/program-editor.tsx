@@ -1,8 +1,8 @@
-import { ThemedText } from '@/components/themed-text';
+import { ThemedText } from '@/components/ui/themed-text';
 import { useProgram } from '@/hooks/use-program';
 import { useTranslation } from 'react-i18next';
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet } from 'react-native';
-import { ThemedView } from '../themed-view';
+import { ThemedView } from '@/components/ui/themed-view';
 import { RobotControlHeader } from '../robots';
 import { useRobotConnection } from '@/hooks/use-robot-connection';
 import { useProgramStorage } from '@/hooks/use-program-storage';

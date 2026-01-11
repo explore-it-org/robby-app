@@ -5,7 +5,7 @@
  * Shows robot name with play and stop buttons in a purple card.
  */
 
-import { ThemedText } from '@/components/themed-text';
+import { ThemedText } from '@/components/ui/themed-text';
 import { PlayCodeIcon } from '@/components/icons/PlayCodeIcon';
 import { StopIcon } from '@/components/icons/StopIcon';
 import { UploadIcon } from '@/components/icons/UploadIcon';

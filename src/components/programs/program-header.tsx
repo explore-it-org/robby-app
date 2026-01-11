@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, View, Text } from 'react-native';
 import { useThemeColor } from '@/hooks/use-theme-color';
-import { ThemedText } from '@/components/themed-text';
+import { ThemedText } from '@/components/ui/themed-text';
 import { COLORS } from '@/constants/colors';
 
 interface Props {

@@ -1,5 +1,5 @@
 import { ProgramEditor, ProgramList } from '@/components/programs';
-import { ThemedView } from '@/components/themed-view';
+import { ThemedView } from '@/components/ui/themed-view';
 import { useProgramStorage } from '@/hooks/use-program-storage';
 import { useResponsiveLayout } from '@/hooks/use-responsive-layout';
 import { useThemeColor } from '@/hooks/use-theme-color';

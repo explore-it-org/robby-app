@@ -7,8 +7,8 @@
  */
 
 import { ProgramListItem } from './program-list-item';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
+import { ThemedText } from '@/components/ui/themed-text';
+import { ThemedView } from '@/components/ui/themed-view';
 import { FloatingActionButton } from '@/components/ui/floating-action-button';
 import { COMPONENT_SPACING, LAYOUT_SPACING, SPACING } from '@/constants/spacing';
 import { Platform, ScrollView, StyleSheet } from 'react-native';

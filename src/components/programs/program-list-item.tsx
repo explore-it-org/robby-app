@@ -7,8 +7,8 @@
 
 import { StyleSheet, Pressable } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
+import { ThemedText } from '@/components/ui/themed-text';
+import { ThemedView } from '@/components/ui/themed-view';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { COLORS } from '@/constants/colors';
 import { COMPONENT_SPACING, SHADOW_SPACING } from '@/constants/spacing';
