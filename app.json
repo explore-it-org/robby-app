@@ -28,7 +28,10 @@
       "permissions": [
         "android.permission.BLUETOOTH",
         "android.permission.BLUETOOTH_ADMIN",
-        "android.permission.BLUETOOTH_SCAN",
+        {
+          "name": "android.permission.BLUETOOTH_SCAN",
+          "usesPermissionFlags": "neverForLocation"
+        },
         "android.permission.BLUETOOTH_CONNECT",
         "android.permission.ACCESS_FINE_LOCATION"
       ]
@@ -52,7 +55,8 @@
         {
           "isBackgroundEnabled": true,
           "modes": ["peripheral", "central"],
-          "bluetoothAlwaysPermission": "This app uses Bluetooth to connect to EXPLORE-IT robots."
+          "bluetoothAlwaysPermission": "This app uses Bluetooth to connect to EXPLORE-IT robots.",
+          "neverForLocation": true
         }
       ],
       "expo-localization",

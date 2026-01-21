@@ -8,6 +8,7 @@
 import { BleManager, Device } from 'react-native-ble-plx';
 import { DiscoveredDevice, HardwareState, IHardwareLayer } from '@/types/hardware';
 import { base64ToUint8Array, uint8ArrayToBase64, latin1ToUint8Array } from '@/utils/buffer-utils';
+import { requestBluetoothPermissions } from '@/utils/ble-permissions';
 
 // BLE Service and Characteristic UUIDs for EXPLORE-IT robots
 const BLE_SERVICE_UUID = '0000ffe0-0000-1000-8000-00805f9b34fb';
@@ -30,6 +31,12 @@ export class BLEHardwareLayer implements IHardwareLayer {
   async startDiscovery(callback: (device: DiscoveredDevice) => void): Promise<void> {
     this.discoveryCallback = callback;
     this.discoveredDevices.clear();
+
+    // Request Bluetooth permissions
+    const permissionsGranted = await requestBluetoothPermissions();
+    if (!permissionsGranted) {
+      throw new Error('Bluetooth permissions not granted');
+    }
 
     // Check if Bluetooth is powered on
     const state = await this.bleManager.state();
