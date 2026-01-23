@@ -28,10 +28,7 @@
       "permissions": [
         "android.permission.BLUETOOTH",
         "android.permission.BLUETOOTH_ADMIN",
-        {
-          "name": "android.permission.BLUETOOTH_SCAN",
-          "usesPermissionFlags": "neverForLocation"
-        },
+        "android.permission.BLUETOOTH_SCAN",
         "android.permission.BLUETOOTH_CONNECT",
         "android.permission.ACCESS_FINE_LOCATION"
       ]
