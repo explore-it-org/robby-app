@@ -7,17 +7,13 @@ import { uint8ArrayToLatin1 } from './protocol-base';
 
 export class DeviceChannel {
   private device: ConnectedDevice;
-  private responseResolve: ((data: Uint8Array) => void) | null = null;
+  private buffer: Uint8Array[] = [];
   private unsubscribe: (() => void) | null = null;
 
   constructor(device: ConnectedDevice) {
     this.device = device;
     this.unsubscribe = device.onDataReceived((data) => {
-      if (this.responseResolve) {
-        const resolve = this.responseResolve;
-        this.responseResolve = null;
-        resolve(data);
-      }
+      this.buffer.push(data);
     });
   }
 
@@ -25,24 +21,25 @@ export class DeviceChannel {
    * Send a command without waiting for response
    */
   async send(command: string | Uint8Array): Promise<void> {
+    this.buffer = [];
     await this.device.writeData(command);
   }
 
   /**
    * Wait for a response without sending a command
    */
-  awaitResponse(timeoutMs = 5000): Promise<Uint8Array> {
-    return new Promise((resolve, reject) => {
-      const timeout = setTimeout(() => {
-        this.responseResolve = null;
-        reject(new Error('Response timeout'));
-      }, timeoutMs);
+  async awaitResponse(timeoutMs = 5000): Promise<Uint8Array> {
+    const startTime = Date.now();
+    const pollInterval = 100;
 
-      this.responseResolve = (data) => {
-        clearTimeout(timeout);
-        resolve(data);
-      };
-    });
+    while (Date.now() - startTime < timeoutMs) {
+      if (this.buffer.length > 0) {
+        return this.buffer.shift()!;
+      }
+      await new Promise((resolve) => setTimeout(resolve, pollInterval));
+    }
+
+    throw new Error('Response timeout');
   }
 
   /**
@@ -67,9 +64,9 @@ export class DeviceChannel {
    * Send a command and wait for a response
    */
   async request(command: string | Uint8Array, timeoutMs = 5000): Promise<Uint8Array> {
-    const responsePromise = this.awaitResponse(timeoutMs);
+    this.buffer = [];
     await this.device.writeData(command);
-    return responsePromise;
+    return this.awaitResponse(timeoutMs);
   }
 
   /**

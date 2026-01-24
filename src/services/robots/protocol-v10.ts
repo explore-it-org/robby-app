@@ -7,15 +7,9 @@
  * - Maximum 4096 instructions
  */
 
-import { Instruction } from '@/programs/instructions';
+import { Instruction } from '@/services/programs/instructions';
 import { ProtocolHandler } from './protocol';
-import {
-  encodeSpeed,
-  decodeSpeed,
-  calculateDataLength,
-  hexNumber,
-  hexNumberConfirm,
-} from './protocol-base';
+import { encodeSpeed, decodeSpeed, hexNumber, hexNumberConfirm } from './protocol-base';
 import { DeviceChannel } from './device-channel';
 
 const CHUNK_SIZE = 256; // instructions per chunk
