@@ -317,6 +317,7 @@
     "programLinesPerSecond": "Program Lines Per Second",
     "appSettings": "App Settings",
     "language": "Language",
+    "deviceLanguage": "Device Language",
     "extendedRobotInfo": "Show Extended Robot Information",
     "visitWebsite": "Visit www.explore-it.org",
     "version": "Version"

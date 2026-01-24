@@ -13,7 +13,7 @@ const STORAGE_KEYS = {
   SHOW_EXTENDED_ROBOT_INFO: '@settings/showExtendedRobotInfo',
 } as const;
 
-export type Language = 'en' | 'de' | 'fr' | 'it';
+export type Language = 'device' | 'en' | 'de' | 'fr' | 'it';
 
 export interface Settings {
   recordingDuration: number;
@@ -23,7 +23,7 @@ export interface Settings {
 
 export const DEFAULT_SETTINGS: Settings = {
   recordingDuration: 15,
-  language: 'en',
+  language: 'device',
   showExtendedRobotInfo: false,
 };
 
@@ -67,7 +67,7 @@ export async function saveRecordingDuration(duration: number): Promise<void> {
 export async function loadLanguage(): Promise<Language> {
   try {
     const value = await AsyncStorage.getItem(STORAGE_KEYS.LANGUAGE);
-    if (value !== null && ['en', 'de', 'fr', 'it'].includes(value)) {
+    if (value !== null && ['device', 'en', 'de', 'fr', 'it'].includes(value)) {
       return value as Language;
     }
   } catch (error) {
@@ -81,8 +81,8 @@ export async function loadLanguage(): Promise<Language> {
  */
 export async function saveLanguage(language: Language): Promise<void> {
   // Validate language value
-  if (!['en', 'de', 'fr', 'it'].includes(language)) {
-    throw new Error('Invalid language. Must be one of: en, de, fr, it');
+  if (!['device', 'en', 'de', 'fr', 'it'].includes(language)) {
+    throw new Error('Invalid language. Must be one of: device, en, de, fr, it');
   }
   try {
     await AsyncStorage.setItem(STORAGE_KEYS.LANGUAGE, language);

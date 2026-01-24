@@ -317,6 +317,7 @@
     "programLinesPerSecond": "Programmzeilen pro Sekunde",
     "appSettings": "App-Einstellungen",
     "language": "Sprache",
+    "deviceLanguage": "Gerätesprache",
     "extendedRobotInfo": "Erweiterte Roboter-Informationen anzeigen",
     "visitWebsite": "Besuche www.explore-it.org",
     "version": "Version"

@@ -239,7 +239,9 @@ export default function RobotScreen() {
       </View>
       <View style={styles.robotItemInfo}>
         <ThemedText style={styles.robotItemName}>{item.name || item.id}</ThemedText>
-        <ThemedText style={styles.robotItemId}>{t('robot.overview.robotId', { id: item.id })}</ThemedText>
+        {showExtendedRobotInfo && (
+          <ThemedText style={styles.robotItemId}>{t('robot.overview.robotId', { id: item.id })}</ThemedText>
+        )}
       </View>
     </Pressable>
   );

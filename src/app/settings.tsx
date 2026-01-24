@@ -11,6 +11,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, ScrollView, Switch, Pressable, Alert, Image } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import Constants from 'expo-constants';
 import { NumberInput } from '@/components/ui/number-input';
 import * as Linking from 'expo-linking';
 import { Stack } from 'expo-router';
@@ -21,8 +22,6 @@ import { useSettings } from '@/hooks/use-settings';
 import { COLORS } from '@/constants/colors';
 import { SPACING } from '@/constants/spacing';
 import { Language } from '@/services/settings-storage';
-
-const packageJson = require('../../package.json');
 
 export default function SettingsScreen() {
   const { t } = useTranslation();
@@ -98,6 +97,7 @@ export default function SettingsScreen() {
   };
 
   const languages: { value: Language; label: string }[] = [
+    { value: 'device', label: t('settings.deviceLanguage') },
     { value: 'en', label: 'English' },
     { value: 'de', label: 'Deutsch' },
     { value: 'fr', label: 'Français' },
@@ -119,7 +119,7 @@ export default function SettingsScreen() {
 
           <View style={styles.settingItem}>
             <View style={styles.durationRow}>
-              <ThemedText style={styles.settingLabel}>{t('settings.recordingDuration')}</ThemedText>
+              <ThemedText style={styles.durationLabel}>{t('settings.recordingDuration')}</ThemedText>
               <NumberInput
                 value={recordingDuration}
                 onValueChange={handleDurationChange}
@@ -135,7 +135,7 @@ export default function SettingsScreen() {
           {robot && (
             <View style={styles.settingItem}>
               <View style={styles.durationRow}>
-                <ThemedText style={styles.settingLabel}>{t('settings.programLinesPerSecond')}</ThemedText>
+                <ThemedText style={styles.durationLabel}>{t('settings.programLinesPerSecond')}</ThemedText>
                 <NumberInput
                   value={instructionInterval}
                   onValueChange={handleIntervalChange}
@@ -181,7 +181,7 @@ export default function SettingsScreen() {
           {/* Extended Robot Info Toggle */}
           <View style={styles.settingItem}>
             <View style={styles.toggleRow}>
-              <ThemedText style={styles.settingLabel}>
+              <ThemedText style={styles.toggleLabel}>
                 {t('settings.extendedRobotInfo')}
               </ThemedText>
               <Switch
@@ -213,7 +213,7 @@ export default function SettingsScreen() {
 
           {/* Version */}
           <ThemedText style={styles.version}>
-            {t('settings.version')} {packageJson.version}
+            {t('settings.version')} {Constants.expoConfig?.version || '0.0.0'}
           </ThemedText>
         </View>
       </ScrollView>
@@ -253,6 +253,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    gap: SPACING.MD,
+  },
+  durationLabel: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: COLORS.TEXT_PRIMARY,
+    flex: 1,
+    flexShrink: 1,
   },
   settingLabel: {
     fontSize: 16,
@@ -292,6 +300,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    gap: SPACING.MD,
+  },
+  toggleLabel: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: COLORS.TEXT_PRIMARY,
+    flex: 1,
+    flexShrink: 1,
   },
   footer: {
     alignItems: 'center',

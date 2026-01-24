@@ -6,6 +6,7 @@
  */
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import * as Localization from 'expo-localization';
 import i18n from '@/i18n';
 import {
   Language,
@@ -49,8 +50,11 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
         setRecordingDurationState(settings.recordingDuration);
         setLanguageState(settings.language);
         setShowExtendedRobotInfoState(settings.showExtendedRobotInfo);
-        // Set i18n language
-        i18n.changeLanguage(settings.language).catch(console.error);
+        // Set i18n language (resolve 'device' to actual device language)
+        const actualLanguage = settings.language === 'device' 
+          ? (Localization.getLocales()[0]?.languageCode ?? 'en')
+          : settings.language;
+        i18n.changeLanguage(actualLanguage).catch(console.error);
       })
       .catch(console.error)
       .finally(() => {
@@ -70,8 +74,11 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
   const handleSetLanguage = async (lang: Language): Promise<void> => {
     await saveLanguage(lang);
     setLanguageState(lang);
-    // Update i18n language
-    await i18n.changeLanguage(lang);
+    // Update i18n language (resolve 'device' to actual device language)
+    const actualLanguage = lang === 'device' 
+      ? (Localization.getLocales()[0]?.languageCode ?? 'en')
+      : lang;
+    await i18n.changeLanguage(actualLanguage);
   };
 
   const handleSetShowExtendedRobotInfo = async (show: boolean): Promise<void> => {

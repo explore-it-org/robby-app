@@ -19,6 +19,7 @@ class NativeConnectedDevice implements ConnectedDevice {
   private rnBleManager: RNBleManager;
   private dataCallbacks: ((data: Uint8Array) => void)[] = [];
   private disconnectCallbacks: (() => void)[] = [];
+  private monitorSubscription: any = null;
 
   constructor(device: Device, rnBleManager: RNBleManager) {
     this.device = device;
@@ -29,9 +30,17 @@ class NativeConnectedDevice implements ConnectedDevice {
 
   async disconnect(): Promise<void> {
     try {
+      // Cancel notification subscription first
+      if (this.monitorSubscription) {
+        this.monitorSubscription.remove();
+        this.monitorSubscription = null;
+      }
       await this.rnBleManager.cancelDeviceConnection(this.device.id);
     } catch (error) {
-      console.error('Error disconnecting:', error);
+      // Ignore already disconnected errors
+      if (error instanceof Error && !error.message?.includes('disconnected')) {
+        console.error('Error disconnecting:', error);
+      }
     }
     this.notifyDisconnect();
   }
@@ -67,6 +76,13 @@ class NativeConnectedDevice implements ConnectedDevice {
         this.dataCallbacks.splice(idx, 1);
       }
     };
+  }
+
+  /**
+   * Set the monitor subscription
+   */
+  setMonitorSubscription(subscription: any): void {
+    this.monitorSubscription = subscription;
   }
 
   /**
@@ -146,11 +162,15 @@ export class NativeBleManager implements BleManager {
     const connectedDevice = new NativeConnectedDevice(rnDevice, this.rnBleManager);
 
     // Subscribe to notifications
-    rnDevice.monitorCharacteristicForService(
+    const subscription = rnDevice.monitorCharacteristicForService(
       BLE_SERVICE_UUID,
       BLE_CHAR_UUID,
       (error, characteristic) => {
         if (error) {
+          // Ignore disconnection and cancellation errors
+          if (error.message?.includes('disconnected') || error.message?.includes('cancelled')) {
+            return;
+          }
           console.error('Notification error:', error);
           return;
         }
@@ -162,6 +182,9 @@ export class NativeBleManager implements BleManager {
       },
       TRANSACTION_ID
     );
+
+    // Store subscription for cleanup
+    connectedDevice.setMonitorSubscription(subscription);
 
     // Monitor for disconnection
     rnDevice.onDisconnected(() => {
