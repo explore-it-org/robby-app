@@ -37,4 +37,9 @@ export const toggleSettings = () => ({
     type: ActionTypes.TOGGLE_SETTINGS,
 });
 
+export const setExtendedRobotInfo = (showExtended) => ({
+    type: ActionTypes.SET_EXTENDED_ROBOT_INFO,
+    showExtended,
+});
+
 

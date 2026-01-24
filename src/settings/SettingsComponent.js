@@ -4,6 +4,7 @@ import {
     Image,
     SafeAreaView, ScrollView,
     StyleSheet,
+    Switch,
     TouchableOpacity,
     View,
     Platform,
@@ -341,6 +342,32 @@ class SettingsComponent extends Component {
                                         </View>
                                         <View style={{flex: 10, alignSelf: 'center'}}>
                                             {this.renderPicker()}
+                                        </View>
+                                        <View style={{flex: 2}}/>
+                                    </View>
+                                    {hr}
+
+                                    <View style={{
+                                        flexDirection: 'row',
+                                        justifyContent: 'flex-start',
+                                        marginVertical: 10,
+                                    }}>
+                                        <View style={{flex: 1}}/>
+                                        <View style={{flex: 11, alignSelf: 'center'}}>
+                                            <Text style={{
+                                                fontSize: 16,
+                                                fontWeight: 'bold',
+                                            }}>
+                                                {i18n.t('Settings.extendedRobotInfo')}
+                                            </Text>
+                                        </View>
+                                        <View style={{flex: 4, alignSelf: 'center', alignItems: 'flex-end'}}>
+                                            <Switch
+                                                value={this.props.Settings.showExtendedRobotInfo}
+                                                onValueChange={(value) => {
+                                                    this.props.setExtendedRobotInfo(value);
+                                                }}
+                                            />
                                         </View>
                                         <View style={{flex: 2}}/>
                                     </View>

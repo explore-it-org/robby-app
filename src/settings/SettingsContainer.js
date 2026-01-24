@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {setDuration, setInterval, setIntervalAndSendToRobby, setLanguage, toggleSettings} from './SettingsAction';
+import {setDuration, setInterval, setIntervalAndSendToRobby, setLanguage, toggleSettings, setExtendedRobotInfo} from './SettingsAction';
 import BleAction from '../ble/BleAction';
 import SettingsComponent from './SettingsComponent';
 import {forceReloadBlocks} from '../programmingtabs/blockprogramming/ActiveBlockAction';
@@ -18,6 +18,7 @@ const mapDispatchToProps = dispatch =>
             setIntervalAndSendToRobby,
             setLanguage,
             toggleSettings,
+            setExtendedRobotInfo,
             forceReloadBlocks,
         }, dispatch);
 

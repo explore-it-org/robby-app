@@ -9,6 +9,7 @@ const default_state_settings = {
     language: undefined,
     bleState: '',
     visible: false,
+    showExtendedRobotInfo: false,
 
 };
 export const SettingsReducer = (state = default_state_settings, action) => {
@@ -25,6 +26,8 @@ export const SettingsReducer = (state = default_state_settings, action) => {
             return Object.assign({}, state, {bleState: action.bleState});
         case ActionType.TOGGLE_SETTINGS:
             return Object.assign({}, state, {visible: !state.visible});
+        case ActionType.SET_EXTENDED_ROBOT_INFO:
+            return Object.assign({}, state, {showExtendedRobotInfo: action.showExtended, lastUpdate: Date.now()});
         default:
             return state;
     }

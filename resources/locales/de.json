@@ -45,6 +45,7 @@
     "duration-unit": "Sekunden (1..80)",
     "language": "Sprache:",
     "robotVersion": "Roboter Version:",
+    "extendedRobotInfo": "Erweiterte Roboter-Informationen anzeigen",
     "websiteURL":"https://www.explore-it.org/de",
     "enteredDurationTooBigTitle": "",
     "enteredDurationTooBigMessage": "Die eingegebene Zahl ist zu gross.",
