@@ -59,22 +59,11 @@ export class DeviceChannel {
   }
 
   /**
-   * Send a command and wait for a text response matching a pattern
+   * Send a command and wait for a text response
    */
-  async requestText(
-    command: string | Uint8Array,
-    matcher: string | ((text: string) => boolean),
-    timeoutMs = 5000
-  ): Promise<string> {
+  async requestText(command: string | Uint8Array, timeoutMs = 5000): Promise<string> {
     const data = await this.request(command, timeoutMs);
-    const text = uint8ArrayToLatin1(data);
-
-    const matches = typeof matcher === 'string' ? text.includes(matcher) : matcher(text);
-    if (!matches) {
-      throw new Error(`Unexpected response: ${text}`);
-    }
-
-    return text;
+    return uint8ArrayToLatin1(data);
   }
 
   /**
@@ -102,21 +91,11 @@ export class DeviceChannel {
   }
 
   /**
-   * Wait for a text response matching a pattern
+   * Wait for a text response
    */
-  async awaitTextResponse(
-    matcher: string | ((text: string) => boolean),
-    timeoutMs = 5000
-  ): Promise<string> {
+  async awaitTextResponse(timeoutMs = 5000): Promise<string> {
     const data = await this.awaitResponse(timeoutMs);
-    const text = uint8ArrayToLatin1(data);
-
-    const matches = typeof matcher === 'string' ? text.includes(matcher) : matcher(text);
-    if (!matches) {
-      throw new Error(`Unexpected response: ${text}`);
-    }
-
-    return text;
+    return uint8ArrayToLatin1(data);
   }
 
   /**

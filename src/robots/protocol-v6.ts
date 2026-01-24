@@ -13,8 +13,10 @@ import { DeviceChannel, encodeSpeed, decodeSpeed, calculateDataLength } from './
 
 export class ProtocolV6 implements ProtocolHandler {
   async startDriveMode(channel: DeviceChannel): Promise<void> {
-    // Robot responds with '_GR_' or '_GO_' when drive mode starts
-    await channel.requestText('G', (text) => text.includes('_GR_') || text.includes('_GO_'));
+    const response = await channel.requestText('G');
+    if (!response.includes('_GR_') && !response.includes('_GO_')) {
+      throw new Error(`Unexpected drive mode response: ${response}`);
+    }
   }
 
   async recordInstructions(
@@ -31,15 +33,24 @@ export class ProtocolV6 implements ProtocolHandler {
     await channel.send(hex);
 
     // 3. Start recording
-    await channel.requestText('L', 'FULL', (durationSeconds + 10) * 1000);
+    const response = await channel.requestText('L', (durationSeconds + 10) * 1000);
+    if (response !== 'FULL') {
+      throw new Error(`Unexpected record response: ${response}`);
+    }
   }
 
   async runStoredInstructions(channel: DeviceChannel): Promise<void> {
-    await channel.requestText('R', '_END', 60000);
+    const response = await channel.requestText('R', 60000);
+    if (response !== '_END') {
+      throw new Error(`Unexpected run response: ${response}`);
+    }
   }
 
   async stop(channel: DeviceChannel): Promise<void> {
-    await channel.requestText('S', '_SR_');
+    const response = await channel.requestText('S');
+    if (response !== '_SR_') {
+      throw new Error(`Unexpected stop response: ${response}`);
+    }
   }
 
   async uploadInstructions(
@@ -64,11 +75,17 @@ export class ProtocolV6 implements ProtocolHandler {
     await channel.send('end');
 
     // 6. Wait for confirmation
-    await channel.awaitTextResponse('FULL');
+    const response = await channel.awaitTextResponse();
+    if (response !== 'FULL') {
+      throw new Error(`Unexpected upload response: ${response}`);
+    }
 
     // 7. Run if requested
     if (runAfterUpload) {
-      await channel.requestText('R', '_END', 60000);
+      const runResponse = await channel.requestText('R', 60000);
+      if (runResponse !== '_END') {
+        throw new Error(`Unexpected run response: ${runResponse}`);
+      }
     }
   }
 
@@ -106,7 +123,10 @@ export class ProtocolV6 implements ProtocolHandler {
   }
 
   async getInterval(channel: DeviceChannel): Promise<number> {
-    const response = await channel.requestText('I?', (text) => text.startsWith('I='));
+    const response = await channel.requestText('I?');
+    if (!response.startsWith('I=')) {
+      throw new Error(`Unexpected interval response: ${response}`);
+    }
     const match = response.match(/I=(\d+)/);
     if (match) {
       return parseInt(match[1], 10);

@@ -116,7 +116,10 @@ export default function RobotScreen() {
       return;
     }
     try {
-      await robotRef.current.recordInstructions();
+      // TODO: Get duration and interval from user settings
+      const durationSeconds = 10;
+      const interval = 2;
+      await robotRef.current.recordInstructions(durationSeconds, interval);
     } catch (error) {
       Alert.alert(
         t('alerts.error.title'),

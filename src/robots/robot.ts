@@ -37,7 +37,12 @@ export class Robot {
     const channel = new DeviceChannel(device);
 
     // Send VERSION_REQ ('Z') and await VERSION_RESP ('VER X')
-    const response = await channel.requestText('Z', (text) => text.startsWith('VER '));
+    const response = await channel.requestText('Z');
+    
+    // Validate response format
+    if (!response.startsWith('VER ')) {
+      throw new Error(`Invalid version response: ${response}`);
+    }
 
     // Parse firmware version from 'VER X' response
     const match = response.match(/VER\s+(\d+)/);
