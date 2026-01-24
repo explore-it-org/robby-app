@@ -20,12 +20,14 @@ import {
   DiscoveredRobot,
   useRobotDiscovery,
 } from '@/hooks/use-robot-discovery';
+import { useSettings } from '@/hooks/use-settings';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Alert, FlatList, Pressable, StyleSheet, View } from 'react-native';
 
 export default function RobotScreen() {
   const { t } = useTranslation();
+  const { recordingDuration } = useSettings();
   const { state, discoveredRobots, startDiscovery, stopDiscovery } = useRobotDiscovery();
   const [connectedRobotName, setConnectedRobotName] = useState<string | null>(null);
   const [firmwareVersion, setFirmwareVersion] = useState<number>(0);
@@ -116,10 +118,8 @@ export default function RobotScreen() {
       return;
     }
     try {
-      // TODO: Get duration and interval from user settings
-      const durationSeconds = 10;
       const interval = 2;
-      await robotRef.current.recordInstructions(durationSeconds, interval);
+      await robotRef.current.recordInstructions(recordingDuration, interval);
     } catch (error) {
       Alert.alert(
         t('alerts.error.title'),

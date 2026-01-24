@@ -291,5 +291,15 @@
     "faultyReference": "Programm \"{{programName}}\" hat Fehler.",
     "cyclicReference": "Zyklische Referenzen: {{cycle}}",
     "unknown": "Ein unbekannter Fehler ist aufgetreten."
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "robotSettings": "Roboter-Einstellungen",
+    "recordingDuration": "Aufnahmedauer (Sekunden)",
+    "appSettings": "App-Einstellungen",
+    "language": "Sprache",
+    "extendedRobotInfo": "Erweiterte Roboter-Informationen anzeigen",
+    "visitWebsite": "Besuche www.explore-it.org",
+    "version": "Version"
   }
 }

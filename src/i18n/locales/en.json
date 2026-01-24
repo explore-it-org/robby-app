@@ -291,5 +291,15 @@
     "faultyReference": "Program \"{{programName}}\" has errors.",
     "cyclicReference": "Circular dependency: {{cycle}}",
     "unknown": "An unknown error occurred."
+  },
+  "settings": {
+    "title": "Settings",
+    "robotSettings": "Robot Settings",
+    "recordingDuration": "Recording Duration (seconds)",
+    "appSettings": "App Settings",
+    "language": "Language",
+    "extendedRobotInfo": "Show Extended Robot Information",
+    "visitWebsite": "Visit www.explore-it.org",
+    "version": "Version"
   }
 }
