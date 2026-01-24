@@ -15,25 +15,30 @@ import { ThemedText } from '@/components/ui/themed-text';
 import { ThemedView } from '@/components/ui/themed-view';
 import { COLORS } from '@/constants/colors';
 import { useConnectedRobot } from '@/contexts/connected-robot-context';
+import { useInstructionViewer } from '@/contexts/instruction-viewer-context';
 import {
   ConnectedRobotState,
   DiscoveredRobot,
   useRobotDiscovery,
 } from '@/hooks/use-robot-discovery';
 import { useSettings } from '@/hooks/use-settings';
+import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Alert, FlatList, Pressable, StyleSheet, View } from 'react-native';
 
 export default function RobotScreen() {
   const { t } = useTranslation();
+  const router = useRouter();
   const { recordingDuration, showExtendedRobotInfo } = useSettings();
   const { state, discoveredRobots, startDiscovery, stopDiscovery } = useRobotDiscovery();
   const { robot, setRobot } = useConnectedRobot();
+  const { setInstructions } = useInstructionViewer();
   const [connectedRobotName, setConnectedRobotName] = useState<string | null>(null);
   const [firmwareVersion, setFirmwareVersion] = useState<number>(0);
   const [protocolVersion, setProtocolVersion] = useState<string>('');
   const [robotState, setRobotState] = useState<ConnectedRobotState>('ready');
+  const [isConnecting, setIsConnecting] = useState(false);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -67,6 +72,7 @@ export default function RobotScreen() {
   };
 
   const handleSelectRobot = async (discoveredRobot: DiscoveredRobot) => {
+    setIsConnecting(true);
     try {
       await stopDiscovery();
       const connectedRobot = await discoveredRobot.connect();
@@ -94,6 +100,8 @@ export default function RobotScreen() {
         t('alerts.error.title'),
         error instanceof Error ? error.message : t('alerts.error.connectFailed')
       );
+    } finally {
+      setIsConnecting(false);
     }
   };
 
@@ -139,6 +147,23 @@ export default function RobotScreen() {
       Alert.alert(
         t('alerts.error.title'),
         error instanceof Error ? error.message : t('alerts.error.runStoredFailed')
+      );
+    }
+  };
+
+  const handleDownloadInstructions = async () => {
+    if (!robot) {
+      Alert.alert(t('alerts.error.title'), t('controlBar.noRobotConnected'));
+      return;
+    }
+    try {
+      const instructions = await robot.downloadInstructions();
+      setInstructions(instructions);
+      router.push('/program-view');
+    } catch (error) {
+      Alert.alert(
+        t('alerts.error.title'),
+        error instanceof Error ? error.message : t('alerts.error.downloadFailed')
       );
     }
   };
@@ -219,6 +244,7 @@ export default function RobotScreen() {
               onDriveMode={handleDriveMode}
               onRecordMode={handleRecordMode}
               onRunStoredInstructions={handleRunStoredInstructions}
+              onDownloadInstructions={handleDownloadInstructions}
               onStop={handleStop}
               onDisconnect={handleDisconnect}
             />
@@ -257,6 +283,14 @@ export default function RobotScreen() {
               </View>
             )}
           </View>
+        ) : isConnecting ? (
+          /* Connecting State */
+          <View style={styles.emptyStateContainer}>
+            <ActivityIndicator size="large" color={COLORS.PRIMARY} style={styles.connectingIndicator} />
+            <ThemedText style={styles.emptyStateText}>
+              {t('robot.overview.connecting')}
+            </ThemedText>
+          </View>
         ) : !isConnected ? (
           /* Empty State */
           <View style={styles.emptyStateContainer}>
@@ -267,8 +301,8 @@ export default function RobotScreen() {
         ) : null}
       </View>
 
-      {/* Action Button - hidden when connected */}
-      {!isConnected || isScanning ? (
+      {/* Action Button - hidden when connected or connecting */}
+      {!isConnected && !isConnecting && (
         <View style={styles.buttonContainer}>
           <Pressable
             style={({ pressed }) => [styles.scanButton, pressed && styles.scanButtonPressed]}
@@ -279,7 +313,7 @@ export default function RobotScreen() {
             </ThemedText>
           </Pressable>
         </View>
-      ) : null}
+      )}
     </ThemedView>
   );
 }
@@ -313,6 +347,9 @@ const styles = StyleSheet.create({
   emptyStateText: {
     fontSize: 18,
     opacity: 0.5,
+  },
+  connectingIndicator: {
+    marginBottom: 16,
   },
   scanningContainer: {
     flex: 1,

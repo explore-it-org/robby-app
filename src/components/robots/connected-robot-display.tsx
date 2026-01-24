@@ -9,6 +9,7 @@
  */
 
 import { ThemedText } from '@/components/ui/themed-text';
+import { DownloadIcon } from '@/components/icons/DownloadIcon';
 import { PlayIcon } from '@/components/icons/PlayIcon';
 import { RecordIcon } from '@/components/icons/RecordIcon';
 import { RunStoredIcon } from '@/components/icons/RunStoredIcon';
@@ -26,6 +27,7 @@ interface ConnectedRobotDisplayProps {
   onDriveMode: () => void;
   onRecordMode: () => void;
   onRunStoredInstructions: () => void;
+  onDownloadInstructions: () => void;
   onStop: () => void;
   onDisconnect: () => void;
 }
@@ -39,6 +41,7 @@ export function ConnectedRobotDisplay({
   onDriveMode,
   onRecordMode,
   onRunStoredInstructions,
+  onDownloadInstructions,
   onStop,
   onDisconnect,
 }: ConnectedRobotDisplayProps) {
@@ -88,6 +91,12 @@ export function ConnectedRobotDisplay({
               style={({ pressed }) => [styles.actionButton, pressed && styles.actionButtonPressed]}
             >
               <RunStoredIcon size={24} color="#FFFFFF" />
+            </Pressable>
+            <Pressable
+              onPress={onDownloadInstructions}
+              style={({ pressed }) => [styles.actionButton, pressed && styles.actionButtonPressed]}
+            >
+              <DownloadIcon size={24} color="#FFFFFF" />
             </Pressable>
           </>
         )}

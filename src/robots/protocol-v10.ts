@@ -37,7 +37,7 @@ export class ProtocolV10 implements ProtocolHandler {
     await channel.send('L');
     await channel.expectTextResponse('_LR_');
 
-    await channel.expectTextResponse('FULL');
+    await channel.expectTextResponse('FULL', (durationSeconds + 5) * 1000);
   }
 
   async runStoredInstructions(channel: DeviceChannel): Promise<void> {

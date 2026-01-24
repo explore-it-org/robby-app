@@ -46,6 +46,7 @@
       "scanForRobots": "Scan for Robots",
       "cancelScanning": "Cancel Scanning",
       "scanning": "Scanning for robots...",
+      "connecting": "Connecting to robot...",
       "selectRobotToConnect": "Select a robot to connect",
       "robotId": "ID: {{id}}",
       "firmwareVersion": "Firmware v{{version}}",
@@ -180,7 +181,8 @@
       "runStoredFailed": "Failed to run stored instructions",
       "stopFailed": "Failed to stop robot",
       "disconnectFailed": "Failed to disconnect from robot",
-      "setIntervalFailed": "Failed to set program lines per second"
+      "setIntervalFailed": "Failed to set program lines per second",
+      "downloadFailed": "Failed to download instructions from robot"
     }
   },
   "actionSheet": {

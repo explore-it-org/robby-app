@@ -46,6 +46,7 @@
       "scanForRobots": "Cerca robot",
       "cancelScanning": "Annulla ricerca",
       "scanning": "Ricerca robot...",
+      "connecting": "Connessione al robot...",
       "selectRobotToConnect": "Seleziona un robot per connetterti",
       "robotId": "ID: {{id}}",
       "firmwareVersion": "Firmware v{{version}}",
@@ -180,7 +181,8 @@
       "runStoredFailed": "Impossibile eseguire le istruzioni memorizzate",
       "stopFailed": "Impossibile fermare il robot",
       "disconnectFailed": "Impossibile disconnettersi dal robot",
-      "setIntervalFailed": "Impossibile impostare le linee di programma al secondo"
+      "setIntervalFailed": "Impossibile impostare le linee di programma al secondo",
+      "downloadFailed": "Impossibile scaricare le istruzioni dal robot"
     }
   },
   "actionSheet": {
