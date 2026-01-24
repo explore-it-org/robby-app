@@ -49,6 +49,10 @@ export async function loadRecordingDuration(): Promise<number> {
  * Save recording duration to storage
  */
 export async function saveRecordingDuration(duration: number): Promise<void> {
+  // Validate range
+  if (isNaN(duration) || duration < 0 || duration > 80) {
+    throw new Error('Recording duration must be between 0 and 80 seconds');
+  }
   try {
     await AsyncStorage.setItem(STORAGE_KEYS.RECORDING_DURATION, duration.toString());
   } catch (error) {
@@ -76,6 +80,10 @@ export async function loadLanguage(): Promise<Language> {
  * Save language to storage
  */
 export async function saveLanguage(language: Language): Promise<void> {
+  // Validate language value
+  if (!['en', 'de', 'fr', 'it'].includes(language)) {
+    throw new Error('Invalid language. Must be one of: en, de, fr, it');
+  }
   try {
     await AsyncStorage.setItem(STORAGE_KEYS.LANGUAGE, language);
   } catch (error) {
