@@ -10,6 +10,7 @@
 import { ThemedText } from '@/components/ui/themed-text';
 import { PlayIcon } from '@/components/icons/PlayIcon';
 import { RecordIcon } from '@/components/icons/RecordIcon';
+import { RunStoredIcon } from '@/components/icons/RunStoredIcon';
 import { StopIcon } from '@/components/icons/StopIcon';
 import { WheelIcon } from '@/components/icons/WheelIcon';
 import { Pressable, StyleSheet, View } from 'react-native';
@@ -21,6 +22,7 @@ interface ConnectedRobotDisplayProps {
   isExecuting: boolean;
   onDriveMode: () => void;
   onRecordMode: () => void;
+  onRunStoredInstructions: () => void;
   onStop: () => void;
 }
 
@@ -31,6 +33,7 @@ export function ConnectedRobotDisplay({
   isExecuting,
   onDriveMode,
   onRecordMode,
+  onRunStoredInstructions,
   onStop,
 }: ConnectedRobotDisplayProps) {
   return (
@@ -76,6 +79,12 @@ export function ConnectedRobotDisplay({
               style={({ pressed }) => [styles.actionButton, pressed && styles.actionButtonPressed]}
             >
               <RecordIcon size={24} color="#FFFFFF" />
+            </Pressable>
+            <Pressable
+              onPress={onRunStoredInstructions}
+              style={({ pressed }) => [styles.actionButton, pressed && styles.actionButtonPressed]}
+            >
+              <RunStoredIcon size={24} color="#FFFFFF" />
             </Pressable>
           </>
         )}

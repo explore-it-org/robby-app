@@ -2,6 +2,7 @@ import { ProgramEditor, ProgramList } from '@/components/programs';
 import { ThemedView } from '@/components/ui/themed-view';
 import { useProgramStorage } from '@/hooks/use-program-storage';
 import { useResponsiveLayout } from '@/hooks/use-responsive-layout';
+import { useConnectedRobot } from '@/hooks/use-robot-discovery';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { router } from 'expo-router';
 import { useCallback, useState } from 'react';
@@ -12,6 +13,7 @@ export default function ProgramsScreen() {
   const { t } = useTranslation();
   const { isTablet } = useResponsiveLayout();
   const borderColor = useThemeColor({}, 'border');
+  const connectedRobot = useConnectedRobot();
 
   const programStorage = useProgramStorage();
   const availablePrograms = programStorage.availablePrograms;
@@ -72,7 +74,7 @@ export default function ProgramsScreen() {
         {/* Right pane: Program detail */}
         <ThemedView style={styles.detailPane}>
           {selectedProgramName ? (
-            <ProgramEditor programName={selectedProgramName} onProgramRenamed={onProgramSelected} />
+            <ProgramEditor programName={selectedProgramName} onProgramRenamed={onProgramSelected} connectedRobot={connectedRobot} />
           ) : null}
         </ThemedView>
       </ThemedView>

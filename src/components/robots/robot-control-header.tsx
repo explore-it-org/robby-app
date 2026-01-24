@@ -7,34 +7,40 @@
 
 import { COLORS } from '@/constants/colors';
 import { SPACING } from '@/constants/spacing';
-import { StoredRobot } from '@/services/known-robots-storage';
+import { ConnectedRobot } from '@/hooks/use-robot-discovery';
 import { StyleSheet, View } from 'react-native';
 import { ConnectedRobotDisplay } from './connected-robot-display';
 import { NoRobotConnectedDisplay } from './no-robot-connected-display';
 
 interface Props {
-  connectedRobot: StoredRobot | null;
+  connectedRobot: ConnectedRobot | null;
   onConnect: () => void;
-  onUploadAndRun?: () => void;
-  onStop?: () => void;
-  onUpload?: () => void;
+  onDriveMode: () => void;
+  onRecordMode: () => void;
+  onRunStoredInstructions: () => void;
+  onStop: () => void;
 }
 
 export function RobotControlHeader({
   connectedRobot,
   onConnect,
-  onUploadAndRun,
+  onDriveMode,
+  onRecordMode,
+  onRunStoredInstructions,
   onStop,
-  onUpload,
 }: Props) {
   return (
     <View style={styles.container}>
       {connectedRobot ? (
         <ConnectedRobotDisplay
-          robot={connectedRobot}
-          onUploadAndRun={onUploadAndRun}
+          robotName={connectedRobot.name}
+          firmwareVersion={connectedRobot.firmwareVersion}
+          protocolVersion={connectedRobot.protocolVersion}
+          isExecuting={connectedRobot.state === 'executing'}
+          onDriveMode={onDriveMode}
+          onRecordMode={onRecordMode}
+          onRunStoredInstructions={onRunStoredInstructions}
           onStop={onStop}
-          onUpload={onUpload}
         />
       ) : (
         <NoRobotConnectedDisplay onConnect={onConnect} />
