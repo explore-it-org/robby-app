@@ -19,6 +19,7 @@ interface Props {
   onRecordMode: () => void;
   onRunStoredInstructions: () => void;
   onStop: () => void;
+  onDisconnect: () => void;
 }
 
 export function RobotControlHeader({
@@ -28,6 +29,7 @@ export function RobotControlHeader({
   onRecordMode,
   onRunStoredInstructions,
   onStop,
+  onDisconnect,
 }: Props) {
   return (
     <View style={styles.container}>
@@ -41,6 +43,7 @@ export function RobotControlHeader({
           onRecordMode={onRecordMode}
           onRunStoredInstructions={onRunStoredInstructions}
           onStop={onStop}
+          onDisconnect={onDisconnect}
         />
       ) : (
         <NoRobotConnectedDisplay onConnect={onConnect} />

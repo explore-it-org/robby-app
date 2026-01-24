@@ -158,6 +158,25 @@ export default function RobotScreen() {
     }
   };
 
+  const handleDisconnect = async () => {
+    if (!robotRef.current) {
+      return;
+    }
+    try {
+      await robotRef.current.disconnect();
+      robotRef.current = null;
+      setConnectedRobotName(null);
+      setFirmwareVersion(0);
+      setProtocolVersion('');
+      setRobotState('ready');
+    } catch (error) {
+      Alert.alert(
+        t('alerts.error.title'),
+        error instanceof Error ? error.message : 'Failed to disconnect from robot'
+      );
+    }
+  };
+
   const renderRobotItem = ({ item }: { item: DiscoveredRobot }) => (
     <Pressable
       style={({ pressed }) => [styles.robotItem, pressed && styles.robotItemPressed]}
@@ -200,6 +219,7 @@ export default function RobotScreen() {
               onRecordMode={handleRecordMode}
               onRunStoredInstructions={handleRunStoredInstructions}
               onStop={handleStop}
+              onDisconnect={handleDisconnect}
             />
           </View>
         ) : null}

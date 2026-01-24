@@ -1,10 +1,11 @@
 /**
  * Connected Robot Display Component
  *
- * Compact display of a connected robot showing:
- * - Robot name, firmware version, and protocol version
- * - Ready state: Drive Mode (Play) and Record Mode (Record) buttons
- * - Executing state: Stop button
+ * Spacious display of a connected robot showing:
+ * - Line 1: Robot name with icon
+ * - Line 2: Action buttons (Drive Mode, Record Mode, Run Stored, or Stop)
+ * - Line 3: Extended info (firmware and protocol version)
+ * - Line 4: Disconnect button
  */
 
 import { ThemedText } from '@/components/ui/themed-text';
@@ -13,6 +14,7 @@ import { RecordIcon } from '@/components/icons/RecordIcon';
 import { RunStoredIcon } from '@/components/icons/RunStoredIcon';
 import { StopIcon } from '@/components/icons/StopIcon';
 import { WheelIcon } from '@/components/icons/WheelIcon';
+import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 interface ConnectedRobotDisplayProps {
@@ -24,6 +26,7 @@ interface ConnectedRobotDisplayProps {
   onRecordMode: () => void;
   onRunStoredInstructions: () => void;
   onStop: () => void;
+  onDisconnect: () => void;
 }
 
 export function ConnectedRobotDisplay({
@@ -35,25 +38,23 @@ export function ConnectedRobotDisplay({
   onRecordMode,
   onRunStoredInstructions,
   onStop,
+  onDisconnect,
 }: ConnectedRobotDisplayProps) {
+  const { t } = useTranslation();
+
   return (
     <View style={styles.card}>
-      {/* Robot info */}
-      <View style={styles.robotInfo}>
+      {/* Line 1: Robot name */}
+      <View style={styles.nameRow}>
         <View style={styles.iconContainer}>
           <WheelIcon size={32} color="#FFFFFF" />
         </View>
-        <View style={styles.textContainer}>
-          <ThemedText style={styles.robotName} numberOfLines={1} ellipsizeMode="tail">
-            {robotName}
-          </ThemedText>
-          <ThemedText style={styles.versionInfo}>
-            Firmware v{firmwareVersion} • Protocol {protocolVersion}
-          </ThemedText>
-        </View>
+        <ThemedText style={styles.robotName} numberOfLines={1} ellipsizeMode="tail">
+          {robotName}
+        </ThemedText>
       </View>
 
-      {/* Action buttons */}
+      {/* Line 2: Action buttons */}
       <View style={styles.actionRow}>
         {isExecuting ? (
           <Pressable
@@ -89,6 +90,23 @@ export function ConnectedRobotDisplay({
           </>
         )}
       </View>
+
+      {/* Line 3: Extended info */}
+      <View style={styles.infoRow}>
+        <ThemedText style={styles.versionInfo}>
+          Firmware v{firmwareVersion} • Protocol {protocolVersion}
+        </ThemedText>
+      </View>
+
+      {/* Line 4: Disconnect button */}
+      <Pressable
+        onPress={onDisconnect}
+        style={({ pressed }) => [styles.disconnectButton, pressed && styles.disconnectButtonPressed]}
+      >
+        <ThemedText style={styles.disconnectButtonText}>
+          {t('robotOptionsMenu.disconnect')}
+        </ThemedText>
+      </Pressable>
     </View>
   );
 }
@@ -99,17 +117,13 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 2,
     borderColor: '#9370DB',
-    padding: 12,
-    flexDirection: 'row',
-    alignItems: 'center',
+    padding: 16,
     gap: 16,
   },
-  robotInfo: {
-    flex: 1,
+  nameRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    minWidth: 0,
   },
   iconContainer: {
     width: 32,
@@ -117,36 +131,50 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  textContainer: {
-    flex: 1,
-    minWidth: 0,
-  },
   robotName: {
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: '700',
     color: '#FFFFFF',
-  },
-  versionInfo: {
-    fontSize: 12,
-    color: 'rgba(255, 255, 255, 0.7)',
-    marginTop: 2,
+    flex: 1,
   },
   actionRow: {
     flexDirection: 'row',
-    gap: 8,
+    gap: 12,
     alignItems: 'center',
-    flexShrink: 0,
+    justifyContent: 'center',
   },
   actionButton: {
-    padding: 8,
+    padding: 12,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    borderRadius: 8,
   },
   stopButton: {
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    borderRadius: 8,
+    backgroundColor: 'rgba(255, 255, 255, 0.25)',
   },
   actionButtonPressed: {
     opacity: 0.5,
+  },
+  infoRow: {
+    alignItems: 'center',
+  },
+  versionInfo: {
+    fontSize: 14,
+    color: 'rgba(255, 255, 255, 0.7)',
+  },
+  disconnectButton: {
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    borderRadius: 8,
+    paddingVertical: 12,
+    alignItems: 'center',
+  },
+  disconnectButtonPressed: {
+    opacity: 0.5,
+  },
+  disconnectButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });

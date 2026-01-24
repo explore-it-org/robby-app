@@ -1,9 +1,9 @@
 import { ThemedText } from '@/components/ui/themed-text';
 import { useProgram } from '@/hooks/use-program';
 import { useTranslation } from 'react-i18next';
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { ThemedView } from '@/components/ui/themed-view';
-import { RobotControlHeader } from '../robots';
+import { NoRobotConnectedDisplay, ProgramEditorRobotHeader } from '../robots';
 import { ConnectedRobot } from '@/hooks/use-robot-discovery';
 import { useProgramStorage } from '@/hooks/use-program-storage';
 import { useCallback, useState } from 'react';
@@ -14,6 +14,8 @@ import { ProgramHeaderMenu } from './program-header-menu';
 import { ProgramRenameModal } from './program-rename-modal';
 import { showDeleteProgramConfirmation } from '@/utils/alerts';
 import { ErrorList } from './error-list';
+import { COLORS } from '@/constants/colors';
+import { SPACING } from '@/constants/spacing';
 
 interface Props {
   programName: string;
@@ -34,14 +36,9 @@ export function ProgramEditor({ programName, onProgramRenamed, connectedRobot }:
     router.replace('/(tabs)/robots');
   }, []);
 
-  const handleDriveMode = useCallback(() => {
-    connectedRobot?.startDriveMode();
-  }, [connectedRobot]);
-
-  const handleRecordMode = useCallback(() => {
-    // TODO: Configure duration and interval
-    connectedRobot?.recordInstructions(5, 1);
-  }, [connectedRobot]);
+  const handleUpload = useCallback(() => {
+    // TODO: Upload current program to robot
+  }, []);
 
   const handleRunStoredInstructions = useCallback(() => {
     connectedRobot?.runStoredInstructions();
@@ -101,14 +98,19 @@ export function ProgramEditor({ programName, onProgramRenamed, connectedRobot }:
         keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
       >
         <ThemedView style={styles.flex}>
-          <RobotControlHeader
-            connectedRobot={connectedRobot}
-            onConnect={handleConnectRobot}
-            onDriveMode={handleDriveMode}
-            onRecordMode={handleRecordMode}
-            onRunStoredInstructions={handleRunStoredInstructions}
-            onStop={handleStop}
-          />
+          <View style={styles.robotHeader}>
+            {connectedRobot ? (
+              <ProgramEditorRobotHeader
+                robotName={connectedRobot.name}
+                isExecuting={connectedRobot.state === 'executing'}
+                onUpload={handleUpload}
+                onRunStoredInstructions={handleRunStoredInstructions}
+                onStop={handleStop}
+              />
+            ) : (
+              <NoRobotConnectedDisplay onConnect={handleConnectRobot} />
+            )}
+          </View>
 
           <ScrollView
             style={styles.scrollView}
@@ -152,6 +154,13 @@ const styles = StyleSheet.create({
   },
   flex: {
     flex: 1,
+  },
+  robotHeader: {
+    paddingHorizontal: SPACING.LG,
+    paddingVertical: SPACING.MD,
+    backgroundColor: '#F5F5F5',
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.BORDER,
   },
   scrollView: {
     flex: 1,
