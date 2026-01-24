@@ -57,8 +57,8 @@ export class Robot {
     await this.protocol.startDriveMode(this.device);
   }
 
-  async recordInstructions() {
-    await this.protocol.recordInstructions(this.device);
+  async recordInstructions(durationSeconds: number, interval: number) {
+    await this.protocol.recordInstructions(this.device, durationSeconds, interval);
   }
 
   async runStoredInstructions() {

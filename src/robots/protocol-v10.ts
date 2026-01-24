@@ -18,16 +18,30 @@ export class ProtocolV10 implements ProtocolHandler {
   async startDriveMode(device: ConnectedDevice): Promise<void> {
     const channel = new DeviceChannel(device);
     try {
-      await channel.requestText('G', '_END', 60000);
+      // Robot responds with '_GR_' or '_GO_' when drive mode starts
+      await channel.requestText('G', (text) => text.includes('_GR_') || text.includes('_GO_'));
     } finally {
       channel.dispose();
     }
   }
 
-  async recordInstructions(device: ConnectedDevice): Promise<void> {
+  async recordInstructions(
+    device: ConnectedDevice,
+    durationSeconds: number,
+    interval: number
+  ): Promise<void> {
     const channel = new DeviceChannel(device);
     try {
-      await channel.requestText('L', 'FULL', 120000);
+      // 1. Flush memory
+      await channel.send('F');
+
+      // 2. Send data length (V10 uses interval * duration * 2 - 1)
+      const byteCount = interval * durationSeconds * 2 - 1;
+      const hex = 'd' + byteCount.toString(16).toUpperCase().padStart(4, '0');
+      await channel.send(hex);
+
+      // 3. Start recording
+      await channel.requestText('L', 'FULL', (durationSeconds + 10) * 1000);
     } finally {
       channel.dispose();
     }

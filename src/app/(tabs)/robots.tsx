@@ -14,9 +14,9 @@ import { WheelIcon } from '@/components/icons/WheelIcon';
 import { ThemedText } from '@/components/ui/themed-text';
 import { ThemedView } from '@/components/ui/themed-view';
 import { COLORS } from '@/constants/colors';
-import { StoredRobot } from '@/services/known-robots-storage';
 import {
   ConnectedRobot,
+  ConnectedRobotState,
   DiscoveredRobot,
   useRobotDiscovery,
 } from '@/hooks/use-robot-discovery';
@@ -27,7 +27,10 @@ import { ActivityIndicator, Alert, FlatList, Pressable, StyleSheet, View } from 
 export default function RobotScreen() {
   const { t } = useTranslation();
   const { state, discoveredRobots, startDiscovery, stopDiscovery } = useRobotDiscovery();
-  const [connectedRobotDisplay, setConnectedRobotDisplay] = useState<StoredRobot | null>(null);
+  const [connectedRobotName, setConnectedRobotName] = useState<string | null>(null);
+  const [firmwareVersion, setFirmwareVersion] = useState<number>(0);
+  const [protocolVersion, setProtocolVersion] = useState<string>('');
+  const [robotState, setRobotState] = useState<ConnectedRobotState>('ready');
   const robotRef = useRef<ConnectedRobot | null>(null);
 
   // Cleanup on unmount
@@ -66,20 +69,23 @@ export default function RobotScreen() {
       await stopDiscovery();
       const robot = await discoveredRobot.connect();
       robotRef.current = robot;
+      setConnectedRobotName(robot.name);
+      setFirmwareVersion(robot.firmwareVersion);
+      setProtocolVersion(robot.protocolVersion);
+      setRobotState(robot.state);
 
-      const robotDisplay: StoredRobot = {
-        robotId: robot.id,
-        robotName: robot.name,
-        addedAt: new Date().toISOString(),
-        isVirtual: false,
-      };
-
-      setConnectedRobotDisplay(robotDisplay);
+      // Listen for state changes
+      robot.onStateChange((newState) => {
+        setRobotState(newState);
+      });
 
       // Listen for disconnection
       robot.onDisconnect(() => {
         robotRef.current = null;
-        setConnectedRobotDisplay(null);
+        setConnectedRobotName(null);
+        setFirmwareVersion(0);
+        setProtocolVersion('');
+        setRobotState('ready');
       });
     } catch (error) {
       Alert.alert(
@@ -89,13 +95,34 @@ export default function RobotScreen() {
     }
   };
 
-  const handleUploadAndRun = async () => {
+  const handleDriveMode = async () => {
     if (!robotRef.current) {
       Alert.alert(t('alerts.error.title'), 'No robot connected');
       return;
     }
-    // TODO: Get instructions from program storage and upload
-    Alert.alert('Upload & Run', 'This feature will upload and run the program on the robot');
+    try {
+      await robotRef.current.startDriveMode();
+    } catch (error) {
+      Alert.alert(
+        t('alerts.error.title'),
+        error instanceof Error ? error.message : 'Failed to start drive mode'
+      );
+    }
+  };
+
+  const handleRecordMode = async () => {
+    if (!robotRef.current) {
+      Alert.alert(t('alerts.error.title'), 'No robot connected');
+      return;
+    }
+    try {
+      await robotRef.current.recordInstructions();
+    } catch (error) {
+      Alert.alert(
+        t('alerts.error.title'),
+        error instanceof Error ? error.message : 'Failed to start record mode'
+      );
+    }
   };
 
   const handleStop = async () => {
@@ -111,15 +138,6 @@ export default function RobotScreen() {
         error instanceof Error ? error.message : 'Failed to stop robot'
       );
     }
-  };
-
-  const handleUpload = async () => {
-    if (!robotRef.current) {
-      Alert.alert(t('alerts.error.title'), 'No robot connected');
-      return;
-    }
-    // TODO: Get instructions from program storage and upload
-    Alert.alert('Upload', 'This feature will upload the program to the robot');
   };
 
   const renderRobotItem = ({ item }: { item: DiscoveredRobot }) => (
@@ -138,7 +156,8 @@ export default function RobotScreen() {
   );
 
   const isScanning = state === 'running';
-  const isConnected = connectedRobotDisplay !== null;
+  const isConnected = connectedRobotName !== null;
+  const isExecuting = robotState === 'executing' || robotState === 'stopping';
 
   return (
     <ThemedView style={styles.container}>
@@ -151,14 +170,17 @@ export default function RobotScreen() {
 
       {/* Content */}
       <View style={styles.content}>
-        {isConnected && !isScanning && connectedRobotDisplay ? (
+        {isConnected && !isScanning && connectedRobotName ? (
           /* Connected State */
           <View style={styles.connectedContainer}>
             <ConnectedRobotDisplay
-              robot={connectedRobotDisplay}
-              onUploadAndRun={handleUploadAndRun}
+              robotName={connectedRobotName}
+              firmwareVersion={firmwareVersion}
+              protocolVersion={protocolVersion}
+              isExecuting={isExecuting}
+              onDriveMode={handleDriveMode}
+              onRecordMode={handleRecordMode}
               onStop={handleStop}
-              onUpload={handleUpload}
             />
           </View>
         ) : null}

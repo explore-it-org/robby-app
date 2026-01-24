@@ -4,7 +4,11 @@ import { Instruction } from '@/programs/instructions';
 export interface ProtocolHandler {
   // Control commands
   startDriveMode: (device: ConnectedDevice) => Promise<void>;
-  recordInstructions: (device: ConnectedDevice) => Promise<void>;
+  recordInstructions: (
+    device: ConnectedDevice,
+    durationSeconds: number,
+    interval: number
+  ) => Promise<void>;
   runStoredInstructions: (device: ConnectedDevice) => Promise<void>;
   stop: (device: ConnectedDevice) => Promise<void>;
 

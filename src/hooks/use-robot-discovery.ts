@@ -120,10 +120,10 @@ function createConnectedRobot(robot: Robot): ConnectedRobot {
       }
     },
 
-    async recordInstructions() {
+    async recordInstructions(durationSeconds: number, interval: number) {
       setState('executing');
       try {
-        await robot.recordInstructions();
+        await robot.recordInstructions(durationSeconds, interval);
       } finally {
         setState('ready');
       }
@@ -215,7 +215,7 @@ export interface ConnectedRobot {
 
   // Robot operations
   startDriveMode: () => Promise<void>;
-  recordInstructions: () => Promise<void>;
+  recordInstructions: (durationSeconds: number, interval: number) => Promise<void>;
   uploadInstructions: (instructions: Instruction[], runAfterUpload: boolean) => Promise<void>;
   downloadInstructions: () => Promise<Instruction[]>;
   runStoredInstructions: () => Promise<void>;
