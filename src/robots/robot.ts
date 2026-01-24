@@ -9,6 +9,7 @@ export class Robot {
   readonly name: string;
   readonly firmwareVersion: number;
   readonly protocolVersion: ProtocolVersion;
+  private _interval: number;
 
   private device: ConnectedDevice;
   private channel: DeviceChannel;
@@ -19,7 +20,8 @@ export class Robot {
     channel: DeviceChannel,
     protocol: ProtocolHandler,
     firmwareVersion: number,
-    protocolVersion: ProtocolVersion
+    protocolVersion: ProtocolVersion,
+    interval: number
   ) {
     this.device = device;
     this.channel = channel;
@@ -28,6 +30,11 @@ export class Robot {
     this.name = device.name;
     this.firmwareVersion = firmwareVersion;
     this.protocolVersion = protocolVersion;
+    this._interval = interval;
+  }
+
+  get interval(): number {
+    return this._interval;
   }
 
   /**
@@ -55,9 +62,9 @@ export class Robot {
     const protocol = createProtocolHandler(protocolVersion);
 
     // Query interval after connection
-    await channel.send('I?');
+    const interval = await protocol.getInterval(channel);
 
-    return new Robot(device, channel, protocol, firmwareVersion, protocolVersion);
+    return new Robot(device, channel, protocol, firmwareVersion, protocolVersion, interval);
   }
 
   async startDriveMode() {
@@ -84,12 +91,9 @@ export class Robot {
     return await this.protocol.downloadInstructions(this.channel);
   }
 
-  async getInterval(): Promise<number> {
-    return await this.protocol.getInterval(this.channel);
-  }
-
   async setInterval(value: number): Promise<void> {
     await this.protocol.setInterval(this.channel, value);
+    this._interval = value;
   }
 
   async disconnect(): Promise<void> {

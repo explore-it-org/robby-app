@@ -22,6 +22,7 @@ interface ConnectedRobotDisplayProps {
   firmwareVersion: number;
   protocolVersion: string;
   isExecuting: boolean;
+  showExtendedInfo: boolean;
   onDriveMode: () => void;
   onRecordMode: () => void;
   onRunStoredInstructions: () => void;
@@ -34,6 +35,7 @@ export function ConnectedRobotDisplay({
   firmwareVersion,
   protocolVersion,
   isExecuting,
+  showExtendedInfo,
   onDriveMode,
   onRecordMode,
   onRunStoredInstructions,
@@ -91,12 +93,15 @@ export function ConnectedRobotDisplay({
         )}
       </View>
 
-      {/* Line 3: Extended info */}
-      <View style={styles.infoRow}>
-        <ThemedText style={styles.versionInfo}>
-          Firmware v{firmwareVersion} • Protocol {protocolVersion}
-        </ThemedText>
-      </View>
+      {/* Line 3: Extended info (conditional) */}
+      {showExtendedInfo && (
+        <View style={styles.infoRow}>
+          <ThemedText style={styles.versionInfo}>
+            {t('robot.overview.firmwareVersion', { version: firmwareVersion })} •{' '}
+            {t('robot.overview.protocolVersion', { version: protocolVersion })}
+          </ThemedText>
+        </View>
+      )}
 
       {/* Line 4: Disconnect button */}
       <Pressable

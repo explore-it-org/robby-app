@@ -46,7 +46,10 @@
       "scanForRobots": "Nach Robotern suchen",
       "cancelScanning": "Suche abbrechen",
       "scanning": "Suche nach Robotern...",
-      "selectRobotToConnect": "Roboter zum Verbinden auswählen"
+      "selectRobotToConnect": "Roboter zum Verbinden auswählen",
+      "robotId": "ID: {{id}}",
+      "firmwareVersion": "Firmware v{{version}}",
+      "protocolVersion": "Protokoll {{version}}"
     }
   },
   "robotScanner": {
@@ -168,7 +171,16 @@
       "title": "Fehler",
       "deleteFailed": "Programm konnte nicht gelöscht werden. Bitte versuche es erneut.",
       "saveRobotFailed": "Ausgewählter Roboter konnte nicht gespeichert werden",
-      "clearRobotFailed": "Ausgewählter Roboter konnte nicht entfernt werden"
+      "clearRobotFailed": "Ausgewählter Roboter konnte nicht entfernt werden",
+      "startScanFailed": "Suche konnte nicht gestartet werden",
+      "stopScanFailed": "Suche konnte nicht gestoppt werden",
+      "connectFailed": "Verbindung zum Roboter fehlgeschlagen",
+      "driveModeFailed": "Fahrmodus konnte nicht gestartet werden",
+      "recordModeFailed": "Aufnahmemodus konnte nicht gestartet werden",
+      "runStoredFailed": "Gespeicherte Anweisungen konnten nicht ausgeführt werden",
+      "stopFailed": "Roboter konnte nicht gestoppt werden",
+      "disconnectFailed": "Verbindung konnte nicht getrennt werden",
+      "setIntervalFailed": "Programmzeilen pro Sekunde konnten nicht gesetzt werden"
     }
   },
   "actionSheet": {
@@ -299,6 +311,7 @@
     "title": "Einstellungen",
     "robotSettings": "Roboter-Einstellungen",
     "recordingDuration": "Aufnahmedauer (Sekunden)",
+    "programLinesPerSecond": "Programmzeilen pro Sekunde",
     "appSettings": "App-Einstellungen",
     "language": "Sprache",
     "extendedRobotInfo": "Erweiterte Roboter-Informationen anzeigen",

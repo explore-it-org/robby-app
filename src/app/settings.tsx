@@ -8,14 +8,15 @@
  * - App info (logo, website link, version)
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, ScrollView, Switch, Pressable, Alert, Image } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import Slider from '@react-native-community/slider';
+import { NumberInput } from '@/components/ui/number-input';
 import * as Linking from 'expo-linking';
 import { Stack } from 'expo-router';
 import { ThemedView } from '@/components/ui/themed-view';
 import { ThemedText } from '@/components/ui/themed-text';
+import { useConnectedRobot } from '@/contexts/connected-robot-context';
 import { useSettings } from '@/hooks/use-settings';
 import { COLORS } from '@/constants/colors';
 import { SPACING } from '@/constants/spacing';
@@ -33,21 +34,36 @@ export default function SettingsScreen() {
     setLanguage,
     setShowExtendedRobotInfo,
   } = useSettings();
+  const { robot } = useConnectedRobot();
+  const [instructionInterval, setInstructionInterval] = useState<number>(10);
 
-  const [localDuration, setLocalDuration] = useState(recordingDuration);
+  // Sync interval from robot when connected
+  useEffect(() => {
+    if (robot) {
+      setInstructionInterval(robot.interval);
+    }
+  }, [robot]);
 
-  const handleDurationChange = (value: number) => {
-    setLocalDuration(Math.round(value));
-  };
-
-  const handleDurationComplete = async (value: number) => {
-    const roundedValue = Math.round(value);
+  const handleDurationChange = async (value: number) => {
     try {
-      await setRecordingDuration(roundedValue);
+      await setRecordingDuration(value);
     } catch (error) {
       Alert.alert(
         t('alerts.error.title'),
         error instanceof Error ? error.message : 'Failed to save recording duration'
+      );
+    }
+  };
+
+  const handleIntervalChange = async (value: number) => {
+    if (!robot) return;
+    try {
+      await robot.setInterval(value);
+      setInstructionInterval(value);
+    } catch (error) {
+      Alert.alert(
+        t('alerts.error.title'),
+        error instanceof Error ? error.message : t('alerts.error.setIntervalFailed')
       );
     }
   };
@@ -102,23 +118,34 @@ export default function SettingsScreen() {
           <ThemedText style={styles.sectionTitle}>{t('settings.robotSettings')}</ThemedText>
 
           <View style={styles.settingItem}>
-            <View style={styles.settingHeader}>
+            <View style={styles.durationRow}>
               <ThemedText style={styles.settingLabel}>{t('settings.recordingDuration')}</ThemedText>
-              <ThemedText style={styles.durationValue}>{localDuration}s</ThemedText>
+              <NumberInput
+                value={recordingDuration}
+                onValueChange={handleDurationChange}
+                min={1}
+                max={80}
+                unit="s"
+                large
+              />
             </View>
-            <Slider
-              style={styles.slider}
-              minimumValue={0}
-              maximumValue={80}
-              step={1}
-              value={localDuration}
-              onValueChange={handleDurationChange}
-              onSlidingComplete={handleDurationComplete}
-              minimumTrackTintColor={COLORS.CURIOUS_BLUE}
-              maximumTrackTintColor={COLORS.GRAY_LIGHT}
-              thumbTintColor={COLORS.CURIOUS_BLUE}
-            />
           </View>
+
+          {/* Program Lines Per Second - only shown when robot is connected */}
+          {robot && (
+            <View style={styles.settingItem}>
+              <View style={styles.durationRow}>
+                <ThemedText style={styles.settingLabel}>{t('settings.programLinesPerSecond')}</ThemedText>
+                <NumberInput
+                  value={instructionInterval}
+                  onValueChange={handleIntervalChange}
+                  min={1}
+                  max={50}
+                  large
+                />
+              </View>
+            </View>
+          )}
         </View>
 
         {/* App Settings Section */}
@@ -172,7 +199,7 @@ export default function SettingsScreen() {
         <View style={styles.footer}>
           {/* Logo */}
           <Image
-            source={require('../../../assets/images/icon.png')}
+            source={require('../../assets/images/explore-it-logo.png')}
             style={styles.logo}
             resizeMode="contain"
           />
@@ -222,25 +249,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.BORDER,
   },
-  settingHeader: {
+  durationRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: SPACING.SM,
   },
   settingLabel: {
     fontSize: 16,
     fontWeight: '500',
     color: COLORS.TEXT_PRIMARY,
-  },
-  durationValue: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: COLORS.CURIOUS_BLUE,
-  },
-  slider: {
-    width: '100%',
-    height: 40,
   },
   languageContainer: {
     flexDirection: 'row',

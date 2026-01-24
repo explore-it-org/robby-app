@@ -162,8 +162,8 @@ function createConnectedRobot(robot: Robot): ConnectedRobot {
       }
     },
 
-    async getInterval() {
-      return robot.getInterval();
+    get interval() {
+      return robot.interval;
     },
 
     async setInterval(value: number) {
@@ -219,7 +219,7 @@ export interface ConnectedRobot {
   stop: () => Promise<void>;
 
   // Configuration
-  getInterval: () => Promise<number>;
+  interval: number;
   setInterval: (value: number) => Promise<void>;
 
   // Connection

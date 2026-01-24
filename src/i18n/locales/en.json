@@ -46,7 +46,10 @@
       "scanForRobots": "Scan for Robots",
       "cancelScanning": "Cancel Scanning",
       "scanning": "Scanning for robots...",
-      "selectRobotToConnect": "Select a robot to connect"
+      "selectRobotToConnect": "Select a robot to connect",
+      "robotId": "ID: {{id}}",
+      "firmwareVersion": "Firmware v{{version}}",
+      "protocolVersion": "Protocol {{version}}"
     }
   },
   "robotScanner": {
@@ -168,7 +171,16 @@
       "title": "Error",
       "deleteFailed": "Failed to delete program. Please try again.",
       "saveRobotFailed": "Failed to save selected robot",
-      "clearRobotFailed": "Failed to clear selected robot"
+      "clearRobotFailed": "Failed to clear selected robot",
+      "startScanFailed": "Failed to start scanning",
+      "stopScanFailed": "Failed to stop scanning",
+      "connectFailed": "Failed to connect to robot",
+      "driveModeFailed": "Failed to start drive mode",
+      "recordModeFailed": "Failed to start record mode",
+      "runStoredFailed": "Failed to run stored instructions",
+      "stopFailed": "Failed to stop robot",
+      "disconnectFailed": "Failed to disconnect from robot",
+      "setIntervalFailed": "Failed to set program lines per second"
     }
   },
   "actionSheet": {
@@ -299,6 +311,7 @@
     "title": "Settings",
     "robotSettings": "Robot Settings",
     "recordingDuration": "Recording Duration (seconds)",
+    "programLinesPerSecond": "Program Lines Per Second",
     "appSettings": "App Settings",
     "language": "Language",
     "extendedRobotInfo": "Show Extended Robot Information",

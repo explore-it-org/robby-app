@@ -14,26 +14,26 @@ import { WheelIcon } from '@/components/icons/WheelIcon';
 import { ThemedText } from '@/components/ui/themed-text';
 import { ThemedView } from '@/components/ui/themed-view';
 import { COLORS } from '@/constants/colors';
+import { useConnectedRobot } from '@/contexts/connected-robot-context';
 import {
-  ConnectedRobot,
   ConnectedRobotState,
   DiscoveredRobot,
   useRobotDiscovery,
 } from '@/hooks/use-robot-discovery';
 import { useSettings } from '@/hooks/use-settings';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Alert, FlatList, Pressable, StyleSheet, View } from 'react-native';
 
 export default function RobotScreen() {
   const { t } = useTranslation();
-  const { recordingDuration } = useSettings();
+  const { recordingDuration, showExtendedRobotInfo } = useSettings();
   const { state, discoveredRobots, startDiscovery, stopDiscovery } = useRobotDiscovery();
+  const { robot, setRobot } = useConnectedRobot();
   const [connectedRobotName, setConnectedRobotName] = useState<string | null>(null);
   const [firmwareVersion, setFirmwareVersion] = useState<number>(0);
   const [protocolVersion, setProtocolVersion] = useState<string>('');
   const [robotState, setRobotState] = useState<ConnectedRobotState>('ready');
-  const robotRef = useRef<ConnectedRobot | null>(null);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -50,7 +50,7 @@ export default function RobotScreen() {
     } catch (error) {
       Alert.alert(
         t('alerts.error.title'),
-        error instanceof Error ? error.message : 'Failed to start scanning'
+        error instanceof Error ? error.message : t('alerts.error.startScanFailed')
       );
     }
   };
@@ -61,7 +61,7 @@ export default function RobotScreen() {
     } catch (error) {
       Alert.alert(
         t('alerts.error.title'),
-        error instanceof Error ? error.message : 'Failed to stop scanning'
+        error instanceof Error ? error.message : t('alerts.error.stopScanFailed')
       );
     }
   };
@@ -69,21 +69,21 @@ export default function RobotScreen() {
   const handleSelectRobot = async (discoveredRobot: DiscoveredRobot) => {
     try {
       await stopDiscovery();
-      const robot = await discoveredRobot.connect();
-      robotRef.current = robot;
-      setConnectedRobotName(robot.name);
-      setFirmwareVersion(robot.firmwareVersion);
-      setProtocolVersion(robot.protocolVersion);
-      setRobotState(robot.state);
+      const connectedRobot = await discoveredRobot.connect();
+      setRobot(connectedRobot);
+      setConnectedRobotName(connectedRobot.name);
+      setFirmwareVersion(connectedRobot.firmwareVersion);
+      setProtocolVersion(connectedRobot.protocolVersion);
+      setRobotState(connectedRobot.state);
 
       // Listen for state changes
-      robot.onStateChange((newState) => {
+      connectedRobot.onStateChange((newState) => {
         setRobotState(newState);
       });
 
       // Listen for disconnection
-      robot.onDisconnect(() => {
-        robotRef.current = null;
+      connectedRobot.onDisconnect(() => {
+        setRobot(null);
         setConnectedRobotName(null);
         setFirmwareVersion(0);
         setProtocolVersion('');
@@ -92,79 +92,79 @@ export default function RobotScreen() {
     } catch (error) {
       Alert.alert(
         t('alerts.error.title'),
-        error instanceof Error ? error.message : 'Failed to connect to robot'
+        error instanceof Error ? error.message : t('alerts.error.connectFailed')
       );
     }
   };
 
   const handleDriveMode = async () => {
-    if (!robotRef.current) {
-      Alert.alert(t('alerts.error.title'), 'No robot connected');
+    if (!robot) {
+      Alert.alert(t('alerts.error.title'), t('controlBar.noRobotConnected'));
       return;
     }
     try {
-      await robotRef.current.startDriveMode();
+      await robot.startDriveMode();
     } catch (error) {
       Alert.alert(
         t('alerts.error.title'),
-        error instanceof Error ? error.message : 'Failed to start drive mode'
+        error instanceof Error ? error.message : t('alerts.error.driveModeFailed')
       );
     }
   };
 
   const handleRecordMode = async () => {
-    if (!robotRef.current) {
-      Alert.alert(t('alerts.error.title'), 'No robot connected');
+    if (!robot) {
+      Alert.alert(t('alerts.error.title'), t('controlBar.noRobotConnected'));
       return;
     }
     try {
       const interval = 2;
-      await robotRef.current.recordInstructions(recordingDuration, interval);
+      await robot.recordInstructions(recordingDuration, interval);
     } catch (error) {
       Alert.alert(
         t('alerts.error.title'),
-        error instanceof Error ? error.message : 'Failed to start record mode'
+        error instanceof Error ? error.message : t('alerts.error.recordModeFailed')
       );
     }
   };
 
   const handleRunStoredInstructions = async () => {
-    if (!robotRef.current) {
-      Alert.alert(t('alerts.error.title'), 'No robot connected');
+    if (!robot) {
+      Alert.alert(t('alerts.error.title'), t('controlBar.noRobotConnected'));
       return;
     }
     try {
-      await robotRef.current.runStoredInstructions();
+      await robot.runStoredInstructions();
     } catch (error) {
       Alert.alert(
         t('alerts.error.title'),
-        error instanceof Error ? error.message : 'Failed to run stored instructions'
+        error instanceof Error ? error.message : t('alerts.error.runStoredFailed')
       );
     }
   };
 
   const handleStop = async () => {
-    if (!robotRef.current) {
-      Alert.alert(t('alerts.error.title'), 'No robot connected');
+    if (!robot) {
+      Alert.alert(t('alerts.error.title'), t('controlBar.noRobotConnected'));
       return;
     }
     try {
-      await robotRef.current.stop();
+      await robot.stop();
     } catch (error) {
       Alert.alert(
         t('alerts.error.title'),
-        error instanceof Error ? error.message : 'Failed to stop robot'
+        error instanceof Error ? error.message : t('alerts.error.stopFailed')
       );
     }
   };
 
   const handleDisconnect = async () => {
-    if (!robotRef.current) {
+    if (!robot) {
       return;
     }
     try {
-      await robotRef.current.disconnect();
-      robotRef.current = null;
+      await robot.disconnect();
+      setRobot(null);
       setConnectedRobotName(null);
       setFirmwareVersion(0);
       setProtocolVersion('');
@@ -172,7 +172,7 @@ export default function RobotScreen() {
     } catch (error) {
       Alert.alert(
         t('alerts.error.title'),
-        error instanceof Error ? error.message : 'Failed to disconnect from robot'
+        error instanceof Error ? error.message : t('alerts.error.disconnectFailed')
       );
     }
   };
@@ -187,7 +187,7 @@ export default function RobotScreen() {
       </View>
       <View style={styles.robotItemInfo}>
         <ThemedText style={styles.robotItemName}>{item.name || item.id}</ThemedText>
-        <ThemedText style={styles.robotItemId}>ID: {item.id}</ThemedText>
+        <ThemedText style={styles.robotItemId}>{t('robot.overview.robotId', { id: item.id })}</ThemedText>
       </View>
     </Pressable>
   );
@@ -215,6 +215,7 @@ export default function RobotScreen() {
               firmwareVersion={firmwareVersion}
               protocolVersion={protocolVersion}
               isExecuting={isExecuting}
+              showExtendedInfo={showExtendedRobotInfo}
               onDriveMode={handleDriveMode}
               onRecordMode={handleRecordMode}
               onRunStoredInstructions={handleRunStoredInstructions}
@@ -256,20 +257,29 @@ export default function RobotScreen() {
               </View>
             )}
           </View>
+        ) : !isConnected ? (
+          /* Empty State */
+          <View style={styles.emptyStateContainer}>
+            <ThemedText style={styles.emptyStateText}>
+              {t('controlBar.noRobotConnected')}
+            </ThemedText>
+          </View>
         ) : null}
       </View>
 
-      {/* Action Button */}
-      <View style={styles.buttonContainer}>
-        <Pressable
-          style={({ pressed }) => [styles.scanButton, pressed && styles.scanButtonPressed]}
-          onPress={isScanning ? handleStopScan : handleStartScan}
-        >
-          <ThemedText style={styles.scanButtonText}>
-            {isScanning ? t('robot.overview.cancelScanning') : t('robot.overview.scanForRobots')}
-          </ThemedText>
-        </Pressable>
-      </View>
+      {/* Action Button - hidden when connected */}
+      {!isConnected || isScanning ? (
+        <View style={styles.buttonContainer}>
+          <Pressable
+            style={({ pressed }) => [styles.scanButton, pressed && styles.scanButtonPressed]}
+            onPress={isScanning ? handleStopScan : handleStartScan}
+          >
+            <ThemedText style={styles.scanButtonText}>
+              {isScanning ? t('robot.overview.cancelScanning') : t('robot.overview.scanForRobots')}
+            </ThemedText>
+          </Pressable>
+        </View>
+      ) : null}
     </ThemedView>
   );
 }
@@ -280,12 +290,13 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     paddingHorizontal: 20,
-    paddingTop: 60,
-    paddingBottom: 20,
+    paddingTop: 80,
+    paddingBottom: 32,
   },
   title: {
     fontSize: 48,
     fontWeight: '700',
+    lineHeight: 56,
   },
   content: {
     flex: 1,
@@ -293,6 +304,15 @@ const styles = StyleSheet.create({
   },
   connectedContainer: {
     marginBottom: 20,
+  },
+  emptyStateContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyStateText: {
+    fontSize: 18,
+    opacity: 0.5,
   },
   scanningContainer: {
     flex: 1,

@@ -3,12 +3,12 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 import { Colors } from '@/constants/theme';
-import { RobotManagerProvider } from '@/services/robot-manager-factory';
 import { ProgramStorageProvider } from '@/hooks/use-program-storage';
 import { BleManagerProvider } from '@/hooks/use-robot-discovery';
 import { NativeBleManager } from '@/ble/native';
 import { SettingsProvider } from '@/contexts/settings-context';
 import { InstructionViewerProvider } from '@/contexts/instruction-viewer-context';
+import { ConnectedRobotProvider } from '@/contexts/connected-robot-context';
 import '@/i18n';
 
 const bleManager = new NativeBleManager();
@@ -30,9 +30,9 @@ export default function RootLayout() {
   return (
     <SettingsProvider>
       <BleManagerProvider value={bleManager}>
-        <ProgramStorageProvider>
-          <RobotManagerProvider>
-            <InstructionViewerProvider>
+        <ConnectedRobotProvider>
+          <ProgramStorageProvider>
+              <InstructionViewerProvider>
               <ThemeProvider value={customTheme}>
                 <Stack
                   screenOptions={{
@@ -51,9 +51,9 @@ export default function RootLayout() {
                 </Stack>
                 <StatusBar style="light" />
               </ThemeProvider>
-            </InstructionViewerProvider>
-          </RobotManagerProvider>
-        </ProgramStorageProvider>
+              </InstructionViewerProvider>
+          </ProgramStorageProvider>
+        </ConnectedRobotProvider>
       </BleManagerProvider>
     </SettingsProvider>
   );
