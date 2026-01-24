@@ -8,7 +8,7 @@ export interface ConnectedRobot {
   name: string;
   state: ConnectedRobotState;
 
-  startFollowMode: () => Promise<void>;
+  startDriveMode: () => Promise<void>;
   recordInstructions: () => Promise<void>;
   uploadInstructions: (instructions: Instruction[], runAfterUpload: boolean) => Promise<void>;
   downloadInstructions: () => Promise<Instruction[]>;

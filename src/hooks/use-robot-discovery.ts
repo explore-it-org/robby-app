@@ -15,4 +15,6 @@ export type RobotDiscoveryState = 'stopped' | 'running' | 'error';
 export interface DiscoveredRobot {
   id: string;
   name: string;
+
+  connect: () => Promise<void>;
 }
