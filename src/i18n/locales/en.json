@@ -74,7 +74,10 @@
     "renameError": {
       "empty": "Name cannot be empty",
       "exists": "A program with this name already exists"
-    }
+    },
+    "downloadedInstructions": "Downloaded Instructions",
+    "noInstructions": "No Instructions",
+    "noInstructionsDescription": "No instructions have been downloaded from the robot"
   },
   "programDetail": {
     "notFound": "Program Not Found",

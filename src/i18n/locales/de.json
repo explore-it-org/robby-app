@@ -74,7 +74,10 @@
     "renameError": {
       "empty": "Name darf nicht leer sein",
       "exists": "Ein Programm mit diesem Namen existiert bereits"
-    }
+    },
+    "downloadedInstructions": "Heruntergeladene Anweisungen",
+    "noInstructions": "Keine Anweisungen",
+    "noInstructionsDescription": "Es wurden keine Anweisungen vom Roboter heruntergeladen"
   },
   "programDetail": {
     "notFound": "Programm nicht gefunden",

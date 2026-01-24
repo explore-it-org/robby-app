@@ -8,3 +8,5 @@ export { StatementList } from './statement-list';
 export { StatementListHeader } from './statement-list-header';
 export { MoveStatementItem, SubroutineStatementItem } from './statement-list-item';
 export { StatementTypePicker } from './statement-type-picker';
+export { ReadonlyInstructionList } from './readonly-instruction-list';
+export { ReadonlyInstructionItem } from './readonly-instruction-item';

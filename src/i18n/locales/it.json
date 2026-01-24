@@ -74,7 +74,10 @@
     "renameError": {
       "empty": "Il nome non può essere vuoto",
       "exists": "Esiste già un programma con questo nome"
-    }
+    },
+    "downloadedInstructions": "Istruzioni scaricate",
+    "noInstructions": "Nessuna istruzione",
+    "noInstructionsDescription": "Nessuna istruzione è stata scaricata dal robot"
   },
   "programDetail": {
     "notFound": "Programma non trovato",

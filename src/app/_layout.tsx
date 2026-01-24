@@ -8,6 +8,7 @@ import { ProgramStorageProvider } from '@/hooks/use-program-storage';
 import { BleManagerProvider } from '@/hooks/use-robot-discovery';
 import { NativeBleManager } from '@/ble/native';
 import { SettingsProvider } from '@/contexts/settings-context';
+import { InstructionViewerProvider } from '@/contexts/instruction-viewer-context';
 import '@/i18n';
 
 const bleManager = new NativeBleManager();
@@ -31,24 +32,26 @@ export default function RootLayout() {
       <BleManagerProvider value={bleManager}>
         <ProgramStorageProvider>
           <RobotManagerProvider>
-            <ThemeProvider value={customTheme}>
-              <Stack
-                screenOptions={{
-                  headerStyle: {
-                    backgroundColor: Colors.light.primary,
-                  },
-                  headerTintColor: '#FFFFFF',
-                  headerTitleStyle: {
-                    color: '#FFFFFF',
-                    fontWeight: '600',
-                  },
-                }}
-              >
-                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                <Stack.Screen name="settings" />
-              </Stack>
-              <StatusBar style="light" />
-            </ThemeProvider>
+            <InstructionViewerProvider>
+              <ThemeProvider value={customTheme}>
+                <Stack
+                  screenOptions={{
+                    headerStyle: {
+                      backgroundColor: Colors.light.primary,
+                    },
+                    headerTintColor: '#FFFFFF',
+                    headerTitleStyle: {
+                      color: '#FFFFFF',
+                      fontWeight: '600',
+                    },
+                  }}
+                >
+                  <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                  <Stack.Screen name="settings" />
+                </Stack>
+                <StatusBar style="light" />
+              </ThemeProvider>
+            </InstructionViewerProvider>
           </RobotManagerProvider>
         </ProgramStorageProvider>
       </BleManagerProvider>
