@@ -1,26 +1,26 @@
-import { ConnectedDevice } from '@/ble/manager';
 import { Instruction } from '@/programs/instructions';
+import { DeviceChannel } from './protocol-base';
 
 export interface ProtocolHandler {
   // Control commands
-  startDriveMode: (device: ConnectedDevice) => Promise<void>;
+  startDriveMode: (channel: DeviceChannel) => Promise<void>;
   recordInstructions: (
-    device: ConnectedDevice,
+    channel: DeviceChannel,
     durationSeconds: number,
     interval: number
   ) => Promise<void>;
-  runStoredInstructions: (device: ConnectedDevice) => Promise<void>;
-  stop: (device: ConnectedDevice) => Promise<void>;
+  runStoredInstructions: (channel: DeviceChannel) => Promise<void>;
+  stop: (channel: DeviceChannel) => Promise<void>;
 
   // Uploading and downloading instructions
   uploadInstructions: (
-    device: ConnectedDevice,
+    channel: DeviceChannel,
     instructions: Instruction[],
     runAfterUpload: boolean
   ) => Promise<void>;
-  downloadInstructions: (device: ConnectedDevice) => Promise<Instruction[]>;
+  downloadInstructions: (channel: DeviceChannel) => Promise<Instruction[]>;
 
   // Configuration
-  getInterval(device: ConnectedDevice): Promise<number>;
-  setInterval(device: ConnectedDevice, value: number): Promise<void>;
+  getInterval(channel: DeviceChannel): Promise<number>;
+  setInterval(channel: DeviceChannel, value: number): Promise<void>;
 }
