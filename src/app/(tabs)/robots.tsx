@@ -15,57 +15,28 @@ import { ThemedText } from '@/components/ui/themed-text';
 import { ThemedView } from '@/components/ui/themed-view';
 import { COLORS } from '@/constants/colors';
 import { StoredRobot } from '@/services/known-robots-storage';
-import { useRobotManager } from '@/services/robot-manager-factory';
-import { IRobot } from '@/types/robot';
-import { DiscoveredRobot, DiscoveryStatus } from '@/types/robot-discovery';
+import { DiscoveredRobot, useRobotDiscovery } from '@/hooks/use-robot-discovery';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Alert, FlatList, Pressable, StyleSheet, View } from 'react-native';
 
 export default function RobotScreen() {
   const { t } = useTranslation();
-  const { getRobotManager } = useRobotManager();
-  const [discoveredRobots, setDiscoveredRobots] = useState<DiscoveredRobot[]>([]);
-  const [connectedRobot, setConnectedRobot] = useState<IRobot | null>(null);
-  const [connectedRobotDisplay, setConnectedRobotDisplay] = useState<StoredRobot | null>(null);
-  const [status, setStatus] = useState<DiscoveryStatus>('idle');
-
-  const robotManager = getRobotManager();
+  const { state, discoveredRobots, startDiscovery, stopDiscovery } = useRobotDiscovery();
+  const [connectedRobot, setConnectedRobot] = useState<StoredRobot | null>(null);
 
   // Cleanup on unmount
   useEffect(() => {
     return () => {
-      if (connectedRobot) {
-        connectedRobot.disconnect().catch(console.error);
-      }
-      if (status === 'scanning') {
-        robotManager.stopDiscovery().catch(console.error);
+      if (state === 'running') {
+        stopDiscovery().catch(console.error);
       }
     };
-  }, [connectedRobot, robotManager, status]);
+  }, [state, stopDiscovery]);
 
   const handleStartScan = async () => {
     try {
-      setDiscoveredRobots([]);
-      await robotManager.startDiscovery(
-        (robot) => {
-          // Robot discovered callback
-          setDiscoveredRobots((prev) => {
-            // Avoid duplicates
-            if (prev.some((r) => r.id === robot.id)) {
-              return prev;
-            }
-            return [...prev, robot];
-          });
-        },
-        (newStatus, error) => {
-          // Status change callback
-          setStatus(newStatus);
-          if (error) {
-            Alert.alert(t('alerts.error.title'), error.message || 'Scanning error');
-          }
-        }
-      );
+      await startDiscovery();
     } catch (error) {
       Alert.alert(
         t('alerts.error.title'),
@@ -76,8 +47,7 @@ export default function RobotScreen() {
 
   const handleStopScan = async () => {
     try {
-      await robotManager.stopDiscovery();
-      setStatus('idle');
+      await stopDiscovery();
     } catch (error) {
       Alert.alert(
         t('alerts.error.title'),
@@ -86,36 +56,19 @@ export default function RobotScreen() {
     }
   };
 
-  const handleSelectRobot = async (discoveredRobot: DiscoveredRobot) => {
+  const handleSelectRobot = async (robot: DiscoveredRobot) => {
     try {
-      // Disconnect current robot if any
-      if (connectedRobot) {
-        await connectedRobot.disconnect();
-        setConnectedRobot(null);
-        setConnectedRobotDisplay(null);
-      }
-
-      // Stop scanning
-      if (status === 'scanning') {
-        await robotManager.stopDiscovery();
-        setStatus('idle');
-      }
-
-      // Create and connect to the robot
-      const robot = await robotManager.createRobot(discoveredRobot.id);
+      await stopDiscovery();
       await robot.connect();
 
-      // Create a stored robot object for display
       const robotDisplay: StoredRobot = {
         robotId: robot.id,
-        robotName: robot.name || discoveredRobot.name || robot.id,
+        robotName: robot.name,
         addedAt: new Date().toISOString(),
-        isVirtual: discoveredRobot.isVirtual || false,
+        isVirtual: false,
       };
 
-      setConnectedRobot(robot);
-      setConnectedRobotDisplay(robotDisplay);
-      setDiscoveredRobots([]);
+      setConnectedRobot(robotDisplay);
     } catch (error) {
       Alert.alert(
         t('alerts.error.title'),
@@ -124,27 +77,14 @@ export default function RobotScreen() {
     }
   };
 
-  const handleScanWhileConnected = () => {
-    // Don't disconnect, just start scanning
-    handleStartScan();
-  };
-
   const handleUploadAndRun = () => {
     // TODO: Implement upload and run
     Alert.alert('Upload & Run', 'This feature will upload and run the program on the robot');
   };
 
   const handleStop = async () => {
-    if (connectedRobot) {
-      try {
-        await connectedRobot.stop();
-      } catch (error) {
-        Alert.alert(
-          t('alerts.error.title'),
-          error instanceof Error ? error.message : 'Failed to stop robot'
-        );
-      }
-    }
+    // TODO: Implement stop
+    Alert.alert('Stop', 'This feature will stop the robot');
   };
 
   const handleUpload = () => {
@@ -167,8 +107,8 @@ export default function RobotScreen() {
     </Pressable>
   );
 
-  const isScanning = status === 'scanning';
-  const isConnected = connectedRobot !== null && connectedRobot.isConnected;
+  const isScanning = state === 'running';
+  const isConnected = connectedRobot !== null;
 
   return (
     <ThemedView style={styles.container}>
@@ -181,11 +121,11 @@ export default function RobotScreen() {
 
       {/* Content */}
       <View style={styles.content}>
-        {isConnected && !isScanning && connectedRobotDisplay ? (
+        {isConnected && !isScanning && connectedRobot ? (
           /* Connected State */
           <View style={styles.connectedContainer}>
             <ConnectedRobotDisplay
-              robot={connectedRobotDisplay}
+              robot={connectedRobot}
               onUploadAndRun={handleUploadAndRun}
               onStop={handleStop}
               onUpload={handleUpload}
@@ -232,9 +172,7 @@ export default function RobotScreen() {
       <View style={styles.buttonContainer}>
         <Pressable
           style={({ pressed }) => [styles.scanButton, pressed && styles.scanButtonPressed]}
-          onPress={
-            isScanning ? handleStopScan : isConnected ? handleScanWhileConnected : handleStartScan
-          }
+          onPress={isScanning ? handleStopScan : handleStartScan}
         >
           <ThemedText style={styles.scanButtonText}>
             {isScanning ? t('robot.overview.cancelScanning') : t('robot.overview.scanForRobots')}
