@@ -1,6 +1,6 @@
-import { ConnectedDevice } from '@/ble/manager';
+import { ConnectedDevice } from '@/services/ble/manager';
 import { ProtocolHandler } from './protocol';
-import { Instruction } from '@/programs/instructions';
+import { Instruction } from '@/services/programs/instructions';
 import { DeviceChannel } from './device-channel';
 import { createProtocolHandler, getProtocolVersion, ProtocolVersion } from './protocol-factory';
 

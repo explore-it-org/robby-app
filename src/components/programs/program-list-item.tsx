@@ -13,7 +13,7 @@ import { useThemeColor } from '@/hooks/use-theme-color';
 import { COLORS } from '@/constants/colors';
 import { COMPONENT_SPACING, SHADOW_SPACING } from '@/constants/spacing';
 import { formatProgramDate } from '@/utils/date-formatter';
-import { ProgramInfo } from '@/programs';
+import { ProgramInfo } from '@/services/programs';
 
 interface Props {
   program: ProgramInfo;

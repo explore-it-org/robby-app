@@ -5,7 +5,7 @@
  * Set instructions before navigating, then read them in the view page.
  */
 
-import { Instruction } from '@/programs/instructions';
+import { Instruction } from '@/services/programs/instructions';
 import { createContext, ReactNode, useCallback, useContext, useState } from 'react';
 
 interface InstructionViewerContextValue {

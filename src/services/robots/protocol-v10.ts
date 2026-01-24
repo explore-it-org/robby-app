@@ -7,7 +7,7 @@
  * - Maximum 4096 instructions
  */
 
-import { Instruction } from '@/programs/instructions';
+import { Instruction } from '@/services/programs/instructions';
 import { ProtocolHandler } from './protocol';
 import {
   encodeSpeed,

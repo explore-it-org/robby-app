@@ -5,7 +5,7 @@
  * Used for viewing downloaded instructions from a robot.
  */
 
-import { Instruction } from '@/programs/instructions';
+import { Instruction } from '@/services/programs/instructions';
 import { StyleSheet, View } from 'react-native';
 import { StatementListHeader } from './statement-list-header';
 import { ReadonlyInstructionItem } from './readonly-instruction-item';

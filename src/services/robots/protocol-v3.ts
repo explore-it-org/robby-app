@@ -1,18 +1,18 @@
 /**
- * V6 Protocol Handler
+ * V3 Protocol Handler
  *
- * Binary protocol for firmware version 9.
- * - Upload: All instructions in single binary write
- * - Download: Packeted with sequence numbers
- * - Maximum ~2400 instructions
+ * Text-based ASCII protocol for firmware versions 2-4.
+ * - Upload: One instruction per write operation with "xxx,xxxxx" format
+ * - Download: Comma-delimited text responses ending with ",,,,"
+ * - Maximum ~100 instructions (MTU limited)
  */
 
-import { Instruction } from '@/programs/instructions';
+import { Instruction } from '@/services/programs/instructions';
 import { ProtocolHandler } from './protocol';
-import { encodeSpeed, decodeSpeed, calculateDataLength } from './protocol-base';
+import { encodeSpeed, decodeSpeed, calculateDataLength, uint8ArrayToLatin1 } from './protocol-base';
 import { DeviceChannel } from './device-channel';
 
-export class ProtocolV6 implements ProtocolHandler {
+export class ProtocolV3 implements ProtocolHandler {
   async startDriveMode(channel: DeviceChannel): Promise<void> {
     const response = await channel.requestText('G');
     if (!response.includes('_GR_') && !response.includes('_GO_')) {
@@ -23,13 +23,13 @@ export class ProtocolV6 implements ProtocolHandler {
   async recordInstructions(
     channel: DeviceChannel,
     durationSeconds: number,
-    interval: number
+    _interval: number
   ): Promise<void> {
     // 1. Flush memory
     await channel.send('F');
 
-    // 2. Send data length (V6 uses interval * duration * 2 - 1)
-    const byteCount = interval * durationSeconds * 2 - 1;
+    // 2. Send data length (V3 uses duration * 2 - 1, ignores interval)
+    const byteCount = durationSeconds * 2 - 1;
     const hex = 'd' + byteCount.toString(16).toUpperCase().padStart(4, '0');
     await channel.send(hex);
 
@@ -68,20 +68,20 @@ export class ProtocolV6 implements ProtocolHandler {
     // 3. Enter upload mode
     await channel.send('E');
 
-    // 4. Upload all instructions as binary data
-    const binaryData = this.encodeInstructions(instructions);
-    await channel.send(binaryData);
+    // 4. Upload instructions one by one (V3 text format)
+    for (const inst of instructions) {
+      const left = encodeSpeed(inst.leftMotorSpeed).toString().padStart(3, '0');
+      const right = encodeSpeed(inst.rightMotorSpeed).toString().padStart(3, '0');
+      await channel.send(`${left},${right}xx`);
+    }
 
-    // 5. Send end marker
-    await channel.send('end');
-
-    // 6. Wait for confirmation
-    const response = await channel.awaitTextResponse();
+    // 5. End upload
+    const response = await channel.requestText('end');
     if (response !== 'FULL') {
       throw new Error(`Unexpected upload response: ${response}`);
     }
 
-    // 7. Run if requested
+    // 6. Run if requested
     if (runAfterUpload) {
       const runResponse = await channel.requestText('R', 60000);
       if (runResponse !== '_END') {
@@ -91,33 +91,28 @@ export class ProtocolV6 implements ProtocolHandler {
   }
 
   async downloadInstructions(channel: DeviceChannel): Promise<Instruction[]> {
+    const instructions: Instruction[] = [];
+
     // Send download request
     await channel.send('B');
 
-    // Read header packet (total byte count)
-    const headerPacket = await channel.awaitResponse();
-    const totalBytes = this.decodeBigEndian(headerPacket);
-    const expectedPackets = Math.ceil((totalBytes + 1) / 18);
+    // Collect responses until we get the end marker
+    while (true) {
+      const response = await channel.awaitResponse();
+      const text = uint8ArrayToLatin1(response);
 
-    const instructions: Instruction[] = [];
-    let packetsReceived = 0;
-
-    // Read data packets
-    while (packetsReceived < expectedPackets) {
-      const packet = await channel.awaitResponse();
-
-      // First byte is sequence number, rest is instruction data
-      const dataBytes = packet.slice(1);
-
-      // Parse instruction pairs
-      for (let i = 0; i + 1 < dataBytes.length; i += 2) {
-        instructions.push({
-          leftMotorSpeed: decodeSpeed(dataBytes[i]),
-          rightMotorSpeed: decodeSpeed(dataBytes[i + 1]),
-        });
+      if (text === ',,,,') {
+        break;
       }
 
-      packetsReceived++;
+      // Parse "xxx,xxx" format
+      const match = text.match(/(\d{3}),(\d{3})/);
+      if (match) {
+        instructions.push({
+          leftMotorSpeed: decodeSpeed(parseInt(match[1], 10)),
+          rightMotorSpeed: decodeSpeed(parseInt(match[2], 10)),
+        });
+      }
     }
 
     return instructions;
@@ -137,22 +132,5 @@ export class ProtocolV6 implements ProtocolHandler {
 
   async setInterval(channel: DeviceChannel, value: number): Promise<void> {
     await channel.send(`I${value}`);
-  }
-
-  private encodeInstructions(instructions: Instruction[]): Uint8Array {
-    const data = new Uint8Array(instructions.length * 2);
-    for (let i = 0; i < instructions.length; i++) {
-      data[i * 2] = encodeSpeed(instructions[i].leftMotorSpeed);
-      data[i * 2 + 1] = encodeSpeed(instructions[i].rightMotorSpeed);
-    }
-    return data;
-  }
-
-  private decodeBigEndian(data: Uint8Array): number {
-    let value = 0;
-    for (let i = 0; i < data.length; i++) {
-      value = (value << 8) | data[i];
-    }
-    return value;
   }
 }

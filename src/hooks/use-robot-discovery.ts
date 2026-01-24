@@ -1,8 +1,8 @@
 import { createContext, useCallback, useContext, useRef, useState } from 'react';
-import { BleManager, DiscoveredDevice } from '@/ble/manager';
-import { NativeBleManager } from '@/ble/native';
-import { Robot } from '@/robots';
-import { Instruction } from '@/programs/instructions';
+import { BleManager, DiscoveredDevice } from '@/services/ble/manager';
+import { NativeBleManager } from '@/services/ble/native';
+import { Robot } from '@/services/robots';
+import { Instruction } from '@/services/programs/instructions';
 
 // BLE Manager Context
 const defaultBleManager = new NativeBleManager();

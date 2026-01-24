@@ -1,7 +1,7 @@
 import { COLORS } from '@/constants/colors';
 import { SPACING } from '@/constants/spacing';
 import { EditableProgram } from '@/hooks/use-program';
-import { ProgramError } from '@/programs/errors';
+import { ProgramError } from '@/services/programs/errors';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, Text, View } from 'react-native';
 

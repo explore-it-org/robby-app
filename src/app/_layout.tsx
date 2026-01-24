@@ -5,7 +5,7 @@ import 'react-native-reanimated';
 import { Colors } from '@/constants/theme';
 import { ProgramStorageProvider } from '@/hooks/use-program-storage';
 import { BleManagerProvider } from '@/hooks/use-robot-discovery';
-import { NativeBleManager } from '@/ble/native';
+import { NativeBleManager } from '@/services/ble/native';
 import { SettingsProvider } from '@/contexts/settings-context';
 import { InstructionViewerProvider } from '@/contexts/instruction-viewer-context';
 import { ConnectedRobotProvider } from '@/contexts/connected-robot-context';
@@ -32,7 +32,7 @@ export default function RootLayout() {
       <BleManagerProvider value={bleManager}>
         <ConnectedRobotProvider>
           <ProgramStorageProvider>
-              <InstructionViewerProvider>
+            <InstructionViewerProvider>
               <ThemeProvider value={customTheme}>
                 <Stack
                   screenOptions={{
@@ -51,7 +51,7 @@ export default function RootLayout() {
                 </Stack>
                 <StatusBar style="light" />
               </ThemeProvider>
-              </InstructionViewerProvider>
+            </InstructionViewerProvider>
           </ProgramStorageProvider>
         </ConnectedRobotProvider>
       </BleManagerProvider>

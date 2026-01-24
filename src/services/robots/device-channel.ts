@@ -1,4 +1,4 @@
-import { ConnectedDevice } from '@/ble/manager';
+import { ConnectedDevice } from '@/services/ble/manager';
 import { uint8ArrayToLatin1 } from './protocol-base';
 
 /**

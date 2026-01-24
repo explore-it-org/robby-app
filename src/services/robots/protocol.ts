@@ -1,4 +1,4 @@
-import { Instruction } from '@/programs/instructions';
+import { Instruction } from '@/services/programs/instructions';
 import { DeviceChannel } from './device-channel';
 
 export interface ProtocolHandler {

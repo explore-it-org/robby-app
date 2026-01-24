@@ -5,7 +5,7 @@
  * Shows motor speeds with visualization bar, no editing controls.
  */
 
-import { Instruction } from '@/programs/instructions';
+import { Instruction } from '@/services/programs/instructions';
 import { StyleSheet, Text, View } from 'react-native';
 import { COLORS } from '@/constants/colors';
 import { SPACING } from '@/constants/spacing';

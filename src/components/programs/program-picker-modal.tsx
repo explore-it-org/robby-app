@@ -3,7 +3,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { COLORS } from '@/constants/colors';
 import { SPACING } from '@/constants/spacing';
-import { ProgramInfo } from '@/programs/storage';
+import { ProgramInfo } from '@/services/programs/storage';
 
 interface ProgramPickerModalProps {
   visible: boolean;

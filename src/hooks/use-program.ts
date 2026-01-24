@@ -1,7 +1,7 @@
-import { compile } from '@/programs/compiler';
-import { CompiledProgram } from '@/programs/program';
-import { ProgramSource } from '@/programs/source';
-import { Statement } from '@/programs/statements';
+import { compile } from '@/services/programs/compiler';
+import { CompiledProgram } from '@/services/programs/program';
+import { ProgramSource } from '@/services/programs/source';
+import { Statement } from '@/services/programs/statements';
 import { useProgramStorage } from './use-program-storage';
 
 /**

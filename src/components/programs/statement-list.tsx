@@ -7,7 +7,11 @@ import { MultiOptionButton } from '@/components/ui/multi-option-button';
 import { StatementTypePicker } from './statement-type-picker';
 import { ProgramPickerModal } from './program-picker-modal';
 import { StatementListHeader } from './statement-list-header';
-import { createMoveStatement, createSubroutineStatement, Statement } from '@/programs/statements';
+import {
+  createMoveStatement,
+  createSubroutineStatement,
+  Statement,
+} from '@/services/programs/statements';
 import { useProgramStorage } from '@/hooks/use-program-storage';
 import { router } from 'expo-router';
 

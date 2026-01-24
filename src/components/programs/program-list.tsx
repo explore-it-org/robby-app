@@ -13,7 +13,7 @@ import { FloatingActionButton } from '@/components/ui/floating-action-button';
 import { COMPONENT_SPACING, LAYOUT_SPACING, SPACING } from '@/constants/spacing';
 import { Platform, ScrollView, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { ProgramInfo } from '@/programs';
+import { ProgramInfo } from '@/services/programs';
 
 interface Props {
   programs: ProgramInfo[];

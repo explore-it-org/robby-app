@@ -1,4 +1,4 @@
-import { MoveStatement, SubroutineStatement } from '@/programs/statements';
+import { MoveStatement, SubroutineStatement } from '@/services/programs/statements';
 import { ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
