@@ -1,11 +1,7 @@
 import { BleManager as RNBleManager, Device, State } from 'react-native-ble-plx';
 import { BleAdapterState, BleManager, ConnectedDevice, DiscoveredDevice } from './manager';
 import { requestBluetoothPermissions } from '@/utils/ble-permissions';
-import {
-  base64ToUint8Array,
-  uint8ArrayToBase64,
-  latin1ToUint8Array,
-} from '@/utils/buffer-utils';
+import { base64ToUint8Array, uint8ArrayToBase64, latin1ToUint8Array } from '@/utils/buffer-utils';
 
 const ROBOT_NAME_PREFIX = 'EXPLORE-IT';
 const BLE_SERVICE_UUID = '0000ffe0-0000-1000-8000-00805f9b34fb';
@@ -51,6 +47,8 @@ class NativeConnectedDevice implements ConnectedDevice {
   }
 
   async writeData(data: string | Uint8Array): Promise<void> {
+    console.log('Writing data:', data);
+
     const uint8Array = typeof data === 'string' ? latin1ToUint8Array(data) : data;
     const base64 = uint8ArrayToBase64(uint8Array);
 
@@ -75,6 +73,8 @@ class NativeConnectedDevice implements ConnectedDevice {
    * Called internally when data is received from the device
    */
   handleDataReceived(data: Uint8Array): void {
+    console.log('Received data:', String.fromCharCode(...data));
+
     this.dataCallbacks.forEach((callback) => callback(data));
   }
 
