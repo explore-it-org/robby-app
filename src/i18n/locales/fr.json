@@ -291,5 +291,15 @@
     "faultyReference": "Le programme \"{{programName}}\" contient des erreurs.",
     "cyclicReference": "Dépendance circulaire : {{cycle}}",
     "unknown": "Une erreur inconnue s'est produite."
+  },
+  "settings": {
+    "title": "Paramètres",
+    "robotSettings": "Paramètres du robot",
+    "recordingDuration": "Durée d'enregistrement (secondes)",
+    "appSettings": "Paramètres de l'application",
+    "language": "Langue",
+    "extendedRobotInfo": "Afficher les informations étendues du robot",
+    "visitWebsite": "Visite www.explore-it.org",
+    "version": "Version"
   }
 }

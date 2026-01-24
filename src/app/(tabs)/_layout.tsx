@@ -1,6 +1,7 @@
-import { Tabs } from 'expo-router';
+import { Tabs, router } from 'expo-router';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { Pressable } from 'react-native';
 
 import { HapticTab } from '@/components/ui/haptic-tab';
 import { GearIcon } from '@/components/icons/GearIcon';
@@ -42,6 +43,15 @@ export default function TabLayout() {
         options={{
           title: t('tabs.robot'),
           tabBarIcon: ({ color }) => <GearIcon size={28} color={color} />,
+          headerRight: () => (
+            <Pressable
+              onPress={() => router.push('/settings')}
+              style={{ marginRight: 16 }}
+              hitSlop={8}
+            >
+              <GearIcon size={24} color="#FFFFFF" />
+            </Pressable>
+          ),
         }}
       />
       <Tabs.Screen

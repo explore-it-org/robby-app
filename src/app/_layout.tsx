@@ -7,6 +7,7 @@ import { RobotManagerProvider } from '@/services/robot-manager-factory';
 import { ProgramStorageProvider } from '@/hooks/use-program-storage';
 import { BleManagerProvider } from '@/hooks/use-robot-discovery';
 import { NativeBleManager } from '@/ble/native';
+import { SettingsProvider } from '@/contexts/settings-context';
 import '@/i18n';
 
 const bleManager = new NativeBleManager();
@@ -26,28 +27,31 @@ export default function RootLayout() {
   };
 
   return (
-    <BleManagerProvider value={bleManager}>
-      <ProgramStorageProvider>
-        <RobotManagerProvider>
-          <ThemeProvider value={customTheme}>
-            <Stack
-              screenOptions={{
-                headerStyle: {
-                  backgroundColor: Colors.light.primary,
-                },
-                headerTintColor: '#FFFFFF',
-                headerTitleStyle: {
-                  color: '#FFFFFF',
-                  fontWeight: '600',
-                },
-              }}
-            >
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            </Stack>
-            <StatusBar style="light" />
-          </ThemeProvider>
-        </RobotManagerProvider>
-      </ProgramStorageProvider>
-    </BleManagerProvider>
+    <SettingsProvider>
+      <BleManagerProvider value={bleManager}>
+        <ProgramStorageProvider>
+          <RobotManagerProvider>
+            <ThemeProvider value={customTheme}>
+              <Stack
+                screenOptions={{
+                  headerStyle: {
+                    backgroundColor: Colors.light.primary,
+                  },
+                  headerTintColor: '#FFFFFF',
+                  headerTitleStyle: {
+                    color: '#FFFFFF',
+                    fontWeight: '600',
+                  },
+                }}
+              >
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack.Screen name="settings" />
+              </Stack>
+              <StatusBar style="light" />
+            </ThemeProvider>
+          </RobotManagerProvider>
+        </ProgramStorageProvider>
+      </BleManagerProvider>
+    </SettingsProvider>
   );
 }
