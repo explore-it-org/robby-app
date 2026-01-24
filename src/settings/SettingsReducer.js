@@ -19,7 +19,7 @@ export const SettingsReducer = (state = default_state_settings, action) => {
         case ActionType.SET_DURATION:
             return Object.assign({}, state, {duration: action.duration, lastUpdate: Date.now()});
         case ActionType.SET_LANGUAGE:
-            return Object.assign({}, state, {language: action.language, lastUpdat: Date.now()});
+            return Object.assign({}, state, {language: action.language, lastUpdate: Date.now()});
         case ActionType.GRANT_LOCATION:
             return Object.assign({}, state, {isGranted: action.isGranted});
         case ActionType.BLE_STATE:
