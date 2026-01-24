@@ -4,6 +4,7 @@ import { COLORS } from '@/constants/colors';
 import { LAYOUT_SPACING } from '@/constants/spacing';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useConnectedRobot } from '@/hooks/use-robot-discovery';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -15,6 +16,7 @@ export default function ProgramEditScreen() {
 
   const colorScheme = useColorScheme();
   const { t } = useTranslation();
+  const connectedRobot = useConnectedRobot();
 
   return (
     <ThemedView style={styles.container}>
@@ -32,7 +34,7 @@ export default function ProgramEditScreen() {
           },
         }}
       />
-      <ProgramEditor programName={name} onProgramRenamed={setName} />
+      <ProgramEditor programName={name} onProgramRenamed={setName} connectedRobot={connectedRobot} />
     </ThemedView>
   );
 }

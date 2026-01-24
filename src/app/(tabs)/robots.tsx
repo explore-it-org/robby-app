@@ -128,6 +128,21 @@ export default function RobotScreen() {
     }
   };
 
+  const handleRunStoredInstructions = async () => {
+    if (!robotRef.current) {
+      Alert.alert(t('alerts.error.title'), 'No robot connected');
+      return;
+    }
+    try {
+      await robotRef.current.runStoredInstructions();
+    } catch (error) {
+      Alert.alert(
+        t('alerts.error.title'),
+        error instanceof Error ? error.message : 'Failed to run stored instructions'
+      );
+    }
+  };
+
   const handleStop = async () => {
     if (!robotRef.current) {
       Alert.alert(t('alerts.error.title'), 'No robot connected');
@@ -183,6 +198,7 @@ export default function RobotScreen() {
               isExecuting={isExecuting}
               onDriveMode={handleDriveMode}
               onRecordMode={handleRecordMode}
+              onRunStoredInstructions={handleRunStoredInstructions}
               onStop={handleStop}
             />
           </View>

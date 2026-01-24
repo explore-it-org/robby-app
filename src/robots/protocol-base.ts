@@ -1,5 +1,3 @@
-import { ConnectedDevice } from '@/ble/manager';
-
 /**
  * Encode motor speed from application domain (0-100) to wire protocol (0-255)
  */
@@ -19,8 +17,7 @@ export function decodeSpeed(wireValue: number): number {
  * Calculate data length command for upload
  */
 export function calculateDataLength(instructionCount: number): string {
-  const byteCount = instructionCount * 2 - 1;
-  return 'd' + byteCount.toString(16).toUpperCase().padStart(4, '0');
+  return hexNumber(instructionCount * 2 - 1);
 }
 
 /**
@@ -31,94 +28,15 @@ export function uint8ArrayToLatin1(data: Uint8Array): string {
 }
 
 /**
- * Request/Response handler for cleaner protocol communication
+ * Format a number as a hexadecimal string with a leading 'd'
  */
-export class DeviceChannel {
-  private device: ConnectedDevice;
-  private responseResolve: ((data: Uint8Array) => void) | null = null;
-  private unsubscribe: (() => void) | null = null;
+export function hexNumber(value: number): string {
+  return 'd' + value.toString(16).toUpperCase().padStart(4, '0');
+}
 
-  constructor(device: ConnectedDevice) {
-    this.device = device;
-    this.unsubscribe = device.onDataReceived((data) => {
-      if (this.responseResolve) {
-        const resolve = this.responseResolve;
-        this.responseResolve = null;
-        resolve(data);
-      }
-    });
-  }
-
-  /**
-   * Send a command and wait for a response
-   */
-  async request(command: string | Uint8Array, timeoutMs = 5000): Promise<Uint8Array> {
-    const responsePromise = this.awaitResponse(timeoutMs);
-    await this.device.writeData(command);
-    return responsePromise;
-  }
-
-  /**
-   * Send a command and wait for a text response
-   */
-  async requestText(command: string | Uint8Array, timeoutMs = 5000): Promise<string> {
-    const data = await this.request(command, timeoutMs);
-    return uint8ArrayToLatin1(data);
-  }
-
-  /**
-   * Send a command without waiting for response
-   */
-  async send(command: string | Uint8Array): Promise<void> {
-    await this.device.writeData(command);
-  }
-
-  /**
-   * Wait for a response without sending a command
-   */
-  awaitResponse(timeoutMs = 5000): Promise<Uint8Array> {
-    return new Promise((resolve, reject) => {
-      const timeout = setTimeout(() => {
-        this.responseResolve = null;
-        reject(new Error('Response timeout'));
-      }, timeoutMs);
-
-      this.responseResolve = (data) => {
-        clearTimeout(timeout);
-        resolve(data);
-      };
-    });
-  }
-
-  /**
-   * Wait for a text response
-   */
-  async awaitTextResponse(timeoutMs = 5000): Promise<string> {
-    const data = await this.awaitResponse(timeoutMs);
-    return uint8ArrayToLatin1(data);
-  }
-
-  /**
-   * Collect multiple responses until a condition is met
-   */
-  async collectResponses(
-    shouldStop: (responses: Uint8Array[]) => boolean,
-    timeoutMs = 5000
-  ): Promise<Uint8Array[]> {
-    const responses: Uint8Array[] = [];
-
-    while (!shouldStop(responses)) {
-      const response = await this.awaitResponse(timeoutMs);
-      responses.push(response);
-    }
-
-    return responses;
-  }
-
-  dispose(): void {
-    if (this.unsubscribe) {
-      this.unsubscribe();
-      this.unsubscribe = null;
-    }
-  }
+/**
+ * Format a number as a hexadecimal string with a leading 'd_' and trailing '_ok_'
+ */
+export function hexNumberConfirm(value: number): string {
+  return 'd_' + value.toString(16).toUpperCase().padStart(4, '0') + '_ok_';
 }

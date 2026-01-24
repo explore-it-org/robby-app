@@ -1,7 +1,7 @@
 import { ConnectedDevice } from '@/ble/manager';
 import { ProtocolHandler } from './protocol';
 import { Instruction } from '@/programs/instructions';
-import { DeviceChannel } from './protocol-base';
+import { DeviceChannel } from './device-channel';
 import { createProtocolHandler, getProtocolVersion, ProtocolVersion } from './protocol-factory';
 
 export class Robot {
@@ -38,7 +38,7 @@ export class Robot {
 
     // Send VERSION_REQ ('Z') and await VERSION_RESP ('VER X')
     const response = await channel.requestText('Z');
-    
+
     // Validate response format
     if (!response.startsWith('VER ')) {
       throw new Error(`Invalid version response: ${response}`);

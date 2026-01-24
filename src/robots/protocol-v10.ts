@@ -9,16 +9,21 @@
 
 import { Instruction } from '@/programs/instructions';
 import { ProtocolHandler } from './protocol';
-import { DeviceChannel, encodeSpeed, decodeSpeed, calculateDataLength } from './protocol-base';
+import {
+  encodeSpeed,
+  decodeSpeed,
+  calculateDataLength,
+  hexNumber,
+  hexNumberConfirm,
+} from './protocol-base';
+import { DeviceChannel } from './device-channel';
 
 const CHUNK_SIZE = 256; // instructions per chunk
 
 export class ProtocolV10 implements ProtocolHandler {
   async startDriveMode(channel: DeviceChannel): Promise<void> {
-    const response = await channel.requestText('G');
-    if (!response.includes('_GR_') && !response.includes('_GO_')) {
-      throw new Error(`Unexpected drive mode response: ${response}`);
-    }
+    await channel.send('R');
+    await channel.expectTextResponse('_RR_');
   }
 
   async recordInstructions(
@@ -26,33 +31,25 @@ export class ProtocolV10 implements ProtocolHandler {
     durationSeconds: number,
     interval: number
   ): Promise<void> {
-    // 1. Flush memory
-    await channel.send('F');
+    await this.flushMemory(channel);
+    await this.sendDataLength(channel, interval * durationSeconds * 2 - 1);
 
-    // 2. Send data length (V10 uses interval * duration * 2 - 1)
-    const byteCount = interval * durationSeconds * 2 - 1;
-    const hex = 'd' + byteCount.toString(16).toUpperCase().padStart(4, '0');
-    await channel.send(hex);
+    await channel.send('L');
+    await channel.expectTextResponse('_LR_');
 
-    // 3. Start recording
-    const response = await channel.requestText('L', (durationSeconds + 10) * 1000);
-    if (response !== 'FULL') {
-      throw new Error(`Unexpected record response: ${response}`);
-    }
+    await channel.expectTextResponse('FULL');
   }
 
   async runStoredInstructions(channel: DeviceChannel): Promise<void> {
-    const response = await channel.requestText('R', 60000);
-    if (response !== '_END') {
-      throw new Error(`Unexpected run response: ${response}`);
-    }
+    await channel.send('G');
+    await channel.expectTextResponse('_GR_');
+
+    await channel.expectTextResponse('_END');
   }
 
   async stop(channel: DeviceChannel): Promise<void> {
-    const response = await channel.requestText('S');
-    if (response !== '_SR_') {
-      throw new Error(`Unexpected stop response: ${response}`);
-    }
+    await channel.send('S');
+    await channel.expectTextResponse('_SR_');
   }
 
   async uploadInstructions(
@@ -137,6 +134,16 @@ export class ProtocolV10 implements ProtocolHandler {
 
   async setInterval(channel: DeviceChannel, value: number): Promise<void> {
     await channel.send(`I${value}`);
+  }
+
+  private async flushMemory(channel: DeviceChannel): Promise<void> {
+    await channel.send('F');
+    await channel.expectTextResponse('MEMCLEAR');
+  }
+
+  private async sendDataLength(channel: DeviceChannel, value: number): Promise<void> {
+    await channel.send(hexNumber(value));
+    await channel.expectTextResponse(hexNumberConfirm(value));
   }
 
   private createChunks(instructions: Instruction[]): Uint8Array[] {

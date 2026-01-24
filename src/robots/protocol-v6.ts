@@ -9,7 +9,8 @@
 
 import { Instruction } from '@/programs/instructions';
 import { ProtocolHandler } from './protocol';
-import { DeviceChannel, encodeSpeed, decodeSpeed, calculateDataLength } from './protocol-base';
+import { encodeSpeed, decodeSpeed, calculateDataLength } from './protocol-base';
+import { DeviceChannel } from './device-channel';
 
 export class ProtocolV6 implements ProtocolHandler {
   async startDriveMode(channel: DeviceChannel): Promise<void> {

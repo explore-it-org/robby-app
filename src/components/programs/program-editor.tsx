@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet } from 'react-native';
 import { ThemedView } from '@/components/ui/themed-view';
 import { RobotControlHeader } from '../robots';
-import { useRobotConnection } from '@/hooks/use-robot-connection';
+import { ConnectedRobot } from '@/hooks/use-robot-discovery';
 import { useProgramStorage } from '@/hooks/use-program-storage';
 import { useCallback, useState } from 'react';
 import { router } from 'expo-router';
@@ -18,13 +18,13 @@ import { ErrorList } from './error-list';
 interface Props {
   programName: string;
   onProgramRenamed: (newName: string) => void;
+  connectedRobot: ConnectedRobot | null;
 }
 
-export function ProgramEditor({ programName, onProgramRenamed }: Props) {
+export function ProgramEditor({ programName, onProgramRenamed, connectedRobot }: Props) {
   const { t } = useTranslation();
   const program = useProgram(programName);
   const programStorage = useProgramStorage();
-  const { connectedRobot } = useRobotConnection();
   const [showMenu, setShowMenu] = useState(false);
   const [showRenameModal, setShowRenameModal] = useState(false);
 
@@ -34,17 +34,22 @@ export function ProgramEditor({ programName, onProgramRenamed }: Props) {
     router.replace('/(tabs)/robots');
   }, []);
 
-  const handleUploadToRobot = useCallback(() => {
-    console.log('Upload program');
-  }, []);
+  const handleDriveMode = useCallback(() => {
+    connectedRobot?.startDriveMode();
+  }, [connectedRobot]);
 
-  const handleUploadToRobotAndRun = useCallback(() => {
-    console.log('Upload and run program');
-  }, []);
+  const handleRecordMode = useCallback(() => {
+    // TODO: Configure duration and interval
+    connectedRobot?.recordInstructions(5, 1);
+  }, [connectedRobot]);
 
-  const handleStopRobot = useCallback(() => {
-    console.log('Stop program');
-  }, []);
+  const handleRunStoredInstructions = useCallback(() => {
+    connectedRobot?.runStoredInstructions();
+  }, [connectedRobot]);
+
+  const handleStop = useCallback(() => {
+    connectedRobot?.stop();
+  }, [connectedRobot]);
 
   const handleMenuRequested = useCallback(() => {
     setShowMenu(true);
@@ -99,9 +104,10 @@ export function ProgramEditor({ programName, onProgramRenamed }: Props) {
           <RobotControlHeader
             connectedRobot={connectedRobot}
             onConnect={handleConnectRobot}
-            onUploadAndRun={handleUploadToRobotAndRun}
-            onStop={handleStopRobot}
-            onUpload={handleUploadToRobot}
+            onDriveMode={handleDriveMode}
+            onRecordMode={handleRecordMode}
+            onRunStoredInstructions={handleRunStoredInstructions}
+            onStop={handleStop}
           />
 
           <ScrollView

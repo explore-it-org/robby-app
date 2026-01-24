@@ -1,5 +1,5 @@
 import { Instruction } from '@/programs/instructions';
-import { DeviceChannel } from './protocol-base';
+import { DeviceChannel } from './device-channel';
 
 export interface ProtocolHandler {
   // Control commands

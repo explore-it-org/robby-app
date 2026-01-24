@@ -113,11 +113,8 @@ function createConnectedRobot(robot: Robot): ConnectedRobot {
 
     async startDriveMode() {
       setState('executing');
-      try {
-        await robot.startDriveMode();
-      } finally {
-        setState('ready');
-      }
+      await robot.startDriveMode();
+      // State remains 'executing' until stop() is called
     },
 
     async recordInstructions(durationSeconds: number, interval: number) {
