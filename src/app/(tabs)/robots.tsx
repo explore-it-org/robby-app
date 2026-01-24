@@ -15,8 +15,11 @@ import { ThemedText } from '@/components/ui/themed-text';
 import { ThemedView } from '@/components/ui/themed-view';
 import { COLORS } from '@/constants/colors';
 import { StoredRobot } from '@/services/known-robots-storage';
-import { DiscoveredRobot, useRobotDiscovery } from '@/hooks/use-robot-discovery';
-import { Robot } from '@/robots';
+import {
+  ConnectedRobot,
+  DiscoveredRobot,
+  useRobotDiscovery,
+} from '@/hooks/use-robot-discovery';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Alert, FlatList, Pressable, StyleSheet, View } from 'react-native';
@@ -24,8 +27,8 @@ import { ActivityIndicator, Alert, FlatList, Pressable, StyleSheet, View } from 
 export default function RobotScreen() {
   const { t } = useTranslation();
   const { state, discoveredRobots, startDiscovery, stopDiscovery } = useRobotDiscovery();
-  const [connectedRobot, setConnectedRobot] = useState<StoredRobot | null>(null);
-  const robotRef = useRef<Robot | null>(null);
+  const [connectedRobotDisplay, setConnectedRobotDisplay] = useState<StoredRobot | null>(null);
+  const robotRef = useRef<ConnectedRobot | null>(null);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -71,12 +74,12 @@ export default function RobotScreen() {
         isVirtual: false,
       };
 
-      setConnectedRobot(robotDisplay);
+      setConnectedRobotDisplay(robotDisplay);
 
       // Listen for disconnection
       robot.onDisconnect(() => {
         robotRef.current = null;
-        setConnectedRobot(null);
+        setConnectedRobotDisplay(null);
       });
     } catch (error) {
       Alert.alert(
@@ -135,7 +138,7 @@ export default function RobotScreen() {
   );
 
   const isScanning = state === 'running';
-  const isConnected = connectedRobot !== null;
+  const isConnected = connectedRobotDisplay !== null;
 
   return (
     <ThemedView style={styles.container}>
@@ -148,11 +151,11 @@ export default function RobotScreen() {
 
       {/* Content */}
       <View style={styles.content}>
-        {isConnected && !isScanning && connectedRobot ? (
+        {isConnected && !isScanning && connectedRobotDisplay ? (
           /* Connected State */
           <View style={styles.connectedContainer}>
             <ConnectedRobotDisplay
-              robot={connectedRobot}
+              robot={connectedRobotDisplay}
               onUploadAndRun={handleUploadAndRun}
               onStop={handleStop}
               onUpload={handleUpload}
