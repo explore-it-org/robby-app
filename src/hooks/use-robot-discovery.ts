@@ -1,16 +1,15 @@
 import { createContext, useCallback, useContext, useRef, useState } from 'react';
 import { BleManager, DiscoveredDevice } from '@/ble/manager';
+import { NativeBleManager } from '@/ble/native';
 
-const BleManagerContext = createContext<BleManager | null>(null);
+const defaultBleManager = new NativeBleManager();
+
+const BleManagerContext = createContext<BleManager>(defaultBleManager);
 
 export const BleManagerProvider = BleManagerContext.Provider;
 
 function useBleManager(): BleManager {
-  const manager = useContext(BleManagerContext);
-  if (!manager) {
-    throw new Error('useRobotDiscovery must be used within a BleManagerProvider');
-  }
-  return manager;
+  return useContext(BleManagerContext);
 }
 
 export function useRobotDiscovery(): RobotDiscovery {
