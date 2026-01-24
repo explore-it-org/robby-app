@@ -16,7 +16,8 @@ import { ThemedView } from '@/components/ui/themed-view';
 import { COLORS } from '@/constants/colors';
 import { StoredRobot } from '@/services/known-robots-storage';
 import { DiscoveredRobot, useRobotDiscovery } from '@/hooks/use-robot-discovery';
-import { useEffect, useState } from 'react';
+import { Robot } from '@/robots';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Alert, FlatList, Pressable, StyleSheet, View } from 'react-native';
 
@@ -24,6 +25,7 @@ export default function RobotScreen() {
   const { t } = useTranslation();
   const { state, discoveredRobots, startDiscovery, stopDiscovery } = useRobotDiscovery();
   const [connectedRobot, setConnectedRobot] = useState<StoredRobot | null>(null);
+  const robotRef = useRef<Robot | null>(null);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -56,10 +58,11 @@ export default function RobotScreen() {
     }
   };
 
-  const handleSelectRobot = async (robot: DiscoveredRobot) => {
+  const handleSelectRobot = async (discoveredRobot: DiscoveredRobot) => {
     try {
       await stopDiscovery();
-      await robot.connect();
+      const robot = await discoveredRobot.connect();
+      robotRef.current = robot;
 
       const robotDisplay: StoredRobot = {
         robotId: robot.id,
@@ -69,6 +72,12 @@ export default function RobotScreen() {
       };
 
       setConnectedRobot(robotDisplay);
+
+      // Listen for disconnection
+      robot.onDisconnect(() => {
+        robotRef.current = null;
+        setConnectedRobot(null);
+      });
     } catch (error) {
       Alert.alert(
         t('alerts.error.title'),
@@ -77,18 +86,36 @@ export default function RobotScreen() {
     }
   };
 
-  const handleUploadAndRun = () => {
-    // TODO: Implement upload and run
+  const handleUploadAndRun = async () => {
+    if (!robotRef.current) {
+      Alert.alert(t('alerts.error.title'), 'No robot connected');
+      return;
+    }
+    // TODO: Get instructions from program storage and upload
     Alert.alert('Upload & Run', 'This feature will upload and run the program on the robot');
   };
 
   const handleStop = async () => {
-    // TODO: Implement stop
-    Alert.alert('Stop', 'This feature will stop the robot');
+    if (!robotRef.current) {
+      Alert.alert(t('alerts.error.title'), 'No robot connected');
+      return;
+    }
+    try {
+      await robotRef.current.stop();
+    } catch (error) {
+      Alert.alert(
+        t('alerts.error.title'),
+        error instanceof Error ? error.message : 'Failed to stop robot'
+      );
+    }
   };
 
-  const handleUpload = () => {
-    // TODO: Implement upload
+  const handleUpload = async () => {
+    if (!robotRef.current) {
+      Alert.alert(t('alerts.error.title'), 'No robot connected');
+      return;
+    }
+    // TODO: Get instructions from program storage and upload
     Alert.alert('Upload', 'This feature will upload the program to the robot');
   };
 

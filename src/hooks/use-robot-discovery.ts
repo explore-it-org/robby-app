@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useRef, useState } from 'react';
 import { BleManager, DiscoveredDevice } from '@/ble/manager';
 import { NativeBleManager } from '@/ble/native';
+import { Robot } from '@/robots';
 
 const defaultBleManager = new NativeBleManager();
 
@@ -38,7 +39,10 @@ export function useRobotDiscovery(): RobotDiscovery {
           id: device.id,
           name: device.name,
           connect: async () => {
-            throw new Error('Not implemented');
+            // Connect to the BLE device
+            const connectedDevice = await bleManager.connect(device);
+            // Negotiate protocol and create Robot instance
+            return Robot.connect(connectedDevice);
           },
         };
 
@@ -80,5 +84,5 @@ export interface DiscoveredRobot {
   id: string;
   name: string;
 
-  connect: () => Promise<void>;
+  connect: () => Promise<Robot>;
 }

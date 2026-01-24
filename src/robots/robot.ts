@@ -1,14 +1,56 @@
 import { ConnectedDevice } from '@/ble/manager';
 import { ProtocolHandler } from './protocol';
 import { Instruction } from '@/programs/instructions';
+import { DeviceChannel } from './protocol-base';
+import { createProtocolHandler, getProtocolVersion, ProtocolVersion } from './protocol-factory';
 
 export class Robot {
+  readonly id: string;
+  readonly name: string;
+  readonly firmwareVersion: number;
+  readonly protocolVersion: ProtocolVersion;
+
   private device: ConnectedDevice;
   private protocol: ProtocolHandler;
 
-  constructor(device: ConnectedDevice, protocol: ProtocolHandler) {
+  private constructor(
+    device: ConnectedDevice,
+    protocol: ProtocolHandler,
+    firmwareVersion: number,
+    protocolVersion: ProtocolVersion
+  ) {
     this.device = device;
     this.protocol = protocol;
+    this.id = device.id;
+    this.name = device.name;
+    this.firmwareVersion = firmwareVersion;
+    this.protocolVersion = protocolVersion;
+  }
+
+  /**
+   * Connect to a robot and negotiate the protocol version
+   */
+  static async connect(device: ConnectedDevice): Promise<Robot> {
+    const channel = new DeviceChannel(device);
+
+    try {
+      // Send VERSION_REQ ('Z') and await VERSION_RESP ('VER X')
+      const response = await channel.requestText('Z', (text) => text.startsWith('VER '));
+
+      // Parse firmware version from 'VER X' response
+      const match = response.match(/VER\s+(\d+)/);
+      if (!match) {
+        throw new Error(`Invalid version response: ${response}`);
+      }
+
+      const firmwareVersion = parseInt(match[1], 10);
+      const protocolVersion = getProtocolVersion(firmwareVersion);
+      const protocol = createProtocolHandler(protocolVersion);
+
+      return new Robot(device, protocol, firmwareVersion, protocolVersion);
+    } finally {
+      channel.dispose();
+    }
   }
 
   async startDriveMode() {
