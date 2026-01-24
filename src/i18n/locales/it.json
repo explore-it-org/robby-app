@@ -182,7 +182,8 @@
       "stopFailed": "Impossibile fermare il robot",
       "disconnectFailed": "Impossibile disconnettersi dal robot",
       "setIntervalFailed": "Impossibile impostare le linee di programma al secondo",
-      "downloadFailed": "Impossibile scaricare le istruzioni dal robot"
+      "downloadFailed": "Impossibile scaricare le istruzioni dal robot",
+      "connectionTimeout": "Connessione scaduta. Riprova."
     }
   },
   "actionSheet": {

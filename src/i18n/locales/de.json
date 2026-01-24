@@ -182,7 +182,8 @@
       "stopFailed": "Roboter konnte nicht gestoppt werden",
       "disconnectFailed": "Verbindung konnte nicht getrennt werden",
       "setIntervalFailed": "Programmzeilen pro Sekunde konnten nicht gesetzt werden",
-      "downloadFailed": "Anweisungen konnten nicht vom Roboter heruntergeladen werden"
+      "downloadFailed": "Anweisungen konnten nicht vom Roboter heruntergeladen werden",
+      "connectionTimeout": "Verbindung abgelaufen. Bitte erneut versuchen."
     }
   },
   "actionSheet": {

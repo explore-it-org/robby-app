@@ -182,7 +182,8 @@
       "stopFailed": "Échec de l'arrêt du robot",
       "disconnectFailed": "Échec de la déconnexion du robot",
       "setIntervalFailed": "Échec de la modification des lignes de programme par seconde",
-      "downloadFailed": "Échec du téléchargement des instructions du robot"
+      "downloadFailed": "Échec du téléchargement des instructions du robot",
+      "connectionTimeout": "Connexion expirée. Veuillez réessayer."
     }
   },
   "actionSheet": {

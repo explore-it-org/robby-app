@@ -7,10 +7,10 @@
  */
 
 import { ThemedText } from '@/components/ui/themed-text';
-import { GearIcon } from '@/components/icons/GearIcon';
-import { PlayCodeIcon } from '@/components/icons/PlayCodeIcon';
+import { RunStoredIcon } from '@/components/icons/RunStoredIcon';
 import { StopIcon } from '@/components/icons/StopIcon';
 import { UploadIcon } from '@/components/icons/UploadIcon';
+import { WheelIcon } from '@/components/icons/WheelIcon';
 import { COLORS } from '@/constants/colors';
 import { Pressable, StyleSheet, View } from 'react-native';
 
@@ -33,7 +33,7 @@ export function ProgramEditorRobotHeader({
     <View style={styles.container}>
       {/* Left: Gear icon + Robot name */}
       <View style={styles.leftSection}>
-        <GearIcon size={20} color={COLORS.PRIMARY} />
+        <WheelIcon size={20} color={COLORS.PRIMARY} />
         <ThemedText style={styles.robotName} numberOfLines={1} ellipsizeMode="tail">
           {robotName}
         </ThemedText>
@@ -64,7 +64,7 @@ export function ProgramEditorRobotHeader({
               onPress={onRunStoredInstructions}
               style={({ pressed }) => [styles.actionButton, pressed && styles.actionButtonPressed]}
             >
-              <PlayCodeIcon size={20} color={COLORS.PRIMARY} />
+              <RunStoredIcon size={20} color={COLORS.PRIMARY} />
             </Pressable>
           </>
         )}

@@ -182,7 +182,8 @@
       "stopFailed": "Failed to stop robot",
       "disconnectFailed": "Failed to disconnect from robot",
       "setIntervalFailed": "Failed to set program lines per second",
-      "downloadFailed": "Failed to download instructions from robot"
+      "downloadFailed": "Failed to download instructions from robot",
+      "connectionTimeout": "Connection timed out. Please try again."
     }
   },
   "actionSheet": {

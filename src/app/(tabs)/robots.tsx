@@ -23,7 +23,7 @@ import {
 } from '@/hooks/use-robot-discovery';
 import { useSettings } from '@/hooks/use-settings';
 import { useRouter } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Alert, FlatList, Pressable, StyleSheet, View } from 'react-native';
 
@@ -40,9 +40,18 @@ export default function RobotScreen() {
   const [robotState, setRobotState] = useState<ConnectedRobotState>('ready');
   const [isConnecting, setIsConnecting] = useState(false);
 
+  // Store cleanup functions for robot listeners
+  const cleanupFunctionsRef = useRef<(() => void)[]>([]);
+
+  const cleanupRobotListeners = () => {
+    cleanupFunctionsRef.current.forEach((cleanup) => cleanup());
+    cleanupFunctionsRef.current = [];
+  };
+
   // Cleanup on unmount
   useEffect(() => {
     return () => {
+      cleanupRobotListeners();
       if (state === 'running') {
         stopDiscovery().catch(console.error);
       }
@@ -75,26 +84,43 @@ export default function RobotScreen() {
     setIsConnecting(true);
     try {
       await stopDiscovery();
-      const connectedRobot = await discoveredRobot.connect();
+
+      // Connect with 10 second timeout
+      const CONNECTION_TIMEOUT = 10000;
+      const timeoutPromise = new Promise<never>((_, reject) => {
+        setTimeout(() => reject(new Error(t('alerts.error.connectionTimeout'))), CONNECTION_TIMEOUT);
+      });
+
+      const connectedRobot = await Promise.race([
+        discoveredRobot.connect(),
+        timeoutPromise,
+      ]);
+
+      // Clean up any existing listeners before setting up new ones
+      cleanupRobotListeners();
+
       setRobot(connectedRobot);
       setConnectedRobotName(connectedRobot.name);
       setFirmwareVersion(connectedRobot.firmwareVersion);
       setProtocolVersion(connectedRobot.protocolVersion);
       setRobotState(connectedRobot.state);
 
-      // Listen for state changes
-      connectedRobot.onStateChange((newState) => {
+      // Listen for state changes and store cleanup function
+      const unsubscribeStateChange = connectedRobot.onStateChange((newState) => {
         setRobotState(newState);
       });
+      cleanupFunctionsRef.current.push(unsubscribeStateChange);
 
-      // Listen for disconnection
-      connectedRobot.onDisconnect(() => {
+      // Listen for disconnection and store cleanup function
+      const unsubscribeDisconnect = connectedRobot.onDisconnect(() => {
+        cleanupRobotListeners();
         setRobot(null);
         setConnectedRobotName(null);
         setFirmwareVersion(0);
         setProtocolVersion('');
         setRobotState('ready');
       });
+      cleanupFunctionsRef.current.push(unsubscribeDisconnect);
     } catch (error) {
       Alert.alert(
         t('alerts.error.title'),
@@ -188,6 +214,7 @@ export default function RobotScreen() {
       return;
     }
     try {
+      cleanupRobotListeners();
       await robot.disconnect();
       setRobot(null);
       setConnectedRobotName(null);

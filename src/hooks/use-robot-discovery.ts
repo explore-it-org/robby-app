@@ -3,6 +3,7 @@ import { BleManager, DiscoveredDevice } from '@/services/ble/manager';
 import { NativeBleManager } from '@/services/ble/native';
 import { Robot } from '@/services/robots';
 import { Instruction } from '@/services/programs/instructions';
+import { useConnectedRobot as useConnectedRobotContext } from '@/contexts/connected-robot-context';
 
 // BLE Manager Context
 const defaultBleManager = new NativeBleManager();
@@ -13,12 +14,10 @@ function useBleManager(): BleManager {
   return useContext(BleManagerContext);
 }
 
-// Connected Robot Context
-const ConnectedRobotContext = createContext<ConnectedRobot | null>(null);
-export const ConnectedRobotProvider = ConnectedRobotContext.Provider;
-
+// Connected Robot Hook - delegates to context
 export function useConnectedRobot(): ConnectedRobot | null {
-  return useContext(ConnectedRobotContext);
+  const { robot } = useConnectedRobotContext();
+  return robot;
 }
 
 // Robot Discovery Hook

@@ -36,9 +36,15 @@ export function ProgramEditor({ programName, onProgramRenamed, connectedRobot }:
     router.replace('/(tabs)/robots');
   }, []);
 
-  const handleUpload = useCallback(() => {
-    // TODO: Upload current program to robot
-  }, []);
+  const handleUpload = useCallback(async () => {
+    if (!connectedRobot || program === 'not-found' || program.compiled.type !== 'compiled') return;
+    await connectedRobot.uploadInstructions(program.compiled.instructions, false);
+  }, [connectedRobot, program]);
+
+  const handleUploadAndRun = useCallback(async () => {
+    if (!connectedRobot || program === 'not-found' || program.compiled.type !== 'compiled') return;
+    await connectedRobot.uploadInstructions(program.compiled.instructions, true);
+  }, [connectedRobot, program]);
 
   const handleRunStoredInstructions = useCallback(() => {
     connectedRobot?.runStoredInstructions();

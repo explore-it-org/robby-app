@@ -7,7 +7,7 @@
  * - Maximum 4096 instructions
  */
 
-import { Instruction } from '@/services/programs/instructions';
+import { Instruction } from '@/programs/instructions';
 import { ProtocolHandler } from './protocol';
 import {
   encodeSpeed,
@@ -32,7 +32,7 @@ export class ProtocolV10 implements ProtocolHandler {
     interval: number
   ): Promise<void> {
     await this.flushMemory(channel);
-    await this.sendDataLength(channel, interval * durationSeconds * 2 - 1);
+    await this.sendDataLength(channel, interval * durationSeconds * 2);
 
     await channel.send('L');
     await channel.expectTextResponse('_LR_');
@@ -44,7 +44,7 @@ export class ProtocolV10 implements ProtocolHandler {
     await channel.send('G');
     await channel.expectTextResponse('_GR_');
 
-    await channel.expectTextResponse('_END');
+    await channel.expectTextResponse('_END', 300000);
   }
 
   async stop(channel: DeviceChannel): Promise<void> {
@@ -57,33 +57,21 @@ export class ProtocolV10 implements ProtocolHandler {
     instructions: Instruction[],
     runAfterUpload: boolean
   ): Promise<void> {
-    // 1. Flush memory
-    await channel.send('F');
+    await this.flushMemory(channel);
+    await this.sendDataLength(channel, instructions.length * 2 - 1);
 
-    // 2. Send data length
-    await channel.send(calculateDataLength(instructions.length));
-
-    // 3. Enter upload mode
     await channel.send('E');
+    await channel.expectTextResponse('_ER_');
 
-    // 4. Upload instructions in chunks
     const chunks = this.createChunks(instructions);
     for (const chunk of chunks) {
       await channel.send(chunk);
     }
 
-    // 5. Wait for confirmation
-    const response = await channel.awaitTextResponse();
-    if (response !== 'FULL') {
-      throw new Error(`Unexpected upload response: ${response}`);
-    }
+    await channel.expectTextResponse('FULL');
 
-    // 6. Run if requested
     if (runAfterUpload) {
-      const runResponse = await channel.requestText('R', 60000);
-      if (runResponse !== '_END') {
-        throw new Error(`Unexpected run response: ${runResponse}`);
-      }
+      await this.runStoredInstructions(channel);
     }
   }
 
