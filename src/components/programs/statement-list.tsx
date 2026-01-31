@@ -1,10 +1,10 @@
 import { EditableProgram } from '@/hooks/use-program';
-import { StyleSheet, View, Alert } from 'react-native';
+import { StyleSheet, View, Alert, Pressable, Text } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useCallback, useState } from 'react';
 import { MoveStatementItem, SubroutineStatementItem } from './statement-list-item';
-import { MultiOptionButton } from '@/components/ui/multi-option-button';
 import { StatementTypePicker } from './statement-type-picker';
+import { useThemeColor } from '@/hooks/use-theme-color';
 import { ProgramPickerModal } from './program-picker-modal';
 import { StatementListHeader } from './statement-list-header';
 import {
@@ -21,6 +21,7 @@ interface Props {
 
 export function StatementList({ program }: Props) {
   const { t } = useTranslation();
+  const tintColor = useThemeColor({}, 'tint');
   const statements = program.source.statements;
   const [showTypePicker, setShowTypePicker] = useState(false);
   const [showProgramPicker, setShowProgramPicker] = useState(false);
@@ -205,13 +206,31 @@ export function StatementList({ program }: Props) {
           }
         })}
 
-        {/* Add Statement Button */}
-        <MultiOptionButton
-          icon="+"
-          label={t('instructionPicker.addMove')}
-          onMainPress={handleAddMove}
-          onMenuPress={handleOpenStatementPicker}
-        />
+        {/* Add Statement Buttons */}
+        <View style={styles.buttonRow}>
+          <Pressable
+            style={({ pressed }) => [
+              styles.addButton,
+              { backgroundColor: tintColor },
+              pressed && styles.pressed,
+            ]}
+            onPress={handleAddMove}
+          >
+            <Text style={styles.buttonIcon}>+</Text>
+            <Text style={styles.buttonLabel}>{t('instructionPicker.addMove')}</Text>
+          </Pressable>
+          <Pressable
+            style={({ pressed }) => [
+              styles.addButton,
+              { backgroundColor: tintColor },
+              pressed && styles.pressed,
+            ]}
+            onPress={handleAddSubroutine}
+          >
+            <Text style={styles.buttonIcon}>+</Text>
+            <Text style={styles.buttonLabel}>{t('instructionPicker.addSubroutine')}</Text>
+          </Pressable>
+        </View>
       </View>
 
       {/* Statement Type Picker Modal */}
@@ -237,5 +256,34 @@ const styles = StyleSheet.create({
   container: {
     padding: 16,
     gap: 6,
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 12,
+    paddingVertical: 12,
+  },
+  addButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    minHeight: 44,
+    gap: 8,
+    borderRadius: 8,
+  },
+  buttonIcon: {
+    fontSize: 18,
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+  },
+  buttonLabel: {
+    fontSize: 14,
+    color: '#FFFFFF',
+    fontWeight: '600',
+  },
+  pressed: {
+    opacity: 0.5,
   },
 });

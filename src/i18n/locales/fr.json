@@ -99,7 +99,8 @@
   },
   "instructionPicker": {
     "title": "Ajouter une instruction",
-    "addMove": "Ajouter un mouvement",
+    "addMove": "Mouvement",
+    "addSubroutine": "Sous-programme",
     "move": {
       "title": "Déplacer",
       "description": "Contrôler les vitesses des moteurs gauche et droit"
@@ -217,6 +218,7 @@
   },
   "statementOptionsMenu": {
     "title": "Options d'instruction",
+    "changeProgram": "Changer de programme",
     "insertBefore": "Insérer avant",
     "insertAfter": "Insérer après",
     "moveUp": "Vers le haut",

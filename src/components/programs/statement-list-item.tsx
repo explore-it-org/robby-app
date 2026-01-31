@@ -5,7 +5,6 @@ import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import { COLORS } from '@/constants/colors';
 import { SPACING } from '@/constants/spacing';
 import { NumberInput } from '@/components/ui/number-input';
-import { IconSymbol } from '@/components/ui/icon-symbol';
 
 interface StatementItemLayoutProps {
   repetitions: number;
@@ -17,6 +16,7 @@ interface StatementItemLayoutProps {
   onInsertAfter: () => void;
   canMoveUp: boolean;
   canMoveDown: boolean;
+  onChangeProgram?: () => void;
   children: ReactNode;
 }
 
@@ -30,6 +30,7 @@ function StatementItemLayout({
   onInsertAfter,
   canMoveUp,
   canMoveDown,
+  onChangeProgram,
   children,
 }: StatementItemLayoutProps) {
   const [showMenu, setShowMenu] = useState(false);
@@ -67,6 +68,7 @@ function StatementItemLayout({
         onInsertAfter={onInsertAfter}
         canMoveUp={canMoveUp}
         canMoveDown={canMoveDown}
+        onChangeProgram={onChangeProgram}
       />
     </>
   );
@@ -195,6 +197,7 @@ interface StatementOptionsMenuProps {
   onInsertAfter: () => void;
   canMoveUp: boolean;
   canMoveDown: boolean;
+  onChangeProgram?: () => void;
 }
 
 function StatementOptionsMenu({
@@ -207,6 +210,7 @@ function StatementOptionsMenu({
   onInsertAfter,
   canMoveUp,
   canMoveDown,
+  onChangeProgram,
 }: StatementOptionsMenuProps) {
   const { t } = useTranslation();
 
@@ -223,6 +227,17 @@ function StatementOptionsMenu({
             <Text style={styles.title}>{t('statementOptionsMenu.title')}</Text>
 
             <View style={styles.optionsContainer}>
+              {/* Change Program (only for subroutines) */}
+              {onChangeProgram && (
+                <Pressable
+                  style={({ pressed }) => [styles.option, pressed && styles.optionPressed]}
+                  onPress={() => handleAction(onChangeProgram)}
+                >
+                  <Text style={styles.optionIcon}>🔁</Text>
+                  <Text style={styles.optionText}>{t('statementOptionsMenu.changeProgram')}</Text>
+                </Pressable>
+              )}
+
               {/* Move Up */}
               <Pressable
                 style={({ pressed }) => [
@@ -371,18 +386,15 @@ export function SubroutineStatementItem({
       onInsertAfter={handleInsertAfter}
       canMoveUp={canMoveUp}
       canMoveDown={canMoveDown}
+      onChangeProgram={onProgramSelect}
     >
       <Pressable
         style={[styles.subroutineContent, hasError && styles.subroutineContentError]}
-        onPress={onProgramSelect}
+        onPress={onOpenProgram}
       >
         <Text style={[styles.subroutineName, hasError && styles.subroutineNameError]}>
           {statement.programReference}
         </Text>
-      </Pressable>
-
-      <Pressable style={styles.editButton} onPress={onOpenProgram}>
-        <IconSymbol name="pencil" size={20} color={COLORS.TEXT_SECONDARY} />
       </Pressable>
     </StatementItemLayout>
   );
@@ -464,10 +476,6 @@ const styles = StyleSheet.create({
   },
   subroutineNameError: {
     color: COLORS.ERROR_CORAL,
-  },
-  editButton: {
-    paddingHorizontal: SPACING.SM,
-    justifyContent: 'center',
   },
   backdrop: {
     flex: 1,

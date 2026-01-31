@@ -99,7 +99,8 @@
   },
   "instructionPicker": {
     "title": "Anweisung hinzufügen",
-    "addMove": "Schritt hinzufügen",
+    "addMove": "Zeile",
+    "addSubroutine": "Unterprogramm",
     "move": {
       "title": "Bewegen",
       "description": "Linke und rechte Motorgeschwindigkeit steuern"

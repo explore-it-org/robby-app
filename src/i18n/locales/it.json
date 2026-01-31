@@ -99,7 +99,8 @@
   },
   "instructionPicker": {
     "title": "Aggiungi istruzione",
-    "addMove": "Aggiungi movimento",
+    "addMove": "Movimento",
+    "addSubroutine": "Subroutine",
     "move": {
       "title": "Muovi",
       "description": "Controlla le velocità dei motori sinistro e destro"
@@ -217,6 +218,7 @@
   },
   "statementOptionsMenu": {
     "title": "Opzioni istruzione",
+    "changeProgram": "Cambia programma",
     "insertBefore": "Inserisci prima",
     "insertAfter": "Inserisci dopo",
     "moveUp": "Sposta su",
