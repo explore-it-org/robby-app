@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   visualizationLeft: {
-    backgroundColor: '#EFC24A',
+    backgroundColor: '#A2E2BD',
     borderTopLeftRadius: 4,
     borderBottomLeftRadius: 4,
     alignSelf: 'stretch',
