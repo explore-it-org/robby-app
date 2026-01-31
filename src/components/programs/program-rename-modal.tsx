@@ -6,7 +6,16 @@
 
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { useEffect, useRef, useState } from 'react';
-import { Modal, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import {
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 interface ProgramRenameModalProps {
@@ -82,72 +91,90 @@ export function ProgramRenameModal({
 
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={handleClose}>
-      <Pressable style={styles.backdrop} onPress={handleClose}>
-        <View style={styles.modalContainer} onStartShouldSetResponder={() => true}>
-          <View style={[styles.modal, { backgroundColor }]}>
-            <Text style={[styles.title, { color: textColor }]}>
-              {t('programs.renameTitle', 'Rename Program')}
-            </Text>
-            <Text style={[styles.description, { color: textColor, opacity: 0.7 }]}>
-              {t('programs.renameDescription', 'Enter a new name for the program')}
-            </Text>
+      <View style={styles.container}>
+        {/* Backdrop layer */}
+        <Pressable style={styles.backdrop} onPress={handleClose} />
 
-            <TextInput
-              ref={inputRef}
-              style={[
-                styles.input,
-                { backgroundColor: tintColor + '20', color: textColor },
-                errorMessage && styles.inputError,
-              ]}
-              value={newName}
-              onChangeText={(text) => {
-                setNewName(text);
-                setErrorMessage(null); // Clear error when user types
-              }}
-              placeholder={t('programs.renamePlaceholder', 'Program name')}
-              placeholderTextColor={textColor + '80'}
-              selectTextOnFocus
-              onSubmitEditing={handleRename}
-            />
+        {/* Dialog layer */}
+        <KeyboardAvoidingView
+          style={styles.dialogContainer}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          pointerEvents="box-none"
+        >
+          <View style={styles.modalContainer}>
+            <View style={[styles.modal, { backgroundColor }]}>
+              <Text style={[styles.title, { color: textColor }]}>
+                {t('programs.renameTitle', 'Rename Program')}
+              </Text>
+              <Text style={[styles.description, { color: textColor, opacity: 0.7 }]}>
+                {t('programs.renameDescription', 'Enter a new name for the program')}
+              </Text>
 
-            {errorMessage && <Text style={styles.errorText}>{errorMessage}</Text>}
-
-            <View style={styles.buttonRow}>
-              <Pressable
-                style={({ pressed }) => [
-                  styles.button,
-                  { backgroundColor: tintColor + '20' },
-                  pressed && styles.buttonPressed,
+              <TextInput
+                ref={inputRef}
+                style={[
+                  styles.input,
+                  { backgroundColor: tintColor + '20', color: textColor },
+                  errorMessage && styles.inputError,
                 ]}
-                onPress={handleClose}
-              >
-                <Text style={[styles.cancelButtonText, { color: textColor }]}>
-                  {t('common.cancel')}
-                </Text>
-              </Pressable>
+                value={newName}
+                onChangeText={(text) => {
+                  setNewName(text);
+                  setErrorMessage(null); // Clear error when user types
+                }}
+                placeholder={t('programs.renamePlaceholder', 'Program name')}
+                placeholderTextColor={textColor + '80'}
+                selectTextOnFocus
+                onSubmitEditing={handleRename}
+              />
 
-              <Pressable
-                style={({ pressed }) => [
-                  styles.button,
-                  { backgroundColor: tintColor },
-                  pressed && styles.buttonPressed,
-                ]}
-                onPress={handleRename}
-              >
-                <Text style={styles.renameButtonText}>{t('programs.renameButton', 'Rename')}</Text>
-              </Pressable>
+              {errorMessage && <Text style={styles.errorText}>{errorMessage}</Text>}
+
+              <View style={styles.buttonRow}>
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.button,
+                    { backgroundColor: tintColor + '20' },
+                    pressed && styles.buttonPressed,
+                  ]}
+                  onPress={handleClose}
+                >
+                  <Text style={[styles.cancelButtonText, { color: textColor }]}>
+                    {t('common.cancel')}
+                  </Text>
+                </Pressable>
+
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.button,
+                    { backgroundColor: tintColor },
+                    pressed && styles.buttonPressed,
+                  ]}
+                  onPress={handleRename}
+                >
+                  <Text style={styles.renameButtonText}>
+                    {t('programs.renameButton', 'Rename')}
+                  </Text>
+                </Pressable>
+              </View>
             </View>
           </View>
-        </View>
-      </Pressable>
+        </KeyboardAvoidingView>
+      </View>
     </Modal>
   );
 }
 
 const styles = StyleSheet.create({
-  backdrop: {
+  container: {
     flex: 1,
+  },
+  backdrop: {
+    ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  dialogContainer: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
