@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
   },
   actionRow: {
     flexDirection: 'row',
-    gap: 4,
+    gap: 12,
     alignItems: 'center',
   },
   actionButton: {

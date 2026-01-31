@@ -4,9 +4,9 @@ import { useTranslation } from 'react-i18next';
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { ThemedView } from '@/components/ui/themed-view';
 import { NoRobotConnectedDisplay, ProgramEditorRobotHeader } from '../robots';
-import { ConnectedRobot } from '@/hooks/use-robot-discovery';
+import { ConnectedRobot, ConnectedRobotState } from '@/hooks/use-robot-discovery';
 import { useProgramStorage } from '@/hooks/use-program-storage';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { router } from 'expo-router';
 import { ProgramHeader } from './program-header';
 import { StatementList } from './statement-list';
@@ -30,8 +30,26 @@ export function ProgramEditor({ programName, onProgramRenamed, connectedRobot }:
   const [showMenu, setShowMenu] = useState(false);
   const [showRenameModal, setShowRenameModal] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [robotState, setRobotState] = useState<ConnectedRobotState>('ready');
 
   const existingProgramNames = programStorage.availablePrograms.map((p) => p.name);
+
+  // Listen to robot state changes
+  useEffect(() => {
+    if (!connectedRobot) {
+      setRobotState('ready');
+      return;
+    }
+
+    setRobotState(connectedRobot.state);
+    const unsubscribe = connectedRobot.onStateChange((newState) => {
+      setRobotState(newState);
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [connectedRobot]);
 
   const handleConnectRobot = useCallback(() => {
     router.replace('/(tabs)/robots');
@@ -109,7 +127,7 @@ export function ProgramEditor({ programName, onProgramRenamed, connectedRobot }:
             {connectedRobot ? (
               <ProgramEditorRobotHeader
                 robotName={connectedRobot.name}
-                isExecuting={connectedRobot.state === 'executing'}
+                isExecuting={robotState === 'executing'}
                 isUploading={isUploading}
                 onUpload={handleUpload}
                 onRunStoredInstructions={handleRunStoredInstructions}
