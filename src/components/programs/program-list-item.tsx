@@ -11,7 +11,7 @@ import { ThemedText } from '@/components/ui/themed-text';
 import { ThemedView } from '@/components/ui/themed-view';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { COLORS } from '@/constants/colors';
-import { COMPONENT_SPACING, SHADOW_SPACING } from '@/constants/spacing';
+import { COMPONENT_SPACING } from '@/constants/spacing';
 import { formatProgramDate } from '@/utils/date-formatter';
 import { ProgramInfo } from '@/services/programs';
 
@@ -87,27 +87,15 @@ export function ProgramListItem({ program, onSelected: onPress, isSelected }: Pr
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: COMPONENT_SPACING.LIST_ITEM_MARGIN_BOTTOM,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.GRAY_LIGHT,
   },
   content: {
     padding: COMPONENT_SPACING.LIST_ITEM_PADDING,
-    borderRadius: COMPONENT_SPACING.LIST_ITEM_BORDER_RADIUS,
     gap: COMPONENT_SPACING.LIST_ITEM_GAP,
   },
-  defaultContent: {
-    shadowColor: COLORS.BLACK,
-    shadowOffset: SHADOW_SPACING.DEFAULT_OFFSET,
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 3, // Android shadow
-  },
-  selectedContent: {
-    shadowColor: COLORS.PRIMARY_RED,
-    shadowOffset: SHADOW_SPACING.ELEVATED_OFFSET,
-    shadowOpacity: 0.3,
-    shadowRadius: 12,
-    elevation: 6, // Android shadow
-  },
+  defaultContent: {},
+  selectedContent: {},
   programName: {
     fontSize: 18, // Style guide: 18px for program names
     fontWeight: '600', // Semibold

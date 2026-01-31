@@ -76,19 +76,21 @@ export function ProgramList({
         showsVerticalScrollIndicator={true}
       >
         <ThemedView style={styles.container}>
-          <ThemedText type="subtitle" style={styles.header}>
-            {t('programs.title')}
-          </ThemedText>
-          <Pressable onPress={toggleSortOrder}>
-            <ThemedText style={[styles.sortLabel, { color: tintColor }]}>
-              {t('programs.sortedBy', {
-                order:
-                  sortOrder === 'recent'
-                    ? t('programs.sortRecent')
-                    : t('programs.sortAlphabetically'),
-              })}
+          <ThemedView style={styles.headerContainer}>
+            <ThemedText type="subtitle" style={styles.header}>
+              {t('programs.title')}
             </ThemedText>
-          </Pressable>
+            <Pressable onPress={toggleSortOrder}>
+              <ThemedText style={[styles.sortLabel, { color: tintColor }]}>
+                {t('programs.sortedBy', {
+                  order:
+                    sortOrder === 'recent'
+                      ? t('programs.sortRecent')
+                      : t('programs.sortAlphabetically'),
+                })}
+              </ThemedText>
+            </Pressable>
+          </ThemedView>
           <ThemedView style={styles.listContainer}>
             {sortedPrograms.map((program) => (
               <ProgramListItem
@@ -119,8 +121,12 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    padding: LAYOUT_SPACING.SCREEN_PADDING,
+    paddingVertical: LAYOUT_SPACING.SCREEN_PADDING,
     gap: LAYOUT_SPACING.ELEMENT_GAP,
+  },
+  headerContainer: {
+    paddingHorizontal: LAYOUT_SPACING.SCREEN_PADDING,
+    gap: SPACING.XS,
   },
   header: {
     fontSize: 20,
@@ -130,9 +136,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
   },
-  listContainer: {
-    gap: 0,
-  },
+  listContainer: {},
   emptyContainer: {
     flex: 1,
     justifyContent: 'center',
