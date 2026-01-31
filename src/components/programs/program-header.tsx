@@ -38,6 +38,8 @@ const styles = StyleSheet.create({
   },
   nameText: {
     flex: 1,
+    fontSize: 20,
+    fontWeight: '600',
   },
   menuButton: {
     width: 44,

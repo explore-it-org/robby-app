@@ -353,13 +353,12 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     paddingHorizontal: 20,
-    paddingTop: 80,
-    paddingBottom: 32,
+    paddingTop: 20,
+    paddingBottom: 16,
   },
   title: {
-    fontSize: 48,
-    fontWeight: '700',
-    lineHeight: 56,
+    fontSize: 20,
+    fontWeight: '600',
   },
   content: {
     flex: 1,

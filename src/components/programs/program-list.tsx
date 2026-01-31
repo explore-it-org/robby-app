@@ -93,8 +93,8 @@ const styles = StyleSheet.create({
     gap: LAYOUT_SPACING.ELEMENT_GAP,
   },
   header: {
-    fontSize: 20, // Style guide: Heading 2 size
-    fontWeight: '600', // Semibold
+    fontSize: 20,
+    fontWeight: '600',
   },
   listContainer: {
     gap: 0,
