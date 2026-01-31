@@ -29,6 +29,7 @@ export function ProgramEditor({ programName, onProgramRenamed, connectedRobot }:
   const programStorage = useProgramStorage();
   const [showMenu, setShowMenu] = useState(false);
   const [showRenameModal, setShowRenameModal] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
 
   const existingProgramNames = programStorage.availablePrograms.map((p) => p.name);
 
@@ -38,7 +39,12 @@ export function ProgramEditor({ programName, onProgramRenamed, connectedRobot }:
 
   const handleUpload = useCallback(async () => {
     if (!connectedRobot || program === 'not-found' || program.compiled.type !== 'compiled') return;
-    await connectedRobot.uploadInstructions(program.compiled.instructions, false);
+    setIsUploading(true);
+    try {
+      await connectedRobot.uploadInstructions(program.compiled.instructions, false);
+    } finally {
+      setIsUploading(false);
+    }
   }, [connectedRobot, program]);
 
   const handleRunStoredInstructions = useCallback(() => {
@@ -104,6 +110,7 @@ export function ProgramEditor({ programName, onProgramRenamed, connectedRobot }:
               <ProgramEditorRobotHeader
                 robotName={connectedRobot.name}
                 isExecuting={connectedRobot.state === 'executing'}
+                isUploading={isUploading}
                 onUpload={handleUpload}
                 onRunStoredInstructions={handleRunStoredInstructions}
                 onStop={handleStop}

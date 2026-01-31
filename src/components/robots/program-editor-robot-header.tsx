@@ -11,12 +11,12 @@ import { RunStoredIcon } from '@/components/icons/RunStoredIcon';
 import { StopIcon } from '@/components/icons/StopIcon';
 import { UploadIcon } from '@/components/icons/UploadIcon';
 import { WheelIcon } from '@/components/icons/WheelIcon';
-import { COLORS } from '@/constants/colors';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';
 
 interface ProgramEditorRobotHeaderProps {
   robotName: string;
   isExecuting: boolean;
+  isUploading: boolean;
   onUpload: () => void;
   onRunStoredInstructions: () => void;
   onStop: () => void;
@@ -25,6 +25,7 @@ interface ProgramEditorRobotHeaderProps {
 export function ProgramEditorRobotHeader({
   robotName,
   isExecuting,
+  isUploading,
   onUpload,
   onRunStoredInstructions,
   onStop,
@@ -33,7 +34,7 @@ export function ProgramEditorRobotHeader({
     <View style={styles.container}>
       {/* Left: Gear icon + Robot name */}
       <View style={styles.leftSection}>
-        <WheelIcon size={20} color={COLORS.PRIMARY} />
+        <WheelIcon size={20} color="#FFFFFF" />
         <ThemedText style={styles.robotName} numberOfLines={1} ellipsizeMode="tail">
           {robotName}
         </ThemedText>
@@ -41,7 +42,11 @@ export function ProgramEditorRobotHeader({
 
       {/* Right: Actions */}
       <View style={styles.actionRow}>
-        {isExecuting ? (
+        {isUploading ? (
+          <View style={styles.spinnerContainer}>
+            <ActivityIndicator size="small" color="#FFFFFF" />
+          </View>
+        ) : isExecuting ? (
           <Pressable
             onPress={onStop}
             style={({ pressed }) => [
@@ -58,13 +63,13 @@ export function ProgramEditorRobotHeader({
               onPress={onUpload}
               style={({ pressed }) => [styles.actionButton, pressed && styles.actionButtonPressed]}
             >
-              <UploadIcon size={20} color={COLORS.PRIMARY} />
+              <UploadIcon size={20} color="#FFFFFF" />
             </Pressable>
             <Pressable
               onPress={onRunStoredInstructions}
               style={({ pressed }) => [styles.actionButton, pressed && styles.actionButtonPressed]}
             >
-              <RunStoredIcon size={20} color={COLORS.PRIMARY} />
+              <RunStoredIcon size={20} color="#FFFFFF" />
             </Pressable>
           </>
         )}
@@ -78,10 +83,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: 'rgba(147, 112, 219, 0.15)',
+    backgroundColor: '#9370DB',
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: 'rgba(147, 112, 219, 0.3)',
+    borderColor: '#9370DB',
     paddingVertical: 10,
     paddingHorizontal: 12,
   },
@@ -95,7 +100,7 @@ const styles = StyleSheet.create({
   robotName: {
     fontSize: 16,
     fontWeight: '600',
-    color: COLORS.PRIMARY,
+    color: '#FFFFFF',
     flex: 1,
   },
   actionRow: {
@@ -107,10 +112,16 @@ const styles = StyleSheet.create({
     padding: 8,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.15)',
     borderRadius: 8,
   },
   stopButton: {
-    backgroundColor: COLORS.PRIMARY,
+    backgroundColor: 'rgba(255, 255, 255, 0.25)',
+  },
+  spinnerContainer: {
+    padding: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   actionButtonPressed: {
     opacity: 0.5,
