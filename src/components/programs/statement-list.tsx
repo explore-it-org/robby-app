@@ -257,7 +257,7 @@ export function StatementList({ program }: Props) {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-    gap: 6,
+    gap: 0,
   },
   buttonRow: {
     flexDirection: 'row',
