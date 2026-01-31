@@ -39,6 +39,7 @@ export default function RobotScreen() {
   const [protocolVersion, setProtocolVersion] = useState<string>('');
   const [robotState, setRobotState] = useState<ConnectedRobotState>('ready');
   const [isConnecting, setIsConnecting] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   // Store cleanup functions for robot listeners
   const cleanupFunctionsRef = useRef<(() => void)[]>([]);
@@ -182,6 +183,7 @@ export default function RobotScreen() {
       Alert.alert(t('alerts.error.title'), t('controlBar.noRobotConnected'));
       return;
     }
+    setIsDownloading(true);
     try {
       const instructions = await robot.downloadInstructions();
       setInstructions(instructions);
@@ -191,6 +193,8 @@ export default function RobotScreen() {
         t('alerts.error.title'),
         error instanceof Error ? error.message : t('alerts.error.downloadFailed')
       );
+    } finally {
+      setIsDownloading(false);
     }
   };
 
@@ -269,6 +273,7 @@ export default function RobotScreen() {
               firmwareVersion={firmwareVersion}
               protocolVersion={protocolVersion}
               isExecuting={isExecuting}
+              isDownloading={isDownloading}
               showExtendedInfo={showExtendedRobotInfo}
               onDriveMode={handleDriveMode}
               onRecordMode={handleRecordMode}

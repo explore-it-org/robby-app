@@ -15,6 +15,7 @@ import { NoRobotConnectedDisplay } from './no-robot-connected-display';
 interface Props {
   connectedRobot: ConnectedRobot | null;
   showExtendedInfo: boolean;
+  isDownloading?: boolean;
   onConnect: () => void;
   onDriveMode: () => void;
   onRecordMode: () => void;
@@ -27,6 +28,7 @@ interface Props {
 export function RobotControlHeader({
   connectedRobot,
   showExtendedInfo,
+  isDownloading = false,
   onConnect,
   onDriveMode,
   onRecordMode,
@@ -43,6 +45,7 @@ export function RobotControlHeader({
           firmwareVersion={connectedRobot.firmwareVersion}
           protocolVersion={connectedRobot.protocolVersion}
           isExecuting={connectedRobot.state === 'executing'}
+          isDownloading={isDownloading}
           showExtendedInfo={showExtendedInfo}
           onDriveMode={onDriveMode}
           onRecordMode={onRecordMode}

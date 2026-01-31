@@ -16,13 +16,14 @@ import { RunStoredIcon } from '@/components/icons/RunStoredIcon';
 import { StopIcon } from '@/components/icons/StopIcon';
 import { WheelIcon } from '@/components/icons/WheelIcon';
 import { useTranslation } from 'react-i18next';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';
 
 interface ConnectedRobotDisplayProps {
   robotName: string;
   firmwareVersion: number;
   protocolVersion: string;
   isExecuting: boolean;
+  isDownloading: boolean;
   showExtendedInfo: boolean;
   onDriveMode: () => void;
   onRecordMode: () => void;
@@ -37,6 +38,7 @@ export function ConnectedRobotDisplay({
   firmwareVersion,
   protocolVersion,
   isExecuting,
+  isDownloading,
   showExtendedInfo,
   onDriveMode,
   onRecordMode,
@@ -61,7 +63,11 @@ export function ConnectedRobotDisplay({
 
       {/* Line 2: Action buttons */}
       <View style={styles.actionRow}>
-        {isExecuting ? (
+        {isDownloading ? (
+          <View style={styles.spinnerContainer}>
+            <ActivityIndicator size="small" color="#FFFFFF" />
+          </View>
+        ) : isExecuting ? (
           <Pressable
             onPress={onStop}
             style={({ pressed }) => [
@@ -163,6 +169,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'rgba(255, 255, 255, 0.15)',
     borderRadius: 8,
+  },
+  spinnerContainer: {
+    padding: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   stopButton: {
     backgroundColor: 'rgba(255, 255, 255, 0.25)',
