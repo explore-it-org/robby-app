@@ -16,6 +16,7 @@ interface StatementItemLayoutProps {
   onInsertAfter: () => void;
   canMoveUp: boolean;
   canMoveDown: boolean;
+  canDelete: boolean;
   onChangeProgram?: () => void;
   children: ReactNode;
 }
@@ -30,6 +31,7 @@ function StatementItemLayout({
   onInsertAfter,
   canMoveUp,
   canMoveDown,
+  canDelete,
   onChangeProgram,
   children,
 }: StatementItemLayoutProps) {
@@ -68,6 +70,7 @@ function StatementItemLayout({
         onInsertAfter={onInsertAfter}
         canMoveUp={canMoveUp}
         canMoveDown={canMoveDown}
+        canDelete={canDelete}
         onChangeProgram={onChangeProgram}
       />
     </>
@@ -85,6 +88,7 @@ interface MoveStatementProps {
   onInsertAfter: (index: number) => void;
   canMoveUp: boolean;
   canMoveDown: boolean;
+  canDelete: boolean;
 }
 
 export function MoveStatementItem({
@@ -98,6 +102,7 @@ export function MoveStatementItem({
   onInsertAfter,
   canMoveUp,
   canMoveDown,
+  canDelete,
 }: MoveStatementProps) {
   const handleRepetitionChange = (value: number) => {
     onChange({
@@ -155,6 +160,7 @@ export function MoveStatementItem({
       onInsertAfter={handleInsertAfter}
       canMoveUp={canMoveUp}
       canMoveDown={canMoveDown}
+      canDelete={canDelete}
     >
       {/* Left Motor Speed */}
       <NumberInput
@@ -197,6 +203,7 @@ interface StatementOptionsMenuProps {
   onInsertAfter: () => void;
   canMoveUp: boolean;
   canMoveDown: boolean;
+  canDelete: boolean;
   onChangeProgram?: () => void;
 }
 
@@ -210,6 +217,7 @@ function StatementOptionsMenu({
   onInsertAfter,
   canMoveUp,
   canMoveDown,
+  canDelete,
   onChangeProgram,
 }: StatementOptionsMenuProps) {
   const { t } = useTranslation();
@@ -289,19 +297,21 @@ function StatementOptionsMenu({
               </Pressable>
 
               {/* Delete */}
-              <Pressable
-                style={({ pressed }) => [
-                  styles.option,
-                  styles.deleteOption,
-                  pressed && styles.optionPressed,
-                ]}
-                onPress={() => handleAction(onDelete)}
-              >
-                <Text style={styles.optionIcon}>🗑️</Text>
-                <Text style={[styles.optionText, styles.deleteText]}>
-                  {t('statementOptionsMenu.delete')}
-                </Text>
-              </Pressable>
+              {canDelete && (
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.option,
+                    styles.deleteOption,
+                    pressed && styles.optionPressed,
+                  ]}
+                  onPress={() => handleAction(onDelete)}
+                >
+                  <Text style={styles.optionIcon}>🗑️</Text>
+                  <Text style={[styles.optionText, styles.deleteText]}>
+                    {t('statementOptionsMenu.delete')}
+                  </Text>
+                </Pressable>
+              )}
             </View>
 
             <Pressable
@@ -330,6 +340,7 @@ interface SubroutineStatementProps {
   onInsertAfter: (index: number) => void;
   canMoveUp: boolean;
   canMoveDown: boolean;
+  canDelete: boolean;
   hasError: boolean;
 }
 
@@ -346,6 +357,7 @@ export function SubroutineStatementItem({
   onInsertAfter,
   canMoveUp,
   canMoveDown,
+  canDelete,
   hasError,
 }: SubroutineStatementProps) {
   const handleRepetitionChange = (value: number) => {
@@ -386,6 +398,7 @@ export function SubroutineStatementItem({
       onInsertAfter={handleInsertAfter}
       canMoveUp={canMoveUp}
       canMoveDown={canMoveDown}
+      canDelete={canDelete}
       onChangeProgram={onProgramSelect}
     >
       <Pressable

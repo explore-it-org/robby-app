@@ -1,6 +1,7 @@
 import { ProgramEditor, ProgramList } from '@/components/programs';
 import { ThemedView } from '@/components/ui/themed-view';
 import { useProgramStorage } from '@/hooks/use-program-storage';
+import { createMoveStatement } from '@/services/programs/statements';
 import { useResponsiveLayout } from '@/hooks/use-responsive-layout';
 import { useConnectedRobot } from '@/hooks/use-robot-discovery';
 import { useThemeColor } from '@/hooks/use-theme-color';
@@ -44,11 +45,11 @@ export default function ProgramsScreen() {
       number += 1;
     } while (existingNames.includes(newName));
 
-    // Create new program source
+    // Create new program source with initial move statement
     const newSource = {
       name: newName,
       lastModified: new Date(),
-      statements: [],
+      statements: [createMoveStatement()],
     };
 
     // Save to storage

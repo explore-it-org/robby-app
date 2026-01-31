@@ -180,6 +180,7 @@ export function StatementList({ program }: Props) {
                   onInsertAfter={handleInsertAfter}
                   canMoveUp={index > 0}
                   canMoveDown={index < statements.length - 1}
+                  canDelete={statements.length > 1}
                 />
               );
             case 'subroutine':
@@ -198,6 +199,7 @@ export function StatementList({ program }: Props) {
                   onInsertAfter={handleInsertAfter}
                   canMoveUp={index > 0}
                   canMoveDown={index < statements.length - 1}
+                  canDelete={statements.length > 1}
                   hasError={hasErrorAtIndex(index)}
                 />
               );

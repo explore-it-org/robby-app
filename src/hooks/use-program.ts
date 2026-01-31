@@ -185,6 +185,9 @@ function createEditor(
       const source = programStorage.getProgramSource(programName);
       if (!source) return;
 
+      // Prevent deleting the last statement
+      if (source.statements.length <= 1) return;
+
       const newStatements = [...source.statements];
       newStatements.splice(index, 1);
 
