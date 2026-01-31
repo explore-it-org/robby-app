@@ -90,10 +90,6 @@ export function StatementList({ program }: Props) {
     router.push(`/program-edit?name=${encodeURIComponent(programName)}`);
   }, []);
 
-  const handleOpenStatementPicker = useCallback(() => {
-    setShowTypePicker(true);
-  }, []);
-
   const handleCloseTypePicker = useCallback(() => {
     setShowTypePicker(false);
   }, []);
