@@ -60,6 +60,9 @@
   },
   "programs": {
     "title": "Programs",
+    "sortedBy": "Sorted by: {{order}}",
+    "sortAlphabetically": "Alphabetically",
+    "sortRecent": "Recently used",
     "noPrograms": "No Programs",
     "noProgramsMessage": "Start by creating a new program",
     "noProgramSelected": "No program selected",
