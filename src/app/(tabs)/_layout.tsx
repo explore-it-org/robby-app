@@ -59,6 +59,15 @@ export default function TabLayout() {
         options={{
           title: t('tabs.programs'),
           tabBarIcon: ({ color }) => <ProgramIcon size={28} color={color} />,
+          headerRight: () => (
+            <Pressable
+              onPress={() => router.push('/settings')}
+              style={{ marginRight: 16 }}
+              hitSlop={8}
+            >
+              <GearIcon size={24} color="#FFFFFF" />
+            </Pressable>
+          ),
         }}
       />
     </Tabs>

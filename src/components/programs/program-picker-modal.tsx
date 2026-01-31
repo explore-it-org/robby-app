@@ -1,9 +1,12 @@
 import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
+import { useMemo, useState } from 'react';
 import { COLORS } from '@/constants/colors';
 import { SPACING } from '@/constants/spacing';
 import { ProgramInfo } from '@/services/programs/storage';
+import { ProgramEntryView } from './program-entry-view';
+import { SortHeader, SortOrder } from './sort-header';
 
 interface ProgramPickerModalProps {
   visible: boolean;
@@ -19,6 +22,21 @@ export function ProgramPickerModal({
   onSelectProgram,
 }: ProgramPickerModalProps) {
   const { t } = useTranslation();
+  const [sortOrder, setSortOrder] = useState<SortOrder>('recent');
+
+  const sortedPrograms = useMemo(() => {
+    const sorted = [...programs];
+    if (sortOrder === 'alphabetical') {
+      sorted.sort((a, b) => a.name.localeCompare(b.name));
+    } else {
+      sorted.sort((a, b) => b.lastModified.getTime() - a.lastModified.getTime());
+    }
+    return sorted;
+  }, [programs, sortOrder]);
+
+  const toggleSortOrder = () => {
+    setSortOrder((current) => (current === 'recent' ? 'alphabetical' : 'recent'));
+  };
 
   return (
     <Modal
@@ -41,18 +59,18 @@ export function ProgramPickerModal({
               <Text style={styles.emptyText}>{t('programPicker.noPrograms')}</Text>
             </View>
           ) : (
-            programs.map((programInfo) => (
-              <Pressable
-                key={programInfo.name}
-                style={({ pressed }) => [styles.programItem, pressed && styles.programItemPressed]}
-                onPress={() => onSelectProgram(programInfo.name)}
-              >
-                <Text style={styles.programName}>{programInfo.name}</Text>
-                <Text style={styles.programMeta}>
-                  {t('programs.instruction', { count: programInfo.statementCount })}
-                </Text>
-              </Pressable>
-            ))
+            <>
+              <View style={styles.sortHeaderContainer}>
+                <SortHeader sortOrder={sortOrder} onToggle={toggleSortOrder} />
+              </View>
+              {sortedPrograms.map((programInfo) => (
+                <ProgramEntryView
+                  key={programInfo.name}
+                  program={programInfo}
+                  onPress={() => onSelectProgram(programInfo.name)}
+                />
+              ))}
+            </>
           )}
         </ScrollView>
       </SafeAreaView>
@@ -87,40 +105,22 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.BEIGE_SOFT,
   },
-  pickerListContent: {
-    padding: SPACING.LG,
+  pickerListContent: {},
+  sortHeaderContainer: {
+    paddingHorizontal: SPACING.LG,
+    paddingVertical: SPACING.SM,
+    backgroundColor: COLORS.BEIGE_SOFT,
   },
   emptyState: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: SPACING.XL * 2,
+    paddingHorizontal: SPACING.LG,
   },
   emptyText: {
     fontSize: 16,
     color: COLORS.TEXT_SECONDARY,
     textAlign: 'center',
-  },
-  programItem: {
-    backgroundColor: COLORS.WHITE,
-    borderRadius: 8,
-    padding: SPACING.LG,
-    marginBottom: SPACING.MD,
-    borderWidth: 1,
-    borderColor: COLORS.BORDER,
-  },
-  programItemPressed: {
-    backgroundColor: COLORS.BEIGE_SOFT,
-    borderColor: COLORS.PRIMARY,
-  },
-  programName: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: COLORS.TEXT_PRIMARY,
-    marginBottom: SPACING.XS,
-  },
-  programMeta: {
-    fontSize: 14,
-    color: COLORS.TEXT_SECONDARY,
   },
 });

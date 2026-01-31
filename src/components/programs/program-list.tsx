@@ -7,15 +7,15 @@
  */
 
 import { ProgramListItem } from './program-list-item';
+import { SortHeader, SortOrder } from './sort-header';
 import { ThemedText } from '@/components/ui/themed-text';
 import { ThemedView } from '@/components/ui/themed-view';
 import { FloatingActionButton } from '@/components/ui/floating-action-button';
 import { COMPONENT_SPACING, LAYOUT_SPACING, SPACING } from '@/constants/spacing';
-import { Platform, Pressable, ScrollView, StyleSheet } from 'react-native';
+import { Platform, ScrollView, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { ProgramInfo } from '@/services/programs';
 import { useMemo, useState } from 'react';
-import { useThemeColor } from '@/hooks/use-theme-color';
 
 interface Props {
   programs: ProgramInfo[];
@@ -24,8 +24,6 @@ interface Props {
   onNewProgramRequested: () => void;
 }
 
-type SortOrder = 'recent' | 'alphabetical';
-
 export function ProgramList({
   programs,
   selectedProgramName,
@@ -33,7 +31,6 @@ export function ProgramList({
   onNewProgramRequested,
 }: Props) {
   const { t } = useTranslation();
-  const tintColor = useThemeColor({}, 'tint');
   const [sortOrder, setSortOrder] = useState<SortOrder>('recent');
 
   const sortedPrograms = useMemo(() => {
@@ -80,16 +77,7 @@ export function ProgramList({
             <ThemedText type="subtitle" style={styles.header}>
               {t('programs.title')}
             </ThemedText>
-            <Pressable onPress={toggleSortOrder}>
-              <ThemedText style={[styles.sortLabel, { color: tintColor }]}>
-                {t('programs.sortedBy', {
-                  order:
-                    sortOrder === 'recent'
-                      ? t('programs.sortRecent')
-                      : t('programs.sortAlphabetically'),
-                })}
-              </ThemedText>
-            </Pressable>
+            <SortHeader sortOrder={sortOrder} onToggle={toggleSortOrder} />
           </ThemedView>
           <ThemedView style={styles.listContainer}>
             {sortedPrograms.map((program) => (
@@ -131,10 +119,6 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 20,
     fontWeight: '600',
-  },
-  sortLabel: {
-    fontSize: 14,
-    fontWeight: '500',
   },
   listContainer: {},
   emptyContainer: {
